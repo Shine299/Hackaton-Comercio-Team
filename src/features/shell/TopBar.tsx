@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useSectorStore } from '@/features/sector';
+import { useDrawerStore } from '@/shared/nav/drawerStore';
 import { Icon, Text } from '@/shared/ui';
 
 /**
@@ -13,6 +14,7 @@ export function TopBar() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const sector = useSectorStore((s) => s.sector);
+  const setDrawerOpen = useDrawerStore((s) => s.setOpen);
 
   return (
     <View
@@ -20,13 +22,24 @@ export function TopBar() {
       style={{ paddingTop: insets.top + 8 }}>
       <View className="flex-row items-center justify-between gap-2">
         <View className="min-w-0 flex-1 flex-row items-center gap-2">
-          <View className="h-10 w-10 items-center justify-center rounded-xl bg-primary-container">
-            <Icon name="account-group" size={22} color="onPrimary" />
-          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Abrir el menú con tu perfil"
+            onPress={() => setDrawerOpen(true)}
+            hitSlop={6}
+            className="h-12 w-12 items-center justify-center rounded-xl bg-primary-container active:opacity-80">
+            <Icon name="account-group" size={24} color="onPrimary" />
+          </Pressable>
           <View className="min-w-0 flex-1">
-            <Text variant="headline-sm" numberOfLines={1}>
-              Red Vecinal
-            </Text>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Abrir el menú con tu perfil"
+              onPress={() => setDrawerOpen(true)}
+              className="self-start">
+              <Text variant="headline-sm" numberOfLines={1}>
+                Red Vecinal
+              </Text>
+            </Pressable>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={`Sector actual: ${sector.name}, radio de ${sector.radiusKm} kilómetros. Toca para cambiar`}

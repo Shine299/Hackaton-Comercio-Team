@@ -45,6 +45,52 @@ const SECTION_STYLE: Record<
   confianza: { bg: 'bg-surface-container-high', icon: 'onSurfaceVariant', tagIcon: 'shield-check-outline', tagTone: 'muted' },
 };
 
+/** Entrada grande a una de las 4 funciones de la app. */
+function ValueTile({
+  title,
+  hint,
+  icon,
+  tone = 'default',
+  onPress,
+}: {
+  title: string;
+  hint: string;
+  icon: IconName;
+  tone?: 'default' | 'emergency';
+  onPress: () => void;
+}) {
+  const emergency = tone === 'emergency';
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${title}. ${hint}`}
+      onPress={onPress}
+      className={`min-h-36 flex-1 justify-between rounded-3xl p-4 active:opacity-90 ${
+        emergency ? 'bg-error-container' : 'bg-surface-container-lowest shadow-sm elevation-xs'
+      }`}>
+      <View
+        className={`h-12 w-12 items-center justify-center rounded-2xl ${
+          emergency ? 'bg-surface-container-lowest' : 'bg-primary-fixed'
+        }`}>
+        <Icon name={icon} size={28} color={emergency ? 'error' : 'primary'} />
+      </View>
+      <View className="gap-0.5">
+        <Text
+          variant="body-lg-bold"
+          tone={emergency ? 'error' : 'default'}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.8}>
+          {title}
+        </Text>
+        <Text variant="label-md" tone="muted" numberOfLines={3}>
+          {hint}
+        </Text>
+      </View>
+    </Pressable>
+  );
+}
+
 function FeedCard({ item }: { item: FeedItem }) {
   const style = SECTION_STYLE[item.section];
   return (
@@ -193,6 +239,18 @@ export function HomeScreen() {
         </Pressable>
       </View>
 
+      <TextField
+        label="Buscar en tu barrio"
+        hideLabel
+        leadingIcon="magnify"
+        placeholder="Busca ayuda, herramientas, una bodega…"
+        value={query}
+        onChangeText={setQuery}
+        onClear={() => setQuery('')}
+        onSubmitEditing={search}
+        returnKeyType="search"
+      />
+
       {alert ? (
         <Card tone={alert.severity === 'critical' ? 'error' : 'warning'} accessibilityLiveRegion="polite">
           <Pressable
@@ -215,6 +273,38 @@ export function HomeScreen() {
         </Card>
       ) : null}
 
+      <View className="gap-3">
+        <View className="flex-row gap-3">
+          <ValueTile
+            title="Día a día"
+            hint="Pide u ofrece ayuda entre vecinos"
+            icon="handshake-outline"
+            onPress={() => router.push('/explorar')}
+          />
+          <ValueTile
+            title="Confianza"
+            hint="Tu perfil, recomendaciones y privacidad"
+            icon="shield-check-outline"
+            onPress={() => router.push('/perfil')}
+          />
+        </View>
+        <View className="flex-row gap-3">
+          <ValueTile
+            title="Emergencia"
+            hint="Ayuda en un toque, sin cuenta"
+            icon="lifebuoy"
+            tone="emergency"
+            onPress={() => router.push('/emergencias')}
+          />
+          <ValueTile
+            title="Emprendimientos"
+            hint="Compra y apoya a tu barrio"
+            icon="storefront-outline"
+            onPress={() => router.push('/negocios')}
+          />
+        </View>
+      </View>
+
       <View className="h-44 overflow-hidden rounded-3xl bg-primary-fixed">
         <View className="absolute -bottom-5 -right-7">
           <SvgXml xml={HERO_BARRIO_XML} width={230} height={192} />
@@ -235,18 +325,6 @@ export function HomeScreen() {
           </View>
         ) : null}
       </View>
-
-      <TextField
-        label="Buscar en tu barrio"
-        hideLabel
-        leadingIcon="magnify"
-        placeholder="Busca ayuda, herramientas, una bodega…"
-        value={query}
-        onChangeText={setQuery}
-        onClear={() => setQuery('')}
-        onSubmitEditing={search}
-        returnKeyType="search"
-      />
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
         <Chip role="radio" label="Todo" selected={filter === 'all'} onPress={() => setFilter('all')} />

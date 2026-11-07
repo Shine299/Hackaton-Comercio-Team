@@ -7,7 +7,7 @@ import { Inter_600SemiBold } from '@expo-google-fonts/inter/600SemiBold';
 import { Inter_700Bold } from '@expo-google-fonts/inter/700Bold';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BoardNotifier } from '@/features/notifications';
-import { SectionBar } from '@/features/shell';
+import { ProfileDrawer, SectionBar } from '@/features/shell';
 import { hasServerTransport, registerSupabaseTransport, useOutboxStore } from '@/features/outbox';
 import { reconcileWithServer, syncNow } from '@/features/sync';
 import { Stack } from 'expo-router';
@@ -71,6 +71,7 @@ export default function RootLayout() {
           </Stack>
           <SectionBar />
         </View>
+        <ProfileDrawer />
       </QueryClientProvider>
     </SafeAreaProvider>
   );
