@@ -2,7 +2,7 @@ import { Redirect } from 'expo-router';
 import { Tabs } from 'expo-router/js-tabs';
 
 import { useOnboardingStore } from '@/features/onboarding';
-import { TopBar } from '@/features/shell';
+import { BackHeader } from '@/features/shell';
 
 /**
  * Pantallas con barra inferior fija de 5 (SectionBar, en el diseño raíz):
@@ -19,7 +19,7 @@ export default function TabsLayout() {
       // La barra inferior vive en el diseño raíz (SectionBar).
       tabBar={() => null}
       screenOptions={{
-        header: () => <TopBar />,
+        header: () => <BackHeader />,
         headerShown: true,
       }}>
       {/* Pantallas raíz con cabecera propia (SectionHeader). */}

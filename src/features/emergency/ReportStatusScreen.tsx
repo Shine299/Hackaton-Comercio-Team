@@ -9,6 +9,7 @@ import { EmergencyNumbersCard } from './components/EmergencyNumbersCard';
 import { IncidentStatusBadge, IncidentStatusTimeline } from './components/IncidentStatus';
 import { reportIcon, reportTitle } from './components/ReportCard';
 import { useEmergencyStore } from './store';
+import { INCIDENT_STATUS_INFO } from './types';
 
 /** Estado real de un reporte propio. En esta etapa siempre está guardado en el teléfono. */
 export function ReportStatusScreen() {
@@ -31,7 +32,20 @@ export function ReportStatusScreen() {
   const local = report.status === 'local' || report.status === 'pending';
 
   return (
-    <Screen safeBottom>
+    <Screen safeBottom noTopInset contentClassName="gap-4 px-5 pb-6 pt-2">
+      <View className="items-center gap-2 pt-2">
+        <View className={`h-24 w-24 items-center justify-center rounded-full ${local ? 'bg-warning-container' : 'bg-primary-fixed'}`}>
+          <Icon name={local ? 'cellphone-check' : 'cloud-check-outline'} size={46} color={local ? 'warning' : 'primary'} />
+        </View>
+        <Text variant="headline-lg" className="text-center" accessibilityRole="header">
+          {INCIDENT_STATUS_INFO[report.status].label}
+        </Text>
+        <Text tone="muted" className="text-center" accessibilityLiveRegion="polite">
+          {INCIDENT_STATUS_INFO[report.status].description}
+          {local ? ' Si hay riesgo para la vida, llama ahora a los servicios oficiales.' : ''}
+        </Text>
+      </View>
+
       <Card tone={report.immediateDanger ? 'error' : 'default'}>
         <View className="flex-row items-center gap-2">
           <Icon name={reportIcon(report)} size={26} color={report.immediateDanger ? 'error' : 'onSurface'} />
@@ -54,24 +68,17 @@ export function ReportStatusScreen() {
         ) : null}
       </Card>
 
-      {local ? (
-        <Card tone="warning" accessibilityLiveRegion="polite">
-          <Text variant="body-lg-bold">Está guardado en tu teléfono</Text>
-          <Text>
-            Aún no se envió a nadie y nadie lo ha recibido. Si hay riesgo para la vida, llama ahora a
-            los servicios oficiales.
-          </Text>
-        </Card>
-      ) : null}
-
-      <EmergencyNumbersCard />
-
       <Card>
         <Text variant="body-lg-bold">Seguimiento</Text>
         <IncidentStatusTimeline status={report.status} />
       </Card>
 
-      <Button label="Volver al Centro de emergencias" variant="outline" onPress={() => router.dismissTo('/emergencias')} />
+      <EmergencyNumbersCard />
+
+      <View className="gap-1">
+        <Button label="Ver mis reportes" size="lg" icon="clipboard-text-clock-outline" onPress={() => router.replace('/emergencias/mis-reportes')} />
+        <Button label="Listo" variant="ghost" onPress={() => router.dismissTo('/emergencias')} />
+      </View>
     </Screen>
   );
 }

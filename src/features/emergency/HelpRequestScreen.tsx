@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Linking, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { Button, Icon, Screen, Text, TextField } from '@/shared/ui';
 
@@ -58,16 +58,6 @@ export function HelpRequestScreen() {
           <Text variant="headline-lg" accessibilityRole="header">
             ¿Qué necesitas?
           </Text>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Llamar al 116, Bomberos"
-            onPress={() => void Linking.openURL('tel:116')}
-            className="h-10 flex-row items-center gap-1.5 rounded-full bg-error-container px-3.5 active:opacity-80">
-            <Icon name="phone" size={18} color="onErrorContainer" />
-            <Text variant="label-md" style={{ color: '#93000a' }}>
-              Llamar 116
-            </Text>
-          </Pressable>
         </View>
         <View className="flex-row flex-wrap gap-2.5" accessibilityRole="radiogroup">
           {HELP_TYPES.map((item) => (

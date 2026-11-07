@@ -4,7 +4,7 @@ import { Pressable, View } from 'react-native';
 
 import { useSectorStore } from '@/features/sector';
 import { formatRelativeTime } from '@/shared/format';
-import { Badge, Button, Card, DemoTag, Icon, ListenButton, Screen, Text } from '@/shared/ui';
+import { Badge, Button, Card, DemoTag, Icon, ListenButton, Screen, Text, type IconName } from '@/shared/ui';
 
 import { BOARD_SECTIONS, buildBoard, type BoardItem } from './board';
 import {
@@ -172,6 +172,32 @@ function SharedRow({ item, sectorId, sectorName, now }: { item: SharedBoardItem;
   );
 }
 
+const KPI_TONE = {
+  neutral: { text: 'text-on-surface', icon: 'onSurfaceVariant' },
+  secondary: { text: 'text-secondary', icon: 'secondary' },
+  tertiary: { text: 'text-tertiary', icon: 'tertiary' },
+  success: { text: 'text-success', icon: 'success' },
+} as const;
+
+/** Contador del tablero: número grande con icono y nombre. */
+function Kpi({ icon, value, label, tone = 'neutral' }: { icon: IconName; value: number; label: string; tone?: keyof typeof KPI_TONE }) {
+  return (
+    <View
+      accessibilityLabel={`${value} ${label.toLowerCase()}`}
+      className="min-h-16 basis-[48%] grow flex-row items-center gap-3 rounded-2xl bg-surface-container-lowest px-3.5 py-2.5">
+      <Icon name={icon} size={27} color={KPI_TONE[tone].icon} />
+      <View>
+        <Text variant="headline-md" className={KPI_TONE[tone].text}>
+          {value}
+        </Text>
+        <Text variant="label-md" tone="muted">
+          {label}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
 /** Tablero del sector: avisos reales de vecinos en vivo, más lo guardado en tu teléfono y datos de demo etiquetados. */
 export function SectorDashboardScreen() {
   const router = useRouter();
@@ -202,33 +228,34 @@ export function SectorDashboardScreen() {
   const sharedOpen = shared.filter((s) => s.status !== 'resolved');
   const sharedDone = shared.filter((s) => s.status === 'resolved');
 
+  const localOpen = items.filter((i) => i.section !== 'resource');
+  const openCount = sharedOpen.length + localOpen.length;
+  const priorityCount =
+    sharedOpen.filter((s) => s.immediateDanger || s.source === 'vulnerable').length +
+    localOpen.filter((i) => i.section === 'vulnerable').length;
+  const attendingCount = sharedOpen.filter((s) => s.status === 'coordinated').length;
+  const resolvedCount = impact?.resolvedToday ?? sharedDone.length;
+
   return (
     <Screen safeBottom>
       <View className="gap-1">
-        <Text variant="headline-md">Tablero de {sector.name}</Text>
-        <Text tone="muted">Zona aproximada. Nunca se muestran nombres, teléfonos ni direcciones exactas.</Text>
+        <Text variant="headline-lg" accessibilityRole="header">
+          Coordinación
+        </Text>
+        <View className="flex-row items-center gap-1.5">
+          <View className="h-2 w-2 rounded-full bg-success" />
+          <Text variant="body-md-medium" tone="muted">
+            {sector.name} · zona aproximada
+          </Text>
+        </View>
       </View>
 
-      {impact ? (
-        <View className="flex-row gap-2">
-          <View className="flex-1 items-center gap-0.5 rounded-xl bg-primary-fixed py-3">
-            <Text variant="headline-md" tone="primary">
-              {impact.resolvedToday}
-            </Text>
-            <Text variant="label-sm" tone="muted" className="text-center">
-              avisos atendidos hoy
-            </Text>
-          </View>
-          <View className="flex-1 items-center gap-0.5 rounded-xl bg-primary-fixed py-3">
-            <Text variant="headline-md" tone="primary">
-              {impact.respondersToday}
-            </Text>
-            <Text variant="label-sm" tone="muted" className="text-center">
-              vecinos respondieron
-            </Text>
-          </View>
-        </View>
-      ) : null}
+      <View className="flex-row flex-wrap gap-2">
+        <Kpi icon="inbox-outline" value={openCount} label="Abiertas" />
+        <Kpi icon="alert-circle-outline" value={priorityCount} label="Prioritarias" tone="secondary" />
+        <Kpi icon="run-fast" value={attendingCount} label="En atención" tone="tertiary" />
+        <Kpi icon="check-circle-outline" value={resolvedCount} label="Resueltas" tone="success" />
+      </View>
 
       <Card tone="warning">
         <Text variant="body-lg-bold">Prioridad no es validación</Text>

@@ -9,10 +9,13 @@ import { IncidentStatusBadge } from './IncidentStatus';
 import { ReportCard } from './ReportCard';
 
 /** Reportes y alertas guardados en este teléfono, cada uno con su estado real. */
-export function MyReports() {
+export function MyReports({ filter = 'all' }: { filter?: 'all' | 'active' | 'resolved' }) {
   const router = useRouter();
-  const reports = useEmergencyStore((s) => s.reports);
-  const vulnerable = useEmergencyStore((s) => s.vulnerable);
+  const allReports = useEmergencyStore((s) => s.reports);
+  const allVulnerable = useEmergencyStore((s) => s.vulnerable);
+  const keep = (status: string) => (filter === 'all' ? true : filter === 'resolved' ? status === 'resolved' : status !== 'resolved');
+  const reports = allReports.filter((r) => keep(r.status));
+  const vulnerable = allVulnerable.filter((v) => keep(v.status));
 
   return (
   <View className="gap-3">

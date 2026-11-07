@@ -3,7 +3,8 @@ import { ActivityIndicator, View } from 'react-native';
 
 import { useSectorStore } from '@/features/sector';
 import { useNearbyPosts } from '@/features/posts';
-import { Screen, ScreenHeader, Text } from '@/shared/ui';
+import { BackHeader } from '@/features/shell';
+import { Screen, Text } from '@/shared/ui';
 
 import { CommunityMap } from './CommunityMap';
 import type { MapLayerId } from './types';
@@ -22,10 +23,12 @@ export function MapScreen() {
   const initialLayers: MapLayerId[] | undefined = params.layer === 'business' ? ['business'] : undefined;
 
   return (
-    <Screen header={<ScreenHeader title="Mapa del barrio" backLabel="Volver" />} safeBottom contentClassName="gap-4">
+    <Screen header={<BackHeader />} safeBottom contentClassName="gap-4">
       <View className="gap-0.5">
-        <Text variant="headline-md">{sector.name}</Text>
-        <Text tone="muted">Toca un punto para ver qué es. Todo es zona aproximada.</Text>
+        <Text variant="headline-lg" accessibilityRole="header">
+          Mapa del barrio
+        </Text>
+        <Text tone="muted">{sector.name} · toca un punto para ver qué es. Todo es zona aproximada.</Text>
       </View>
       {isLoading ? (
         <View className="items-center py-10" accessibilityLabel="Cargando el mapa">
