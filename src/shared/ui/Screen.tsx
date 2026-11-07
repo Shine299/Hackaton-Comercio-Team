@@ -33,7 +33,7 @@ export function Screen({
   const bottomPad = safeBottom || footer ? insets.bottom : 0;
 
   return (
-    <View className="flex-1 bg-surface" style={{ paddingTop: header || noTopInset ? 0 : insets.top }}>
+    <View className="flex-1 bg-surface-container-low" style={{ paddingTop: header || noTopInset ? 0 : insets.top }}>
       {header}
       {scroll ? (
         <ScrollView

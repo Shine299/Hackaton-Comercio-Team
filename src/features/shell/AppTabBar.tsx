@@ -74,7 +74,7 @@ export function AppTabBar({ state, emitter, navigateToTab }: BottomTabBarProps) 
             onLongPress={() => emitter.emit({ type: 'tabLongPress', target: route.key })}
             className="min-h-14 min-w-16 flex-1 items-center justify-center gap-0.5 active:opacity-70">
             {config.primary ? (
-              <View className="h-11 w-11 items-center justify-center rounded-full bg-primary shadow-md elevation-md">
+              <View className="h-9 w-14 items-center justify-center rounded-xl bg-primary">
                 <Icon name={config.icon} size={26} color="onPrimary" />
               </View>
             ) : (

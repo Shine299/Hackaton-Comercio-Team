@@ -95,7 +95,7 @@ export function EmergencyCenterScreen() {
           icon="map-outline"
           title="Mapa comunitario"
           description="Incidentes, necesidades, recursos y lugares en el mapa de tu sector."
-          onPress={() => router.push({ pathname: '/explorar', params: { view: 'map', t: String(Date.now()) } })}
+          onPress={() => router.push('/mapa')}
         />
       </View>
 

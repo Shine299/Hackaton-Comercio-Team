@@ -6,7 +6,7 @@ type CardTone = 'default' | 'low' | 'error' | 'warning';
 
 const toneClass: Record<CardTone, string> = {
   default: 'bg-surface-container-lowest',
-  low: 'bg-surface-container-low',
+  low: 'bg-surface-container',
   error: 'bg-error-container',
   warning: 'bg-warning-container',
 };
@@ -20,7 +20,7 @@ export type CardProps = ViewProps & {
 export function Card({ tone = 'default', className, ...rest }: CardProps) {
   return (
     <View
-      className={cn('gap-3 rounded-2xl p-4 shadow-sm elevation-xs', toneClass[tone], className)}
+      className={cn('gap-3 rounded-3xl p-4 shadow-sm elevation-xs', toneClass[tone], className)}
       {...rest}
     />
   );

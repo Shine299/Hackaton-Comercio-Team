@@ -84,9 +84,7 @@ export function BusinessesScreen() {
           icon="map-outline"
           variant="tonal"
           fullWidth={false}
-          onPress={() =>
-            router.push({ pathname: '/explorar', params: { view: 'map', layer: 'business', t: String(Date.now()) } })
-          }
+          onPress={() => router.push({ pathname: '/mapa', params: { layer: 'business' } })}
         />
       </View>
 
