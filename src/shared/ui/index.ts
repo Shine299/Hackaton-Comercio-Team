@@ -7,6 +7,7 @@ export { cn } from './cn';
 export { ComingSoon } from './ComingSoon';
 export { DemoTag } from './DemoTag';
 export { Icon, type IconName } from './Icon';
+export { ListenButton } from './ListenButton';
 export { Screen } from './Screen';
 export { ScreenHeader } from './ScreenHeader';
 export { SegmentedControl } from './SegmentedControl';

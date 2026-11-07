@@ -4,7 +4,7 @@ import { Pressable, View } from 'react-native';
 
 import { useSectorStore } from '@/features/sector';
 import { formatRelativeTime } from '@/shared/format';
-import { Badge, Button, Card, DemoTag, Icon, Screen, Text } from '@/shared/ui';
+import { Badge, Button, Card, DemoTag, Icon, ListenButton, Screen, Text } from '@/shared/ui';
 
 import { BOARD_SECTIONS, buildBoard, type BoardItem } from './board';
 import {
@@ -106,6 +106,12 @@ function SharedRow({ item, sectorId, sectorName, now }: { item: SharedBoardItem;
       <Text variant="label-md" tone="muted">
         Zona aproximada: {sectorName} · {formatRelativeTime(item.createdAt, now)} · Fuente: un vecino de tu sector
       </Text>
+
+      <ListenButton
+        text={`${title} ${INCIDENT_STATUS_INFO[item.status].label}.${
+          item.responders > 0 ? ` ${item.responders} ${item.responders === 1 ? 'vecino va' : 'vecinos van'} en camino.` : ''
+        } Zona aproximada: ${sectorName}.`}
+      />
 
       {item.mine && item.responderNames.length > 0 ? (
         <Text variant="label-md" tone="primary">

@@ -6,6 +6,7 @@ import { Button, Card, cn, Icon, Screen, Text, TextField, type IconName } from '
 
 import { EmergencyNumbersCard } from './components/EmergencyNumbersCard';
 import { ApproxZoneCard, PhotoField } from './components/FormBits';
+import { VoiceNoteField } from './components/VoiceNoteField';
 import { IncidentStatusBadge } from './components/IncidentStatus';
 import { VulnerableLayers } from './components/VulnerableLayers';
 import { useEmergencyStore } from './store';
@@ -22,8 +23,6 @@ import {
 import { usePickPhoto } from './usePickPhoto';
 
 type Step = 1 | 2 | 3;
-
-const VOICE_MOCK = 'Nota de voz (simulada): la persona vive sola y hoy no pudo salir de su casa.';
 
 function Steps({ step }: { step: Step }) {
   const items: { n: Step; label: string }[] = [
@@ -89,7 +88,7 @@ export function VulnerableNeighborScreen() {
   const [need, setNeed] = useState<VulnerableNeed | undefined>();
   const [detail, setDetail] = useState('');
   const [diagnosis, setDiagnosis] = useState('');
-  const [voiceUsed, setVoiceUsed] = useState(false);
+  const [voiceUri, setVoiceUri] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
   const [saved, setSaved] = useState<VulnerableAlert | undefined>();
   const photo = usePickPhoto();
@@ -139,7 +138,7 @@ export function VulnerableNeighborScreen() {
 
   const save = () => {
     if (!basis || !need) return;
-    setSaved(addVulnerable({ need, basis, detail, diagnosis, photoUri: photo.photoUri, voiceUsed }));
+    setSaved(addVulnerable({ need, basis, detail, diagnosis, photoUri: photo.photoUri, voiceUri }));
   };
 
   return (
@@ -232,15 +231,7 @@ export function VulnerableNeighborScreen() {
             onChangeText={setDetail}
             multiline
           />
-          <Button
-            label={voiceUsed ? 'Nota de voz simulada añadida' : 'Añadir nota de voz (simulada)'}
-            variant="outline"
-            icon="microphone-outline"
-            onPress={() => {
-              setVoiceUsed(true);
-              setDetail((d) => (d ? `${d}\n${VOICE_MOCK}` : VOICE_MOCK));
-            }}
-          />
+          <VoiceNoteField uri={voiceUri} onChange={setVoiceUri} />
           <TextField
             label="Diagnóstico conocido (opcional)"
             placeholder="Déjalo vacío si no lo sabes"

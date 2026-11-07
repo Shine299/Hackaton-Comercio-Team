@@ -13,7 +13,7 @@ import {
 } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
 import { formatApproxDistance, formatRelativeTime } from '@/shared/format';
-import { Badge, Button, Card, DemoTag, Icon, Screen, Text, TextField, type IconName } from '@/shared/ui';
+import { Badge, Button, Card, DemoTag, Icon, ListenButton, Screen, Text, TextField, type IconName } from '@/shared/ui';
 
 /** Atajo circular de la fila de accesos: un toque y estás en lo que buscabas. */
 type Shortcut = { label: string; icon: IconName; href: Href };
@@ -227,6 +227,7 @@ export function HomeScreen() {
           <Text variant="label-md" tone="muted">
             Activada por: {alert.source} · {formatRelativeTime(alert.createdAt)}
           </Text>
+          <ListenButton text={`${alert.title}. ${alert.body} Activada por ${alert.source}.`} />
           <Button
             label="Abrir Modo Emergencia"
             variant="outline"
