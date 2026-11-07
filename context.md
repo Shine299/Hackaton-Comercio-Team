@@ -150,7 +150,7 @@ Las tabs redirigen a `/onboarding` si no se completó; `/emergencias` nunca se b
   `emergencyNumbers.ts`, con fecha y aviso), seis accesos y «Mis reportes en este teléfono».
   Fotos sin EXIF. Zona = sector.
 - **activity** — `feed.ts` (cola + contactos, alertas arriba), `readStore.ts` (rvs.activity-read.v1), filtros Todo/Solicitudes/Mensajes (vacío honesto)/Comunidad/Alertas.
-- **map** (etapa 8) — `CommunityMap` (chips de 7 capas, mapa nativo o lista), `buildMapPoints` (publicaciones + tablero + perfil), `approx.ts` (zona aproximada determinista desde el centro del sector; nunca GPS), `places.ts` + `data/lincePlaces.json` (233 lugares OSM, ODbL), `NativeLayerMap` (`.web` devuelve null). `app.config.js` inyecta la clave a las builds nativas.
+- **map** (etapa 8) — `CommunityMap` (chips de 7 capas, mapa nativo o lista), `buildMapPoints` (publicaciones + tablero + perfil), `approx.ts` (zona aproximada determinista desde el centro del sector; nunca GPS), `places.ts` + `data/places.json` (975 lugares OSM de los 4 sectores, ODbL; se regenera con `node scripts/fetch-places.mjs`), `NativeLayerMap` (`.web` devuelve null). `app.config.js` inyecta la clave a las builds nativas.
 - **dev** — galería del design system.
 
 ## 7. Estado por etapas
@@ -183,8 +183,8 @@ Las tabs redirigen a `/onboarding` si no se completó; `/emergencias` nunca se b
   Leído/no leído en el teléfono.
 
 ### Etapa 8 — HECHA (referencia de lo implementado)
-- Segmento Mapa de Explorar con `react-native-maps` si existe `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY`;
-  si no, lista equivalente con aviso.
+- Segmento Mapa de Explorar con `react-native-maps` en iOS/Android (Expo Go no necesita clave; la clave de
+  Google solo hace falta en builds de producción). En web, lista equivalente con aviso.
 - Capas: incidentes, necesidades, recursos, voluntarios, zonas afectadas, publicaciones.
   Puntos en zona aproximada (jitter / centro del sector). Tocar un punto abre el detalle existente.
 - Script OSM/Overpass para lugares de Lince, datos versionados en el repo (`scripts/`).
@@ -196,7 +196,12 @@ Las tabs redirigen a `/onboarding` si no se completó; `/emergencias` nunca se b
 - Sin servidor el tope es «local» o «pendiente». Bloque en Ajustes con la cola y el último intento.
 - Probar en modo avión.
 
-### Etapa 10 — Supabase
+### Etapa 10 — Supabase — HECHA (rama `etapa-10-supabase`)
+- Esquema/RLS/semillas en `supabase/`; transporte `features/outbox/supabaseTransport.ts`; estados desde servidor en
+  `features/sync`; alertas reales en `sector_alerts` (sin demoAlert); ofertas con cantidad y entregas parciales.
+- Requiere `Allow anonymous sign-ins` activado en el proyecto de Supabase.
+
+#### Plan original de la etapa 10
 - `supabase/` está vacío: esquema SQL, RLS y semillas ficticias.
 - Auth anónima solo con `EXPO_PUBLIC_SUPABASE_URL` + `EXPO_PUBLIC_SUPABASE_ANON_KEY`; sin service role.
 - Implementación Supabase detrás de `PostsRepository` (y emergencias). Sin env → mock.

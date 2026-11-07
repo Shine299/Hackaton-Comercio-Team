@@ -1,6 +1,6 @@
 import { distanceKm } from '@/shared/geo/distance';
 
-import lincePlaces from './data/lincePlaces.json';
+import placesData from './data/places.json';
 import type { MapPoint } from './types';
 
 type RawPlace = {
@@ -23,14 +23,14 @@ const AMENITY_LABEL: Record<string, string> = {
   townhall: 'Municipalidad',
 };
 
-export const PLACES_ATTRIBUTION = `${lincePlaces.license}. Datos del ${lincePlaces.fetchedAt}; confirma siempre antes de ir.`;
+export const PLACES_ATTRIBUTION = `${placesData.license}. Datos del ${placesData.fetchedAt}; confirma siempre antes de ir.`;
 
 /**
  * Lugares de referencia (OSM) versionados en el repo: se leen de un JSON, no hay llamadas de red
- * al renderizar. Solo cubren Lince; en otros sectores se filtran por cercanía.
+ * al renderizar. Cubren los sectores del demo y se filtran por cercanía al centro del sector.
  */
 export function getPlacePoints(center: { latitude: number; longitude: number }, radiusKm: number): MapPoint[] {
-  return (lincePlaces.places as RawPlace[])
+  return (placesData.places as RawPlace[])
     .filter((p) => distanceKm(center, p) <= radiusKm)
     .map<MapPoint>((p) => ({
       id: p.id,

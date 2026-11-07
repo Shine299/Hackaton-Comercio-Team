@@ -9,7 +9,6 @@ import { useSectorStore } from '@/features/sector';
 import { Badge, Button, Card, Chip, DemoTag, Icon, Text } from '@/shared/ui';
 
 import { buildMapPoints } from './buildMapPoints';
-import { HAS_MAPS_KEY } from './config';
 import { DEFAULT_LAYERS, getLayer, MAP_LAYERS } from './layers';
 import NativeLayerMap from './NativeLayerMap';
 import { PLACES_ATTRIBUTION } from './places';
@@ -47,7 +46,7 @@ function PointRow({ point, selected, onPress }: { point: MapPoint; selected: boo
 }
 
 /**
- * Mapa barrial por capas (Explorar → Mapa). Con API key muestra react-native-maps; sin ella,
+ * Mapa barrial por capas (Explorar → Mapa). En iOS y Android muestra react-native-maps; en web,
  * la misma información en lista y un aviso claro. Los puntos son siempre zona aproximada.
  */
 export function CommunityMap({ posts }: { posts: Post[] }) {
@@ -63,7 +62,8 @@ export function CommunityMap({ posts }: { posts: Post[] }) {
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const [showList, setShowList] = useState(false);
 
-  const nativeMap = HAS_MAPS_KEY && Platform.OS !== 'web';
+  // En Expo Go el mapa funciona sin clave; la clave de Google solo hace falta en builds de producción.
+  const nativeMap = Platform.OS !== 'web';
 
   const all = useMemo(() => {
     const board = buildBoard({ sectorId: sector.id, sectorName: sector.name, reports, vulnerable, offers, now });
@@ -111,10 +111,7 @@ export function CommunityMap({ posts }: { posts: Post[] }) {
             <Text variant="body-lg-bold">Mapa no disponible</Text>
           </View>
           <Text>
-            {Platform.OS === 'web'
-              ? 'El mapa nativo no funciona en la versión web.'
-              : 'Falta la clave de Google Maps (EXPO_PUBLIC_GOOGLE_MAPS_API_KEY).'}{' '}
-            Te mostramos la misma información en lista.
+            El mapa nativo no funciona en la versión web. Te mostramos la misma información en lista.
           </Text>
         </Card>
       ) : (
