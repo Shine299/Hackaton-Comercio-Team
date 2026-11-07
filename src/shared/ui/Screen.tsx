@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useBarStore } from '../nav/barStore';
 import { cn } from './cn';
 
 type ScreenProps = {
@@ -30,7 +31,8 @@ export function Screen({
   noTopInset = false,
 }: ScreenProps) {
   const insets = useSafeAreaInsets();
-  const bottomPad = safeBottom || footer ? insets.bottom : 0;
+  const barVisible = useBarStore((s) => s.visible);
+  const bottomPad = !barVisible && (safeBottom || footer) ? insets.bottom : 0;
 
   return (
     <View className="flex-1 bg-surface-container-low" style={{ paddingTop: header || noTopInset ? 0 : insets.top }}>

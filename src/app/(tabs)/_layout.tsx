@@ -2,7 +2,7 @@ import { Redirect } from 'expo-router';
 import { Tabs } from 'expo-router/js-tabs';
 
 import { useOnboardingStore } from '@/features/onboarding';
-import { AppTabBar, TopBar } from '@/features/shell';
+import { TopBar } from '@/features/shell';
 
 /** Navegación principal: Inicio · Explorar · Publicar · Actividad · Perfil. */
 export default function TabsLayout() {
@@ -13,7 +13,8 @@ export default function TabsLayout() {
 
   return (
     <Tabs
-      tabBar={(props) => <AppTabBar {...props} />}
+      // La barra inferior vive en el diseño raíz (SectionBar) y cambia según la sección.
+      tabBar={() => null}
       screenOptions={{
         header: () => <TopBar />,
         headerShown: true,

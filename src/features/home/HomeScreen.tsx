@@ -1,151 +1,181 @@
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 
 import { useUnreadActivityCount } from '@/features/activity/useUnreadActivityCount';
-import { useSectorAlerts } from '@/features/emergency';
+import { useSectorAlerts, useSectorImpact, useSharedBoard } from '@/features/emergency';
 import {
   categoryText,
   getCategory,
   POST_KIND_LABEL,
   rankPosts,
+  TRUST_LABEL,
   useNearbyPosts,
   type Post,
 } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
-import { formatApproxDistance, formatRelativeTime } from '@/shared/format';
-import { Badge, Card, DemoTag, Icon, ListenButton, Screen, Text, TextField, type IconName } from '@/shared/ui';
+import { formatRelativeTime } from '@/shared/format';
+import { Badge, Card, Chip, DemoTag, Icon, ListenButton, Screen, Text, TextField, type IconName } from '@/shared/ui';
 
-/** Botón grande de «¿Qué quieres hacer?». Una acción por botón, con texto claro. */
-function ActionTile({
-  title,
-  hint,
-  icon,
-  tone = 'primary',
-  onPress,
-}: {
+import { HERO_BARRIO_XML } from './heroBarrio';
+
+type FeedSection = 'dia' | 'negocios' | 'emergencia' | 'confianza';
+type FeedFilter = 'all' | Exclude<FeedSection, 'confianza'>;
+
+type FeedItem = {
+  id: string;
+  section: FeedSection;
+  tag: string;
   title: string;
-  hint: string;
+  meta: string;
   icon: IconName;
-  /** `request` usa el azul de «Pide»; el resto, el teal de las acciones. */
-  tone?: 'primary' | 'request';
+  isDemo: boolean;
   onPress: () => void;
-}) {
-  const request = tone === 'request';
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={`${title}. ${hint}`}
-      onPress={onPress}
-      className="min-h-36 flex-1 justify-between rounded-3xl bg-surface-container-lowest p-4 shadow-sm elevation-xs active:opacity-90">
-      <View
-        className={`h-14 w-14 items-center justify-center rounded-2xl ${
-          request ? 'bg-tertiary-fixed' : 'bg-primary-fixed'
-        }`}>
-        <Icon name={icon} size={32} color={request ? 'tertiary' : 'primary'} />
-      </View>
-      <View className="gap-0.5">
-        <Text variant="headline-sm">{title}</Text>
-        <Text variant="label-md" tone="muted">
-          {hint}
-        </Text>
-      </View>
-    </Pressable>
-  );
-}
+};
 
-/** Tarjeta del carrusel «Cerca de ti». */
-function NearbyCard({ post, onPress }: { post: Post; onPress: () => void }) {
-  const category = getCategory(post.category);
-  const offer = post.kind === 'offer';
+/** Color de cada sección en el resumen. Siempre acompañado del nombre de la sección. */
+const SECTION_STYLE: Record<
+  FeedSection,
+  { bg: string; icon: 'primaryContainer' | 'error' | 'onSurfaceVariant'; tagIcon: IconName; tagTone: 'primary' | 'error' | 'muted' }
+> = {
+  dia: { bg: 'bg-primary-fixed', icon: 'primaryContainer', tagIcon: 'handshake-outline', tagTone: 'primary' },
+  negocios: { bg: 'bg-primary-fixed', icon: 'primaryContainer', tagIcon: 'storefront-outline', tagTone: 'primary' },
+  emergencia: { bg: 'bg-error-container', icon: 'error', tagIcon: 'lifebuoy', tagTone: 'error' },
+  confianza: { bg: 'bg-surface-container-high', icon: 'onSurfaceVariant', tagIcon: 'shield-check-outline', tagTone: 'muted' },
+};
+
+function FeedCard({ item }: { item: FeedItem }) {
+  const style = SECTION_STYLE[item.section];
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${POST_KIND_LABEL[post.kind]}: ${post.title}. ${post.author.displayName}, ${formatApproxDistance(post.distanceM)}${post.isDemo ? '. Dato de demostración' : ''}`}
-      onPress={onPress}
-      className="w-52 overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm elevation-xs active:opacity-90">
-      <View className="h-24 items-center justify-center bg-primary-fixed">
-        <Icon name={category.icon} size={44} color="primaryContainer" />
-      </View>
-      <View className="gap-1.5 p-3">
-        <View className="flex-row flex-wrap items-center gap-1.5">
-          <Badge label={POST_KIND_LABEL[post.kind]} tone={offer ? 'primary' : 'secondary'} />
-          {post.isDemo ? <DemoTag /> : null}
+      accessibilityLabel={`${item.tag}. ${item.title}. ${item.meta}${item.isDemo ? '. Dato de demostración' : ''}`}
+      onPress={item.onPress}
+      className="overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm elevation-xs active:opacity-90">
+      <View className={`h-36 items-center justify-center ${style.bg}`}>
+        <Icon name={item.icon} size={64} color={style.icon} />
+        <View className="absolute left-3 top-3 flex-row items-center gap-1.5 rounded-xl bg-surface-container-lowest px-2.5 py-1.5">
+          <Icon name={style.tagIcon} size={16} color={style.tagTone === 'error' ? 'error' : style.tagTone === 'primary' ? 'primary' : 'onSurfaceVariant'} />
+          <Text variant="label-md" tone={style.tagTone}>
+            {item.tag}
+          </Text>
         </View>
-        <Text variant="body-md-medium" numberOfLines={2}>
-          {post.title}
-        </Text>
-        <Text variant="label-md" tone="muted" numberOfLines={1}>
-          {post.author.displayName} · {formatApproxDistance(post.distanceM)}
-        </Text>
+      </View>
+      <View className="gap-1.5 p-4">
+        <Text variant="headline-sm">{item.title}</Text>
+        <View className="flex-row items-center justify-between gap-2">
+          <Text variant="label-md" tone="muted" className="flex-1">
+            {item.meta}
+          </Text>
+          {item.isDemo ? <DemoTag /> : null}
+        </View>
       </View>
     </Pressable>
   );
 }
 
 /**
- * Inicio fácil: lo urgente primero (alerta del sector), luego «¿Qué quieres hacer?» con acciones directas,
- * Emergencia siempre a un toque, el mapa y lo que hay cerca. El detalle de cada cosa vive en su pantalla.
+ * Inicio = novedades del barrio. Junta lo nuevo de las 4 secciones (Día a día, Emprendimientos,
+ * Emergencia y Confianza). Para entrar a una sección se usa la barra inferior.
  */
 export function HomeScreen() {
   const router = useRouter();
   const sector = useSectorStore((s) => s.sector);
   const { data, isLoading } = useNearbyPosts(sector.id);
+  const { data: alerts } = useSectorAlerts(sector.id);
+  const { data: board = [] } = useSharedBoard(sector.id);
+  const { data: impact } = useSectorImpact(sector.id);
+  const unread = useUnreadActivityCount();
   const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState<FeedFilter>('all');
 
+  const alert = alerts?.[0];
   const now = data?.fetchedAt ?? 0;
   const radiusKm = sector.radiusKm;
-  const { data: alerts } = useSectorAlerts(sector.id);
-  const alert = alerts?.[0];
-  const unread = useUnreadActivityCount();
 
-  const nearby = useMemo(() => {
+  const { dia, biz } = useMemo(() => {
     const inRange = (data?.posts ?? []).filter((p) => p.distanceM / 1000 <= radiusKm);
-    return rankPosts(inRange, { now, radiusKm, extraSearchText: categoryText }).slice(0, 5);
+    const ranked = rankPosts(inRange, { now, radiusKm, extraSearchText: categoryText }).map((r) => r.post);
+    return { dia: ranked.filter((p) => p.category !== 'business'), biz: ranked.filter((p) => p.category === 'business') };
   }, [data, now, radiusKm]);
 
-  const search = () =>
-    router.push({ pathname: '/explorar', params: query.trim() ? { q: query.trim() } : {} });
-  const publish = (kind: 'offer' | 'request') =>
-    router.push({ pathname: '/publicar', params: { kind, t: String(Date.now()) } });
+  const items = useMemo(() => {
+    const open = (post: Post) => () => router.push({ pathname: '/publicacion/[id]', params: { id: post.id } });
+    const distance = (post: Post) => (post.distanceM <= 0 ? 'En tu sector' : `A ${Math.max(50, Math.round(post.distanceM / 50) * 50)} m`);
+
+    const fromPost = (post: Post): FeedItem => {
+      const business = post.category === 'business';
+      return {
+        id: post.id,
+        section: business ? 'negocios' : 'dia',
+        tag: business ? 'Emprendimientos' : `Día a día · ${POST_KIND_LABEL[post.kind]}`,
+        title: post.title,
+        meta: `${post.author.displayName} · ${formatRelativeTime(post.createdAt, now)} · ${distance(post)}`,
+        icon: business ? 'storefront-outline' : getCategory(post.category).icon,
+        isDemo: post.isDemo,
+        onPress: open(post),
+      };
+    };
+
+    const activeNotices = board.filter((b) => b.status !== 'resolved').length;
+    const emergency: FeedItem = {
+      id: 'feed-emergencia',
+      section: 'emergencia',
+      tag: 'Emergencia',
+      title:
+        activeNotices > 0
+          ? `${activeNotices} ${activeNotices === 1 ? 'aviso activo' : 'avisos activos'} en el tablero de ${sector.name}`
+          : `Sin avisos activos en ${sector.name}`,
+      meta: impact?.resolvedToday
+        ? `${impact.resolvedToday} ${impact.resolvedToday === 1 ? 'atendido' : 'atendidos'} hoy`
+        : 'Si necesitas ayuda, Emergencia está a un toque',
+      icon: 'lifebuoy',
+      isDemo: false,
+      onPress: () => router.push('/emergencias/tablero'),
+    };
+
+    const trusted = [...dia, ...biz]
+      .filter((p) => p.author.trust !== 'new')
+      .sort((a, b) => b.author.recommendations - a.author.recommendations)[0];
+    const trust: FeedItem | undefined = trusted
+      ? {
+          id: `feed-confianza-${trusted.author.id}`,
+          section: 'confianza',
+          tag: 'Confianza',
+          title: `${trusted.author.displayName}: ${TRUST_LABEL[trusted.author.trust]}`,
+          meta: `${trusted.author.recommendations} recomendaciones de vecinos`,
+          icon: 'shield-check-outline',
+          isDemo: trusted.isDemo,
+          onPress: () => router.push({ pathname: '/vecino/[id]', params: { id: trusted.author.id } }),
+        }
+      : undefined;
+
+    // Intercalado para que cada sección aparezca pronto: negocio, vecinos, emergencia, vecinos, confianza…
+    const order = [biz[0], dia[0], emergency, dia[1], trust, biz[1], dia[2]];
+    return order.map((entry) => (entry && 'section' in entry ? entry : entry ? fromPost(entry) : undefined)).filter(
+      (entry): entry is FeedItem => Boolean(entry),
+    );
+  }, [biz, dia, board, impact, now, router, sector.name]);
+
+  const visible = items.filter((item) => filter === 'all' || item.section === filter);
+  const anyDemo = dia.some((p) => p.isDemo) || biz.some((p) => p.isDemo);
+
+  const search = () => router.push({ pathname: '/explorar', params: query.trim() ? { q: query.trim() } : {} });
 
   return (
     <Screen noTopInset>
-      {alert ? (
-        <Card tone={alert.severity === 'critical' ? 'error' : 'warning'} accessibilityLiveRegion="polite">
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={`${alert.title}. Activada por ${alert.source}. Abrir Modo Emergencia`}
-            onPress={() => router.push('/emergencias')}
-            className="flex-row items-center gap-3 active:opacity-80">
-            <Icon name="weather-lightning-rainy" size={26} color={alert.severity === 'critical' ? 'error' : 'warning'} />
-            <View className="min-w-0 flex-1">
-              <Text variant="body-lg-bold" numberOfLines={2}>
-                {alert.title}
-              </Text>
-              <Text variant="label-md" tone="muted">
-                {alert.source} · {formatRelativeTime(alert.createdAt)}
-              </Text>
-            </View>
-            <Icon name="chevron-right" size={24} color="onSurfaceVariant" />
-          </Pressable>
-          <ListenButton text={`${alert.title}. ${alert.body} Activada por ${alert.source}.`} />
-        </Card>
-      ) : null}
-
-      <View className="flex-row items-start gap-2">
-        <View className="flex-1">
-          <TextField
-            label="Buscar en tu barrio"
-            hideLabel
-            leadingIcon="magnify"
-            placeholder="Busca ayuda, herramientas, una bodega…"
-            value={query}
-            onChangeText={setQuery}
-            onClear={() => setQuery('')}
-            onSubmitEditing={search}
-            returnKeyType="search"
-          />
+      <View className="flex-row items-start justify-between gap-3">
+        <View className="min-w-0 flex-1 gap-0.5">
+          <View className="flex-row items-center gap-1">
+            <Icon name="map-marker-radius-outline" size={17} color="primary" />
+            <Text variant="label-md" tone="muted">
+              {sector.name} · {radiusKm} km
+            </Text>
+          </View>
+          <Text variant="headline-lg" accessibilityRole="header">
+            Lo nuevo en tu barrio
+          </Text>
         </View>
         <Pressable
           accessibilityRole="button"
@@ -163,108 +193,89 @@ export function HomeScreen() {
         </Pressable>
       </View>
 
-      <View className="gap-3">
-        <Text variant="headline-sm" accessibilityRole="header">
-          ¿Qué quieres hacer?
-        </Text>
-        <View className="flex-row gap-3">
-          <ActionTile
-            title="Pedir ayuda"
-            hint="Publica lo que necesitas"
-            icon="hand-extended-outline"
-            tone="request"
-            onPress={() => publish('request')}
-          />
-          <ActionTile
-            title="Ofrecer ayuda"
-            hint="Presta, regala o da una mano"
-            icon="gift-outline"
-            onPress={() => publish('offer')}
-          />
-        </View>
-        <View className="flex-row gap-3">
-          <ActionTile
-            title="Ver el barrio"
-            hint="Lo que piden y ofrecen cerca"
-            icon="handshake-outline"
-            onPress={() => router.push('/explorar')}
-          />
-          <ActionTile
-            title="Negocios"
-            hint="Compra y apoya a tu barrio"
-            icon="storefront-outline"
-            onPress={() => router.push('/negocios')}
-          />
-        </View>
-      </View>
-
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Emergencia. Ayuda en un toque, sin cuenta"
-        onPress={() => router.push('/emergencias')}
-        className="min-h-20 flex-row items-center gap-4 rounded-3xl bg-error px-4 py-3 active:opacity-90">
-        <View className="h-14 w-14 items-center justify-center rounded-full bg-surface-container-lowest">
-          <Icon name="lifebuoy" size={30} color="error" />
-        </View>
-        <View className="min-w-0 flex-1">
-          <Text variant="headline-sm" tone="onError">
-            Emergencia
-          </Text>
-          <Text variant="label-md" tone="onError">
-            Ayuda en un toque, sin cuenta
-          </Text>
-        </View>
-        <Icon name="chevron-right" size={26} color="onError" />
-      </Pressable>
-
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Mapa del barrio. Ayuda, negocios y puntos cerca"
-        onPress={() => router.push('/mapa')}
-        className="min-h-20 flex-row items-center gap-4 rounded-3xl bg-surface-container-lowest p-3 shadow-sm elevation-xs active:opacity-90">
-        <View className="h-16 w-16 items-center justify-center rounded-2xl bg-primary-fixed">
-          <Icon name="map-outline" size={32} color="primary" />
-        </View>
-        <View className="min-w-0 flex-1">
-          <Text variant="headline-sm">Mapa del barrio</Text>
-          <Text variant="label-md" tone="muted">
-            Ayuda, negocios y puntos cerca
-          </Text>
-        </View>
-        <Icon name="chevron-right" size={24} color="onSurfaceVariant" />
-      </Pressable>
-
-      <View className="gap-2">
-        <View className="flex-row items-center justify-between">
-          <Text variant="headline-sm">Cerca de ti</Text>
+      {alert ? (
+        <Card tone={alert.severity === 'critical' ? 'error' : 'warning'} accessibilityLiveRegion="polite">
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Ver todo lo que hay cerca"
-            onPress={() => router.push('/explorar')}
-            className="min-h-11 justify-center">
-            <Text variant="body-md-medium" tone="primary">
-              Ver todo
-            </Text>
+            accessibilityLabel={`${alert.title}. Activada por ${alert.source}. Abrir Emergencia`}
+            onPress={() => router.push('/emergencias')}
+            className="flex-row items-center gap-3 active:opacity-80">
+            <Icon name="weather-lightning-rainy" size={26} color={alert.severity === 'critical' ? 'error' : 'warning'} />
+            <View className="min-w-0 flex-1">
+              <Text variant="body-lg-bold" numberOfLines={2}>
+                {alert.title}
+              </Text>
+              <Text variant="label-md" tone="muted">
+                {alert.source} · {formatRelativeTime(alert.createdAt)}
+              </Text>
+            </View>
+            <Icon name="chevron-right" size={24} color="onSurfaceVariant" />
           </Pressable>
+          <ListenButton text={`${alert.title}. ${alert.body} Activada por ${alert.source}.`} />
+        </Card>
+      ) : null}
+
+      <View className="h-44 overflow-hidden rounded-3xl bg-primary-fixed">
+        <View className="absolute -bottom-5 -right-7">
+          <SvgXml xml={HERO_BARRIO_XML} width={230} height={192} />
         </View>
-        {isLoading ? (
-          <View className="items-center py-6" accessibilityLabel="Cargando lo que hay cerca">
-            <ActivityIndicator />
+        <View className="max-w-[62%] gap-1.5 p-5">
+          <Text variant="label-md" tone="primary" className="uppercase">
+            {sector.name} hoy
+          </Text>
+          <Text variant="headline-md">Tu barrio está en movimiento</Text>
+          <View className="mt-1 flex-row flex-wrap gap-1.5">
+            <Badge label={`${dia.length} ayudas`} tone="neutral" />
+            <Badge label={`${biz.length} negocios`} tone="neutral" />
           </View>
-        ) : nearby.length === 0 ? (
-          <Text tone="muted">Cuando haya publicaciones cerca de ti, las verás aquí.</Text>
-        ) : (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-3 pr-4 pb-1">
-            {nearby.map(({ post }) => (
-              <NearbyCard
-                key={post.id}
-                post={post}
-                onPress={() => router.push({ pathname: '/publicacion/[id]', params: { id: post.id } })}
-              />
-            ))}
-          </ScrollView>
-        )}
+        </View>
+        {anyDemo ? (
+          <View className="absolute bottom-3 left-5">
+            <DemoTag />
+          </View>
+        ) : null}
       </View>
+
+      <TextField
+        label="Buscar en tu barrio"
+        hideLabel
+        leadingIcon="magnify"
+        placeholder="Busca ayuda, herramientas, una bodega…"
+        value={query}
+        onChangeText={setQuery}
+        onClear={() => setQuery('')}
+        onSubmitEditing={search}
+        returnKeyType="search"
+      />
+
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
+        <Chip role="radio" label="Todo" selected={filter === 'all'} onPress={() => setFilter('all')} />
+        <Chip role="radio" label="Día a día" icon="handshake-outline" selected={filter === 'dia'} onPress={() => setFilter('dia')} />
+        <Chip role="radio" label="Negocios" icon="storefront-outline" selected={filter === 'negocios'} onPress={() => setFilter('negocios')} />
+        <Chip role="radio" label="Emergencia" icon="lifebuoy" selected={filter === 'emergencia'} onPress={() => setFilter('emergencia')} />
+      </ScrollView>
+
+      {isLoading ? (
+        <View className="items-center py-8" accessibilityLabel="Cargando novedades">
+          <ActivityIndicator />
+        </View>
+      ) : visible.length === 0 ? (
+        <Card className="items-center gap-2 py-8">
+          <Icon name="text-box-search-outline" size={34} color="primary" />
+          <Text variant="headline-sm" className="text-center">
+            Todavía no hay novedades aquí
+          </Text>
+          <Text tone="muted" className="text-center">
+            Cuando haya algo nuevo en esta sección, lo verás en esta lista.
+          </Text>
+        </Card>
+      ) : (
+        <View className="gap-4">
+          {visible.map((item) => (
+            <FeedCard key={item.id} item={item} />
+          ))}
+        </View>
+      )}
 
       <View className="flex-row items-start gap-2">
         <Icon name="shield-lock-outline" size={18} color="primary" />

@@ -1,2 +1,2 @@
-export { AppTabBar } from './AppTabBar';
+export { SectionBar } from './SectionBar';
 export { TopBar } from './TopBar';
