@@ -64,7 +64,7 @@ export function OfferHelpScreen() {
   return (
     <Screen safeBottom>
       <View className="gap-1">
-        <Text variant="headline-md">¿Qué puedes ofrecer?</Text>
+        <Text variant="headline-lg" accessibilityRole="header">¿Qué puedes ofrecer?</Text>
         <Text tone="muted">Tu oferta queda en tu teléfono hasta que exista conexión con el servidor.</Text>
       </View>
 

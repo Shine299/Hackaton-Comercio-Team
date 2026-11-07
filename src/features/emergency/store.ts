@@ -30,7 +30,7 @@ type VulnerableInput = {
   detail?: string;
   diagnosis?: string;
   photoUri?: string;
-  voiceUsed?: boolean;
+  voiceUri?: string;
 };
 
 export type ServerPatch = {
@@ -124,7 +124,7 @@ export const useEmergencyStore = create<EmergencyState>()(
         set((state) => ({ reports: [report, ...state.reports] }));
         return report;
       },
-      addVulnerable: ({ need, basis, detail = '', diagnosis = '', photoUri, voiceUsed = false }) => {
+      addVulnerable: ({ need, basis, detail = '', diagnosis = '', photoUri, voiceUri }) => {
         const id = Crypto.randomUUID();
         const zone = currentZone();
         // La cola solo lleva lo mínimo: nunca el diagnóstico, el detalle ni la foto.
@@ -142,7 +142,8 @@ export const useEmergencyStore = create<EmergencyState>()(
           detail: detail.trim(),
           diagnosis: diagnosis.trim(),
           photoUri: photoUri || undefined,
-          voiceUsed,
+          voiceUsed: Boolean(voiceUri),
+          voiceUri: voiceUri || undefined,
           ...zone,
           createdAt: Date.now(),
           status: 'local',

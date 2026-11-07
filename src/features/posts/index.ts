@@ -1,6 +1,7 @@
 export { PostCard } from './components/PostCard';
 export {
   getCategory,
+  HELP_CATEGORIES,
   POST_CATEGORIES,
   POST_KIND_LABEL,
   TRUST_LABEL,

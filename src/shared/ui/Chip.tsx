@@ -34,7 +34,7 @@ export function Chip({
       onPress={onPress}
       className={cn(
         'min-h-11 flex-row items-center gap-1.5 rounded-full border-2 px-3.5 active:opacity-80',
-        selected ? 'border-primary bg-primary' : 'border-outline-variant bg-surface-container-lowest',
+        selected ? 'border-primary bg-primary' : 'border-transparent bg-surface-container-lowest shadow-sm elevation-xs',
       )}>
       {selected ? (
         <View>

@@ -167,7 +167,8 @@ Las tabs redirigen a `/onboarding` si no se completó; `/emergencias` nunca se b
 | 7. Seguimiento y tablero | Hecho (pendiente verificación visual en Expo Go) |
 | 8. Mapa por capas | Hecho (pendiente verificación visual en Expo Go) |
 | 9. Cola offline en SQLite | Hecho (pendiente verificación en modo avión en Expo Go) |
-| 10. Supabase | Pendiente |
+| 10. Supabase | Hecho (rama `etapa-10-supabase`, ya en `main`) |
+| 11. Tablero compartido y emprendimientos | Hecho (rama `etapa-11-tablero-emprendimientos`; pendiente probar con dos dispositivos) |
 
 ## 8. Lo que falta
 
@@ -207,6 +208,31 @@ Las tabs redirigen a `/onboarding` si no se completó; `/emergencias` nunca se b
 - Implementación Supabase detrás de `PostsRepository` (y emergencias). Sin env → mock.
 - RLS: público aproximado y no identificable; ubicación precisa nunca sale al cliente.
 - Pasar a «recibido» solo tras respuesta real del servidor.
+
+### Etapa 11 — Tablero compartido, emprendimientos, Inicio y mapa — HECHA (rama `etapa-11-tablero-emprendimientos`)
+- Supabase (`20261108000003_shared_board.sql`): `board_responses` (sin políticas, solo vía funciones) y las funciones
+  `sector_board`, `respond_to_board_item`, `resolve_my_board_item`, `sector_impact`. Solo exponen tipo, sector, estado,
+  hora y conteos; nunca `user_id`, detalle, diagnóstico ni foto. La categoría `business` ya cabe en `posts`.
+- Cliente: `features/emergency/sharedBoard.ts` (consulta cada 8 s). El tablero muestra «Avisos de vecinos de tu sector (en vivo)»
+  con «Voy a ayudar» → «Ya llegué»; quien avisó ve cuántos vienen y cierra con «Ya fue atendido». Lo que el servidor ya muestra no se repite desde el teléfono.
+- Emprendimientos: categoría `business` (plantillas, 3 demos, capa propia en el mapa, tarjeta grande y carrusel en el Inicio).
+- Inicio estilo «super app» (`features/home`). Mapa interactivo: marcadores con ícono, cámara que sigue la selección, buscador, recentrar, ampliar, avisos en vivo (`MapFab`, `NativeLayerMap`).
+- Voz real: `VoiceNoteField` (expo-audio) graba/escucha/borra; la nota se queda en el teléfono. «Escuchar» (`ListenButton`, expo-speech).
+  El dictado a texto de Publicar sigue simulado (Expo no trae reconocimiento de voz).
+- Notificaciones LOCALES (`features/notifications`) al aparecer un aviso nuevo en el sector. No es push remoto (Expo Go no lo permite en Android).
+- **Emprendimientos como sección propia** (`features/business`): pestaña «Negocios» (`(tabs)/negocios.tsx`), registro en `negocios/registrar.tsx`,
+  detalle reutilizando `/publicacion/[id]` (variante de negocio en `PostDetailScreen`). Rubro, horario y entrega viajan en `details` (`rubros.ts`); sin migración nueva.
+  Explorar y Publicar usan `HELP_CATEGORIES` (sin `business`); el mapa sí muestra los negocios en su capa (`?view=map&layer=business`).
+  Barra inferior: Inicio · Explorar · Publicar (+) · Negocios · Perfil. Actividad se abre desde la campana del Inicio (contador: `useUnreadActivityCount`).
+  El filtro «Abierto ahora» del diseño es «Disponible ahora» en la app (no hay horarios estructurados). Sin micrófono en el registro (no hay dictado real).
+- **Navegación por sección (etapa 11c)**: la barra inferior vive en el diseño raíz (`features/shell/SectionBar.tsx` + `sections.ts`) y cambia según la pantalla.
+  El Inicio NO tiene barra: se entra a cada sección desde sus 4 tarjetas grandes (y se vuelve con la pestaña Inicio). Día a día: Vecinos · Publicar (+) · Mapa · Solicitudes. Emprendimientos: Negocios · Mapa · Mi negocio · Solicitudes.
+  Confianza: Perfil · Guardados · Privacidad · Ajustes (parámetro `tab` de `/perfil`). Emergencia (acento rojo): Ayuda · Tablero · Recursos · Mis reportes (`/emergencias/mis-reportes`).
+  Solo las pantallas raíz muestran barra; formularios y detalles quedan limpios. `Mapa` y `Solicitudes` se resuelven por la sección de origen (`useBarStore.lastSection`).
+  `Screen` no suma margen inferior si hay barra (`useBarStore.visible`). Las pestañas de `(tabs)` ya no dibujan barra propia.
+- **Inicio = novedades del barrio** (`features/home`): alerta del sector, tarjeta «hoy» con la ilustración del barrio (react-native-svg), filtros y tarjetas de las 4 secciones.
+  Las imágenes definitivas (portadas, fotos de negocios) aún no están: hoy son bloques de color con ícono. Irán en `assets/images/inicio/` y `assets/images/negocios/`.
+- Para probar el tablero hacen falta dos dispositivos (cuentas anónimas distintas): nadie puede responder a su propio aviso.
 
 ### Pendientes menores conocidos
 - Verificar la etapa 6 en Expo Go (no se probó en dispositivo).

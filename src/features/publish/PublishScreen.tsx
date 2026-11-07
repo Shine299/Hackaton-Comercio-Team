@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as Crypto from 'expo-crypto';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Pressable, View } from 'react-native';
@@ -10,7 +10,7 @@ import { Pressable, View } from 'react-native';
 import { useOutboxStore } from '@/features/outbox';
 import {
   getCategory,
-  POST_CATEGORIES,
+  HELP_CATEGORIES,
   POST_KIND_LABEL,
   useLocalPostsStore,
   type Post,
@@ -158,6 +158,20 @@ export function PublishScreen() {
       setStep(2);
     });
   };
+
+  // Atajo desde Inicio («Pedir ayuda» / «Ofrecer ayuda»): llega con el tipo ya elegido y salta al paso 2.
+  // `t` hace que el atajo se pueda repetir. Es el mismo flujo de siempre, con el paso 1 resuelto.
+  const { kind: kindParam, t: kindStamp } = useLocalSearchParams<{ kind?: string; t?: string }>();
+  const appliedShortcut = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (kindParam !== 'offer' && kindParam !== 'request') return;
+    const stamp = `${kindParam}|${kindStamp ?? ''}`;
+    if (appliedShortcut.current === stamp || !ready.current) return;
+    appliedShortcut.current = stamp;
+    pickKind(kindParam);
+    // `pickKind` se redefine en cada render; el atajo solo debe correr al llegar con parámetros nuevos.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kindParam, kindStamp]);
 
   const goStep2 = async () => {
     const ok = await trigger([...step2Fields]);
@@ -310,7 +324,7 @@ export function PublishScreen() {
               Categoría
             </Text>
             <View className="flex-row flex-wrap gap-2">
-              {POST_CATEGORIES.map((item) => (
+              {HELP_CATEGORIES.map((item) => (
                 <Chip
                   key={item.id}
                   label={item.label}

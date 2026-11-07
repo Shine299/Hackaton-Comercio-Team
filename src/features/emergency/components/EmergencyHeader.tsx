@@ -1,49 +1,51 @@
 import { useRouter } from 'expo-router';
-import { Pressable, View } from 'react-native';
+import { Linking, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon, Text } from '@/shared/ui';
 
 type EmergencyHeaderProps = {
   title?: string;
-  /** Si es una subpantalla de Emergencias, vuelve atrás; si no, sale al modo Día a Día. */
+  /** Si es una subpantalla de Emergencia, vuelve atrás; si no, sale al Inicio. */
   backToCenter?: boolean;
 };
 
 /**
- * Cabecera del Modo Emergencia (referencia: Stitch «Centro de emergencias»).
- * Siempre ofrece una salida clara; nunca bloquea el acceso por tutorial o registro.
+ * Cabecera de las subpantallas de Emergencia (referencia: lienzo). Siempre ofrece una salida clara
+ * y el acceso al 116; nunca bloquea el acceso por tutorial o registro.
  */
-export function EmergencyHeader({
-  title = 'Modo Emergencia',
-  backToCenter = false,
-}: EmergencyHeaderProps) {
+export function EmergencyHeader({ backToCenter = false }: EmergencyHeaderProps) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
   const goBack = () => {
     if (router.canGoBack()) router.back();
-    else router.replace('/');
+    else router.replace('/emergencias');
   };
 
   return (
-    <View className="bg-error px-4 pb-3" style={{ paddingTop: insets.top + 8 }}>
-      <View className="flex-row items-center justify-between gap-2">
+    <View className="flex-row items-center justify-between bg-surface-container-low px-3 pb-1" style={{ paddingTop: insets.top + 8 }}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={backToCenter ? 'Volver' : 'Salir de Emergencia'}
+        onPress={goBack}
+        className="min-h-11 flex-row items-center gap-0.5 pr-3 active:opacity-70">
+        <Icon name="chevron-left" size={26} color="primary" />
+        <Text variant="body-lg-bold" tone="primary">
+          {backToCenter ? 'Atrás' : 'Salir'}
+        </Text>
+      </Pressable>
+      <View>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={backToCenter ? 'Volver al Centro de emergencias' : 'Salir del Modo Emergencia'}
-          onPress={goBack}
-          className="min-h-12 flex-row items-center gap-1 rounded-full bg-white/20 px-3 active:opacity-80">
-          <Icon name="arrow-left" size={20} color="onError" />
-          <Text variant="body-md-medium" tone="onError">
-            {backToCenter ? 'Volver' : 'Salir'}
+          accessibilityLabel="Llamar al 116, Bomberos"
+          onPress={() => void Linking.openURL('tel:116')}
+          className="h-10 flex-row items-center gap-1.5 rounded-full bg-error-container px-3.5 active:opacity-80">
+          <Icon name="phone" size={18} color="onErrorContainer" />
+          <Text variant="label-md" tone="error">
+            Llamar 116
           </Text>
         </Pressable>
-        <View className="flex-1 items-end">
-          <Text variant="headline-sm" tone="onError" numberOfLines={1}>
-            {title}
-          </Text>
-        </View>
       </View>
     </View>
   );

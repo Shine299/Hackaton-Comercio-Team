@@ -6,13 +6,15 @@ import { Inter_500Medium } from '@expo-google-fonts/inter/500Medium';
 import { Inter_600SemiBold } from '@expo-google-fonts/inter/600SemiBold';
 import { Inter_700Bold } from '@expo-google-fonts/inter/700Bold';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BoardNotifier } from '@/features/notifications';
+import { ProfileDrawer, SectionBar } from '@/features/shell';
 import { hasServerTransport, registerSupabaseTransport, useOutboxStore } from '@/features/outbox';
 import { reconcileWithServer, syncNow } from '@/features/sync';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { AppState } from 'react-native';
+import { AppState, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 SplashScreen.preventAutoHideAsync();
@@ -54,15 +56,22 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <StatusBar style="dark" />
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#f9f9ff' } }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="onboarding" options={{ gestureEnabled: false }} />
-          <Stack.Screen name="publicacion/[id]" />
-          <Stack.Screen name="vecino/[id]" />
-          <Stack.Screen name="emergencias" />
-          <Stack.Screen name="sector" options={{ presentation: 'modal' }} />
-          <Stack.Screen name="galeria" />
-        </Stack>
+        <BoardNotifier />
+        <View style={{ flex: 1 }}>
+          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#f9f9ff' } }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="onboarding" options={{ gestureEnabled: false }} />
+            <Stack.Screen name="publicacion/[id]" />
+            <Stack.Screen name="vecino/[id]" />
+            <Stack.Screen name="negocios/registrar" />
+            <Stack.Screen name="mapa" />
+            <Stack.Screen name="emergencias" />
+            <Stack.Screen name="sector" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="galeria" />
+          </Stack>
+          <SectionBar />
+        </View>
+        <ProfileDrawer />
       </QueryClientProvider>
     </SafeAreaProvider>
   );

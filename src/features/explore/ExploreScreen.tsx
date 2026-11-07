@@ -2,7 +2,6 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 
-import { CommunityMap } from '@/features/map';
 import { useSectorStore } from '@/features/sector';
 import {
   applyFilters,
@@ -10,7 +9,7 @@ import {
   countAdvancedFilters,
   DEFAULT_FILTERS,
   hasActiveFilters,
-  POST_CATEGORIES,
+  HELP_CATEGORIES,
   PostCard,
   rankPosts,
   useNearbyPosts,
@@ -18,64 +17,39 @@ import {
   type PostCategoryId,
   type PostKind,
 } from '@/features/posts';
-import {
-  Badge,
-  Button,
-  Card,
-  Chip,
-  Icon,
-  Screen,
-  SegmentedControl,
-  Text,
-  TextField,
-} from '@/shared/ui';
+import { Badge, Button, Card, Chip, Icon, Screen, Text, TextField } from '@/shared/ui';
 
 import { FiltersSheet } from './components/FiltersSheet';
 
-type ViewMode = 'list' | 'map';
-
-const KIND_OPTIONS: { value: ExploreFilters['kind']; label: string }[] = [
-  { value: 'all', label: 'Todo' },
-  { value: 'offer', label: 'Ofrecen' },
-  { value: 'request', label: 'Solicitan' },
-];
-
 const isCategory = (value: string | undefined): value is PostCategoryId =>
-  POST_CATEGORIES.some((c) => c.id === value);
+  HELP_CATEGORIES.some((c) => c.id === value);
 const isKind = (value: string | undefined): value is PostKind => value === 'offer' || value === 'request';
 
-function FilterLabel({ children }: { children: string }) {
-  return (
-    <Text variant="label-md" tone="muted">
-      {children}
-    </Text>
-  );
-}
-
-/** Explorar: lista de publicaciones con filtros esenciales visibles, avanzados en panel y acceso al mapa. */
+/**
+ * Explorar = ayuda entre vecinos, en una lista simple: buscar, elegir categoría y abrir. El resto vive en
+ * su propio lugar: el mapa tiene su pantalla, los negocios su pestaña, y tipo/distancia están en «Filtros».
+ */
 export function ExploreScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ q?: string; category?: string; kind?: string; view?: string; t?: string }>();
+  const params = useLocalSearchParams<{ q?: string; category?: string; kind?: string }>();
   const sector = useSectorStore((s) => s.sector);
   const { data, isLoading, isError, refetch } = useNearbyPosts(sector.id);
   const posts = data?.posts;
   const now = data?.fetchedAt ?? 0;
+  const radiusKm = sector.radiusKm;
 
-  const [view, setView] = useState<ViewMode>('list');
   const [filters, setFilters] = useState<ExploreFilters>({
     ...DEFAULT_FILTERS,
-    maxDistanceKm: sector.radiusKm,
+    maxDistanceKm: radiusKm,
   });
   const [sheetOpen, setSheetOpen] = useState(false);
 
-  // Atajos desde Inicio (busqueda o categoria) llegan como parametros de ruta.
-  // Se aplican al cambiar la firma de los parametros (ajuste de estado durante el render).
-  // `view=map` (con `t` para repetir el atajo) abre directamente el mapa, p. ej. desde Emergencias.
-  const paramsSignature = `${params.q ?? ''}|${params.category ?? ''}|${params.kind ?? ''}|${params.view ?? ''}|${params.t ?? ''}`;
+  // Atajos desde Inicio (búsqueda, categoría o tipo) llegan como parámetros de ruta.
+  // Se aplican al cambiar la firma de los parámetros (ajuste de estado durante el render).
+  const paramsSignature = `${params.q ?? ''}|${params.category ?? ''}|${params.kind ?? ''}`;
   const [appliedParams, setAppliedParams] = useState(paramsSignature);
   if (appliedParams !== paramsSignature) {
     setAppliedParams(paramsSignature);
-    if (params.view === 'map') setView('map');
     setFilters((f) => ({
       ...f,
       query: params.q ?? f.query,
@@ -83,11 +57,15 @@ export function ExploreScreen() {
       kind: isKind(params.kind) ? params.kind : f.kind,
     }));
   }
-  const radiusKm = sector.radiusKm;
 
   const results = useMemo(() => {
     if (!posts) return [];
-    const filtered = applyFilters(posts, filters, now);
+    // Los emprendimientos tienen su propia sección (pestaña Negocios): aquí solo ayuda entre vecinos.
+    const filtered = applyFilters(
+      posts.filter((p) => p.category !== 'business'),
+      filters,
+      now,
+    );
     return rankPosts(filtered, {
       now,
       radiusKm,
@@ -96,20 +74,28 @@ export function ExploreScreen() {
     });
   }, [posts, filters, now, radiusKm]);
 
-  const advancedCount = countAdvancedFilters(filters);
-  const distanceOptions = [0.5, 1, radiusKm];
+  // El botón «Filtros» cuenta tipo y distancia además de los avanzados.
+  const activeCount =
+    countAdvancedFilters(filters) + (filters.kind !== 'all' ? 1 : 0) + (filters.maxDistanceKm !== radiusKm ? 1 : 0);
   const resetAll = () => setFilters({ ...DEFAULT_FILTERS, maxDistanceKm: radiusKm });
   const filtersActive = hasActiveFilters(filters, radiusKm);
 
   return (
     <Screen noTopInset contentClassName="gap-4">
+      <View className="gap-0.5">
+        <Text variant="headline-lg" accessibilityRole="header">
+          Día a día
+        </Text>
+        <Text tone="muted">Ayuda entre vecinos en {sector.name}</Text>
+      </View>
+
       <View className="flex-row items-start gap-2">
         <View className="flex-1">
           <TextField
             label="Buscar en tu barrio"
             hideLabel
             leadingIcon="magnify"
-            placeholder={`Buscar en ${sector.name} (${radiusKm} km)…`}
+            placeholder="Busca herramientas, oficios, ayuda…"
             value={filters.query}
             onChangeText={(query) => setFilters((f) => ({ ...f, query }))}
             onClear={() => setFilters((f) => ({ ...f, query: '' }))}
@@ -118,100 +104,48 @@ export function ExploreScreen() {
         </View>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={
-            advancedCount > 0 ? `Más filtros, ${advancedCount} activos` : 'Más filtros'
-          }
+          accessibilityLabel={activeCount > 0 ? `Filtros, ${activeCount} activos` : 'Filtros'}
           onPress={() => setSheetOpen(true)}
-          className="h-12 min-w-12 items-center justify-center rounded-xl border-2 border-outline-variant bg-surface-container-lowest active:opacity-80">
-          <Icon name="tune-variant" size={22} color="onSurface" />
-          {advancedCount > 0 ? (
+          className="h-12 w-12 items-center justify-center rounded-2xl bg-surface-container-lowest shadow-sm elevation-xs active:opacity-80">
+          <Icon name="tune-variant" size={22} color="primary" />
+          {activeCount > 0 ? (
             <View className="absolute -right-1.5 -top-1.5 h-5 min-w-5 items-center justify-center rounded-full bg-secondary px-1">
               <Text variant="label-sm" tone="onSecondary">
-                {advancedCount}
+                {activeCount}
               </Text>
             </View>
           ) : null}
         </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Ver ayuda cercana en el mapa"
+          onPress={() => router.push('/mapa')}
+          className="h-12 w-12 items-center justify-center rounded-2xl bg-primary active:opacity-80">
+          <Icon name="map-outline" size={22} color="onPrimary" />
+        </Pressable>
       </View>
 
-      <SegmentedControl<ViewMode>
-        accessibilityLabel="Vista de resultados"
-        value={view}
-        onChange={setView}
-        options={[
-          { value: 'list', label: 'Lista', icon: 'format-list-bulleted' },
-          { value: 'map', label: 'Mapa barrial', icon: 'map-outline' },
-        ]}
-      />
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
+        <Chip
+          role="radio"
+          label="Todo"
+          icon="apps"
+          selected={filters.category === 'all'}
+          onPress={() => setFilters((f) => ({ ...f, category: 'all' }))}
+        />
+        {HELP_CATEGORIES.map((category) => (
+          <Chip
+            key={category.id}
+            role="radio"
+            label={category.label}
+            icon={category.icon}
+            selected={filters.category === category.id}
+            onPress={() => setFilters((f) => ({ ...f, category: category.id }))}
+          />
+        ))}
+      </ScrollView>
 
-      <View className="gap-3">
-        <View className="gap-1.5">
-          <FilterLabel>Tipo</FilterLabel>
-          <View className="flex-row flex-wrap gap-2">
-            {KIND_OPTIONS.map((option) => (
-              <Chip
-                key={option.value}
-                role="radio"
-                label={option.label}
-                selected={filters.kind === option.value}
-                onPress={() => setFilters((f) => ({ ...f, kind: option.value }))}
-              />
-            ))}
-          </View>
-        </View>
-
-        <View className="gap-1.5">
-          <FilterLabel>Categoría</FilterLabel>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
-            <Chip
-              role="radio"
-              label="Todas"
-              selected={filters.category === 'all'}
-              onPress={() => setFilters((f) => ({ ...f, category: 'all' }))}
-            />
-            {POST_CATEGORIES.map((category) => (
-              <Chip
-                key={category.id}
-                role="radio"
-                label={category.label}
-                icon={category.icon}
-                selected={filters.category === category.id}
-                onPress={() => setFilters((f) => ({ ...f, category: category.id }))}
-              />
-            ))}
-          </ScrollView>
-        </View>
-
-        <View className="gap-1.5">
-          <FilterLabel>Distancia</FilterLabel>
-          <View className="flex-row flex-wrap gap-2">
-            {distanceOptions.map((km) => (
-              <Chip
-                key={km}
-                role="radio"
-                label={km < 1 ? `${km * 1000} m` : `${km} km`}
-                selected={filters.maxDistanceKm === km}
-                onPress={() => setFilters((f) => ({ ...f, maxDistanceKm: km }))}
-              />
-            ))}
-          </View>
-        </View>
-      </View>
-
-      <View className="flex-row items-start gap-2 rounded-xl bg-surface-container-low p-3">
-        <Icon name="shield-lock-outline" size={20} color="primary" />
-        <Text variant="label-md" tone="muted" className="flex-1">
-          Protección vecinal: las ubicaciones son aproximadas dentro de un radio de {radiusKm} km.
-          Nunca mostramos direcciones exactas.
-        </Text>
-      </View>
-
-      {view === 'map' ? (
-        <>
-          <CommunityMap posts={results.map((r) => r.post)} />
-          <Button label="Volver a la lista" variant="tonal" icon="format-list-bulleted" onPress={() => setView('list')} />
-        </>
-      ) : isLoading ? (
+      {isLoading ? (
         <View className="items-center py-10" accessibilityLabel="Cargando publicaciones">
           <ActivityIndicator />
         </View>
@@ -229,9 +163,6 @@ export function ExploreScreen() {
             </Text>
             <Badge label="Datos de demostración" tone="warning" icon="flask-outline" />
           </View>
-          <Text variant="label-md" tone="muted">
-            Ordenadas por relevancia: cercanía, novedad y confianza de la comunidad.
-          </Text>
 
           {results.length === 0 ? (
             <Card className="items-center gap-3 py-8">
@@ -242,9 +173,7 @@ export function ExploreScreen() {
               <Text tone="muted" className="text-center">
                 Prueba con otras palabras, aumenta la distancia o quita algún filtro.
               </Text>
-              {filtersActive ? (
-                <Button label="Quitar filtros" icon="filter-remove-outline" onPress={resetAll} />
-              ) : null}
+              {filtersActive ? <Button label="Quitar filtros" icon="filter-remove-outline" onPress={resetAll} /> : null}
               {!filters.includeNearbySectors ? (
                 <Button
                   label="Ampliar a sectores cercanos"
@@ -264,20 +193,31 @@ export function ExploreScreen() {
         </>
       )}
 
-      <Card tone="low" className="items-center gap-2 py-6">
-        <Icon name="account-group-outline" size={32} color="primary" />
-        <Text variant="headline-sm" className="text-center">
-          ¿Tienes algo para sumar hoy?
-        </Text>
-        <Text tone="muted" className="text-center">
-          Prestar una escalera, regalar plantas o ayudar con un recado hace más fuerte a tu vecindario.
-        </Text>
-        <Button label="Crear publicación" icon="plus-circle-outline" onPress={() => router.push('/publicar')} />
-      </Card>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="¿Buscas un negocio del barrio? Abrir Emprendimientos"
+        onPress={() => router.push('/negocios')}
+        className="flex-row items-center gap-3 rounded-2xl bg-primary-fixed p-3 active:opacity-80">
+        <Icon name="storefront-outline" size={28} color="primary" />
+        <View className="min-w-0 flex-1">
+          <Text variant="body-md-medium" tone="primary">
+            ¿Buscas un negocio del barrio?
+          </Text>
+          <Text variant="label-md" tone="muted">
+            Bodegas, comida y servicios en Emprendimientos
+          </Text>
+        </View>
+        <Icon name="chevron-right" size={22} color="primary" />
+      </Pressable>
+
+      <Text variant="label-md" tone="muted">
+        Ubicaciones aproximadas dentro de {radiusKm} km. Nunca mostramos direcciones exactas.
+      </Text>
 
       <FiltersSheet
         visible={sheetOpen}
         filters={filters}
+        radiusKm={radiusKm}
         resultCount={results.length}
         onChange={setFilters}
         onClose={() => setSheetOpen(false)}

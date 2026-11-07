@@ -1,21 +1,23 @@
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import { useRegistrationGate, useSessionStore } from '@/features/session';
-import { Button, Card, Screen, SegmentedControl, Text } from '@/shared/ui';
+import { Button, Card, Screen, Text } from '@/shared/ui';
 
 import { ProfileHome } from './ProfileHome';
 import { ProfileSaved } from './ProfileSaved';
 import { ProfileSettings } from './ProfileSettings';
 
-type ProfileTab = 'profile' | 'saved' | 'settings';
+type ProfileTab = 'profile' | 'saved' | 'privacy' | 'settings';
 
 /** Perfil público, guardados en colecciones y ajustes de privacidad. */
 export function ProfileScreen() {
   const router = useRouter();
   const registered = useSessionStore((s) => s.registered);
   const { requireRegistration, sheet } = useRegistrationGate();
-  const [tab, setTab] = useState<ProfileTab>('profile');
+  // La pestaña la elige la barra de Confianza (Perfil · Guardados · Privacidad · Ajustes) con el parámetro `tab`.
+  const params = useLocalSearchParams<{ tab?: string }>();
+  const tab: ProfileTab =
+    params.tab === 'saved' || params.tab === 'privacy' || params.tab === 'settings' ? params.tab : 'profile';
 
   if (!registered) {
     return (
@@ -51,19 +53,10 @@ export function ProfileScreen() {
 
   return (
     <Screen noTopInset>
-      <SegmentedControl
-        accessibilityLabel="Secciones del perfil"
-        value={tab}
-        onChange={setTab}
-        options={[
-          { value: 'profile', label: 'Perfil', icon: 'account-outline' },
-          { value: 'saved', label: 'Guardados', icon: 'bookmark-outline' },
-          { value: 'settings', label: 'Ajustes', icon: 'cog-outline' },
-        ]}
-      />
       {tab === 'profile' ? <ProfileHome /> : null}
       {tab === 'saved' ? <ProfileSaved /> : null}
-      {tab === 'settings' ? <ProfileSettings /> : null}
+      {tab === 'privacy' ? <ProfileSettings part="privacy" /> : null}
+      {tab === 'settings' ? <ProfileSettings part="account" /> : null}
     </Screen>
   );
 }

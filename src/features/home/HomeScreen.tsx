@@ -1,261 +1,189 @@
 import { useRouter } from 'expo-router';
-import { useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 
-import { useSectorAlerts } from '@/features/emergency';
-import {
-  PostCard,
-  POST_CATEGORIES,
-  categoryText,
-  rankPosts,
-  useNearbyPosts,
-  type PostCategoryId,
-} from '@/features/posts';
+import { ReportCard, useEmergencyStore, useSectorAlerts } from '@/features/emergency';
+import { useNearbyPosts } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
+import { useSessionStore } from '@/features/session';
+import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
-import { Badge, Button, Card, Icon, Screen, Text, TextField, type IconName } from '@/shared/ui';
+import { Card, Icon, ListenButton, Screen, Text, type IconName } from '@/shared/ui';
 
-function greeting(hour: number): string {
-  if (hour < 12) return 'Buenos días';
-  if (hour < 19) return 'Buenas tardes';
-  return 'Buenas noches';
-}
+import {
+  SECCION_AYUDA_XML,
+  SECCION_COMUNIDAD_XML,
+  SECCION_EMERGENCIA_XML,
+  SECCION_EMPRENDIMIENTOS_XML,
+} from './sectionArt';
 
-type QuickAction = {
-  label: string;
-  hint: string;
-  icon: IconName;
+type SectionTileProps = {
+  title: string;
+  status: string;
+  statusIcon: IconName;
+  xml: string;
+  tone?: 'default' | 'emergency' | 'help';
   onPress: () => void;
-  tone: 'primary' | 'secondary' | 'error';
 };
 
-function QuickActionTile({ label, hint, icon, onPress, tone }: QuickAction) {
-  const iconBg =
-    tone === 'error' ? 'bg-error-container' : tone === 'secondary' ? 'bg-secondary-fixed' : 'bg-primary-fixed';
-  const iconColor = tone === 'error' ? 'error' : tone === 'secondary' ? 'secondary' : 'primary';
+const TILE_BG = { default: 'bg-primary-fixed', emergency: 'bg-error-container', help: 'bg-tertiary-fixed' } as const;
+
+/** Botón grande e ilustrado de una de las 4 secciones. */
+function SectionTile({ title, status, statusIcon, xml, tone = 'default', onPress }: SectionTileProps) {
+  const emergency = tone === 'emergency';
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${label}. ${hint}`}
+      accessibilityLabel={`${title}. ${status}`}
       onPress={onPress}
-      className="min-h-24 flex-1 justify-between gap-3 rounded-2xl bg-surface-container-lowest p-3 shadow-sm elevation-xs active:opacity-80">
-      <View className={`h-10 w-10 items-center justify-center rounded-xl ${iconBg}`}>
-        <Icon name={icon} size={22} color={iconColor} />
+      className={`flex-1 overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm elevation-xs active:opacity-90 ${
+        emergency ? 'border-2 border-error-container' : ''
+      }`}>
+      <View className={`h-28 items-center justify-end overflow-hidden ${TILE_BG[tone]}`}>
+        <SvgXml xml={xml} width={150} height={112} />
       </View>
-      <View>
-        <Text variant="body-md-medium">{label}</Text>
-        <Text variant="label-sm" tone="muted" numberOfLines={2}>
-          {hint}
+      <View className="gap-1 px-3.5 pb-3.5 pt-3">
+        <Text variant="headline-sm" tone={emergency ? 'error' : 'default'} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.8}>
+          {title}
         </Text>
+        <View className="flex-row items-center gap-1">
+          <Icon name={statusIcon} size={16} color={emergency ? 'error' : tone === 'help' ? 'tertiary' : 'primary'} />
+          <Text variant="label-md" tone={emergency ? 'error' : 'muted'} className="flex-1" numberOfLines={2}>
+            {status}
+          </Text>
+        </View>
       </View>
     </Pressable>
   );
 }
 
-function Metric({ value, label }: { value: number; label: string }) {
-  return (
-    <View className="flex-1 items-center gap-0.5 rounded-xl bg-surface-container-low py-3">
-      <Text variant="headline-md" tone="primary">
-        {value}
-      </Text>
-      <Text variant="label-sm" tone="muted" className="text-center">
-        {label}
-      </Text>
-    </View>
-  );
-}
-
-/** Inicio inteligente: sector, búsqueda, aviso contextual, acciones rápidas y actividad cercana. */
+/**
+ * Inicio = «¿Qué necesitas hoy?». Cuatro botones grandes, uno por sección, la alerta del sector (si hay)
+ * y lo que tienes pendiente. Las novedades del barrio viven en Comunidad.
+ */
 export function HomeScreen() {
   const router = useRouter();
   const sector = useSectorStore((s) => s.sector);
-  const { data, isLoading } = useNearbyPosts(sector.id);
-  const posts = data?.posts;
-  const [query, setQuery] = useState('');
-  // Saludo según la hora al abrir la pantalla (estado inicial, no cambia durante el render).
-  const [hour] = useState(() => new Date().getHours());
-
-  const now = data?.fetchedAt ?? 0;
-  const radiusKm = sector.radiusKm;
+  const registered = useSessionStore((s) => s.registered);
+  const displayName = useSessionStore((s) => s.displayName);
+  const { data } = useNearbyPosts(sector.id);
   const { data: alerts } = useSectorAlerts(sector.id);
+  const reports = useEmergencyStore((s) => s.reports);
+
   const alert = alerts?.[0];
-
-  const nearby = useMemo(
-    () => (posts ?? []).filter((p) => p.distanceM / 1000 <= radiusKm),
-    [posts, radiusKm],
-  );
-  const ranked = useMemo(
-    () => rankPosts(nearby, { now, radiusKm, extraSearchText: categoryText }),
-    [nearby, now, radiusKm],
-  );
-  const top = ranked.slice(0, 3);
-  const activeCount = ranked.length;
-  const offerCount = ranked.filter((r) => r.post.kind === 'offer').length;
-  const requestCount = ranked.filter((r) => r.post.kind === 'request').length;
-
-  const categoryCounts = useMemo(() => {
-    const counts = new Map<PostCategoryId, number>();
-    for (const { post } of ranked) counts.set(post.category, (counts.get(post.category) ?? 0) + 1);
-    return counts;
-  }, [ranked]);
-
-  const search = () =>
-    router.push({ pathname: '/explorar', params: query.trim() ? { q: query.trim() } : {} });
+  const posts = (data?.posts ?? []).filter((p) => p.distanceM / 1000 <= sector.radiusKm);
+  const businesses = posts.filter((p) => p.category === 'business').length;
+  const requests = posts.filter((p) => p.kind === 'request' && p.category !== 'business').length;
+  const community = posts.length - businesses;
+  const pending = reports.filter((r) => r.status !== 'resolved').slice(0, 2);
 
   return (
-    <Screen noTopInset>
-      <View className="gap-1">
-        <Text variant="headline-lg" accessibilityRole="header">
-          {greeting(hour)}
-        </Text>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={`Tu sector es ${sector.name}. Toca para cambiarlo`}
-          onPress={() => router.push('/sector')}
-          className="min-h-11 flex-row items-center gap-1.5 self-start">
-          <Icon name="map-marker-radius-outline" size={18} color="primary" />
-          <Text variant="body-md-medium" tone="primary">
-            {sector.name} · {radiusKm} km
-          </Text>
-          <Text variant="body-md" tone="muted">
-            · Cambiar
-          </Text>
-        </Pressable>
-      </View>
-
-      <TextField
-        label="Buscar en tu barrio"
-        hideLabel
-        leadingIcon="magnify"
-        placeholder="¿Qué necesitas o qué puedes ofrecer?"
-        value={query}
-        onChangeText={setQuery}
-        onClear={() => setQuery('')}
-        onSubmitEditing={search}
-        returnKeyType="search"
+    <Screen noTopInset contentClassName="gap-4 px-5 pb-6 pt-14">
+      <SectionHeader
+        eyebrow={
+          <View className="gap-0.5">
+            <Text variant="label-md" tone="muted">
+              {registered && displayName ? `Hola, ${displayName}` : 'Hola, vecino'}
+            </Text>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`Tu sector: ${sector.name}, ${sector.radiusKm} kilómetros. Cambiar`}
+              onPress={() => router.push('/sector')}
+              className="min-h-7 flex-row items-center gap-0.5 self-start">
+              <Icon name="map-marker" size={18} color="primary" />
+              <Text variant="body-md-medium" tone="primary">
+                {sector.name} · {sector.radiusKm} km
+              </Text>
+              <Icon name="chevron-down" size={20} color="primary" />
+            </Pressable>
+          </View>
+        }
       />
+
+      <Text variant="headline-lg" accessibilityRole="header" className="mt-1">
+        ¿Qué necesitas hoy?
+      </Text>
 
       {alert ? (
         <Card tone={alert.severity === 'critical' ? 'error' : 'warning'} accessibilityLiveRegion="polite">
-          <View className="flex-row items-center justify-between gap-2">
-            <View className="flex-1 flex-row items-center gap-2">
-              <Icon name="bullhorn-outline" size={22} color={alert.severity === 'critical' ? 'error' : 'warning'} />
-              <Text variant="body-lg-bold" className="flex-1">
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`${alert.title}. Activada por ${alert.source}. Abrir Emergencia`}
+            onPress={() => router.push('/emergencias')}
+            className="flex-row items-center gap-3 active:opacity-80">
+            <View className="h-9 w-9 items-center justify-center rounded-xl bg-error">
+              <Icon name="weather-lightning-rainy" size={20} color="onError" />
+            </View>
+            <View className="min-w-0 flex-1">
+              <Text variant="body-lg-bold" tone="error" numberOfLines={2}>
                 {alert.title}
               </Text>
+              <Text variant="label-md" tone="muted">
+                {alert.source} · {formatRelativeTime(alert.createdAt)}
+              </Text>
             </View>
-          </View>
-          <Text>{alert.body}</Text>
-          <Text variant="label-md" tone="muted">
-            Activada por: {alert.source} · {formatRelativeTime(alert.createdAt)}
-          </Text>
-          <Button
-            label="Abrir Modo Emergencia"
-            variant="outline"
-            icon="shield-alert-outline"
-            onPress={() => router.push('/emergencias')}
-          />
+            <Icon name="chevron-right" size={24} color="error" />
+          </Pressable>
+          <ListenButton text={`${alert.title}. ${alert.body} Activada por ${alert.source}.`} />
         </Card>
       ) : null}
 
-      <View className="gap-2">
-        <Text variant="headline-sm">Acciones rápidas</Text>
-        <View className="flex-row gap-2">
-          <QuickActionTile
-            label="Explorar"
-            hint="Ver lo que hay cerca"
-            icon="compass-outline"
-            tone="primary"
-            onPress={() => router.push('/explorar')}
+      <View className="gap-3" accessibilityLabel="Secciones">
+        <View className="flex-row gap-3">
+          <SectionTile
+            title="Comunidad"
+            status={community > 0 ? `${community} novedades cerca` : 'Novedades del barrio'}
+            statusIcon="bullhorn-outline"
+            xml={SECCION_COMUNIDAD_XML}
+            onPress={() => router.navigate('/comunidad')}
           />
-          <QuickActionTile
-            label="Publicar"
-            hint="Ofrecer o solicitar"
-            icon="plus-circle-outline"
-            tone="secondary"
-            onPress={() => router.push('/publicar')}
+          <SectionTile
+            title="Emprendimientos"
+            status={businesses > 0 ? `${businesses} negocios cerca` : 'Compra y apoya a tu barrio'}
+            statusIcon="storefront-outline"
+            xml={SECCION_EMPRENDIMIENTOS_XML}
+            onPress={() => router.navigate('/negocios')}
           />
-          <QuickActionTile
-            label="Necesito ayuda"
-            hint="Modo Emergencia"
-            icon="lifebuoy"
-            tone="error"
-            onPress={() => router.push('/emergencias')}
+        </View>
+        <View className="flex-row gap-3">
+          <SectionTile
+            title="Emergencia"
+            status="Reportar o pedir auxilio"
+            statusIcon="bullhorn-outline"
+            xml={SECCION_EMERGENCIA_XML}
+            tone="emergency"
+            onPress={() => router.navigate('/emergencias')}
+          />
+          <SectionTile
+            title="Ayuda"
+            status={requests > 0 ? `${requests} vecinos piden cerca` : 'Pide u ofrece ayuda'}
+            statusIcon="hand-back-left-outline"
+            xml={SECCION_AYUDA_XML}
+            tone="help"
+            onPress={() => router.navigate('/ayuda')}
           />
         </View>
       </View>
 
-      <View className="gap-2">
-        <View className="flex-row items-center justify-between gap-2">
-          <Text variant="headline-sm">Actividad cerca de ti</Text>
-          <Badge label="Datos de demostración" tone="warning" icon="flask-outline" />
-        </View>
-        {isLoading ? (
-          <View className="items-center py-6" accessibilityLabel="Cargando actividad">
-            <ActivityIndicator />
-          </View>
-        ) : (
-          <View className="flex-row gap-2">
-            <Metric value={activeCount} label="publicaciones activas" />
-            <Metric value={offerCount} label="ofrecimientos" />
-            <Metric value={requestCount} label="solicitudes" />
-          </View>
-        )}
-      </View>
-
-      {categoryCounts.size > 0 ? (
-        <View className="gap-2">
-          <Text variant="headline-sm">Categorías cercanas</Text>
-          <View className="flex-row flex-wrap gap-2">
-            {POST_CATEGORIES.filter((c) => categoryCounts.has(c.id)).map((category) => (
-              <Pressable
-                key={category.id}
-                accessibilityRole="button"
-                accessibilityLabel={`${category.label}, ${categoryCounts.get(category.id)} publicaciones`}
-                onPress={() => router.push({ pathname: '/explorar', params: { category: category.id } })}
-                className="min-h-11 flex-row items-center gap-2 rounded-full bg-surface-container px-3.5 active:opacity-80">
-                <Icon name={category.icon} size={18} color="primary" />
-                <Text variant="label-md">{category.label}</Text>
-                <View className="min-w-5 items-center rounded-full bg-primary px-1.5">
-                  <Text variant="label-sm" tone="onPrimary">
-                    {categoryCounts.get(category.id)}
-                  </Text>
-                </View>
-              </Pressable>
-            ))}
-          </View>
+      {pending.length > 0 ? (
+        <View className="gap-3">
+          <Text variant="headline-sm">Tienes pendiente</Text>
+          {pending.map((report) => (
+            <ReportCard
+              key={report.id}
+              report={report}
+              onPress={() => router.push({ pathname: '/emergencias/estado/[id]', params: { id: report.id } })}
+            />
+          ))}
         </View>
       ) : null}
 
-      {top.length > 0 ? (
-        <View className="gap-2">
-          <View className="flex-row items-center justify-between">
-            <Text variant="headline-sm">Para ti, cerca</Text>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Ver todas las publicaciones en Explorar"
-              onPress={() => router.push('/explorar')}
-              className="min-h-11 justify-center">
-              <Text variant="body-md-medium" tone="primary">
-                Ver todas
-              </Text>
-            </Pressable>
-          </View>
-          <View className="gap-3">
-            {top.map(({ post }) => (
-              <PostCard key={post.id} post={post} now={now} compact />
-            ))}
-          </View>
-        </View>
-      ) : null}
-
-      <Card tone="low" className="flex-row items-start gap-2">
-        <Icon name="shield-lock-outline" size={20} color="primary" />
+      <View className="flex-row items-start gap-2 px-1">
+        <Icon name="information-outline" size={18} color="primary" />
         <Text variant="label-md" tone="muted" className="flex-1">
-          Tus datos privados no se muestran hasta que ambas personas confirmen. La app coordina
-          ayuda entre vecinos y no reemplaza a los servicios oficiales de emergencia.
+          La app coordina ayuda entre vecinos y no reemplaza a los servicios oficiales de emergencia.
         </Text>
-      </Card>
+      </View>
     </Screen>
   );
 }

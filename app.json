@@ -39,6 +39,12 @@
         }
       ],
       "expo-sqlite",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Usamos el micrófono solo para grabar una nota de voz opcional. Se queda en tu teléfono y no se envía a nadie."
+        }
+      ],
       "expo-secure-store",
       [
         "expo-image-picker",

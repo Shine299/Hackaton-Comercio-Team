@@ -15,7 +15,7 @@ export default function EmergenciasLayout() {
           />
         ),
       }}>
-      <Stack.Screen name="index" options={{ title: 'Centro de emergencias' }} />
+      <Stack.Screen name="index" options={{ title: 'Emergencia', headerShown: false }} />
       <Stack.Screen name="necesito-ayuda" options={{ title: 'Necesito ayuda' }} />
       <Stack.Screen name="reportar" options={{ title: 'Reportar incidente' }} />
       <Stack.Screen name="estado/[id]" options={{ title: 'Estado del reporte' }} />
@@ -23,6 +23,7 @@ export default function EmergenciasLayout() {
       <Stack.Screen name="recursos" options={{ title: 'Necesidades y recursos' }} />
       <Stack.Screen name="vecino-vulnerable" options={{ title: 'Vecino vulnerable' }} />
       <Stack.Screen name="tablero" options={{ title: 'Tablero del sector' }} />
+      <Stack.Screen name="mis-reportes" options={{ title: 'Mis reportes' }} />
     </Stack>
   );
 }

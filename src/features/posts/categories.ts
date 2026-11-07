@@ -11,7 +11,14 @@ export const POST_CATEGORIES: CategoryInfo[] = [
   { id: 'barter', label: 'Trueque', icon: 'swap-horizontal' },
   { id: 'mobility', label: 'Movilidad', icon: 'car-outline' },
   { id: 'care', label: 'Cuidado y apoyo', icon: 'hand-heart-outline' },
+  { id: 'business', label: 'Emprendimientos', icon: 'storefront-outline' },
 ];
+
+/**
+ * Categorías de «ayuda entre vecinos» (Explorar y Publicar). Emprendimientos NO está aquí:
+ * tiene su propia sección (pestaña Negocios) y su propio registro.
+ */
+export const HELP_CATEGORIES: CategoryInfo[] = POST_CATEGORIES.filter((c) => c.id !== 'business');
 
 const byId = Object.fromEntries(POST_CATEGORIES.map((c) => [c.id, c])) as Record<
   PostCategoryId,

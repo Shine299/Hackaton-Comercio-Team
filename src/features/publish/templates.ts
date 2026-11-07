@@ -172,6 +172,33 @@ export const CATEGORY_GUIDE: Record<PostCategoryId, CategoryGuide> = {
     },
     voice: 'Puedo ofrecer o pedir un apoyo puntual de cuidado. Sin datos médicos ni direcciones exactas.',
   },
+  business: {
+    extra1: { label: 'Horario de atención (opcional)', placeholder: 'Lun a sáb, 8 a. m. a 7 p. m.…' },
+    extra2: { label: 'Cómo se entrega (opcional)', placeholder: 'Recojo en tienda, delivery en el sector…' },
+    templates: {
+      offer: [
+        {
+          title: 'Bodega del barrio: abarrotes y delivery en el sector',
+          description: 'Productos de primera necesidad y entrega a vecinos del sector. Atención de lunes a sábado.',
+        },
+        {
+          title: 'Almuerzos caseros por encargo',
+          description: 'Menú del día para vecinos. Pedidos hasta las 10 a. m. y recojo en un punto del barrio.',
+        },
+      ],
+      request: [
+        {
+          title: 'Busco quien me haga tortas para un cumpleaños',
+          description: 'Para unas 15 personas el sábado. Prefiero un emprendimiento del barrio.',
+        },
+        {
+          title: 'Necesito un costurero o costurera cercano',
+          description: 'Arreglos de ropa sencillos. Pago el trabajo; prefiero apoyar un negocio local.',
+        },
+      ],
+    },
+    voice: 'Soy emprendedor del barrio. Cuento qué vendo, mi horario y cómo entrego, sin dar mi dirección exacta.',
+  },
 };
 
 export const PRICE_CHIPS = ['Gratis', 'Préstamo', 'Trueque', 'A coordinar'] as const;

@@ -209,6 +209,8 @@ export type VulnerableAlert = {
   diagnosis: string;
   photoUri?: string;
   voiceUsed: boolean;
+  /** Ruta local de la nota de voz grabada. Privada: nunca se envía. */
+  voiceUri?: string;
   sectorId: string;
   sectorName: string;
   createdAt: number;

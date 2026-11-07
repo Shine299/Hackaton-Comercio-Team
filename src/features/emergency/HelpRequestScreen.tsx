@@ -2,8 +2,9 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { Button, Chip, Icon, Screen, Text, TextField } from '@/shared/ui';
+import { Button, Icon, Screen, Text, TextField } from '@/shared/ui';
 
+import { ChoiceTile } from './components/ChoiceTile';
 import { ApproxZoneCard, PhotoField } from './components/FormBits';
 import { useEmergencyStore } from './store';
 import { HELP_TYPES, type HelpType } from './types';
@@ -53,15 +54,19 @@ export function HelpRequestScreen() {
       </Pressable>
 
       <View className="gap-2">
-        <Text variant="headline-sm">¿Qué ayuda necesitas?</Text>
-        <View className="flex-row flex-wrap gap-2" accessibilityRole="radiogroup">
+        <View className="flex-row items-center justify-between gap-2">
+          <Text variant="headline-lg" accessibilityRole="header">
+            ¿Qué necesitas?
+          </Text>
+        </View>
+        <View className="flex-row flex-wrap gap-2.5" accessibilityRole="radiogroup">
           {HELP_TYPES.map((item) => (
-            <Chip
+            <ChoiceTile
               key={item.id}
-              label={item.label}
               icon={item.icon}
-              role="radio"
+              title={item.label}
               selected={type === item.id}
+              className="basis-[47%] grow"
               onPress={() => {
                 setType(item.id);
                 setError(undefined);

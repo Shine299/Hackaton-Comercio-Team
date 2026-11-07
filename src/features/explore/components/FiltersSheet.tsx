@@ -6,25 +6,36 @@ import { BottomSheet, Button, Chip, Text } from '@/shared/ui';
 type FiltersSheetProps = {
   visible: boolean;
   filters: ExploreFilters;
+  /** Radio del sector: es el valor «sin filtrar» de la distancia. */
+  radiusKm: number;
   resultCount: number;
   onChange: (next: ExploreFilters) => void;
   onClose: () => void;
 };
 
-const POSTED_OPTIONS: { value: ExploreFilters['postedWithin']; label: string }[] = [
+const KIND_OPTIONS: { value: ExploreFilters['kind']; label: string }[] = [
+  { value: 'all', label: 'Todo' },
+  { value: 'offer', label: 'Ofrecen' },
+  { value: 'request', label: 'Solicitan' },
+];
+
+const POSTED_OPTIONS:{ value: ExploreFilters['postedWithin']; label: string }[] = [
   { value: 'any', label: 'Cualquier fecha' },
   { value: 'today', label: 'Últimas 24 h' },
   { value: 'week', label: 'Esta semana' },
 ];
 
 /** Panel de filtros avanzados (los esenciales viven visibles en la pantalla). */
-export function FiltersSheet({ visible, filters, resultCount, onChange, onClose }: FiltersSheetProps) {
+export function FiltersSheet({ visible, filters, radiusKm, resultCount, onChange, onClose }: FiltersSheetProps) {
+  const distanceOptions = [0.5, 1, radiusKm];
   const set = <K extends keyof ExploreFilters>(key: K, value: ExploreFilters[K]) =>
     onChange({ ...filters, [key]: value });
 
   const reset = () =>
     onChange({
       ...filters,
+      kind: DEFAULT_FILTERS.kind,
+      maxDistanceKm: radiusKm,
       availableNow: DEFAULT_FILTERS.availableNow,
       verifiedOnly: DEFAULT_FILTERS.verifiedOnly,
       withRecommendations: DEFAULT_FILTERS.withRecommendations,
@@ -55,6 +66,40 @@ export function FiltersSheet({ visible, filters, resultCount, onChange, onClose 
           onPress={onClose}
         />
       }>
+      <View className="gap-2">
+        <Text variant="label-md" tone="muted">
+          Tipo
+        </Text>
+        <View className="flex-row flex-wrap gap-2">
+          {KIND_OPTIONS.map((option) => (
+            <Chip
+              key={option.value}
+              role="radio"
+              label={option.label}
+              selected={filters.kind === option.value}
+              onPress={() => set('kind', option.value)}
+            />
+          ))}
+        </View>
+      </View>
+
+      <View className="gap-2">
+        <Text variant="label-md" tone="muted">
+          Distancia
+        </Text>
+        <View className="flex-row flex-wrap gap-2">
+          {distanceOptions.map((km) => (
+            <Chip
+              key={km}
+              role="radio"
+              label={km < 1 ? `${km * 1000} m` : `${km} km`}
+              selected={filters.maxDistanceKm === km}
+              onPress={() => set('maxDistanceKm', km)}
+            />
+          ))}
+        </View>
+      </View>
+
       <View className="gap-2">
         <Text variant="label-md" tone="muted">
           Disponibilidad y confianza
