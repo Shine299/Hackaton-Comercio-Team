@@ -105,4 +105,5 @@ documentos de `docs/`. El mapa de rutas de Stitch está en
 | 7. Seguimiento y tablero | Hecho (vecino vulnerable en 3 pasos sin nombre ni diagnóstico, tablero del sector con motivo/fuente/hora/validación, bandeja de Actividad con filtros y leído/no leído local) |
 | 8. Mapa por capas | Hecho (Explorar → Mapa: 7 capas, react-native-maps con `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY`, lista equivalente sin clave, puntos en zona aproximada, lugares OSM de Lince versionados con `scripts/fetch-places.mjs`) |
 | 9. Cola offline | Hecho (`sync_queue` en expo-sqlite, salida emergencia→urgente→normal, reintento visible, descarte crítico con confirmación, bloque «Cola de envío» en Ajustes; sin servidor el tope es «local»/«pendiente») |
-| 10 | Pendiente |
+| 10. Supabase | Hecho (esquema, RLS, transporte, estados y alertas reales) |
+| 11. Tablero compartido y emprendimientos | Hecho («Voy a ayudar» entre dos teléfonos, emprendimientos como apartado, Inicio y mapa renovados, nota de voz real, «Escuchar» y notificaciones locales) |
