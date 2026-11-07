@@ -1,0 +1,1873 @@
+{
+  "sectorId": "lince",
+  "source": "OpenStreetMap (Overpass API)",
+  "license": "ODbL — © colaboradores de OpenStreetMap",
+  "fetchedAt": "2026-11-07",
+  "radiusM": 2000,
+  "places": [
+    {
+      "id": "osm-way-436588236",
+      "name": "Cedomuh",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07889,
+      "longitude": -77.0363
+    },
+    {
+      "id": "osm-way-401495205",
+      "name": "Centro de Atención Primaria Alfredo Piazza Roberts",
+      "amenity": "hospital",
+      "category": "health",
+      "latitude": -12.08636,
+      "longitude": -77.02764
+    },
+    {
+      "id": "osm-node-4884102510",
+      "name": "Centro de Emergencia del Hospital Nacional Edgardo Rebagliati Martins",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07925,
+      "longitude": -77.0383
+    },
+    {
+      "id": "osm-way-289515854",
+      "name": "Centro de Salud de Lince",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08186,
+      "longitude": -77.03197
+    },
+    {
+      "id": "osm-way-436565547",
+      "name": "Centro Dr. Galvez",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07466,
+      "longitude": -77.03856
+    },
+    {
+      "id": "osm-way-436605089",
+      "name": "Centro Especializado de Diagnóstico Principe",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08296,
+      "longitude": -77.03505
+    },
+    {
+      "id": "osm-way-436781698",
+      "name": "Centro Médico Las Palmeras",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.09436,
+      "longitude": -77.04546
+    },
+    {
+      "id": "osm-node-3230315412",
+      "name": "Centro Nacional de Salud Renal",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07728,
+      "longitude": -77.03849
+    },
+    {
+      "id": "osm-node-4103896369",
+      "name": "CheckSalud",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08887,
+      "longitude": -77.02126
+    },
+    {
+      "id": "osm-way-435841703",
+      "name": "Cimedic",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.0993,
+      "longitude": -77.03257
+    },
+    {
+      "id": "osm-way-436314044",
+      "name": "Clínica de la Piel",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07457,
+      "longitude": -77.043
+    },
+    {
+      "id": "osm-node-2838647365",
+      "name": "Clínica de Otorrino",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08254,
+      "longitude": -77.02332
+    },
+    {
+      "id": "osm-way-436743296",
+      "name": "Clínica González",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08297,
+      "longitude": -77.03296
+    },
+    {
+      "id": "osm-node-5076423515",
+      "name": "Clínica hogar de Maria",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08547,
+      "longitude": -77.05047
+    },
+    {
+      "id": "osm-node-3810263474",
+      "name": "Clínica Internacional - Medicentro San Isidro",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.09308,
+      "longitude": -77.02396
+    },
+    {
+      "id": "osm-way-400891961",
+      "name": "Clínica Javier Prado",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.0911,
+      "longitude": -77.02845
+    },
+    {
+      "id": "osm-node-6652462590",
+      "name": "Clínica La Luz",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07628,
+      "longitude": -77.03594
+    },
+    {
+      "id": "osm-node-14290299001",
+      "name": "Clinica Medica Cayetano Heredia",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08701,
+      "longitude": -77.03845
+    },
+    {
+      "id": "osm-way-436904081",
+      "name": "Clínica Monte Sinaí",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08308,
+      "longitude": -77.04064
+    },
+    {
+      "id": "osm-node-4808012782",
+      "name": "Clinica Pablo Bermudez",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07244,
+      "longitude": -77.03835
+    },
+    {
+      "id": "osm-way-436920146",
+      "name": "Clínica Porvenir",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07761,
+      "longitude": -77.05098
+    },
+    {
+      "id": "osm-way-289515700",
+      "name": "Clinica Ricardo Palma",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.09071,
+      "longitude": -77.0183
+    },
+    {
+      "id": "osm-node-4953786221",
+      "name": "Clinica Sigso",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07596,
+      "longitude": -77.04346
+    },
+    {
+      "id": "osm-way-450128393",
+      "name": "Complejo Hospitalario Arenales",
+      "amenity": "hospital",
+      "category": "health",
+      "latitude": -12.07858,
+      "longitude": -77.03715
+    },
+    {
+      "id": "osm-way-435873176",
+      "name": "DPI",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.09104,
+      "longitude": -77.03826
+    },
+    {
+      "id": "osm-way-39413837",
+      "name": "Hospital Nacional Edgardo Rebagliati Martins",
+      "amenity": "hospital",
+      "category": "health",
+      "latitude": -12.07836,
+      "longitude": -77.03989
+    },
+    {
+      "id": "osm-way-436295984",
+      "name": "Inappares",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08392,
+      "longitude": -77.04909
+    },
+    {
+      "id": "osm-node-6577890321",
+      "name": "Instituto de Oncología & Radioterapia",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.09076,
+      "longitude": -77.01886
+    },
+    {
+      "id": "osm-node-4203505990",
+      "name": "Instituto Nacional Cardiovascular",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.0772,
+      "longitude": -77.04002
+    },
+    {
+      "id": "osm-way-396436042",
+      "name": "Instituto Nacional de Salud",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08017,
+      "longitude": -77.04145
+    },
+    {
+      "id": "osm-node-4240018095",
+      "name": "Instituto Peruano de Neurociencias",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08125,
+      "longitude": -77.03538
+    },
+    {
+      "id": "osm-way-437877500",
+      "name": "La Luz de un Ángel",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08424,
+      "longitude": -77.01921
+    },
+    {
+      "id": "osm-node-4654354690",
+      "name": "Laboratorios Clinicos Integrados SA",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.09571,
+      "longitude": -77.04293
+    },
+    {
+      "id": "osm-way-435546423",
+      "name": "Las Américas",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.09042,
+      "longitude": -77.03341
+    },
+    {
+      "id": "osm-way-436480276",
+      "name": "Medcorp - Salud Ocupacional",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08001,
+      "longitude": -77.0342
+    },
+    {
+      "id": "osm-way-435512509",
+      "name": "Natur",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07535,
+      "longitude": -77.04523
+    },
+    {
+      "id": "osm-way-401490448",
+      "name": "Oftalmo Salud",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.09041,
+      "longitude": -77.0171
+    },
+    {
+      "id": "osm-way-436784917",
+      "name": "Orbi Médica",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.09156,
+      "longitude": -77.03832
+    },
+    {
+      "id": "osm-node-6652448548",
+      "name": "PADOMI",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07814,
+      "longitude": -77.03697
+    },
+    {
+      "id": "osm-node-8699377510",
+      "name": "Policlínico Gestión Médica",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07818,
+      "longitude": -77.04979
+    },
+    {
+      "id": "osm-way-436893830",
+      "name": "Policlinico Jesus Redentor",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.07727,
+      "longitude": -77.04849
+    },
+    {
+      "id": "osm-way-436574814",
+      "name": "Policlínico Municipal",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08383,
+      "longitude": -77.03168
+    },
+    {
+      "id": "osm-way-436609104",
+      "name": "Policlinico Risso",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08451,
+      "longitude": -77.03472
+    },
+    {
+      "id": "osm-way-435209227",
+      "name": "Radioncologia",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.10123,
+      "longitude": -77.02757
+    },
+    {
+      "id": "osm-way-436797584",
+      "name": "Servimedic",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.08953,
+      "longitude": -77.03931
+    },
+    {
+      "id": "osm-way-436278843",
+      "name": "SISOL Salud Lince",
+      "amenity": "hospital",
+      "category": "health",
+      "latitude": -12.08403,
+      "longitude": -77.03951
+    },
+    {
+      "id": "osm-way-435873175",
+      "name": "TG Laser of Talmica",
+      "amenity": "clinic",
+      "category": "health",
+      "latitude": -12.09102,
+      "longitude": -77.03848
+    },
+    {
+      "id": "osm-node-13626817206",
+      "name": "Torre Trecca",
+      "amenity": "hospital",
+      "category": "health",
+      "latitude": -12.07882,
+      "longitude": -77.03698
+    },
+    {
+      "id": "osm-node-4344541988",
+      "name": "Arcangel",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08286,
+      "longitude": -77.03259
+    },
+    {
+      "id": "osm-node-4356531204",
+      "name": "Botica Central",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07996,
+      "longitude": -77.02267
+    },
+    {
+      "id": "osm-node-4343674008",
+      "name": "Botica Cesarid",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08996,
+      "longitude": -77.03268
+    },
+    {
+      "id": "osm-node-7304768833",
+      "name": "Botica Los Laureles",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.09753,
+      "longitude": -77.04553
+    },
+    {
+      "id": "osm-node-4344536407",
+      "name": "Botica María Auxiliadora",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07902,
+      "longitude": -77.03154
+    },
+    {
+      "id": "osm-node-4346222701",
+      "name": "Botica Melchorita",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07638,
+      "longitude": -77.03287
+    },
+    {
+      "id": "osm-node-3729534662",
+      "name": "Botica Mercedes (Farmacom)",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.09322,
+      "longitude": -77.03215
+    },
+    {
+      "id": "osm-node-3729571475",
+      "name": "Botica Neosalud",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08959,
+      "longitude": -77.03803
+    },
+    {
+      "id": "osm-node-4344536406",
+      "name": "Botica Saludfarma",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07889,
+      "longitude": -77.0317
+    },
+    {
+      "id": "osm-node-4343674014",
+      "name": "Botica San Martín",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08936,
+      "longitude": -77.03275
+    },
+    {
+      "id": "osm-way-437874491",
+      "name": "Botica's y Salud",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07916,
+      "longitude": -77.02243
+    },
+    {
+      "id": "osm-node-3810046310",
+      "name": "Boticas Arcangel",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08691,
+      "longitude": -77.042
+    },
+    {
+      "id": "osm-node-4357745694",
+      "name": "Boticas BMC",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07766,
+      "longitude": -77.01753
+    },
+    {
+      "id": "osm-node-4344744307",
+      "name": "Boticas BTL",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07888,
+      "longitude": -77.03634
+    },
+    {
+      "id": "osm-node-4344541982",
+      "name": "Boticas Farmaderm",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08234,
+      "longitude": -77.03266
+    },
+    {
+      "id": "osm-way-436570950",
+      "name": "Boticas Fasa",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08636,
+      "longitude": -77.03202
+    },
+    {
+      "id": "osm-node-1917958569",
+      "name": "Boticas Mifarma",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.09676,
+      "longitude": -77.02333
+    },
+    {
+      "id": "osm-node-4343618334",
+      "name": "Boticas Perú",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08948,
+      "longitude": -77.02711
+    },
+    {
+      "id": "osm-node-4343685146",
+      "name": "Boticas Q.F.",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08433,
+      "longitude": -77.03347
+    },
+    {
+      "id": "osm-node-4344922431",
+      "name": "Boticas Salud",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08711,
+      "longitude": -77.03428
+    },
+    {
+      "id": "osm-node-4334273558",
+      "name": "Boticas y Salud",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07531,
+      "longitude": -77.04728
+    },
+    {
+      "id": "osm-node-4357789331",
+      "name": "Farma Diamantes",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08057,
+      "longitude": -77.02321
+    },
+    {
+      "id": "osm-node-4346361065",
+      "name": "Farma Natural",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08043,
+      "longitude": -77.03636
+    },
+    {
+      "id": "osm-node-7300909497",
+      "name": "Farmacia Gala",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07507,
+      "longitude": -77.02203
+    },
+    {
+      "id": "osm-node-4346194248",
+      "name": "Farmacia Mundial",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08621,
+      "longitude": -77.031
+    },
+    {
+      "id": "osm-node-4344881843",
+      "name": "Farmacia Rocío",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08241,
+      "longitude": -77.03517
+    },
+    {
+      "id": "osm-node-4344601307",
+      "name": "Farmacia Universal",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08329,
+      "longitude": -77.05188
+    },
+    {
+      "id": "osm-node-4332726092",
+      "name": "Farmacom",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.09714,
+      "longitude": -77.03596
+    },
+    {
+      "id": "osm-node-8699499009",
+      "name": "Farmasol",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07898,
+      "longitude": -77.05015
+    },
+    {
+      "id": "osm-node-4341595619",
+      "name": "Hollywood",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08694,
+      "longitude": -77.04224
+    },
+    {
+      "id": "osm-node-4343619528",
+      "name": "Homeo Farma",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.09254,
+      "longitude": -77.03202
+    },
+    {
+      "id": "osm-node-3810046308",
+      "name": "Inkafarma",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08694,
+      "longitude": -77.0422
+    },
+    {
+      "id": "osm-way-436477770",
+      "name": "Mas Salud",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.0891,
+      "longitude": -77.0328
+    },
+    {
+      "id": "osm-node-2646301396",
+      "name": "Mifarma",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08563,
+      "longitude": -77.03472
+    },
+    {
+      "id": "osm-node-4357764424",
+      "name": "Multifarma",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07397,
+      "longitude": -77.02065
+    },
+    {
+      "id": "osm-node-4343678639",
+      "name": "Nova Farma",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08693,
+      "longitude": -77.03311
+    },
+    {
+      "id": "osm-node-4003442678",
+      "name": "Química Suiza",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08903,
+      "longitude": -77.02317
+    },
+    {
+      "id": "osm-node-4346060809",
+      "name": "Super Boticas Hollywood",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.08603,
+      "longitude": -77.033
+    },
+    {
+      "id": "osm-node-8681576836",
+      "name": "Unifarma",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07808,
+      "longitude": -77.05029
+    },
+    {
+      "id": "osm-node-4346350416",
+      "name": "Vital",
+      "amenity": "pharmacy",
+      "category": "pharmacy",
+      "latitude": -12.07603,
+      "longitude": -77.03705
+    },
+    {
+      "id": "osm-way-319331711",
+      "name": "Comisaría PNP Lince",
+      "amenity": "police",
+      "category": "safety",
+      "latitude": -12.08333,
+      "longitude": -77.02715
+    },
+    {
+      "id": "osm-way-319317829",
+      "name": "Comisaría PNP Petit Thouars",
+      "amenity": "police",
+      "category": "safety",
+      "latitude": -12.06885,
+      "longitude": -77.0353
+    },
+    {
+      "id": "osm-way-319575400",
+      "name": "Comisaría PNP San Isidro",
+      "amenity": "police",
+      "category": "safety",
+      "latitude": -12.0951,
+      "longitude": -77.03226
+    },
+    {
+      "id": "osm-way-318312597",
+      "name": "Compañía de Bomberos Jesús María Nº 202",
+      "amenity": "fire_station",
+      "category": "safety",
+      "latitude": -12.08222,
+      "longitude": -77.04207
+    },
+    {
+      "id": "osm-way-318280078",
+      "name": "Compañía de Bomberos Lima Nº 4",
+      "amenity": "fire_station",
+      "category": "safety",
+      "latitude": -12.0819,
+      "longitude": -77.0322
+    },
+    {
+      "id": "osm-node-4567986076",
+      "name": "DIRANDRO",
+      "amenity": "police",
+      "category": "safety",
+      "latitude": -12.07632,
+      "longitude": -77.0287
+    },
+    {
+      "id": "osm-node-4159349590",
+      "name": "Dirección de Seguridad de Estado",
+      "amenity": "police",
+      "category": "safety",
+      "latitude": -12.09747,
+      "longitude": -77.02932
+    },
+    {
+      "id": "osm-way-435551147",
+      "name": "Policía Nacional",
+      "amenity": "police",
+      "category": "safety",
+      "latitude": -12.09504,
+      "longitude": -77.03261
+    },
+    {
+      "id": "osm-node-4382537624",
+      "name": "puesto de control",
+      "amenity": "police",
+      "category": "safety",
+      "latitude": -12.07359,
+      "longitude": -77.02239
+    },
+    {
+      "id": "osm-way-437508566",
+      "name": "San Isidro Serenazgo",
+      "amenity": "police",
+      "category": "safety",
+      "latitude": -12.09078,
+      "longitude": -77.01909
+    },
+    {
+      "id": "osm-node-4152317790",
+      "name": "UNILOG DIRANDRO",
+      "amenity": "police",
+      "category": "safety",
+      "latitude": -12.07305,
+      "longitude": -77.03723
+    },
+    {
+      "id": "osm-node-3992264586",
+      "name": "Antúnez de Mayolo",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07201,
+      "longitude": -77.02536
+    },
+    {
+      "id": "osm-node-5593035733",
+      "name": "Art Nouveau",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07689,
+      "longitude": -77.03623
+    },
+    {
+      "id": "osm-node-8083091849",
+      "name": "C.E.B.A Nicolás Copernico",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07694,
+      "longitude": -77.0354
+    },
+    {
+      "id": "osm-node-4192146780",
+      "name": "Casa de la juventud",
+      "amenity": "community_centre",
+      "category": "shelter",
+      "latitude": -12.07224,
+      "longitude": -77.04678
+    },
+    {
+      "id": "osm-node-4360892789",
+      "name": "CEAS",
+      "amenity": "community_centre",
+      "category": "shelter",
+      "latitude": -12.08398,
+      "longitude": -77.04702
+    },
+    {
+      "id": "osm-node-2090582854",
+      "name": "CEBA Ceba - Francisco de Paula Gonzales Vigil",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08363,
+      "longitude": -77.03354
+    },
+    {
+      "id": "osm-node-2090582855",
+      "name": "CEBA Ceba - Metropolitano",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08533,
+      "longitude": -77.03053
+    },
+    {
+      "id": "osm-node-4214566934",
+      "name": "Centro Aeronáutico del Perú San Isidro",
+      "amenity": "community_centre",
+      "category": "shelter",
+      "latitude": -12.09405,
+      "longitude": -77.04145
+    },
+    {
+      "id": "osm-node-5593086788",
+      "name": "Charles Chaplin",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.09309,
+      "longitude": -77.04729
+    },
+    {
+      "id": "osm-node-5593077556",
+      "name": "Chio Lecca",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.09279,
+      "longitude": -77.04421
+    },
+    {
+      "id": "osm-node-2068560799",
+      "name": "Colegio Benjamin Franklin",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07593,
+      "longitude": -77.04146
+    },
+    {
+      "id": "osm-node-2090582882",
+      "name": "Colegio Gimnasio Peruano",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07988,
+      "longitude": -77.03336
+    },
+    {
+      "id": "osm-node-2090582885",
+      "name": "Colegio Los Angeles",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08408,
+      "longitude": -77.03943
+    },
+    {
+      "id": "osm-node-4359031393",
+      "name": "colegio no escolarizado CEBA PB",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08049,
+      "longitude": -77.03524
+    },
+    {
+      "id": "osm-node-2090582889",
+      "name": "Colegio Nuestra Virgen del Divino Corazon",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08495,
+      "longitude": -77.04354
+    },
+    {
+      "id": "osm-way-449461551",
+      "name": "Colegio Parroquial San Norberto",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08529,
+      "longitude": -77.01806
+    },
+    {
+      "id": "osm-way-447103579",
+      "name": "Colegio Reina de las Américas",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0774,
+      "longitude": -77.02208
+    },
+    {
+      "id": "osm-node-2068560828",
+      "name": "Colegio Saco Oliveros de Jesús María",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0722,
+      "longitude": -77.04182
+    },
+    {
+      "id": "osm-node-5397334824",
+      "name": "Columbia",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08736,
+      "longitude": -77.02516
+    },
+    {
+      "id": "osm-way-436732571",
+      "name": "De Alta Gastronomia Le Grand Gourmet",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07718,
+      "longitude": -77.03419
+    },
+    {
+      "id": "osm-node-5594902750",
+      "name": "De Diseño Publicitario Leo Design",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08936,
+      "longitude": -77.03398
+    },
+    {
+      "id": "osm-node-5593023196",
+      "name": "Educacion Medica San Fernando",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.06938,
+      "longitude": -77.03838
+    },
+    {
+      "id": "osm-node-5594888239",
+      "name": "Ela",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08498,
+      "longitude": -77.03409
+    },
+    {
+      "id": "osm-way-435866451",
+      "name": "Expro - Excelencia Profesional",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.09239,
+      "longitude": -77.03084
+    },
+    {
+      "id": "osm-node-5939954385",
+      "name": "FEPM",
+      "amenity": "community_centre",
+      "category": "shelter",
+      "latitude": -12.07265,
+      "longitude": -77.04252
+    },
+    {
+      "id": "osm-node-5594902748",
+      "name": "Franklin Roosevelt",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08998,
+      "longitude": -77.03348
+    },
+    {
+      "id": "osm-node-5593023197",
+      "name": "General Oscar Arteta Terzi",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07078,
+      "longitude": -77.03885
+    },
+    {
+      "id": "osm-node-6051554368",
+      "name": "Grand Sallon Swissotel",
+      "amenity": "community_centre",
+      "category": "shelter",
+      "latitude": -12.09751,
+      "longitude": -77.03779
+    },
+    {
+      "id": "osm-way-436591878",
+      "name": "Iberotec",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08032,
+      "longitude": -77.03595
+    },
+    {
+      "id": "osm-node-5593035732",
+      "name": "Idat",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0722,
+      "longitude": -77.0366
+    },
+    {
+      "id": "osm-way-436296575",
+      "name": "Institución Educativa 08 Perú Holanda",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07885,
+      "longitude": -77.0473
+    },
+    {
+      "id": "osm-way-532058660",
+      "name": "Institución Educativa 1051 El Olivar",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.10222,
+      "longitude": -77.03321
+    },
+    {
+      "id": "osm-way-496766920",
+      "name": "Institución Educativa 1057 Jose Baquijano Y Carrillo",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08196,
+      "longitude": -77.04155
+    },
+    {
+      "id": "osm-way-436575809",
+      "name": "Institución Educativa 1059 Maria Inmaculada",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08264,
+      "longitude": -77.03195
+    },
+    {
+      "id": "osm-way-289466468",
+      "name": "Institución Educativa 1070 Meliton Carvajal",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08464,
+      "longitude": -77.02702
+    },
+    {
+      "id": "osm-way-470683204",
+      "name": "Institución Educativa 1117 Andres Avelino Aramburu",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.06924,
+      "longitude": -77.03123
+    },
+    {
+      "id": "osm-way-416503221",
+      "name": "Institución Educativa 1129 Corazón de Jesús",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07911,
+      "longitude": -77.01954
+    },
+    {
+      "id": "osm-node-2090582874",
+      "name": "Institución Educativa Albert Einstein",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08116,
+      "longitude": -77.03709
+    },
+    {
+      "id": "osm-way-435544166",
+      "name": "Institución Educativa Alberto Benjamin Simpson",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08735,
+      "longitude": -77.03369
+    },
+    {
+      "id": "osm-node-2090582876",
+      "name": "Institución Educativa Alborada",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08225,
+      "longitude": -77.03409
+    },
+    {
+      "id": "osm-node-5594726946",
+      "name": "Institución Educativa Angelica Palma Roman",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0748,
+      "longitude": -77.01911
+    },
+    {
+      "id": "osm-node-5594752926",
+      "name": "Institución Educativa Antonio Cavoli",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08078,
+      "longitude": -77.0209
+    },
+    {
+      "id": "osm-node-2090582877",
+      "name": "Institución Educativa Aplicacion San Marcos",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08306,
+      "longitude": -77.04211
+    },
+    {
+      "id": "osm-way-436278069",
+      "name": "Institución Educativa Bhonner",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08458,
+      "longitude": -77.0434
+    },
+    {
+      "id": "osm-node-5594896486",
+      "name": "Institución Educativa Buonarroti",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08381,
+      "longitude": -77.0242
+    },
+    {
+      "id": "osm-node-2090582879",
+      "name": "Institución Educativa Christa Mc Auliffe",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08366,
+      "longitude": -77.04577
+    },
+    {
+      "id": "osm-node-2068560807",
+      "name": "Institución Educativa Corazon De Jesus",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07041,
+      "longitude": -77.04412
+    },
+    {
+      "id": "osm-node-5594752925",
+      "name": "Institución Educativa Cristo Milagroso",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07858,
+      "longitude": -77.02096
+    },
+    {
+      "id": "osm-node-5594752922",
+      "name": "Institución Educativa Cruz Saco De Balconcillo",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0792,
+      "longitude": -77.0232
+    },
+    {
+      "id": "osm-way-436732564",
+      "name": "Institución Educativa Dalton",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08277,
+      "longitude": -77.03332
+    },
+    {
+      "id": "osm-way-289515966",
+      "name": "Institución Educativa Dante Alighieri",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07516,
+      "longitude": -77.03522
+    },
+    {
+      "id": "osm-way-436743294",
+      "name": "Institución Educativa Divina Trinidad",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08272,
+      "longitude": -77.03291
+    },
+    {
+      "id": "osm-node-5594896496",
+      "name": "Institución Educativa Domingo Savio",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08825,
+      "longitude": -77.01889
+    },
+    {
+      "id": "osm-node-5594916169",
+      "name": "Institución Educativa Friendship High School",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.09947,
+      "longitude": -77.03161
+    },
+    {
+      "id": "osm-node-2090582883",
+      "name": "Institución Educativa Gotita De Cielo",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08757,
+      "longitude": -77.04211
+    },
+    {
+      "id": "osm-node-5578635280",
+      "name": "Institución Educativa Illariy",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0855,
+      "longitude": -77.0482
+    },
+    {
+      "id": "osm-node-6742505568",
+      "name": "Institución Educativa Ing. Jorge Cabrera Tapia",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07383,
+      "longitude": -77.03342
+    },
+    {
+      "id": "osm-node-5594896484",
+      "name": "Institución Educativa Inicial Nº 1112 Víctor Andrés Belaúnde",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08451,
+      "longitude": -77.01979
+    },
+    {
+      "id": "osm-node-5593010027",
+      "name": "Institución Educativa International High School - Eiger",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07496,
+      "longitude": -77.04241
+    },
+    {
+      "id": "osm-way-396421289",
+      "name": "Institución Educativa Isabel La Catolica",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07045,
+      "longitude": -77.02392
+    },
+    {
+      "id": "osm-node-2068560817",
+      "name": "Institución Educativa Jean Piaget",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07037,
+      "longitude": -77.03909
+    },
+    {
+      "id": "osm-node-2090582884",
+      "name": "Institución Educativa Jesualdo",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08363,
+      "longitude": -77.04633
+    },
+    {
+      "id": "osm-node-5594752931",
+      "name": "Institución Educativa Jesus Salvador",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07919,
+      "longitude": -77.0247
+    },
+    {
+      "id": "osm-node-5594902747",
+      "name": "Institución Educativa La Casita De Juegos",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.09316,
+      "longitude": -77.03382
+    },
+    {
+      "id": "osm-way-436567782",
+      "name": "Institución Educativa Los Robles",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07667,
+      "longitude": -77.03195
+    },
+    {
+      "id": "osm-node-5594752935",
+      "name": "Institución Educativa Luz De Maria",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07711,
+      "longitude": -77.0248
+    },
+    {
+      "id": "osm-way-436920142",
+      "name": "Institución Educativa Macico",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07717,
+      "longitude": -77.04808
+    },
+    {
+      "id": "osm-node-2090582886",
+      "name": "Institución Educativa Maria Reina De La Paz",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.09071,
+      "longitude": -77.03821
+    },
+    {
+      "id": "osm-node-5593388322",
+      "name": "Institución Educativa Master Ciencias Ii",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0744,
+      "longitude": -77.03255
+    },
+    {
+      "id": "osm-way-435544142",
+      "name": "Institución Educativa Metropolitano",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08537,
+      "longitude": -77.03408
+    },
+    {
+      "id": "osm-node-2090582887",
+      "name": "Institución Educativa Mi Hogar Y Escuela",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08426,
+      "longitude": -77.04384
+    },
+    {
+      "id": "osm-node-2090582888",
+      "name": "Institución Educativa Micaela Bastidas De Condorcanqui",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08641,
+      "longitude": -77.0423
+    },
+    {
+      "id": "osm-way-436603556",
+      "name": "Institución Educativa Montealto",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.09699,
+      "longitude": -77.04748
+    },
+    {
+      "id": "osm-way-39675679",
+      "name": "Institución Educativa N° 1071 Alfonso Ugarte",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.09946,
+      "longitude": -77.02776
+    },
+    {
+      "id": "osm-way-408468187",
+      "name": "Institución Educativa Nº 1112 Víctor Andrés Belaúnde",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08476,
+      "longitude": -77.01979
+    },
+    {
+      "id": "osm-way-400878872",
+      "name": "Institución Educativa Nuestra Señora De La Luz",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.09893,
+      "longitude": -77.02993
+    },
+    {
+      "id": "osm-node-5594752927",
+      "name": "Institución Educativa Nuestra Señora De Los Angeles",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08061,
+      "longitude": -77.0246
+    },
+    {
+      "id": "osm-way-317273484",
+      "name": "Institución Educativa Nuestra Señora Del Pilar",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08793,
+      "longitude": -77.02029
+    },
+    {
+      "id": "osm-node-2068560825",
+      "name": "Institución Educativa Pamer",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.06972,
+      "longitude": -77.03865
+    },
+    {
+      "id": "osm-way-436575404",
+      "name": "Institución Educativa Pamer - Jesus Maria",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08232,
+      "longitude": -77.04915
+    },
+    {
+      "id": "osm-node-2090582890",
+      "name": "Institución Educativa Pamer - Lince",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08778,
+      "longitude": -77.03328
+    },
+    {
+      "id": "osm-node-5578635273",
+      "name": "Institución Educativa Privada del Sagrado Corazón Sophianum",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08643,
+      "longitude": -77.04901
+    },
+    {
+      "id": "osm-node-5594752933",
+      "name": "Institución Educativa Rafael Hoyos Rubio",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07851,
+      "longitude": -77.0246
+    },
+    {
+      "id": "osm-node-5594724723",
+      "name": "Institución Educativa Regina Decor Carmeli",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07571,
+      "longitude": -77.02466
+    },
+    {
+      "id": "osm-way-416503209",
+      "name": "Institución Educativa Reina de las Américas",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08054,
+      "longitude": -77.02204
+    },
+    {
+      "id": "osm-way-436574812",
+      "name": "Institución Educativa Republica De Chile",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08507,
+      "longitude": -77.03163
+    },
+    {
+      "id": "osm-way-317270142",
+      "name": "Institución Educativa Rosa Dominga Perez Liendo",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08541,
+      "longitude": -77.02146
+    },
+    {
+      "id": "osm-way-1025142545",
+      "name": "Institución Educativa Saco Oliveros",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07716,
+      "longitude": -77.03321
+    },
+    {
+      "id": "osm-node-5594643738",
+      "name": "Institución Educativa Saco Oliveros De La Victoria",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07359,
+      "longitude": -77.02561
+    },
+    {
+      "id": "osm-node-2090582892",
+      "name": "Institución Educativa Saco Oliveros De Lince",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08139,
+      "longitude": -77.03829
+    },
+    {
+      "id": "osm-node-5593010023",
+      "name": "Institución Educativa Saco Oliveros De Salaverry",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07398,
+      "longitude": -77.04311
+    },
+    {
+      "id": "osm-node-5594748630",
+      "name": "Institución Educativa Saco Oliveros De Santa Beatriz",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0775,
+      "longitude": -77.0357
+    },
+    {
+      "id": "osm-node-5593010022",
+      "name": "Institución Educativa Saco Oliveros Helicoidal",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0722,
+      "longitude": -77.04172
+    },
+    {
+      "id": "osm-way-295176823",
+      "name": "Institución Educativa Sagrado Corazon Sophianum",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08663,
+      "longitude": -77.04895
+    },
+    {
+      "id": "osm-way-39682093",
+      "name": "Institución Educativa San Agustin",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.09165,
+      "longitude": -77.02078
+    },
+    {
+      "id": "osm-node-5594896498",
+      "name": "Institución Educativa San Andres",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08291,
+      "longitude": -77.0185
+    },
+    {
+      "id": "osm-node-5594724730",
+      "name": "Institución Educativa San Francisco",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07693,
+      "longitude": -77.02382
+    },
+    {
+      "id": "osm-way-408468193",
+      "name": "Institución Educativa San Norberto",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08514,
+      "longitude": -77.01899
+    },
+    {
+      "id": "osm-node-5593010025",
+      "name": "Institución Educativa San Patricio",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07482,
+      "longitude": -77.0423
+    },
+    {
+      "id": "osm-way-434687172",
+      "name": "Institución Educativa San Rafael",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.06725,
+      "longitude": -77.03196
+    },
+    {
+      "id": "osm-way-396421290",
+      "name": "Institución Educativa San Ricardo",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07147,
+      "longitude": -77.0223
+    },
+    {
+      "id": "osm-node-2090582893",
+      "name": "Institución Educativa San Tarcisio",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08445,
+      "longitude": -77.04433
+    },
+    {
+      "id": "osm-node-5594752929",
+      "name": "Institución Educativa Santa Luisa De Marillac",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.081,
+      "longitude": -77.0242
+    },
+    {
+      "id": "osm-way-436289823",
+      "name": "Institución Educativa Santa Maria Del Carmen",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08333,
+      "longitude": -77.0397
+    },
+    {
+      "id": "osm-node-5578477031",
+      "name": "Institución Educativa Santa Rita",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0736,
+      "longitude": -77.0476
+    },
+    {
+      "id": "osm-way-436284937",
+      "name": "Institución Educativa Santa Rosa De Lima",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08687,
+      "longitude": -77.03908
+    },
+    {
+      "id": "osm-way-401490482",
+      "name": "Institución Educativa Santa Úrsula",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0965,
+      "longitude": -77.03901
+    },
+    {
+      "id": "osm-node-2090582896",
+      "name": "Institución Educativa Sor Ines",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08156,
+      "longitude": -77.03702
+    },
+    {
+      "id": "osm-way-396436043",
+      "name": "Institución Educativa Teresa Gonzales de Fanning",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07805,
+      "longitude": -77.04628
+    },
+    {
+      "id": "osm-way-436576083",
+      "name": "Institución Educativa Trilce De Roma",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07256,
+      "longitude": -77.03224
+    },
+    {
+      "id": "osm-node-5594916167",
+      "name": "Institución Educativa Trilce De San Isidro",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.1008,
+      "longitude": -77.0317
+    },
+    {
+      "id": "osm-way-436565544",
+      "name": "Institución Educativa Trilce Salaverry",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07477,
+      "longitude": -77.04006
+    },
+    {
+      "id": "osm-node-5594896481",
+      "name": "Institución Educativa Unimundo",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08668,
+      "longitude": -77.02103
+    },
+    {
+      "id": "osm-node-5594896497",
+      "name": "Institución Educativa Unimundo De Santa Catalina",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0828,
+      "longitude": -77.0181
+    },
+    {
+      "id": "osm-way-298349419",
+      "name": "Instituto Idat, Sede Lima Centro",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.06712,
+      "longitude": -77.03567
+    },
+    {
+      "id": "osm-way-435535465",
+      "name": "Latino",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0736,
+      "longitude": -77.03577
+    },
+    {
+      "id": "osm-node-5593023199",
+      "name": "Metropolitano",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07124,
+      "longitude": -77.03665
+    },
+    {
+      "id": "osm-way-436588408",
+      "name": "Municipalidad de Jesús María",
+      "amenity": "townhall",
+      "category": "shelter",
+      "latitude": -12.07575,
+      "longitude": -77.04318
+    },
+    {
+      "id": "osm-node-8083051062",
+      "name": "Municipalidad de Lince",
+      "amenity": "townhall",
+      "category": "shelter",
+      "latitude": -12.08333,
+      "longitude": -77.03185
+    },
+    {
+      "id": "osm-node-8026357065",
+      "name": "Municipalidad de San Isidro",
+      "amenity": "townhall",
+      "category": "shelter",
+      "latitude": -12.09774,
+      "longitude": -77.02739
+    },
+    {
+      "id": "osm-node-5594888243",
+      "name": "Norbert Wiener",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08417,
+      "longitude": -77.03475
+    },
+    {
+      "id": "osm-node-5593010024",
+      "name": "Optica Y Optometria",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.0745,
+      "longitude": -77.04398
+    },
+    {
+      "id": "osm-way-522131536",
+      "name": "Pamer Academia",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07438,
+      "longitude": -77.03264
+    },
+    {
+      "id": "osm-node-5531286021",
+      "name": "Plaza Vea",
+      "amenity": "community_centre",
+      "category": "shelter",
+      "latitude": -12.09749,
+      "longitude": -77.02628
+    },
+    {
+      "id": "osm-node-5594896483",
+      "name": "San Agustin",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.09097,
+      "longitude": -77.02083
+    },
+    {
+      "id": "osm-node-5594748631",
+      "name": "Selene",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08138,
+      "longitude": -77.03399
+    },
+    {
+      "id": "osm-node-5593040481",
+      "name": "Seminario Teologico Evangelico Presbiteriano Del Peru",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08063,
+      "longitude": -77.03737
+    },
+    {
+      "id": "osm-node-5593372474",
+      "name": "Sistemas Peru",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.06938,
+      "longitude": -77.0349
+    },
+    {
+      "id": "osm-node-5593035734",
+      "name": "Southern Technological Institute",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07417,
+      "longitude": -77.03734
+    },
+    {
+      "id": "osm-node-5593388324",
+      "name": "Tecnologico De Lima - Insttel",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07382,
+      "longitude": -77.03585
+    },
+    {
+      "id": "osm-node-7561197414",
+      "name": "Trilce",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.10084,
+      "longitude": -77.03182
+    },
+    {
+      "id": "osm-node-4331307092",
+      "name": "Universidad Peruana Los Andes - Sede Lima",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.07538,
+      "longitude": -77.04156
+    },
+    {
+      "id": "osm-node-4151400699",
+      "name": "Usamedic",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08304,
+      "longitude": -77.03687
+    },
+    {
+      "id": "osm-node-5594888245",
+      "name": "Wernher Von Braun",
+      "amenity": "school",
+      "category": "shelter",
+      "latitude": -12.08222,
+      "longitude": -77.03401
+    }
+  ]
+}
