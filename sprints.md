@@ -103,6 +103,7 @@ Mapa de código para quien empieza:
 8. **Límites conocidos:** dictado a texto simulado en Publicar; notificaciones solo locales (no push remoto); la nota de voz no se reproduce en la pantalla de estado del reporte; iPhone solo con Expo Go; el chat del lienzo no existe en la app.
 9. **Deuda técnica:** el filtro «Delivery» busca la palabra en un texto libre de `details`; la «confianza» de vecinos es solo de demostración (no hay verificación real).
 10. **Lienzo:** 15 tableros conservan la barra inferior anterior.
+11. **Funciones del lienzo que aún no existen en el código** (el rediseño visual ya está aplicado; esto es trabajo nuevo, ver «Pendientes del rediseño» en el Sprint 2): Mensajes y Chat · Favoritos de negocios · Modo fácil y «Elige cómo ver la app» · Avisos y eventos reales en Comunidad · «¿Cuántas personas?» y «¿Hay personas en riesgo?» en los formularios.
 
 ---
 
@@ -245,6 +246,11 @@ Estimaciones: **S** ≤ 2 h · **M** ≤ medio día · **L** ≤ 1 día. «Dueñ
 | S2-4 | Reproducir la nota de voz en la pantalla de estado del reporte | SPEC-023 | S | | — |
 | S2-5 | Tablero del sector con la misma lista de avisos en vivo que el Inicio (revisión de consistencia) | SPEC-024 | S | | S1-1 |
 | S2-6 | Actualizar en el lienzo la barra de las 15 pantallas restantes (documentación visual) | — | M | | — |
+| S2-7 | **Mensajes y Chat** (bandeja central y chat que se abre solo tras aceptar una solicitud) | SPEC-025 | L | | decisión del equipo |
+| S2-8 | **Favoritos de negocios** (corazón en la tarjeta y pantalla de favoritos) | SPEC-026 | M | | — |
+| S2-9 | **Modo fácil** y pantalla «Elige cómo ver la app» (letra grande, botones de 112 px, «Escuchar», una columna; se cambia en Perfil) | SPEC-027 | L | | — |
+| S2-10 | **Avisos y eventos reales en Comunidad** (hoy el feed usa publicaciones, tablero y confianza) | SPEC-028 | L | | — |
+| S2-11 | **«¿Cuántas personas?» y «¿Hay personas en riesgo?»** en Necesito ayuda y Reportar (dato nuevo en la alerta, sin romper la privacidad) | SPEC-029 | M | | S1-3 |
 
 **Imágenes que hay que conseguir** (con licencia libre, por ejemplo Unsplash o Pexels; personas ficticias o de espaldas, sin rostros reconocibles, sobre todo en Emergencia):
 
@@ -276,7 +282,15 @@ Estimaciones: **S** ≤ 2 h · **M** ≤ medio día · **L** ≤ 1 día. «Dueñ
 | Estado del reporte | `emergency/ReportStatusScreen.tsx` | 13 |
 | Onboarding | `onboarding/*` | 01 |
 
-**Decisiones abiertas:** el **chat** del lienzo (tablero 07) no existe en la app, que hoy usa «solicitud antes del contacto». Se deja fuera de alcance salvo que el equipo decida lo contrario.
+**Pendientes del rediseño (funciones nuevas, no solo estilo).** El rediseño visual de las pantallas con función ya está en la rama `etapa-11-tablero-emprendimientos` (barra de 5 secciones, Inicio, Comunidad, Ayuda, Emergencia, Emprendimientos, formularios, Tablero, Mis reportes y estado del reporte). Lo siguiente se vio en el lienzo pero **no existe en el código**, así que es trabajo por hacer con spec y pruebas:
+
+- [ ] Mensajes y Chat (S2-7).
+- [ ] Favoritos de negocios (S2-8).
+- [ ] Modo fácil y «Elige cómo ver la app». Hoy no hay ninguna opción de modo fácil ni letra grande en el código; es una función nueva, no un cambio visual (S2-9).
+- [ ] Avisos y eventos reales en Comunidad (S2-10).
+- [ ] «¿Cuántas personas?» y «¿Hay personas en riesgo?» en los formularios (S2-11).
+
+**Decisiones abiertas:** el **chat** del lienzo (tablero 07) no existe en la app, que hoy usa «solicitud antes del contacto». Antes de empezar S2-7, el equipo decide si entra o queda fuera de alcance.
 
 ---
 
