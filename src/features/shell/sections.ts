@@ -3,10 +3,10 @@ import type { Href } from 'expo-router';
 import type { IconName } from '@/shared/ui';
 
 /**
- * Las 4 secciones de la app más el Inicio. Cada una tiene su propia barra inferior; la primera
- * pestaña de cada sección siempre vuelve a Inicio.
+ * Las 4 secciones de la app. Cada una tiene su propia barra inferior; la primera pestaña de cada
+ * sección siempre vuelve a Inicio. El Inicio en sí no tiene barra: se entra a cada sección desde sus tarjetas.
  */
-export type SectionId = 'home' | 'dia' | 'emprendimientos' | 'confianza' | 'emergencia';
+export type SectionId = 'dia' | 'emprendimientos' | 'confianza' | 'emergencia';
 
 export type BarItem = {
   key: string;
@@ -22,13 +22,6 @@ export type BarItem = {
 const HOME: BarItem = { key: 'inicio', label: 'Inicio', icon: 'home-outline', iconActive: 'home', href: '/', a11y: 'Inicio' };
 
 export const SECTION_ITEMS: Record<SectionId, BarItem[]> = {
-  home: [
-    HOME,
-    { key: 'dia', label: 'Día a día', icon: 'handshake-outline', iconActive: 'handshake', href: '/explorar', a11y: 'Día a día: ayuda entre vecinos' },
-    { key: 'emergencia', label: 'Emergencia', icon: 'lifebuoy', href: '/emergencias', a11y: 'Emergencia: ayuda en un toque', pill: 'danger' },
-    { key: 'negocios', label: 'Negocios', icon: 'storefront-outline', iconActive: 'storefront', href: '/negocios', a11y: 'Emprendimientos del barrio' },
-    { key: 'confianza', label: 'Confianza', icon: 'shield-check-outline', iconActive: 'shield-check', href: '/perfil', a11y: 'Confianza: tu perfil y privacidad' },
-  ],
   dia: [
     HOME,
     { key: 'vecinos', label: 'Vecinos', icon: 'account-group-outline', iconActive: 'account-group', href: '/explorar', a11y: 'Vecinos: ayuda cercana' },
@@ -70,8 +63,6 @@ type Params = { layer?: string; tab?: string };
  */
 export function resolveSection(pathname: string, params: Params, last: 'dia' | 'emprendimientos'): ResolvedSection | null {
   switch (pathname) {
-    case '/':
-      return { section: 'home', active: 'inicio' };
     case '/explorar':
       return { section: 'dia', active: 'vecinos' };
     case '/publicar':

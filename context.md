@@ -226,7 +226,7 @@ Las tabs redirigen a `/onboarding` si no se completó; `/emergencias` nunca se b
   Barra inferior: Inicio · Explorar · Publicar (+) · Negocios · Perfil. Actividad se abre desde la campana del Inicio (contador: `useUnreadActivityCount`).
   El filtro «Abierto ahora» del diseño es «Disponible ahora» en la app (no hay horarios estructurados). Sin micrófono en el registro (no hay dictado real).
 - **Navegación por sección (etapa 11c)**: la barra inferior vive en el diseño raíz (`features/shell/SectionBar.tsx` + `sections.ts`) y cambia según la pantalla.
-  Inicio: Inicio · Día a día · Emergencia · Negocios · Confianza. Día a día: Vecinos · Publicar (+) · Mapa · Solicitudes. Emprendimientos: Negocios · Mapa · Mi negocio · Solicitudes.
+  El Inicio NO tiene barra: se entra a cada sección desde sus 4 tarjetas grandes (y se vuelve con la pestaña Inicio). Día a día: Vecinos · Publicar (+) · Mapa · Solicitudes. Emprendimientos: Negocios · Mapa · Mi negocio · Solicitudes.
   Confianza: Perfil · Guardados · Privacidad · Ajustes (parámetro `tab` de `/perfil`). Emergencia (acento rojo): Ayuda · Tablero · Recursos · Mis reportes (`/emergencias/mis-reportes`).
   Solo las pantallas raíz muestran barra; formularios y detalles quedan limpios. `Mapa` y `Solicitudes` se resuelven por la sección de origen (`useBarStore.lastSection`).
   `Screen` no suma margen inferior si hay barra (`useBarStore.visible`). Las pestañas de `(tabs)` ya no dibujan barra propia.
