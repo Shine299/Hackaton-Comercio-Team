@@ -220,6 +220,11 @@ Las tabs redirigen a `/onboarding` si no se completó; `/emergencias` nunca se b
 - Voz real: `VoiceNoteField` (expo-audio) graba/escucha/borra; la nota se queda en el teléfono. «Escuchar» (`ListenButton`, expo-speech).
   El dictado a texto de Publicar sigue simulado (Expo no trae reconocimiento de voz).
 - Notificaciones LOCALES (`features/notifications`) al aparecer un aviso nuevo en el sector. No es push remoto (Expo Go no lo permite en Android).
+- **Emprendimientos como sección propia** (`features/business`): pestaña «Negocios» (`(tabs)/negocios.tsx`), registro en `negocios/registrar.tsx`,
+  detalle reutilizando `/publicacion/[id]` (variante de negocio en `PostDetailScreen`). Rubro, horario y entrega viajan en `details` (`rubros.ts`); sin migración nueva.
+  Explorar y Publicar usan `HELP_CATEGORIES` (sin `business`); el mapa sí muestra los negocios en su capa (`?view=map&layer=business`).
+  Barra inferior: Inicio · Explorar · Publicar (+) · Negocios · Perfil. Actividad se abre desde la campana del Inicio (contador: `useUnreadActivityCount`).
+  El filtro «Abierto ahora» del diseño es «Disponible ahora» en la app (no hay horarios estructurados). Sin micrófono en el registro (no hay dictado real).
 - Para probar el tablero hacen falta dos dispositivos (cuentas anónimas distintas): nadie puede responder a su propio aviso.
 
 ### Pendientes menores conocidos

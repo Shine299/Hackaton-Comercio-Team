@@ -10,7 +10,7 @@ import { Pressable, View } from 'react-native';
 import { useOutboxStore } from '@/features/outbox';
 import {
   getCategory,
-  POST_CATEGORIES,
+  HELP_CATEGORIES,
   POST_KIND_LABEL,
   useLocalPostsStore,
   type Post,
@@ -310,7 +310,7 @@ export function PublishScreen() {
               Categoría
             </Text>
             <View className="flex-row flex-wrap gap-2">
-              {POST_CATEGORIES.map((item) => (
+              {HELP_CATEGORIES.map((item) => (
                 <Chip
                   key={item.id}
                   label={item.label}

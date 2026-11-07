@@ -50,7 +50,7 @@ function PointRow({ point, selected, onPress }: { point: MapPoint; selected: boo
  * Mapa barrial por capas (Explorar → Mapa). En iOS y Android muestra react-native-maps; en web,
  * la misma información en lista y un aviso claro. Los puntos son siempre zona aproximada.
  */
-export function CommunityMap({ posts }: { posts: Post[] }) {
+export function CommunityMap({ posts, initialLayers }: { posts: Post[]; initialLayers?: MapLayerId[] }) {
   const router = useRouter();
   const sector = useSectorStore((s) => s.sector);
   const reports = useEmergencyStore((s) => s.reports);
@@ -59,7 +59,7 @@ export function CommunityMap({ posts }: { posts: Post[] }) {
   const volunteerAvailable = useProfilePrefsStore((s) => s.volunteerAvailable);
   const showSector = useProfilePrefsStore((s) => s.showSector);
   const [now] = useState(() => Date.now());
-  const [active, setActive] = useState<MapLayerId[]>(DEFAULT_LAYERS);
+  const [active, setActive] = useState<MapLayerId[]>(initialLayers ?? DEFAULT_LAYERS);
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const [showList, setShowList] = useState(false);
   const [expanded, setExpanded] = useState(false);

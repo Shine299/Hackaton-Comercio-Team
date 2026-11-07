@@ -197,6 +197,7 @@ export function createDemoPosts(now: number = Date.now()): Post[] {
       ...base,
       id: 'demo-b1',
       details: [
+        { label: 'Rubro', value: 'Bodega' },
         { label: 'Horario de atención', value: 'Lun a sáb, 7 a. m. a 9 p. m.' },
         { label: 'Cómo se entrega', value: 'Recojo en tienda y delivery en el sector' },
       ],
@@ -215,6 +216,7 @@ export function createDemoPosts(now: number = Date.now()): Post[] {
       ...base,
       id: 'demo-b2',
       details: [
+        { label: 'Rubro', value: 'Comida' },
         { label: 'Horario de atención', value: 'Pedidos hasta las 10 a. m.' },
         { label: 'Cómo se entrega', value: 'Recojo en un punto del barrio' },
       ],
@@ -233,6 +235,7 @@ export function createDemoPosts(now: number = Date.now()): Post[] {
       ...base,
       id: 'demo-b3',
       details: [
+        { label: 'Rubro', value: 'Costura' },
         { label: 'Horario de atención', value: 'Mar a sáb, 10 a. m. a 6 p. m.' },
         { label: 'Cómo se entrega', value: 'En su taller, con cita' },
       ],

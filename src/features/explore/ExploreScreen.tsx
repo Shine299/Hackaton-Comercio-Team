@@ -2,7 +2,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 
-import { CommunityMap } from '@/features/map';
+import { CommunityMap, type MapLayerId } from '@/features/map';
 import { useSectorStore } from '@/features/sector';
 import {
   applyFilters,
@@ -10,7 +10,7 @@ import {
   countAdvancedFilters,
   DEFAULT_FILTERS,
   hasActiveFilters,
-  POST_CATEGORIES,
+  HELP_CATEGORIES,
   PostCard,
   rankPosts,
   useNearbyPosts,
@@ -41,7 +41,7 @@ const KIND_OPTIONS: { value: ExploreFilters['kind']; label: string }[] = [
 ];
 
 const isCategory = (value: string | undefined): value is PostCategoryId =>
-  POST_CATEGORIES.some((c) => c.id === value);
+  HELP_CATEGORIES.some((c) => c.id === value);
 const isKind = (value: string | undefined): value is PostKind => value === 'offer' || value === 'request';
 
 function FilterLabel({ children }: { children: string }) {
@@ -55,7 +55,14 @@ function FilterLabel({ children }: { children: string }) {
 /** Explorar: lista de publicaciones con filtros esenciales visibles, avanzados en panel y acceso al mapa. */
 export function ExploreScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ q?: string; category?: string; kind?: string; view?: string; t?: string }>();
+  const params = useLocalSearchParams<{
+    q?: string;
+    category?: string;
+    kind?: string;
+    view?: string;
+    layer?: string;
+    t?: string;
+  }>();
   const sector = useSectorStore((s) => s.sector);
   const { data, isLoading, isError, refetch } = useNearbyPosts(sector.id);
   const posts = data?.posts;
@@ -87,7 +94,12 @@ export function ExploreScreen() {
 
   const results = useMemo(() => {
     if (!posts) return [];
-    const filtered = applyFilters(posts, filters, now);
+    // Los emprendimientos tienen su propia sección (pestaña Negocios): aquí solo ayuda entre vecinos.
+    const filtered = applyFilters(
+      posts.filter((p) => p.category !== 'business'),
+      filters,
+      now,
+    );
     return rankPosts(filtered, {
       now,
       radiusKm,
@@ -95,6 +107,13 @@ export function ExploreScreen() {
       extraSearchText: categoryText,
     });
   }, [posts, filters, now, radiusKm]);
+
+  // El mapa sí muestra los negocios, en su propia capa.
+  const businessPosts = useMemo(
+    () => (posts ?? []).filter((p) => p.category === 'business' && p.distanceM / 1000 <= radiusKm),
+    [posts, radiusKm],
+  );
+  const mapLayers: MapLayerId[] | undefined = params.layer === 'business' ? ['business'] : undefined;
 
   const advancedCount = countAdvancedFilters(filters);
   const distanceOptions = [0.5, 1, radiusKm];
@@ -144,6 +163,23 @@ export function ExploreScreen() {
         ]}
       />
 
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="¿Buscas un negocio del barrio? Abrir Emprendimientos"
+        onPress={() => router.push('/negocios')}
+        className="flex-row items-center gap-3 rounded-2xl bg-primary-fixed p-3 active:opacity-80">
+        <Icon name="storefront-outline" size={28} color="primary" />
+        <View className="min-w-0 flex-1">
+          <Text variant="body-md-medium" tone="primary">
+            ¿Buscas un negocio del barrio?
+          </Text>
+          <Text variant="label-md" tone="muted">
+            Bodegas, comida y servicios en Emprendimientos
+          </Text>
+        </View>
+        <Icon name="chevron-right" size={22} color="primary" />
+      </Pressable>
+
       <View className="gap-3">
         <View className="gap-1.5">
           <FilterLabel>Tipo</FilterLabel>
@@ -169,7 +205,7 @@ export function ExploreScreen() {
               selected={filters.category === 'all'}
               onPress={() => setFilters((f) => ({ ...f, category: 'all' }))}
             />
-            {POST_CATEGORIES.map((category) => (
+            {HELP_CATEGORIES.map((category) => (
               <Chip
                 key={category.id}
                 role="radio"
@@ -208,7 +244,11 @@ export function ExploreScreen() {
 
       {view === 'map' ? (
         <>
-          <CommunityMap posts={results.map((r) => r.post)} />
+          <CommunityMap
+            key={`${params.layer ?? 'all'}|${params.t ?? ''}`}
+            posts={[...results.map((r) => r.post), ...businessPosts]}
+            initialLayers={mapLayers}
+          />
           <Button label="Volver a la lista" variant="tonal" icon="format-list-bulleted" onPress={() => setView('list')} />
         </>
       ) : isLoading ? (

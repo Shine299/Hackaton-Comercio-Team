@@ -66,6 +66,7 @@ export function PostDetailScreen() {
   const canContact = Boolean(post && !post.isOwn && status === 'active');
   const category = post ? getCategory(post.category) : null;
   const isOffer = post?.kind === 'offer';
+  const isBusiness = post?.category === 'business';
 
   const onSave = () => {
     if (saved) {
@@ -93,7 +94,7 @@ export function PostDetailScreen() {
     <Screen
       header={
         <ScreenHeader
-          title="Publicación"
+          title={post?.category === 'business' ? 'Emprendimiento' : 'Publicación'}
           backLabel="Volver a la lista"
           trailing={
             post ? (
@@ -112,7 +113,15 @@ export function PostDetailScreen() {
       footer={
         canContact ? (
           <Button
-            label={request ? 'Solicitud guardada en tu teléfono' : isOffer ? 'Pedir contacto' : 'Ofrecer ayuda'}
+            label={
+              request
+                ? 'Solicitud guardada en tu teléfono'
+                : isBusiness
+                  ? 'Enviar solicitud al negocio'
+                  : isOffer
+                    ? 'Pedir contacto'
+                    : 'Ofrecer ayuda'
+            }
             size="lg"
             icon={request ? 'cellphone-check' : 'message-text-outline'}
             disabled={Boolean(request)}
@@ -240,6 +249,16 @@ export function PostDetailScreen() {
                   <Text>{item.value}</Text>
                 </View>
               ))}
+            </Card>
+          ) : null}
+
+          {isBusiness && !post.isOwn ? (
+            <Card tone="low" className="flex-row items-start gap-2">
+              <Icon name="shield-lock-outline" size={20} color="primary" />
+              <Text variant="label-md" tone="muted" className="flex-1">
+                Para cuidar tu privacidad, el contacto se abre cuando el negocio acepta tu solicitud. Nunca
+                mostramos su dirección exacta.
+              </Text>
             </Card>
           ) : null}
 

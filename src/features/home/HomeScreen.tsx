@@ -2,6 +2,7 @@ import { useRouter, type Href } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 
+import { useUnreadActivityCount } from '@/features/activity/useUnreadActivityCount';
 import { useSectorAlerts, useSectorImpact } from '@/features/emergency';
 import {
   PostCard,
@@ -151,6 +152,7 @@ export function HomeScreen() {
   const { data: alerts } = useSectorAlerts(sector.id);
   const alert = alerts?.[0];
   const { data: impact } = useSectorImpact(sector.id);
+  const unread = useUnreadActivityCount();
 
   const nearby = useMemo(
     () => (posts ?? []).filter((p) => p.distanceM / 1000 <= radiusKm),
@@ -196,10 +198,17 @@ export function HomeScreen() {
         </View>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Ver tu actividad"
+          accessibilityLabel={unread > 0 ? `Ver tu actividad, ${unread} sin leer` : 'Ver tu actividad'}
           onPress={() => router.push('/actividad')}
           className="h-12 w-12 items-center justify-center rounded-full bg-surface-container-lowest shadow-sm elevation-xs active:opacity-80">
           <Icon name="bell-outline" size={24} color="primary" />
+          {unread > 0 ? (
+            <View className="absolute -right-1 -top-1 h-5 min-w-5 items-center justify-center rounded-full bg-secondary px-1">
+              <Text variant="label-sm" tone="onSecondary">
+                {unread > 9 ? '9+' : unread}
+              </Text>
+            </View>
+          ) : null}
         </Pressable>
       </Pressable>
 
@@ -250,7 +259,7 @@ export function HomeScreen() {
           hint="Compra y apoya a tu barrio"
           icon="storefront-outline"
           tone="business"
-          onPress={() => router.push({ pathname: '/explorar', params: { category: 'business' } })}
+          onPress={() => router.push('/negocios')}
         />
       </View>
 
@@ -282,7 +291,7 @@ export function HomeScreen() {
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Ver todos los emprendimientos"
-              onPress={() => router.push({ pathname: '/explorar', params: { category: 'business' } })}
+              onPress={() => router.push('/negocios')}
               className="min-h-11 justify-center">
               <Text variant="body-md-medium" tone="primary">
                 Ver todos
@@ -302,10 +311,9 @@ export function HomeScreen() {
       ) : null}
 
       <Button
-        label="Publicar mi emprendimiento o ayuda"
-        icon="plus-circle-outline"
-        variant="secondary"
-        onPress={() => router.push('/publicar')}
+        label="Registrar mi emprendimiento"
+        icon="store-plus-outline"
+        onPress={() => router.push('/negocios/registrar')}
       />
 
       <View className="gap-2">

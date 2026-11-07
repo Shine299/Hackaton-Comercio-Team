@@ -29,11 +29,12 @@ const TABS: Record<string, TabConfig> = {
     a11yLabel: 'Publicar: ofrecer o solicitar ayuda',
     primary: true,
   },
-  actividad: {
-    label: 'Actividad',
-    icon: 'bell-outline',
-    iconActive: 'bell',
-    a11yLabel: 'Actividad y notificaciones',
+  // Emprendimientos tiene su propia pestaña. Actividad sigue existiendo, pero se abre desde la campana del Inicio.
+  negocios: {
+    label: 'Negocios',
+    icon: 'storefront-outline',
+    iconActive: 'storefront',
+    a11yLabel: 'Emprendimientos del barrio',
   },
   perfil: {
     label: 'Perfil',
