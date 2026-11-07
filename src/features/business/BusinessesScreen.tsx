@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 
 import {
   applyFilters,
@@ -10,10 +10,30 @@ import {
   useNearbyPosts,
 } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
-import { Badge, Button, Card, Chip, Icon, Screen, Text, TextField } from '@/shared/ui';
+import { SectionHeader } from '@/features/shell';
+import { Badge, Button, Card, Chip, cn, Icon, Screen, Text, TextField, type IconName } from '@/shared/ui';
 
 import { BusinessCard } from './BusinessCard';
 import { BUSINESS_RUBROS, hasDelivery, rubroOf, type RubroId } from './rubros';
+
+/** Categoría como botón cuadrado con icono (referencia: lienzo). */
+function RubroButton({ label, icon, selected, onPress }: { label: string; icon: IconName; selected: boolean; onPress: () => void }) {
+  return (
+    <Pressable
+      accessibilityRole="radio"
+      accessibilityLabel={label}
+      accessibilityState={{ selected, checked: selected }}
+      onPress={onPress}
+      className="w-[72px] items-center gap-1.5 active:opacity-80">
+      <View className={cn('h-16 w-16 items-center justify-center rounded-3xl shadow-sm elevation-xs', selected ? 'bg-primary' : 'bg-surface-container-lowest')}>
+        <Icon name={icon} size={30} color={selected ? 'onPrimary' : 'primary'} />
+      </View>
+      <Text variant="label-md" numberOfLines={1} tone={selected ? 'primary' : 'default'}>
+        {label}
+      </Text>
+    </Pressable>
+  );
+}
 
 /**
  * Emprendimientos: sección propia (pestaña Negocios), separada de la ayuda entre vecinos de Explorar.
@@ -56,60 +76,35 @@ export function BusinessesScreen() {
   };
 
   return (
-    <Screen
-      noTopInset
-      contentClassName="gap-4"
-      footer={
-        <Button
-          label="Registrar mi emprendimiento"
-          size="lg"
-          icon="store-plus-outline"
-          onPress={() => router.push('/negocios/registrar')}
-        />
-      }>
-      <View className="flex-row items-start justify-between gap-3">
-        <View className="min-w-0 flex-1 gap-0.5">
-          <Text variant="headline-lg" accessibilityRole="header">
-            Emprendimientos
-          </Text>
-          <View className="flex-row items-center gap-1">
-            <Icon name="map-marker-radius-outline" size={18} color="primary" />
-            <Text variant="body-md-medium" tone="muted">
-              {sector.name} · {radiusKm} km
-            </Text>
-          </View>
+    <Screen noTopInset contentClassName="gap-4 px-5 pb-6 pt-14">
+      <SectionHeader title="Emprendimientos" />
+
+      <View className="flex-row gap-2.5">
+        <View className="flex-1">
+          <TextField
+            label="Buscar emprendimientos"
+            hideLabel
+            leadingIcon="magnify"
+            placeholder="Busca productos o servicios"
+            value={query}
+            onChangeText={setQuery}
+            onClear={() => setQuery('')}
+            returnKeyType="search"
+          />
         </View>
-        <Button
-          label="Mapa"
-          icon="map-outline"
-          variant="tonal"
-          fullWidth={false}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Ver emprendimientos en el mapa"
           onPress={() => router.push({ pathname: '/mapa', params: { layer: 'business' } })}
-        />
+          className="h-14 w-14 items-center justify-center rounded-2xl bg-primary active:opacity-80">
+          <Icon name="map-outline" size={26} color="onPrimary" />
+        </Pressable>
       </View>
 
-      <TextField
-        label="Buscar emprendimientos"
-        hideLabel
-        leadingIcon="magnify"
-        placeholder="Busca una bodega, comida, costura…"
-        value={query}
-        onChangeText={setQuery}
-        onClear={() => setQuery('')}
-        returnKeyType="search"
-      />
-
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
-        <Chip role="radio" label="Todos" icon="apps" selected={rubro === 'all'} onPress={() => setRubro('all')} />
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4" accessibilityRole="radiogroup">
+        <RubroButton label="Todo" icon="apps" selected={rubro === 'all'} onPress={() => setRubro('all')} />
         {BUSINESS_RUBROS.map((r) => (
-          <Chip
-            key={r.id}
-            role="radio"
-            label={r.label}
-            icon={r.icon}
-            selected={rubro === r.id}
-            onPress={() => setRubro(r.id)}
-          />
+          <RubroButton key={r.id} label={r.label} icon={r.icon} selected={rubro === r.id} onPress={() => setRubro(r.id)} />
         ))}
       </ScrollView>
 
@@ -156,7 +151,7 @@ export function BusinessesScreen() {
               {filtersActive ? <Button label="Quitar filtros" icon="filter-remove-outline" onPress={reset} /> : null}
             </Card>
           ) : (
-            <View className="gap-3">
+            <View className="flex-row flex-wrap gap-3">
               {results.map(({ post }) => (
                 <BusinessCard key={post.id} post={post} />
               ))}
@@ -164,6 +159,23 @@ export function BusinessesScreen() {
           )}
         </>
       )}
+
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="¿Tienes un emprendimiento? Regístralo gratis"
+        onPress={() => router.push('/negocios/registrar')}
+        className="flex-row items-center gap-3.5 rounded-3xl border-2 border-dashed border-outline bg-surface-container-lowest px-4 py-3.5 active:opacity-80">
+        <View className="h-12 w-12 items-center justify-center rounded-2xl bg-primary-fixed">
+          <Icon name="store-plus-outline" size={26} color="primary" />
+        </View>
+        <View className="flex-1">
+          <Text variant="body-lg-bold">¿Tienes un emprendimiento?</Text>
+          <Text variant="label-md" tone="muted">
+            Regístralo gratis
+          </Text>
+        </View>
+        <Icon name="chevron-right" size={22} color="primary" />
+      </Pressable>
     </Screen>
   );
 }

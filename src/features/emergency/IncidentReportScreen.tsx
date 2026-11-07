@@ -1,9 +1,10 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
-import { Button, cn, Icon, Screen, Text, TextField } from '@/shared/ui';
+import { Button, Screen, Text, TextField } from '@/shared/ui';
 
+import { ChoiceTile } from './components/ChoiceTile';
 import { ApproxZoneCard, PhotoField } from './components/FormBits';
 import { useEmergencyStore } from './store';
 import { INCIDENT_CATEGORIES, type IncidentCategory } from './types';
@@ -28,36 +29,27 @@ export function IncidentReportScreen() {
   };
 
   return (
-    <Screen footer={<Button label="Guardar reporte" size="lg" icon="check" variant="danger" onPress={send} />}>
+    <Screen footer={<Button label="Guardar reporte" size="lg" icon="check" onPress={send} />}>
       <View className="gap-1">
-        <Text variant="headline-md">¿Qué está pasando?</Text>
+        <Text variant="headline-lg" accessibilityRole="header">¿Qué pasa?</Text>
         <Text tone="muted">Si hay personas en riesgo, llama primero a los servicios oficiales.</Text>
       </View>
 
-      <View className="flex-row flex-wrap gap-3" accessibilityRole="radiogroup">
-        {INCIDENT_CATEGORIES.map((item) => {
-          const selected = category === item.id;
-          return (
-            <Pressable
-              key={item.id}
-              accessibilityRole="radio"
-              accessibilityLabel={item.label}
-              accessibilityState={{ selected, checked: selected }}
-              onPress={() => {
-                setCategory(item.id);
-                setError(undefined);
-              }}
-              className={cn(
-                'min-h-24 basis-[47%] grow items-center justify-center gap-2 rounded-2xl border-2 p-3 active:opacity-80',
-                selected ? 'border-error bg-error-container' : 'border-outline-variant bg-surface-container-lowest',
-              )}>
-              <Icon name={selected ? 'check-circle' : item.icon} size={30} color={selected ? 'error' : 'onSurface'} />
-              <Text variant="body-md-medium" className="text-center">
-                {item.label}
-              </Text>
-            </Pressable>
-          );
-        })}
+      <View className="flex-row flex-wrap gap-2.5" accessibilityRole="radiogroup">
+        {INCIDENT_CATEGORIES.map((item) => (
+          <ChoiceTile
+            key={item.id}
+            layout="stack"
+            icon={item.icon}
+            title={item.label}
+            selected={category === item.id}
+            className="basis-[30%] grow"
+            onPress={() => {
+              setCategory(item.id);
+              setError(undefined);
+            }}
+          />
+        ))}
       </View>
       {error ? (
         <Text variant="label-md" tone="error" accessibilityLiveRegion="polite">

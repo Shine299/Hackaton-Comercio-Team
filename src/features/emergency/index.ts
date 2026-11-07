@@ -21,3 +21,5 @@ export { ResourcesScreen } from './ResourcesScreen';
 export { useEmergencyStore, type ServerPatch } from './store';
 export * from './types';
 export { VulnerableNeighborScreen } from './VulnerableNeighborScreen';
+export { ReportCard } from './components/ReportCard';
+export { MyReports } from './components/MyReports';

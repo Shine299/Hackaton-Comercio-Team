@@ -15,7 +15,7 @@ export default function EmergenciasLayout() {
           />
         ),
       }}>
-      <Stack.Screen name="index" options={{ title: 'Centro de emergencias' }} />
+      <Stack.Screen name="index" options={{ title: 'Emergencia', headerShown: false }} />
       <Stack.Screen name="necesito-ayuda" options={{ title: 'Necesito ayuda' }} />
       <Stack.Screen name="reportar" options={{ title: 'Reportar incidente' }} />
       <Stack.Screen name="estado/[id]" options={{ title: 'Estado del reporte' }} />

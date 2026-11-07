@@ -1,4 +1,4 @@
-import { useGlobalSearchParams, usePathname, useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,46 +7,36 @@ import { useOnboardingStore } from '@/features/onboarding';
 import { useBarStore } from '@/shared/nav/barStore';
 import { cn, Icon, Text } from '@/shared/ui';
 
-import { resolveSection, SECTION_ITEMS } from './sections';
+import { BAR_ITEMS, resolveSection } from './sections';
 
 /**
- * Barra inferior de la sección actual. Cambia según dónde estés: Inicio muestra las 4 secciones y cada
- * sección tiene la suya. Emergencia usa el acento rojo. En formularios y detalles no aparece.
+ * Barra inferior fija de 5: Inicio · Comunidad · Emprendimientos · Emergencia · Ayuda.
+ * Solo se muestra en la pantalla raíz de cada sección. Emergencia conserva su acento rojo.
  */
 export function SectionBar() {
   const router = useRouter();
   const pathname = usePathname();
-  const params = useGlobalSearchParams<{ layer?: string; tab?: string }>();
   const insets = useSafeAreaInsets();
   const onboardingCompleted = useOnboardingStore((s) => s.completed);
   const setVisible = useBarStore((s) => s.setVisible);
-  // «Mapa» y «Solicitudes» están en dos secciones: se recuerda desde cuál llegaste.
-  const last = useBarStore((s) => s.lastSection);
-  const setLast = useBarStore((s) => s.setLastSection);
 
-  const resolved = onboardingCompleted ? resolveSection(pathname, params, last) : null;
-  const section = resolved?.section;
-  const active = resolved?.active;
+  const active = onboardingCompleted ? resolveSection(pathname) : null;
 
   useEffect(() => {
-    setVisible(Boolean(section));
-    if ((section === 'dia' || section === 'emprendimientos') && pathname !== '/actividad') setLast(section);
-  }, [section, pathname, setVisible, setLast]);
+    setVisible(Boolean(active));
+  }, [active, setVisible]);
 
-  if (!section || !active) return null;
-  const danger = section === 'emergencia';
+  if (!active) return null;
 
   return (
     <View
       accessibilityRole="tablist"
-      className={cn(
-        'flex-row items-end justify-around border-t bg-surface px-2 pt-1',
-        danger ? 'border-error-container' : 'border-outline-variant',
-      )}
+      className="flex-row items-end justify-around border-t border-outline-variant bg-surface px-1 pt-2"
       style={{ paddingBottom: Math.max(insets.bottom, 8) }}>
-      {SECTION_ITEMS[section].map((item) => {
+      {BAR_ITEMS.map((item) => {
         const focused = item.key === active;
-        const tone = focused ? (danger ? 'error' : 'primary') : 'onSurfaceVariant';
+        const danger = item.key === 'emergencia';
+        const iconTone = danger ? 'error' : focused ? 'primary' : 'onSurfaceVariant';
         return (
           <Pressable
             key={item.key}
@@ -56,25 +46,20 @@ export function SectionBar() {
             onPress={() => {
               if (!focused) router.navigate(item.href);
             }}
-            className="min-h-14 min-w-16 flex-1 items-center justify-center gap-0.5 active:opacity-70">
-            {item.pill ? (
-              <View
-                className={cn(
-                  'h-9 w-14 items-center justify-center rounded-xl',
-                  item.pill === 'danger' ? 'bg-error' : 'bg-primary',
-                )}>
-                <Icon name={item.icon} size={26} color={item.pill === 'danger' ? 'onError' : 'onPrimary'} />
-              </View>
-            ) : (
-              <Icon name={focused && item.iconActive ? item.iconActive : item.icon} size={24} color={tone} />
-            )}
+            className={cn('min-h-14 items-center justify-end gap-1 active:opacity-70', item.key === 'emprendimientos' ? 'flex-[1.5]' : 'flex-1')}>
+            <View
+              className={cn(
+                'h-8 w-14 items-center justify-center rounded-full',
+                focused && (danger ? 'bg-error-container' : 'bg-primary-fixed'),
+              )}>
+              <Icon name={focused ? item.iconActive : item.icon} size={24} color={iconTone} />
+            </View>
             <Text
               variant="label-sm"
               // La barra tiene ancho fijo: limitamos el escalado para que 5 etiquetas quepan.
-              maxFontSizeMultiplier={1.3}
+              maxFontSizeMultiplier={1.2}
               numberOfLines={1}
-              tone={focused ? (danger ? 'error' : 'primary') : item.pill ? 'default' : 'muted'}
-              className={cn(focused && 'underline')}>
+              tone={focused ? (danger ? 'error' : 'primary') : 'muted'}>
               {item.label}
             </Text>
           </Pressable>

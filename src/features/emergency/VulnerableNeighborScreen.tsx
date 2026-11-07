@@ -1,9 +1,10 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
-import { Button, Card, cn, Icon, Screen, Text, TextField, type IconName } from '@/shared/ui';
+import { Button, Card, Screen, Text, TextField } from '@/shared/ui';
 
+import { ChoiceTile } from './components/ChoiceTile';
 import { EmergencyNumbersCard } from './components/EmergencyNumbersCard';
 import { ApproxZoneCard, PhotoField } from './components/FormBits';
 import { VoiceNoteField } from './components/VoiceNoteField';
@@ -25,54 +26,23 @@ import { usePickPhoto } from './usePickPhoto';
 type Step = 1 | 2 | 3;
 
 function Steps({ step }: { step: Step }) {
-  const items: { n: Step; label: string }[] = [
-    { n: 1, label: 'Acción' },
-    { n: 2, label: 'Necesidad' },
-    { n: 3, label: 'Revisar' },
-  ];
+  const labels = ['Acción', 'Necesidad', 'Revisar'];
   return (
-    <View className="flex-row gap-2" accessibilityRole="text" accessibilityLabel={`Paso ${step} de 3`}>
-      {items.map((item) => (
-        <View key={item.n} className="flex-1 items-center gap-1">
-          <View className={cn('h-1.5 w-full rounded-full', item.n <= step ? 'bg-error' : 'bg-surface-container')} />
-          <Text variant="label-sm" tone={item.n === step ? 'error' : 'muted'}>
-            {item.label}
-          </Text>
-        </View>
-      ))}
-    </View>
-  );
-}
-
-type OptionCardProps = {
-  selected: boolean;
-  icon: IconName;
-  title: string;
-  hint?: string;
-  onPress: () => void;
-};
-
-function OptionCard({ selected, icon, title, hint, onPress }: OptionCardProps) {
-  return (
-    <Pressable
-      accessibilityRole="radio"
-      accessibilityLabel={hint ? `${title}. ${hint}` : title}
-      accessibilityState={{ selected, checked: selected }}
-      onPress={onPress}
-      className={cn(
-        'min-h-16 flex-row items-center gap-3 rounded-2xl border-2 p-3 active:opacity-80',
-        selected ? 'border-error bg-error-container' : 'border-outline-variant bg-surface-container-lowest',
-      )}>
-      <Icon name={selected ? 'check-circle' : icon} size={26} color={selected ? 'error' : 'onSurface'} />
-      <View className="flex-1">
-        <Text variant="body-md-medium">{title}</Text>
-        {hint ? (
-          <Text variant="label-md" tone="muted">
-            {hint}
-          </Text>
-        ) : null}
+    <View className="gap-1.5" accessibilityRole="text" accessibilityLabel={`Paso ${step} de 3`}>
+      <View className="flex-row items-center justify-between">
+        <Text variant="body-md-medium" tone="primary">
+          Paso {step} de 3
+        </Text>
+        <Text variant="label-md" tone="muted">
+          {labels[step - 1]}
+        </Text>
       </View>
-    </Pressable>
+      <View className="flex-row gap-1.5">
+        {labels.map((label, i) => (
+          <View key={label} className={`h-1.5 flex-1 rounded-full ${i < step ? 'bg-primary' : 'bg-surface-container-highest'}`} />
+        ))}
+      </View>
+    </View>
   );
 }
 
@@ -149,7 +119,6 @@ export function VulnerableNeighborScreen() {
             label={step === 3 ? 'Guardar alerta en mi teléfono' : 'Continuar'}
             size="lg"
             icon={step === 3 ? 'check' : 'arrow-right'}
-            variant={step === 3 ? 'danger' : 'primary'}
             onPress={step === 3 ? save : next}
           />
           {step > 1 ? <Button label="Atrás" variant="ghost" onPress={() => setStep((s) => (s === 3 ? 2 : 1))} /> : null}
@@ -160,12 +129,12 @@ export function VulnerableNeighborScreen() {
       {step === 1 ? (
         <>
           <View className="gap-1">
-            <Text variant="headline-md">Reporto por otra persona</Text>
+            <Text variant="headline-lg" accessibilityRole="header">Reporto por otra persona</Text>
             <Text tone="muted">No necesitas su nombre, teléfono ni diagnóstico. ¿Cómo te enteraste?</Text>
           </View>
           <View className="gap-2" accessibilityRole="radiogroup">
             {REPORT_BASES.map((item) => (
-              <OptionCard
+              <ChoiceTile
                 key={item.id}
                 selected={basis === item.id}
                 icon={item.icon}
@@ -187,13 +156,14 @@ export function VulnerableNeighborScreen() {
             <Text variant="headline-md">¿Qué necesita?</Text>
             <Text tone="muted">Elige una tarjeta. Es solo el tipo general de apoyo.</Text>
           </View>
-          <View className="gap-2" accessibilityRole="radiogroup">
+          <View className="flex-row flex-wrap gap-2.5" accessibilityRole="radiogroup">
             {VULNERABLE_NEEDS.map((item) => (
-              <OptionCard
+              <ChoiceTile
                 key={item.id}
                 selected={need === item.id}
                 icon={item.icon}
                 title={item.label}
+                className="basis-[47%] grow"
                 onPress={() => {
                   setNeed(item.id);
                   setError(undefined);
