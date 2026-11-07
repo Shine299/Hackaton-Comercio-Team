@@ -1,0 +1,98 @@
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" source(none);
+@source "./";
+
+@import "nativewind/theme";
+
+/*
+ * Design tokens de Red Vecinal Solidaria.
+ * Fuente: stitch_red_vecinal_solidaria_app/civic_mutual_aid_system/DESIGN.md
+ * (paleta teal + terracota usada por casi todas las pantallas de Stitch).
+ */
+@theme {
+  /* Superficies */
+  --color-background: #f9f9ff;
+  --color-surface: #f9f9ff;
+  --color-surface-dim: #cfdaf1;
+  --color-surface-bright: #f9f9ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f0f3ff;
+  --color-surface-container: #e7eeff;
+  --color-surface-container-high: #dee8ff;
+  --color-surface-container-highest: #d8e3fa;
+  --color-surface-variant: #d8e3fa;
+  --color-surface-tint: #226869;
+  --color-on-surface: #111c2c;
+  --color-on-background: #111c2c;
+  --color-on-surface-variant: #3f4948;
+  --color-inverse-surface: #263142;
+  --color-inverse-on-surface: #ebf1ff;
+  --color-outline: #6f7979;
+  --color-outline-variant: #bfc8c8;
+
+  /* Primario (teal) */
+  --color-primary: #004243;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #0f5b5c;
+  --color-on-primary-container: #8fd0d1;
+  --color-primary-fixed: #aceeef;
+  --color-primary-fixed-dim: #91d2d2;
+  --color-inverse-primary: #91d2d2;
+
+  /* Secundario (terracota) */
+  --color-secondary: #a0401c;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #fe875d;
+  --color-on-secondary-container: #722200;
+  --color-secondary-fixed: #ffdbcf;
+  --color-secondary-fixed-dim: #ffb59c;
+
+  /* Terciario (azul) */
+  --color-tertiary: #003b71;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #005299;
+  --color-on-tertiary-container: #a3c7ff;
+  --color-tertiary-fixed: #d4e3ff;
+  --color-tertiary-fixed-dim: #a5c8ff;
+
+  /* Error / SOS */
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  /* Semanticos adicionales (siempre acompanados de texto/icono) */
+  --color-success: #1b6b3a;
+  --color-success-container: #d6f5e0;
+  --color-warning: #8a5300;
+  --color-warning-container: #ffe7bf;
+
+  /* Tipografia: Inter, una familia por peso (RN no resuelve font-weight con fuentes custom) */
+  --font-inter: Inter_400Regular;
+  --font-inter-medium: Inter_500Medium;
+  --font-inter-semibold: Inter_600SemiBold;
+  --font-inter-bold: Inter_700Bold;
+
+  /*
+   * IMPORTANTE (NativeWind v5 RC en nativo): `line-height` se multiplica por el tamaño de fuente.
+   * Por eso los --line-height son RATIOS sin unidad (24px/16px = 1.5), nunca px: con px,
+   * un texto de 16 px llegaba a medir 384 dp de alto y rompía todo el layout.
+   */
+  --text-display: 26px;
+  --text-display--line-height: 1.3077;
+  --text-headline-lg: 24px;
+  --text-headline-lg--line-height: 1.3333;
+  --text-headline-md: 20px;
+  --text-headline-md--line-height: 1.4;
+  --text-headline-sm: 18px;
+  --text-headline-sm--line-height: 1.3333;
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 1.5;
+  --text-body-md: 14px;
+  --text-body-md--line-height: 1.4286;
+  --text-label-md: 13px;
+  --text-label-md--line-height: 1.3846;
+  --text-label-sm: 12px;
+  --text-label-sm--line-height: 1.3333;
+}

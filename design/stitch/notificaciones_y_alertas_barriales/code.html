@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f9f9ff;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-primary": "#ffffff", "surface-tint": "#226869", "outline-variant": "#bfc8c8", "error": "#ba1a1a", "inverse-primary": "#91d2d2", "on-secondary-fixed-variant": "#802a05", "on-secondary-container": "#722200", "surface-bright": "#f9f9ff", "primary-fixed-dim": "#91d2d2", "on-error": "#ffffff", "on-tertiary-container": "#a3c7ff", "surface-container": "#e7eeff", "inverse-surface": "#263142", "tertiary": "#003b71", "tertiary-fixed-dim": "#a5c8ff", "primary": "#004243", "on-background": "#111c2c", "surface-container-high": "#dee8ff", "surface": "#f9f9ff", "on-error-container": "#93000a", "secondary-container": "#fe875d", "secondary": "#a0401c", "on-tertiary-fixed-variant": "#004786", "primary-fixed": "#aceeef", "secondary-fixed-dim": "#ffb59c", "on-tertiary-fixed": "#001c3a", "secondary-fixed": "#ffdbcf", "tertiary-fixed": "#d4e3ff", "on-primary-container": "#8fd0d1", "surface-container-low": "#f0f3ff", "surface-container-highest": "#d8e3fa", "surface-variant": "#d8e3fa", "primary-container": "#0f5b5c", "on-surface": "#111c2c", "inverse-on-surface": "#ebf1ff", "on-secondary-fixed": "#390c00", "on-primary-fixed": "#002020", "on-secondary": "#ffffff", "on-surface-variant": "#3f4948", "error-container": "#ffdad6", "surface-container-lowest": "#ffffff", "surface-dim": "#cfdaf1", "outline": "#6f7979", "on-tertiary": "#ffffff", "on-primary-fixed-variant": "#004f50", "background": "#f9f9ff", "tertiary-container": "#005299" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-2xs": "0.25rem", "margin-desktop": "2rem", "margin-tablet": "1.5rem", "space-xs": "0.5rem", "gutter": "1rem", "margin": "1rem", "space-lg": "1.5rem", "space-md": "1rem", "gutter-sm": "0.75rem", "gutter-lg": "1.5rem", "space-2xl": "3rem", "space-sm": "0.75rem", "space-xl": "2rem" }, fontFamily: { "display-lg": ["Inter"], "display-lg-mobile": ["Inter"], "label-md": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "body-md-medium": ["Inter"], "body-lg-bold": ["Inter"], "label-sm": ["Inter"], "headline-sm": ["Inter"], "body-lg": ["Inter"], "headline-md": ["Inter"] }, fontSize: { "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "600" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "body-md-medium": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500" }], "body-lg-bold": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "700" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-20 px-margin flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs min-w-0"><div class="w-10 h-10 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shadow-sm shrink-0"><span class="material-symbols-outlined text-[22px]">diversity_1</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-1.5"><span class="font-headline-sm text-headline-sm text-on-surface truncate tracking-tight">Red Vecinal Solidaria</span><span class="flex h-2 w-2 relative shrink-0" title="En línea"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span></span></div><div class="flex items-center gap-1 text-on-surface-variant"><span class="material-symbols-outlined text-[14px] text-primary shrink-0">near_me</span><span class="font-label-sm text-label-sm truncate">Miraflores / Barranco · 2 km</span></div></div></div><div class="flex items-center gap-space-xs shrink-0"><a aria-label="Activar Modo Emergencia" class="min-h-[48px] px-3.5 rounded-full bg-error-container text-on-error-container flex items-center justify-center gap-1.5 font-label-md text-label-md transition-all active:scale-95 shadow-sm" data-path="modo-emergencia" href="#"><span class="material-symbols-outlined text-[20px] text-error">e911_emergency</span><span class="font-bold tracking-tight text-error">SOS</span></a><div aria-hidden="true" class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-20 pb-28 bg-surface"><div class="flex flex-col w-full px-margin pb-space-2xl space-y-space-md">
+<!-- Header Contextual con Título y Acciones Rápidas -->
+<section class="flex flex-col space-y-space-xs pt-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Centro de Alertas</h1>
+</div>
+<div class="flex items-center space-x-space-2xs">
+<button aria-label="Marcar todas como leídas" class="flex items-center space-x-1 px-3 py-2 rounded-full bg-surface-container text-primary font-label-md text-label-md active:scale-95 transition-all" id="btn-mark-all">
+<span class="material-symbols-outlined text-[18px]">done_all</span>
+<span class="hidden sm:inline">Marcar leídas</span>
+</button>
+<button aria-label="Ajustes de notificaciones" class="w-10 h-10 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+      Avisos en tiempo real, solidaridad vecinal y seguridad compartida en Miraflores / Barranco.
+    </p>
+</section>
+<!-- Barra de Filtros Desplazable -->
+<nav aria-label="Filtro de notificaciones" class="flex items-center space-x-2 overflow-x-auto no-scrollbar py-1">
+<button class="filter-chip active flex-shrink-0 px-4 py-2 rounded-full font-label-md text-label-md bg-primary text-on-primary shadow-sm transition-colors" data-filter="todas">
+      Todas <span class="ml-1 bg-white/20 px-1.5 py-0.5 rounded-full text-[11px]">4</span>
+</button>
+<button class="filter-chip flex-shrink-0 px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container text-on-surface-variant active:scale-95 transition-colors" data-filter="urgentes">
+      Alertas Urgentes
+    </button>
+<button class="filter-chip flex-shrink-0 px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container text-on-surface-variant active:scale-95 transition-colors" data-filter="ayuda">
+      Trueques y Ayuda
+    </button>
+<button class="filter-chip flex-shrink-0 px-4 py-2 rounded-full font-label-md text-label-md bg-surface-container text-on-surface-variant active:scale-95 transition-colors" data-filter="comunidad">
+      Comunidad
+    </button>
+</nav>
+<!-- Feed de Notificaciones y Alertas -->
+<div class="flex flex-col space-y-space-md" id="alerts-container">
+<!-- 1. ALERTA COMUNITARIA: Poste inclinado (Prioridad Media / Advertencia) -->
+<article class="notification-card relative flex flex-col p-4 sm:p-5 rounded-xl bg-surface-container-lowest shadow-sm space-y-3" data-category="urgentes">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-center space-x-3">
+<div class="w-11 h-11 rounded-xl bg-secondary-container/20 text-secondary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">warning</span>
+</div>
+<div>
+<div class="flex items-center space-x-2">
+<span class="font-headline-sm text-headline-sm text-on-surface">Alerta Comunitaria</span>
+<span class="unread-dot w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+<div class="flex items-center space-x-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span class="font-label-sm text-label-sm">Hace 25 min · Jr. Colón cda. 4</span>
+</div>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold flex-shrink-0">
+          Nuevo
+        </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface">
+        Poste inclinado reportado en Jr. Colón cda. 4. Brigadas vecinales y serenazgo acordonando el área por precaución de cableado suelto. Consulta el desvío accesible.
+      </p>
+<!-- Mini Vista Previa de Mapa Cívico -->
+<div class="w-full h-32 rounded-lg bg-cover bg-center overflow-hidden relative shadow-inner" data-location="Jr. Colon cuadra 4, Miraflores, Lima" style="">
+<div class="absolute inset-0 bg-primary/10 flex items-center justify-center backdrop-blur-[1px]">
+<div class="px-3 py-1.5 rounded-full bg-surface-container-lowest/90 text-on-surface flex items-center space-x-1.5 shadow-sm">
+<span class="material-symbols-outlined text-secondary text-[16px]">location_on</span>
+<span class="font-label-sm text-label-sm font-bold">Desvío seguro activo por Av. Grau</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center space-x-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">verified_user</span>
+<span>Validado por 6 vecinos</span>
+</div>
+<button class="px-4 py-2.5 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md flex items-center space-x-1.5 active:scale-95 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-[18px]">map</span>
+<span>Ver en Mapa</span>
+</button>
+</div>
+</article>
+<!-- 2. SOLICITUD DE APOYO: Linterna o Botiquín en Sector Sucre -->
+<article class="notification-card relative flex flex-col p-4 sm:p-5 rounded-xl bg-surface-container-lowest shadow-sm space-y-3" data-category="ayuda">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-center space-x-3">
+<div class="w-11 h-11 rounded-xl bg-primary-fixed text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">handshake</span>
+</div>
+<div>
+<div class="flex items-center space-x-2">
+<span class="font-headline-sm text-headline-sm text-on-surface">Solicitud de Apoyo</span>
+<span class="unread-dot w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+<div class="flex items-center space-x-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]">distance</span>
+<span class="font-label-sm text-label-sm">Hace 1 h · A 230 metros (Sector Sucre)</span>
+</div>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold flex-shrink-0">
+          Nuevo
+        </span>
+</div>
+<div class="flex items-start space-x-3 p-3 rounded-lg bg-surface-container-low">
+<img class="w-14 h-14 rounded-lg object-cover flex-shrink-0 shadow-sm" data-alt="Close up warm photograph of a first aid kit and an emergency hand lantern resting on a wooden kitchen counter, natural daylight, community mutual aid mood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXeKl9lvV-Dc6gRu1gPRtbvb6TV5Be3A7vnm1FAzc1iX8ecf72Xu077vAYrxjA-9F4z23Rn5Hain7ST6VI2OitQN6dyJdBUsZEWwd_-KhNntRgoMhk41Vh-Qg82fwPmNL18n4DjwtWlWou6za4FqM1ePyhCs_BZEWB8osPtgKh4qYogfdFBLX0vAhV4EPjIE_E1x5x90xZ7HjtdCxYY2_BtXDBqqIuKhTJai1iLQ4"/>
+<p class="font-body-md text-body-md text-on-surface flex-1">
+          Un vecino cerca necesita préstamo urgente de linterna de alta potencia o botiquín básico por corte de energía focalizado en Sector Sucre.
+        </p>
+</div>
+<div class="flex items-center justify-between pt-1 gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Respuesta solidaria estimada: &lt; 5 min</span>
+<button class="px-5 py-2.5 rounded-lg bg-secondary text-on-secondary font-label-md text-label-md flex items-center space-x-1.5 active:scale-95 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-[18px]">volunteer_activism</span>
+<span>Ofrecer ayuda</span>
+</button>
+</div>
+</article>
+<!-- 3. AVAL RECIBIDO: Carmen V. y confianza ciudadana -->
+<article class="notification-card relative flex flex-col p-4 sm:p-5 rounded-xl bg-surface-container-lowest shadow-sm space-y-3" data-category="comunidad">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-center space-x-3">
+<div class="w-11 h-11 rounded-xl bg-tertiary-fixed text-tertiary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">stars</span>
+</div>
+<div>
+<div class="flex items-center space-x-2">
+<span class="font-headline-sm text-headline-sm text-on-surface">Aval de Confianza Recibido</span>
+</div>
+<div class="flex items-center space-x-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span class="font-label-sm text-label-sm">Hace 3 h · Préstamo solidario</span>
+</div>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex-shrink-0">
+          Leído
+        </span>
+</div>
+<div class="flex items-center space-x-3.5 p-3 rounded-lg bg-surface-container-low">
+<img class="w-12 h-12 rounded-full object-cover flex-shrink-0 shadow-sm" data-alt="Portrait of an elderly Latin American woman smiling warmly wearing a cozy knitted cardigan in Miraflores neighborhood, soft natural afternoon light, high resolution documentary style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlcgi5NQ8kfhmY3XSssT73kA7Mafd1U4YUjU0tn8EwsQuKyraUxJPbJ8QWYhOGqZWJ_l7Ov7kchea5efILJMd6vsXkNu0_eHJfbOFR9fp5W4fEeSgcA9PHNALed4Yvw8GOgo7MMQQ5agA59f-W18lACLXeaBZFf5BoZXD1L0q3d-R3fTSIk8WsazfaV-Heux9b7xxp0dteyh26JChU-bxBnLm4HgwK4nCJHM3Y7V4"/>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-body-md-medium text-body-md-medium text-on-surface truncate">Carmen V. ha confirmado tu aval</span>
+<div class="flex items-center space-x-1 text-secondary pt-0.5">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant ml-1 font-bold">5.0 (Excelente vecino)</span>
+</div>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface">
+        “Muchísimas gracias por prestarme las muletas el fin de semana. ¡La red vecinal es un alivio para personas mayores!”
+      </p>
+<div class="flex items-center justify-end space-x-2 pt-1">
+<button class="px-4 py-2 rounded-lg bg-surface-container text-primary font-label-md text-label-md hover:bg-surface-container-high active:scale-95 transition-all">
+          Ver perfil cívico
+        </button>
+<button class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md active:scale-95 transition-all">
+          Agradecer
+        </button>
+</div>
+</article>
+<!-- 4. RECORDATORIO CÍVICO: Simulacro Barrial en Parque Reducto -->
+<article class="notification-card relative flex flex-col p-4 sm:p-5 rounded-xl bg-surface-container-lowest shadow-sm space-y-3" data-category="comunidad">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-center space-x-3">
+<div class="w-11 h-11 rounded-xl bg-primary-container text-on-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">event</span>
+</div>
+<div>
+<div class="flex items-center space-x-2">
+<span class="font-headline-sm text-headline-sm text-on-surface">Recordatorio Cívico</span>
+</div>
+<div class="flex items-center space-x-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]">event_available</span>
+<span class="font-label-sm text-label-sm">Ayer · Coordinación de manzana</span>
+</div>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex-shrink-0">
+          Leído
+        </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface">
+        Simulacro de evacuación barrial programado para este sábado a las 10:00 am en Parque Reducto N° 2. Contaremos con mesa informativa de Defensa Civil y botiquines comunitarios.
+      </p>
+<!-- Panel con detalles del evento -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low">
+<div class="flex items-center space-x-2.5">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed text-primary flex flex-col items-center justify-center font-bold">
+<span class="text-[10px] leading-tight uppercase font-label-sm">SÁB</span>
+<span class="text-[16px] leading-tight">18</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md-medium text-body-md-medium text-on-surface">Parque Reducto N° 2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">10:00 am - 11:30 am · Punto Cero</span>
+</div>
+</div>
+<button aria-label="Añadir simulacro al calendario" class="p-2 rounded-full bg-surface-container text-primary active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[22px]">calendar_add_on</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">42 vecinos confirmaron asistencia</span>
+<button class="px-4 py-2.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md flex items-center space-x-1.5 active:scale-95 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-[18px]">how_to_reg</span>
+<span>Confirmar Asistencia</span>
+</button>
+</div>
+</article>
+</div>
+<!-- Estado Vacío Contextual (Oculto inicialmente) -->
+<div class="hidden flex-col items-center justify-center text-center p-8 rounded-2xl bg-surface-container-lowest space-y-3 shadow-sm" id="empty-state">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[36px]">mark_email_read</span>
+</div>
+<div class="space-y-1">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Estás al día con tu barrio</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs">
+        No hay alertas pendientes en esta categoría. Te avisaremos cuando ocurra algo relevante cerca de ti.
+      </p>
+</div>
+<button class="px-5 py-2.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md active:scale-95 transition-all">
+      Explorar el mapa vecinal
+    </button>
+</div>
+<!-- Pie de Apoyo Vecinal -->
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-low text-on-surface-variant">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-primary text-[20px]">shield</span>
+<span class="font-label-md text-label-md">Radio de cobertura: 2.0 km a la redonda</span>
+</div>
+<button class="font-label-md text-label-md text-primary font-bold active:underline">
+      Modificar
+    </button>
+</div>
+</div>
+<script>
+  (function() {
+    const filterButtons = document.querySelectorAll('.filter-chip');
+    const cards = document.querySelectorAll('.notification-card');
+    const emptyState = document.getElementById('empty-state');
+    const markAllBtn = document.getElementById('btn-mark-all');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Toggle estados visuales de los filtros
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+          b.classList.add('bg-surface-container', 'text-on-surface-variant');
+        });
+        btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+        btn.classList.remove('bg-surface-container', 'text-on-surface-variant');
+
+        const filter = btn.getAttribute('data-filter');
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filter === 'todas' || category === filter) {
+            card.classList.remove('hidden');
+            visibleCount++;
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+
+        if (visibleCount === 0) {
+          emptyState.classList.remove('hidden');
+          emptyState.classList.add('flex');
+        } else {
+          emptyState.classList.add('hidden');
+          emptyState.classList.remove('flex');
+        }
+      });
+    });
+
+    // Acción rápida para 'Marcar todas como leídas'
+    if (markAllBtn) {
+      markAllBtn.addEventListener('click', () => {
+        const unreadBadges = document.querySelectorAll('.notification-card span.bg-secondary-fixed');
+        const unreadDots = document.querySelectorAll('.unread-dot');
+
+        unreadBadges.forEach(badge => {
+          badge.textContent = 'Leído';
+          badge.classList.remove('bg-secondary-fixed', 'text-on-secondary-fixed', 'font-bold');
+          badge.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+        });
+
+        unreadDots.forEach(dot => dot.remove());
+
+        markAllBtn.innerHTML = `
+          <span class="material-symbols-outlined text-[18px]">check</span>
+          <span class="hidden sm:inline">¡Todas al día!</span>
+        `;
+        markAllBtn.classList.add('opacity-75');
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.05)]" data-active-classes="text-primary font-body-lg-bold"><div class="h-16 px-space-xs flex items-center justify-around"><a aria-label="Inicio" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-1 text-on-surface-variant transition-colors hover:text-on-surface group" data-path="inicio" href="#"><span class="material-symbols-outlined text-[24px]">home</span><span class="font-label-sm text-label-sm mt-0.5">Inicio</span></a><a aria-label="Explorar" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-1 text-on-surface-variant transition-colors hover:text-on-surface group" data-path="explorar" href="#"><span class="material-symbols-outlined text-[24px]">explore</span><span class="font-label-sm text-label-sm mt-0.5">Explorar</span></a><a aria-label="Publicar solicitud de ayuda" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-0.5 text-on-surface-variant transition-transform active:scale-95 group" data-path="publicar" href="#"><div class="w-11 h-11 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md"><span class="material-symbols-outlined text-[26px]">add</span></div><span class="font-label-sm text-label-sm text-primary mt-0.5 font-bold">Publicar</span></a><a aria-label="Actividad y notificaciones" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-1 text-on-surface-variant transition-colors hover:text-on-surface relative group" data-path="actividad" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute -top-1 -right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-secondary text-on-secondary font-label-sm text-[10px] flex items-center justify-center">3</span></div><span class="font-label-sm text-label-sm mt-0.5">Actividad</span></a><a aria-label="Perfil de vecino" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-1 text-on-surface-variant transition-colors hover:text-on-surface group" data-path="perfil" href="#"><span class="material-symbols-outlined text-[24px]">person</span><span class="font-label-sm text-label-sm mt-0.5">Perfil</span></a></div></nav>
+</body></html>

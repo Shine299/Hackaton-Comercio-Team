@@ -1,0 +1,199 @@
+import { useRouter } from 'expo-router';
+import { useMemo, useState } from 'react';
+import { Platform, Pressable, ScrollView, View } from 'react-native';
+
+import { buildBoard, useEmergencyStore } from '@/features/emergency';
+import type { Post } from '@/features/posts';
+import { useProfilePrefsStore } from '@/features/profile';
+import { useSectorStore } from '@/features/sector';
+import { Badge, Button, Card, Chip, DemoTag, Icon, Text } from '@/shared/ui';
+
+import { buildMapPoints } from './buildMapPoints';
+import { DEFAULT_LAYERS, getLayer, MAP_LAYERS } from './layers';
+import NativeLayerMap from './NativeLayerMap';
+import { PLACES_ATTRIBUTION } from './places';
+import type { MapLayerId, MapPoint } from './types';
+
+const LIST_CAP = 8;
+
+function PointRow({ point, selected, onPress }: { point: MapPoint; selected: boolean; onPress: () => void }) {
+  const layer = getLayer(point.layer);
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${layer.label}: ${point.title}`}
+      accessibilityState={{ selected }}
+      onPress={onPress}
+      className={
+        selected
+          ? 'flex-row items-start gap-3 rounded-xl border-2 border-primary bg-surface-container-lowest p-3 active:opacity-80'
+          : 'flex-row items-start gap-3 rounded-xl bg-surface-container-lowest p-3 active:opacity-80'
+      }>
+      <Icon name={layer.icon} size={22} color="primary" />
+      <View className="min-w-0 flex-1 gap-0.5">
+        <Text variant="body-md-medium" numberOfLines={2}>
+          {point.title}
+        </Text>
+        {point.detail ? (
+          <Text variant="label-md" tone="muted" numberOfLines={2}>
+            {point.detail}
+          </Text>
+        ) : null}
+        {point.isDemo ? <DemoTag /> : null}
+      </View>
+    </Pressable>
+  );
+}
+
+/**
+ * Mapa barrial por capas (Explorar → Mapa). En iOS y Android muestra react-native-maps; en web,
+ * la misma información en lista y un aviso claro. Los puntos son siempre zona aproximada.
+ */
+export function CommunityMap({ posts }: { posts: Post[] }) {
+  const router = useRouter();
+  const sector = useSectorStore((s) => s.sector);
+  const reports = useEmergencyStore((s) => s.reports);
+  const vulnerable = useEmergencyStore((s) => s.vulnerable);
+  const offers = useEmergencyStore((s) => s.offers);
+  const volunteerAvailable = useProfilePrefsStore((s) => s.volunteerAvailable);
+  const showSector = useProfilePrefsStore((s) => s.showSector);
+  const [now] = useState(() => Date.now());
+  const [active, setActive] = useState<MapLayerId[]>(DEFAULT_LAYERS);
+  const [selectedId, setSelectedId] = useState<string | undefined>();
+  const [showList, setShowList] = useState(false);
+
+  // En Expo Go el mapa funciona sin clave; la clave de Google solo hace falta en builds de producción.
+  const nativeMap = Platform.OS !== 'web';
+
+  const all = useMemo(() => {
+    const board = buildBoard({ sectorId: sector.id, sectorName: sector.name, reports, vulnerable, offers, now });
+    return buildMapPoints({ sector, posts, board, volunteer: { available: volunteerAvailable, showSector } });
+  }, [sector, posts, reports, vulnerable, offers, now, volunteerAvailable, showSector]);
+
+  const visible = all.filter((p) => active.includes(p.layer));
+  const selected = visible.find((p) => p.id === selectedId);
+  const counts = useMemo(() => {
+    const map = new Map<MapLayerId, number>();
+    for (const p of all) map.set(p.layer, (map.get(p.layer) ?? 0) + 1);
+    return map;
+  }, [all]);
+
+  const toggle = (id: MapLayerId) =>
+    setActive((cur) => (cur.includes(id) ? cur.filter((l) => l !== id) : [...cur, id]));
+
+  const open = (point: MapPoint) => {
+    const t = point.target;
+    if (t.kind === 'post') router.push({ pathname: '/publicacion/[id]', params: { id: t.id } });
+    else if (t.kind === 'report') router.push({ pathname: '/emergencias/estado/[id]', params: { id: t.id } });
+    else if (t.kind === 'board') router.push('/emergencias/tablero');
+  };
+
+  const listVisible = !nativeMap || showList;
+
+  return (
+    <View className="gap-3">
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
+        {MAP_LAYERS.map((layer) => (
+          <Chip
+            key={layer.id}
+            label={`${layer.label} · ${counts.get(layer.id) ?? 0}`}
+            icon={layer.icon}
+            selected={active.includes(layer.id)}
+            onPress={() => toggle(layer.id)}
+          />
+        ))}
+      </ScrollView>
+
+      {!nativeMap ? (
+        <Card tone="warning">
+          <View className="flex-row items-center gap-2">
+            <Icon name="map-marker-off-outline" size={22} color="warning" />
+            <Text variant="body-lg-bold">Mapa no disponible</Text>
+          </View>
+          <Text>
+            El mapa nativo no funciona en la versión web. Te mostramos la misma información en lista.
+          </Text>
+        </Card>
+      ) : (
+        <NativeLayerMap
+          center={sector.center}
+          radiusKm={sector.radiusKm}
+          points={visible}
+          selectedId={selectedId}
+          onSelect={setSelectedId}
+        />
+      )}
+
+      {selected ? (
+        <Card tone="low" accessibilityLiveRegion="polite">
+          <View className="flex-row items-start gap-2">
+            <Icon name={getLayer(selected.layer).icon} size={22} color="primary" />
+            <Text variant="body-lg-bold" className="flex-1">
+              {selected.title}
+            </Text>
+          </View>
+          {selected.detail ? <Text tone="muted">{selected.detail}</Text> : null}
+          <View className="flex-row flex-wrap gap-2">
+            {selected.isDemo ? <DemoTag /> : null}
+            <Badge label={`Fuente: ${selected.source}`} tone="neutral" />
+          </View>
+          {selected.target.kind !== 'none' ? (
+            <Button label="Ver detalle" icon="arrow-right" onPress={() => open(selected)} />
+          ) : null}
+        </Card>
+      ) : nativeMap ? (
+        <Text variant="label-md" tone="muted">
+          Toca un punto para ver qué es y abrir su detalle.
+        </Text>
+      ) : null}
+
+      {nativeMap ? (
+        <Button
+          label={showList ? 'Ocultar lista de puntos' : 'Ver lista de puntos'}
+          variant="tonal"
+          icon="format-list-bulleted"
+          onPress={() => setShowList((v) => !v)}
+        />
+      ) : null}
+
+      {listVisible ? (
+        <View className="gap-3">
+          {MAP_LAYERS.filter((l) => active.includes(l.id)).map((layer) => {
+            const rows = visible.filter((p) => p.layer === layer.id);
+            const shown = layer.id === 'places' ? rows.slice(0, LIST_CAP) : rows;
+            return (
+              <View key={layer.id} className="gap-2">
+                <Text variant="overline" tone="muted">
+                  {layer.label}
+                </Text>
+                {rows.length === 0 ? <Text tone="muted">Nada en esta capa para tu sector.</Text> : null}
+                {shown.map((p) => (
+                  <PointRow
+                    key={p.id}
+                    point={p}
+                    selected={p.id === selectedId}
+                    onPress={() => (nativeMap || p.target.kind === 'none' ? setSelectedId(p.id) : open(p))}
+                  />
+                ))}
+                {rows.length > shown.length ? (
+                  <Text variant="label-md" tone="muted">
+                    +{rows.length - shown.length} más en el mapa.
+                  </Text>
+                ) : null}
+              </View>
+            );
+          })}
+        </View>
+      ) : null}
+
+      <View className="flex-row items-start gap-2 rounded-xl bg-surface-container-low p-3">
+        <Icon name="shield-lock-outline" size={20} color="primary" />
+        <Text variant="label-md" tone="muted" className="flex-1">
+          Todos los puntos son zona aproximada de tu sector; nunca usamos tu ubicación exacta. Lo marcado
+          como demo es ficticio.
+          {active.includes('places') ? ` ${PLACES_ATTRIBUTION}` : ''}
+        </Text>
+      </View>
+    </View>
+  );
+}

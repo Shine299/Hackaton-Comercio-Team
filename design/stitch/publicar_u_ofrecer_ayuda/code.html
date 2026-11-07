@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#f9f9ff;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-primary": "#ffffff", "surface-tint": "#226869", "outline-variant": "#bfc8c8", "error": "#ba1a1a", "inverse-primary": "#91d2d2", "on-secondary-fixed-variant": "#802a05", "on-secondary-container": "#722200", "surface-bright": "#f9f9ff", "primary-fixed-dim": "#91d2d2", "on-error": "#ffffff", "on-tertiary-container": "#a3c7ff", "surface-container": "#e7eeff", "inverse-surface": "#263142", "tertiary": "#003b71", "tertiary-fixed-dim": "#a5c8ff", "primary": "#004243", "on-background": "#111c2c", "surface-container-high": "#dee8ff", "surface": "#f9f9ff", "on-error-container": "#93000a", "secondary-container": "#fe875d", "secondary": "#a0401c", "on-tertiary-fixed-variant": "#004786", "primary-fixed": "#aceeef", "secondary-fixed-dim": "#ffb59c", "on-tertiary-fixed": "#001c3a", "secondary-fixed": "#ffdbcf", "tertiary-fixed": "#d4e3ff", "on-primary-container": "#8fd0d1", "surface-container-low": "#f0f3ff", "surface-container-highest": "#d8e3fa", "surface-variant": "#d8e3fa", "primary-container": "#0f5b5c", "on-surface": "#111c2c", "inverse-on-surface": "#ebf1ff", "on-secondary-fixed": "#390c00", "on-primary-fixed": "#002020", "on-secondary": "#ffffff", "on-surface-variant": "#3f4948", "error-container": "#ffdad6", "surface-container-lowest": "#ffffff", "surface-dim": "#cfdaf1", "outline": "#6f7979", "on-tertiary": "#ffffff", "on-primary-fixed-variant": "#004f50", "background": "#f9f9ff", "tertiary-container": "#005299" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-2xs": "0.25rem", "margin-desktop": "2rem", "margin-tablet": "1.5rem", "space-xs": "0.5rem", "gutter": "1rem", "margin": "1rem", "space-lg": "1.5rem", "space-md": "1rem", "gutter-sm": "0.75rem", "gutter-lg": "1.5rem", "space-2xl": "3rem", "space-sm": "0.75rem", "space-xl": "2rem" }, fontFamily: { "display-lg": ["Inter"], "display-lg-mobile": ["Inter"], "label-md": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "body-md-medium": ["Inter"], "body-lg-bold": ["Inter"], "label-sm": ["Inter"], "headline-sm": ["Inter"], "body-lg": ["Inter"], "headline-md": ["Inter"] }, fontSize: { "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "600" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "body-md-medium": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500" }], "body-lg-bold": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "700" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-20 px-margin flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs min-w-0"><div class="w-10 h-10 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shadow-sm shrink-0"><span class="material-symbols-outlined text-[22px]">diversity_1</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-1.5"><span class="font-headline-sm text-headline-sm text-on-surface truncate tracking-tight">Red Vecinal</span><span class="flex h-2 w-2 relative shrink-0" title="En línea"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span></span></div><div class="flex items-center gap-1 text-on-surface-variant"><span class="material-symbols-outlined text-[14px] text-primary shrink-0">near_me</span><span class="font-label-sm text-label-sm truncate">Miraflores / Barranco · 2 km</span></div></div></div><div class="flex items-center gap-space-xs shrink-0"><a aria-label="Activar Modo Emergencia" class="min-h-[48px] px-3.5 rounded-full bg-error-container text-on-error-container flex items-center justify-center gap-1.5 font-label-md text-label-md transition-all active:scale-95 shadow-sm" data-path="modo-emergencia" href="#"><span class="material-symbols-outlined text-[20px] text-error">e911_emergency</span><span class="font-bold tracking-tight text-error">SOS</span></a><div aria-hidden="true" class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-20 pb-28 bg-surface"><div class="flex flex-col w-full px-margin space-y-space-lg">
+<!-- Encabezado de Contexto -->
+<section class="space-y-space-2xs">
+<div class="inline-flex items-center gap-space-2xs px-space-sm py-1 rounded-full bg-surface-container-high text-primary">
+<span class="material-symbols-outlined text-[16px]">volunteer_activism</span>
+<span class="font-label-sm text-label-sm">Red Solidaria Activa</span>
+</div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-on-surface">Crear publicación vecinal</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Conecta con tus vecinos en 3 sencillos pasos para apoyarse mutuamente.</p>
+</section>
+<!-- Indicador de Pasos Accesible -->
+<section aria-label="Progreso del formulario" class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-primary font-bold">Paso 1 de 3</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">¿Qué deseas compartir hoy?</span>
+</div>
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="33" class="w-full bg-surface-container h-2 rounded-full overflow-hidden" role="progressbar">
+<div class="bg-primary h-full rounded-full transition-all duration-300 w-1/3"></div>
+</div>
+</section>
+<!-- Paso 1: Selector Visual de Categorías -->
+<section class="space-y-space-xs">
+<label class="font-headline-sm text-headline-sm text-on-surface block" id="label-categorias">
+      Selecciona una categoría principal
+    </label>
+<div aria-labelledby="label-categorias" class="grid grid-cols-1 gap-space-xs" id="category-selector" role="radiogroup">
+<!-- Opción 1: Necesito ayuda -->
+<button aria-checked="true" class="category-card w-full text-left p-space-md rounded-xl bg-surface-container-lowest shadow-sm transition-all duration-200 active:scale-[0.99] flex items-center justify-between min-h-[58px] group" data-cat="necesito" role="radio" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-11 h-11 rounded-lg bg-surface-container text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">handshake</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-lg-bold text-body-lg-bold text-on-surface truncate">Necesito ayuda cotidiana</span>
+<span class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Reparación, compras, apoyo puntual.</span>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 check-indicator">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</button>
+<!-- Opción 2: Ofrezco ayuda -->
+<button aria-checked="false" class="category-card w-full text-left p-space-md rounded-xl bg-surface-container-lowest shadow-sm transition-all duration-200 active:scale-[0.99] flex items-center justify-between min-h-[58px] group" data-cat="ofrezco" role="radio" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-11 h-11 rounded-lg bg-surface-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">favorite</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-lg-bold text-body-lg-bold text-on-surface truncate">Ofrezco un servicio o ayuda</span>
+<span class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Voluntariado, apoyo técnico, tiempo libre.</span>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-surface-container text-transparent flex items-center justify-center shrink-0 check-indicator">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</button>
+<!-- Opción 3: Trueque o intercambio -->
+<button aria-checked="false" class="category-card w-full text-left p-space-md rounded-xl bg-surface-container-lowest shadow-sm transition-all duration-200 active:scale-[0.99] flex items-center justify-between min-h-[58px] group" data-cat="trueque" role="radio" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-11 h-11 rounded-lg bg-surface-container text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">sync_alt</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-lg-bold text-body-lg-bold text-on-surface truncate">Trueque o intercambio</span>
+<span class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Bienes, herramientas, libros, alimentos.</span>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-surface-container text-transparent flex items-center justify-center shrink-0 check-indicator">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</button>
+<!-- Opción 4: Compartir movilidad -->
+<button aria-checked="false" class="category-card w-full text-left p-space-md rounded-xl bg-surface-container-lowest shadow-sm transition-all duration-200 active:scale-[0.99] flex items-center justify-between min-h-[58px] group" data-cat="movilidad" role="radio" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-11 h-11 rounded-lg bg-surface-container text-surface-tint flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">directions_car</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-lg-bold text-body-lg-bold text-on-surface truncate">Compartir movilidad</span>
+<span class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Auto compartido, bicicleta, acompañamiento.</span>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-surface-container text-transparent flex items-center justify-center shrink-0 check-indicator">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</button>
+<!-- Opción 5: Recomendación comunitaria -->
+<button aria-checked="false" class="category-card w-full text-left p-space-md rounded-xl bg-surface-container-lowest shadow-sm transition-all duration-200 active:scale-[0.99] flex items-center justify-between min-h-[58px] group" data-cat="recomendacion" role="radio" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-11 h-11 rounded-lg bg-surface-container text-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">campaign</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-lg-bold text-body-lg-bold text-on-surface truncate">Recomendación comunitaria</span>
+<span class="font-body-md text-body-md text-on-surface-variant line-clamp-1">Talleres locales, avisos y vida de barrio.</span>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-surface-container text-transparent flex items-center justify-center shrink-0 check-indicator">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</button>
+</div>
+</section>
+<!-- Opción Alternativa: Triage Rápido Emergencia -->
+<section class="p-space-md rounded-xl bg-error-container text-on-error-container shadow-sm flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-error text-on-error flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[22px]">warning</span>
+</div>
+<div class="flex flex-col min-w-0 space-y-1">
+<span class="font-headline-sm text-headline-sm text-on-error-container">¿Es un reporte urgente o de salud?</span>
+<p class="font-body-md text-body-md text-on-error-container opacity-90">
+        Para emergencias médicas, adultos mayores en soledad o riesgo físico inminente.
+      </p>
+<div class="pt-1">
+<a class="inline-flex items-center gap-1 font-body-lg-bold text-body-lg-bold text-error underline decoration-2 underline-offset-4 py-1 min-h-[48px]" data-path="modo-emergencia" href="#">
+<span>Ir a Emergencias o Reportar Vecino Vulnerable</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Asistente de Título & Nota de Voz Accesible -->
+<section class="space-y-space-xs p-space-md rounded-xl bg-surface-container-lowest shadow-sm">
+<div class="flex items-center justify-between">
+<label class="font-headline-sm text-headline-sm text-on-surface" for="titulo-post">Título breve del pedido</label>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Máx. 60 caracteres</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<div class="relative flex-1">
+<input class="w-full h-[52px] px-space-md rounded-lg bg-surface-container-low text-on-surface placeholder:text-outline font-body-md text-body-md outline-none transition-colors focus:bg-surface-container" id="titulo-post" maxlength="60" placeholder="Ej. Apoyo para mover mueble pesado..." type="text"/>
+</div>
+<!-- Botón de voz con zona táctil 48px+ para adultos mayores -->
+<button aria-label="Grabar nota de voz accesible" class="h-[52px] min-w-[52px] px-space-sm rounded-lg bg-surface-container text-primary flex items-center justify-center gap-1 active:scale-95 transition-all shadow-sm" id="btn-voice" type="button">
+<span class="material-symbols-outlined text-[24px]">mic</span>
+<span class="font-label-sm text-label-sm hidden xs:inline">Grabar</span>
+</button>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1" id="voice-status">
+<span class="material-symbols-outlined text-[16px] text-primary">record_voice_over</span>
+<span>Puedes escribir o dictar tu mensaje en voz alta.</span>
+</p>
+</section>
+<!-- Selector de Alcance Barrial -->
+<section class="space-y-space-sm p-space-md rounded-xl bg-surface-container-lowest shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-primary text-[20px]">near_me</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Radio barrial de visibilidad</span>
+</div>
+<span class="font-body-lg-bold text-body-lg-bold text-primary px-space-sm py-0.5 rounded-full bg-surface-container-high" id="radius-value">2 km</span>
+</div>
+<div class="space-y-space-xs">
+<input aria-label="Seleccionar radio barrial en kilómetros" class="w-full accent-primary h-2 bg-surface-container rounded-lg cursor-pointer" id="radius-slider" max="5" min="0.5" step="0.5" type="range" value="2"/>
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span>500 m (Calle y manzana)</span>
+<span class="font-bold text-primary">2 km (Recomendado)</span>
+<span>5 km (Distrito)</span>
+</div>
+</div>
+<!-- Indicador de Vecinos Estimados -->
+<div class="flex items-center gap-space-xs p-space-sm rounded-lg bg-surface-container text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[20px]">group</span>
+<span class="font-body-md text-body-md">Aproximadamente <strong class="font-body-lg-bold">340 vecinos activos</strong> dentro de este radio.</span>
+</div>
+</section>
+<!-- Recordatorio de Privacidad y Confianza -->
+<section class="flex items-start gap-space-xs p-space-sm rounded-xl bg-surface-container-low text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">shield</span>
+<p class="font-body-md text-body-md">
+<strong class="font-body-lg-bold text-on-surface">Privacidad garantizada:</strong> Tu dirección exacta nunca se compartirá públicamente; solo se mostrará tu proximidad aproximada y calle de referencia.
+    </p>
+</section>
+<!-- Botón de Acción Principal -->
+<section class="pt-space-xs pb-space-lg">
+<button class="w-full h-[54px] rounded-lg bg-primary text-on-primary font-body-lg-bold text-body-lg-bold flex items-center justify-center gap-space-xs shadow-md active:scale-[0.99] transition-transform" id="btn-continuar" type="button">
+<span>Continuar al Paso 2 (Detalles)</span>
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</section>
+</div>
+<script>
+  (function() {
+    // Manejo accesible del selector de categorías
+    const cards = document.querySelectorAll('.category-card');
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        cards.forEach(c => {
+          c.setAttribute('aria-checked', 'false');
+          const indicator = c.querySelector('.check-indicator');
+          if (indicator) {
+            indicator.classList.remove('bg-primary', 'text-on-primary');
+            indicator.classList.add('bg-surface-container', 'text-transparent');
+          }
+        });
+        card.setAttribute('aria-checked', 'true');
+        const indicator = card.querySelector('.check-indicator');
+        if (indicator) {
+          indicator.classList.remove('bg-surface-container', 'text-transparent');
+          indicator.classList.add('bg-primary', 'text-on-primary');
+        }
+      });
+    });
+
+    // Slider de radio barrial reactivo
+    const slider = document.getElementById('radius-slider');
+    const radiusDisplay = document.getElementById('radius-value');
+    if (slider && radiusDisplay) {
+      slider.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        radiusDisplay.textContent = val < 1 ? `${val * 1000} m` : `${val} km`;
+      });
+    }
+
+    // Microinteracción para dictado por voz accesible
+    const voiceBtn = document.getElementById('btn-voice');
+    const voiceStatus = document.getElementById('voice-status');
+    const titleInput = document.getElementById('titulo-post');
+    let isRecording = false;
+
+    if (voiceBtn && voiceStatus && titleInput) {
+      voiceBtn.addEventListener('click', () => {
+        isRecording = !isRecording;
+        if (isRecording) {
+          voiceBtn.classList.remove('bg-surface-container', 'text-primary');
+          voiceBtn.classList.add('bg-error', 'text-on-error');
+          voiceStatus.innerHTML = '<span class="material-symbols-outlined text-[16px] text-error animate-pulse">radio_button_checked</span><span class="text-error font-bold">Escuchando... Di el título de tu publicación.</span>';
+          
+          // Simulación de dictado para feedback inmediato
+          setTimeout(() => {
+            if (isRecording) {
+              titleInput.value = "Acompañamiento médico y traslado corto";
+              voiceBtn.click();
+            }
+          }, 3200);
+        } else {
+          voiceBtn.classList.remove('bg-error', 'text-on-error');
+          voiceBtn.classList.add('bg-surface-container', 'text-primary');
+          voiceStatus.innerHTML = '<span class="material-symbols-outlined text-[16px] text-primary">check_circle</span><span class="text-primary font-bold">Nota transcrita correctamente.</span>';
+        }
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.05)]" data-active-classes="text-primary font-body-lg-bold"><div class="h-16 px-space-xs flex items-center justify-around"><a aria-label="Inicio" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-1 text-on-surface-variant transition-colors hover:text-on-surface group" data-path="inicio" href="#"><span class="material-symbols-outlined text-[24px]">home</span><span class="font-label-sm text-label-sm mt-0.5">Inicio</span></a><a aria-label="Explorar" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-1 text-on-surface-variant transition-colors hover:text-on-surface group" data-path="explorar" href="#"><span class="material-symbols-outlined text-[24px]">explore</span><span class="font-label-sm text-label-sm mt-0.5">Explorar</span></a><a aria-current="page" aria-label="Publicar solicitud de ayuda" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-0.5 transition-transform active:scale-95 group text-primary font-body-lg-bold" data-path="publicar" href="#"><div class="w-11 h-11 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md"><span class="material-symbols-outlined text-[26px]">add</span></div><span class="font-label-sm text-label-sm text-primary mt-0.5 font-bold">Publicar</span></a><a aria-label="Actividad y notificaciones" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-1 text-on-surface-variant transition-colors hover:text-on-surface relative group" data-path="actividad" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute -top-1 -right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-secondary text-on-secondary font-label-sm text-[10px] flex items-center justify-center">3</span></div><span class="font-label-sm text-label-sm mt-0.5">Actividad</span></a><a aria-label="Perfil de vecino" class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-1 text-on-surface-variant transition-colors hover:text-on-surface group" data-path="perfil" href="#"><span class="material-symbols-outlined text-[24px]">person</span><span class="font-label-sm text-label-sm mt-0.5">Perfil</span></a></div></nav></body></html>

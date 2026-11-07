@@ -1,0 +1,86 @@
+import type { BoardItem } from '@/features/emergency';
+import { POST_KIND_LABEL, type Post } from '@/features/posts';
+import type { Sector } from '@/features/sector';
+
+import { approxPoint } from './approx';
+import { getPlacePoints } from './places';
+import type { MapLayerId, MapPoint } from './types';
+
+const SOURCE_DEMO = 'Dato de demostración (ficticio)';
+
+/** Voluntarios y zonas afectadas FICTICIOS. No describen a nadie ni hechos reales. */
+const DEMO_VOLUNTEERS = [
+  { id: 'demo-vol-1', title: 'Voluntario/a de demo', detail: 'Disponible: herramientas y arreglos menores.' },
+  { id: 'demo-vol-2', title: 'Voluntario/a de demo', detail: 'Disponible: acompañamiento y recados cercanos.' },
+  { id: 'demo-vol-3', title: 'Voluntario/a de demo', detail: 'Disponible: movilidad (traslados cortos).' },
+];
+
+const DEMO_ZONES = [
+  { id: 'demo-zone-1', title: 'Calle anegada (simulada)', detail: 'Zona afectada de demostración.', radiusM: 260 },
+  { id: 'demo-zone-2', title: 'Corte de agua (simulado)', detail: 'Zona afectada de demostración.', radiusM: 380 },
+];
+
+const BOARD_LAYER: Record<BoardItem['section'], MapLayerId> = {
+  incident: 'incidents',
+  need: 'needs',
+  vulnerable: 'needs', // la vulnerabilidad reportada se ve como necesidad, sin identificar a nadie
+  resource: 'resources',
+};
+
+type Input = {
+  sector: Sector;
+  posts: Post[];
+  board: BoardItem[];
+  volunteer: { available: boolean; showSector: boolean };
+};
+
+/**
+ * Convierte lo que ya existe en la app (publicaciones, tablero, perfil) en puntos de mapa.
+ * Todos los puntos usan una zona aproximada derivada del centro del sector.
+ */
+export function buildMapPoints({ sector, posts, board, volunteer }: Input): MapPoint[] {
+  const center = sector.center;
+  const points: MapPoint[] = [];
+
+  for (const item of board) {
+    const layer = BOARD_LAYER[item.section];
+    points.push({
+      id: `board:${item.id}`,
+      layer,
+      title: item.title,
+      detail: item.section === 'vulnerable' ? `No validada · ${item.validation}` : item.validation,
+      coord: approxPoint(center, item.id, item.section === 'vulnerable' ? 0.3 : 0.15),
+      isDemo: item.isDemo,
+      source: item.source,
+      target: item.reportId ? { kind: 'report', id: item.reportId } : { kind: 'board' },
+    });
+  }
+
+  for (const post of posts) {
+    points.push({
+      id: `post:${post.id}`,
+      layer: 'posts',
+      title: post.title,
+      detail: POST_KIND_LABEL[post.kind],
+      coord: approxPoint(center, post.id),
+      isDemo: post.isDemo,
+      source: post.isDemo ? SOURCE_DEMO : 'Publicación hecha en este teléfono',
+      target: { kind: 'post', id: post.id },
+    });
+  }
+
+  for (const v of DEMO_VOLUNTEERS) {
+    points.push({ id: v.id, layer: 'volunteers', title: v.title, detail: v.detail, coord: approxPoint(center, v.id), isDemo: true, source: SOURCE_DEMO, target: { kind: 'none' } });
+  }
+  if (volunteer.available && volunteer.showSector) {
+    points.push({ id: 'volunteer-me', layer: 'volunteers', title: 'Tú · voluntario/a disponible', detail: 'Visible solo como zona aproximada de tu sector.', coord: approxPoint(center, 'volunteer-me'), isDemo: false, source: 'Tu perfil en este teléfono', target: { kind: 'none' } });
+  }
+
+  for (const z of DEMO_ZONES) {
+    points.push({ id: z.id, layer: 'zones', title: z.title, detail: z.detail, coord: approxPoint(center, z.id, 0.2, 0.7), radiusM: z.radiusM, isDemo: true, source: SOURCE_DEMO, target: { kind: 'none' } });
+  }
+
+  points.push(...getPlacePoints(center, sector.radiusKm));
+
+  return points;
+}

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_emergency" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#ffffff;}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-primary": "#ffffff", "surface-tint": "#226869", "outline-variant": "#bfc8c8", "error": "#ba1a1a", "inverse-primary": "#91d2d2", "on-secondary-fixed-variant": "#802a05", "on-secondary-container": "#722200", "surface-bright": "#f9f9ff", "primary-fixed-dim": "#91d2d2", "on-error": "#ffffff", "on-tertiary-container": "#a3c7ff", "surface-container": "#e7eeff", "inverse-surface": "#263142", "tertiary": "#003b71", "tertiary-fixed-dim": "#a5c8ff", "primary": "#004243", "on-background": "#111c2c", "surface-container-high": "#dee8ff", "surface": "#f9f9ff", "on-error-container": "#93000a", "secondary-container": "#fe875d", "secondary": "#a0401c", "on-tertiary-fixed-variant": "#004786", "primary-fixed": "#aceeef", "secondary-fixed-dim": "#ffb59c", "on-tertiary-fixed": "#001c3a", "secondary-fixed": "#ffdbcf", "tertiary-fixed": "#d4e3ff", "on-primary-container": "#8fd0d1", "surface-container-low": "#f0f3ff", "surface-container-highest": "#d8e3fa", "surface-variant": "#d8e3fa", "primary-container": "#0f5b5c", "on-surface": "#111c2c", "inverse-on-surface": "#ebf1ff", "on-secondary-fixed": "#390c00", "on-primary-fixed": "#002020", "on-secondary": "#ffffff", "on-surface-variant": "#3f4948", "error-container": "#ffdad6", "surface-container-lowest": "#ffffff", "surface-dim": "#cfdaf1", "outline": "#6f7979", "on-tertiary": "#ffffff", "on-primary-fixed-variant": "#004f50", "background": "#f9f9ff", "tertiary-container": "#005299" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-2xs": "0.25rem", "margin-desktop": "2rem", "margin-tablet": "1.5rem", "space-xs": "0.5rem", "gutter": "1rem", "margin": "1rem", "space-lg": "1.5rem", "space-md": "1rem", "gutter-sm": "0.75rem", "gutter-lg": "1.5rem", "space-2xl": "3rem", "space-sm": "0.75rem", "space-xl": "2rem" }, fontFamily: { "display-lg": ["Inter"], "display-lg-mobile": ["Inter"], "label-md": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "body-md-medium": ["Inter"], "body-lg-bold": ["Inter"], "label-sm": ["Inter"], "headline-sm": ["Inter"], "body-lg": ["Inter"], "headline-md": ["Inter"] }, fontSize: { "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "600" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "body-md-medium": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500" }], "body-lg-bold": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "700" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface-container-lowest font-body-md text-on-surface flex flex-col min-h-screen antialiased selection:bg-error-container selection:text-on-error-container"><header class="fixed top-0 w-full z-50 bg-error text-on-error shadow-[0_4px_16px_rgba(186,26,26,0.22)] pt-safe"><div class="h-20 px-margin flex items-center justify-between gap-space-xs"><a aria-label="Volver a Red Vecinal" class="min-h-[48px] px-3 -ml-2 rounded-xl bg-on-error/10 hover:bg-on-error/20 active:scale-95 flex items-center gap-1.5 text-on-error transition-all shrink-0" data-path="inicio-inteligente" href="#"><span class="material-symbols-outlined text-[20px]">arrow_back</span><span class="font-label-md text-label-md font-bold tracking-tight whitespace-nowrap hidden sm:inline">Red Vecinal</span><span class="font-label-md text-label-md font-bold tracking-tight sm:hidden">Salir</span></a><div class="flex flex-col items-center justify-center min-w-0 text-center"><div class="flex items-center gap-1.5"><span class="flex h-2.5 w-2.5 relative shrink-0"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-90"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span></span><span class="font-headline-sm text-headline-sm text-on-error font-bold uppercase tracking-wider text-[15px] sm:text-[17px] truncate">Modo Emergencia</span></div><div class="flex items-center gap-1.5 text-on-error/90 mt-0.5"><span class="material-symbols-outlined text-[14px]">cloud_sync</span><span class="font-label-sm text-label-sm font-semibold tracking-wide">Sincronizado Offline/P2P</span></div></div><div class="flex items-center gap-1.5 shrink-0"><a aria-label="Llamada de Emergencia Nacional" class="min-h-[48px] px-3 rounded-xl bg-white text-error font-body-lg-bold text-body-lg-bold flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-transform" href="tel:105"><span class="material-symbols-outlined text-[20px] text-error">call</span><span class="text-[14px] font-black tracking-tight">105</span></a></div></div><div class="h-9 bg-inverse-surface text-inverse-on-surface px-margin flex items-center justify-between text-label-sm font-label-sm border-t border-white/10"><div class="flex items-center gap-1.5 min-w-0"><span class="material-symbols-outlined text-[15px] text-secondary-container">warning</span><span class="truncate font-medium">Ancho de banda bajo · Triage prioritario</span></div><div class="flex items-center gap-3 shrink-0"><a class="text-inverse-on-surface hover:underline font-bold text-label-sm" href="tel:116">116 Bomberos</a><span class="opacity-40">·</span><a class="text-inverse-on-surface hover:underline font-bold text-label-sm" href="tel:106">SAMU 106</a></div></div></header><main class="flex-1 flex flex-col relative w-full pt-[116px] pb-24 bg-surface-container-lowest"><div class="flex flex-col w-full pb-8">
+<!-- Sub-barra táctica de retorno e identificación de caso -->
+<div class="px-margin pt-space-xs pb-space-sm bg-surface-container-low flex flex-col gap-space-2xs">
+<div class="flex items-center justify-between">
+<a class="inline-flex items-center gap-1.5 min-h-[48px] px-2 rounded-xl text-primary font-label-md text-label-md hover:bg-surface-container active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+<span>Volver a Tablero Humanitario</span>
+</a>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">sensors</span>
+        Red Malla Activa
+      </span>
+</div>
+<div class="flex items-center justify-between gap-space-xs mt-1">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary">elderly</span>
+<span>🟠 NECESIDAD PRIORITARIA • Adulto Mayor</span>
+</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">#HUM-028</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Registrado hace 14 min • Cuadrante San Cristóbal B</span>
+</div>
+</div>
+<div class="px-margin flex flex-col gap-space-md mt-space-sm">
+<!-- Tarjeta de Confidencialidad y Escudo Ético -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-sm relative overflow-hidden">
+<div class="flex items-start gap-space-sm">
+<div class="w-11 h-11 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">shield</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center gap-1 text-primary font-headline-sm text-headline-sm">
+<span>Privacidad y Protección Ética</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+            Ubicación protegida dentro de cuadrante difuso (radio 300m). La dirección exacta y contacto familiar sólo se desbloquean al validar tu compromiso de brigada activa.
+          </p>
+<div class="mt-space-xs inline-flex items-center gap-1.5 text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<span>Cifrado vecinal de punto a punto verificado</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Mini Mapa del Cuadrante Difuso con Georreferencia Aproximada -->
+<div class="rounded-xl overflow-hidden shadow-sm relative bg-surface-container">
+<div class="w-full h-44 bg-cover bg-center relative" data-location="Distrito San Cristóbal, Cuadrante Sur, Lima" style="">
+<div class="absolute inset-0 bg-primary/20 backdrop-blur-[1px] flex items-center justify-center">
+<!-- Círculo de Difuminación Humanitaria -->
+<div class="w-28 h-28 rounded-full bg-secondary/20 flex items-center justify-center animate-pulse">
+<div class="w-12 h-12 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-[26px]">fmd_good</span>
+</div>
+</div>
+</div>
+<div class="absolute bottom-2 left-2 right-2 px-3 py-2 rounded-lg bg-surface/90 backdrop-blur-md flex items-center justify-between text-on-surface">
+<div class="flex items-center gap-1.5 font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px] text-secondary">radar</span>
+<span>A 280 metros de tu posición actual</span>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container-high px-2 py-0.5 rounded text-on-surface-variant">Radio ~300m</span>
+</div>
+</div>
+</div>
+<!-- Audio Guía Accesible para Vecinos Mayores y Voluntarios -->
+<div class="bg-surface-container-highest rounded-xl p-space-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs min-w-0">
+<div class="w-10 h-10 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">volume_up</span>
+</div>
+<div class="min-w-0">
+<p class="font-headline-sm text-headline-sm text-on-surface truncate">Audio-Guía Táctica</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Instrucciones por voz para brigadistas y vecinos (0:42 min)</p>
+</div>
+</div>
+<button aria-label="Reproducir instrucciones habladas" class="min-h-[48px] px-3.5 rounded-lg bg-tertiary-container text-on-tertiary-container font-label-md text-label-md flex items-center gap-1.5 active:scale-95 transition-transform shrink-0" id="audio-toggle-btn">
+<span class="material-symbols-outlined text-[20px]" id="audio-icon">play_arrow</span>
+<span id="audio-label">Escuchar</span>
+</button>
+</div>
+<!-- Requerimientos Clave en Formato Visual -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface">Requerimientos Clave</h2>
+<span class="font-label-sm text-label-sm text-error bg-error-container px-2 py-0.5 rounded-full font-bold">2 Urgencias</span>
+</div>
+<div class="grid grid-cols-1 gap-space-xs">
+<!-- Requerimiento 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-start gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[28px]">shopping_cart</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Víveres y Agua de Mesa</h3>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-bold uppercase">Urgente</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+              Paquete básico: 2 galones de agua mineral hervida/envasada y alimentos no perecibles listos para consumo sin gas activo.
+            </p>
+<div class="mt-2 flex items-center gap-2">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary bg-primary-fixed/40 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span>
+                Kit R-4 provisto por almacén vecinal
+              </span>
+</div>
+</div>
+</div>
+<!-- Requerimiento 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-start gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-primary-fixed text-on-primary-fixed-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[28px]">stairs</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Apoyo para Bajar Escaleras</h3>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-bold uppercase">Prioridad</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+              Adulto mayor (Don Alberto, 78 años) en piso 3. Escaleras estrechas sin luz. Movilidad reducida leve; requiere soporte de 2 personas firmes con linterna.
+            </p>
+<div class="mt-2 flex items-center gap-2">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-secondary bg-secondary-fixed/50 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">accessible</span>
+                Andadera disponible en sitio
+              </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Brigadistas Solidarios Coordinando -->
+<div class="bg-surface-container-low rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">group</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Brigadistas en Marcha</h3>
+</div>
+<span class="font-label-sm text-label-sm bg-primary-fixed text-on-primary-fixed px-2 py-0.5 rounded-full font-bold">2 en camino</span>
+</div>
+<!-- Barra de Progreso de Llegada de la Brigada -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span>Desplazamiento solidario</span>
+<span class="font-bold text-primary">65% completado (~4 min)</span>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-500" style="width: 65%;"></div>
+</div>
+</div>
+<!-- Lista de Brigadistas -->
+<div class="flex flex-col gap-2 mt-1">
+<!-- Brigadista 1 -->
+<div class="bg-surface-container-lowest rounded-lg p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="relative">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Close up portrait photo of a trusted local Peruvian community volunteer wearing a dark teal reflective humanitarian vest with a warm helpful expression, natural daytime lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoE6seNZNyeF3vaviI0Z2qWlP2L4RulAmwXax0VWdDR743porPCTOrI77WShzX5IqB5o-TYt-YKeYO1oFv1U0MJafsX2dy9h8c7LBVPuSH2wCwt0vTfbxO4SoxRiodgGmoJiT_99ILNRQ6ZphzLZ6hLYChCZQgLLqqAOjYRDKf_zJZxul1CUrtKqh6xHNSDHIEzB_CaiBdjeMVKkGRKYQqAcFxXfGLedKEJfVzrxI"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-primary ring-2 ring-white"></span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-body-lg-bold text-body-lg-bold text-on-surface truncate">Pedro Morales</span>
+<span class="material-symbols-outlined text-[14px] text-primary" title="Verificado">verified</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Brigada Vecinal • Mochila Médica A</p>
+</div>
+</div>
+<a aria-label="Llamar a Pedro" class="min-h-[48px] px-3 rounded-lg bg-surface-container text-primary font-label-md text-label-md flex items-center gap-1 active:scale-95 transition-transform" href="tel:998001122">
+<span class="material-symbols-outlined text-[18px]">call</span>
+<span class="hidden sm:inline">Llamar</span>
+</a>
+</div>
+<!-- Brigadista 2 -->
+<div class="bg-surface-container-lowest rounded-lg p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="relative">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait photo of a young female community first responder in outdoor protective jacket with a calm compassionate face, daylight setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiHGCr2IsSeBCq8L4jlQp7Yj9N4tZ3KyVpLHGGU2wxvN7B-LztQQzaOddcwAnUSrI8bQfA69pRSMPO6wxdpiQ5faTuWqbQ2RfDXnglqktluoU9nfvZkOos_dEJqCdf2N61ZhdKMe7pPpiqBhHEPpvthU_QmlqBfeIUXuiUkHV3bpsKkx2qWmfYRPih3nCJ1cCkjIJ4n5xTp6SFwtV5j3_B1Sxu3CbyNE-9NR2oStU"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-primary ring-2 ring-white"></span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-body-lg-bold text-body-lg-bold text-on-surface truncate">Lucía Vega</span>
+<span class="material-symbols-outlined text-[14px] text-primary" title="Verificado">verified</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Vecina Bloque 4 • Lleva botellón 10L</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant px-2.5 py-1 rounded bg-surface-container">A 120m</span>
+</div>
+</div>
+</div>
+<!-- Panel de Instrucciones Operativas Inmediatas -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-2 shadow-sm">
+<div class="flex items-center gap-2 text-on-surface font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-[20px] text-secondary">handyman</span>
+<span>Recomendación Táctica para la Brigada</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        No utilizar ascensor por reporte de cortes intermitentes. Ingresar por Pasaje Los Claveles con calzado antideslizante. La puerta del edificio permanece abierta por el vigilante vecinal Don Carlos.
+      </p>
+</div>
+<!-- Botones de Acción Táctiles Grandes -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<!-- Botón Primario de Alto Impacto -->
+<button aria-label="Aceptar Asistencia y Desbloquear Ruta Segura" class="w-full min-h-[56px] rounded-lg bg-primary-container text-on-primary font-body-lg-bold text-body-lg-bold flex items-center justify-center gap-2 shadow-md hover:bg-primary active:scale-[0.99] transition-all px-4" id="accept-assistance-btn">
+<span class="material-symbols-outlined text-[24px]">lock_open</span>
+<span>Aceptar Asistencia y Desbloquear Ruta Segura</span>
+</button>
+<!-- Botón Secundario de Coordinación Directa -->
+<a aria-label="Coordinar con Brigadista Pedro Morales" class="w-full min-h-[52px] rounded-lg bg-surface-container-high text-on-surface font-body-lg-bold text-body-lg-bold flex items-center justify-center gap-2 hover:bg-surface-container-highest active:scale-[0.99] transition-all px-4 shadow-sm" href="tel:998001122">
+<span class="material-symbols-outlined text-[22px] text-primary">chat</span>
+<span>Coordinar con Brigadista Pedro M.</span>
+</a>
+<!-- Canal Alternativo de Emergencia si empeora la situación -->
+<div class="flex items-center justify-center gap-1.5 py-1 text-center">
+<span class="material-symbols-outlined text-[16px] text-error">info</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">¿El caso se convirtió en riesgo vital? Derivar de inmediato al </span>
+<a class="font-label-sm text-label-sm text-error font-bold underline" href="tel:106">SAMU 106</a>
+</div>
+</div>
+</div>
+<!-- Modal / Banner Dinámico de Ruta Desbloqueada (Controlado por Micro-interacción) -->
+<div class="hidden fixed bottom-20 left-4 right-4 z-40 bg-inverse-surface text-inverse-on-surface p-4 rounded-xl shadow-xl flex items-start gap-3 transform transition-all duration-300" id="unlocked-toast">
+<span class="material-symbols-outlined text-secondary-container text-[24px] shrink-0">verified_user</span>
+<div class="flex-1 min-w-0">
+<p class="font-headline-sm text-headline-sm text-white">¡Ruta Segura y Contacto Desbloqueados!</p>
+<p class="font-body-md text-body-md text-inverse-on-surface/90 mt-0.5">
+        Dirección exacta: <strong>Jr. Los Laureles 342, Dpto 302</strong>. Familiar de contacto: Carmen (hija) - 987 654 321.
+      </p>
+<div class="mt-2 flex gap-2">
+<a class="px-3 py-1.5 rounded-lg bg-primary-fixed text-on-primary-fixed font-label-md text-label-md font-bold flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[16px]">navigation</span>
+          Abrir en GPS
+        </a>
+<button class="px-3 py-1.5 rounded-lg bg-white/10 text-white font-label-md text-label-md" id="close-toast-btn">
+          Entendido
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const audioBtn = document.getElementById('audio-toggle-btn');
+    const audioIcon = document.getElementById('audio-icon');
+    const audioLabel = document.getElementById('audio-label');
+    let isPlaying = false;
+
+    if (audioBtn) {
+      audioBtn.addEventListener('click', function() {
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+          audioIcon.textContent = 'pause';
+          audioLabel.textContent = 'Pausar';
+          audioBtn.classList.add('bg-tertiary', 'text-on-tertiary');
+          audioBtn.classList.remove('bg-tertiary-container', 'text-on-tertiary-container');
+        } else {
+          audioIcon.textContent = 'play_arrow';
+          audioLabel.textContent = 'Escuchar';
+          audioBtn.classList.remove('bg-tertiary', 'text-on-tertiary');
+          audioBtn.classList.add('bg-tertiary-container', 'text-on-tertiary-container');
+        }
+      });
+    }
+
+    const acceptBtn = document.getElementById('accept-assistance-btn');
+    const unlockedToast = document.getElementById('unlocked-toast');
+    const closeToastBtn = document.getElementById('close-toast-btn');
+
+    if (acceptBtn && unlockedToast) {
+      acceptBtn.addEventListener('click', function() {
+        acceptBtn.innerHTML = '<span class="material-symbols-outlined text-[24px] animate-spin">sync</span><span>Sincronizando brigada...</span>';
+        acceptBtn.disabled = true;
+
+        setTimeout(function() {
+          acceptBtn.innerHTML = '<span class="material-symbols-outlined text-[24px]">check_circle</span><span>Brigada Activa Asignada</span>';
+          acceptBtn.classList.remove('bg-primary-container', 'hover:bg-primary');
+          acceptBtn.classList.add('bg-primary', 'text-on-primary');
+          unlockedToast.classList.remove('hidden');
+        }, 600);
+      });
+    }
+
+    if (closeToastBtn && unlockedToast) {
+      closeToastBtn.addEventListener('click', function() {
+        unlockedToast.classList.add('hidden');
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/95 backdrop-blur-xl border-t-2 border-error shadow-[0_-4px_16px_rgba(0,0,0,0.08)]" data-active-classes="text-error font-body-lg-bold"><div class="h-16 px-space-xs flex items-center justify-around"><a aria-label="Panel de Alertas y Triage" class="flex flex-col items-center justify-center min-w-[64px] min-h-[48px] py-1 text-on-surface-variant transition-colors hover:text-error group" data-path="modo-emergencia" href="#"><span class="material-symbols-outlined text-[24px]">crisis_alert</span><span class="font-label-sm text-label-sm mt-0.5 font-bold">Alertas SOS</span></a><a aria-label="Solicitar Ayuda Urgente" class="flex flex-col items-center justify-center min-w-[64px] min-h-[48px] py-1 text-on-surface-variant transition-colors hover:text-error group" data-path="solicitar-apoyo-urgente" href="#"><span class="material-symbols-outlined text-[24px]">medical_services</span><span class="font-label-sm text-label-sm mt-0.5">Pedir Ayuda</span></a><a aria-label="Mapa de Evacuación y Refugios" class="flex flex-col items-center justify-center min-w-[64px] min-h-[48px] py-1 text-on-surface-variant transition-colors hover:text-error group" data-path="mapa-refugios-evacuacion" href="#"><span class="material-symbols-outlined text-[24px]">fmd_good</span><span class="font-label-sm text-label-sm mt-0.5">Refugios</span></a><a aria-label="Canales de Contacto Directo" class="flex flex-col items-center justify-center min-w-[64px] min-h-[48px] py-1 text-on-surface-variant transition-colors hover:text-error group" data-path="telefonos-emergencia" href="#"><span class="material-symbols-outlined text-[24px]">contact_phone</span><span class="font-label-sm text-label-sm mt-0.5">Centrales</span></a></div></nav>
+</body></html>
