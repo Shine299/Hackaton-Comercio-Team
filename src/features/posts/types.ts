@@ -12,6 +12,7 @@ export const POST_CATEGORY_IDS = [
   'barter',
   'mobility',
   'care',
+  'business',
 ] as const;
 
 export type PostCategoryId = (typeof POST_CATEGORY_IDS)[number];

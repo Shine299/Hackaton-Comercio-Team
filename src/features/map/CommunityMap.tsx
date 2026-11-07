@@ -2,14 +2,15 @@ import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Platform, Pressable, ScrollView, View } from 'react-native';
 
-import { buildBoard, useEmergencyStore } from '@/features/emergency';
+import { buildBoard, useEmergencyStore, useSharedBoard } from '@/features/emergency';
 import type { Post } from '@/features/posts';
 import { useProfilePrefsStore } from '@/features/profile';
 import { useSectorStore } from '@/features/sector';
-import { Badge, Button, Card, Chip, DemoTag, Icon, Text } from '@/shared/ui';
+import { Badge, Button, Card, Chip, DemoTag, Icon, Text, TextField } from '@/shared/ui';
 
 import { buildMapPoints } from './buildMapPoints';
 import { DEFAULT_LAYERS, getLayer, MAP_LAYERS } from './layers';
+import { MapFab } from './MapFab';
 import NativeLayerMap from './NativeLayerMap';
 import { PLACES_ATTRIBUTION } from './places';
 import type { MapLayerId, MapPoint } from './types';
@@ -61,16 +62,34 @@ export function CommunityMap({ posts }: { posts: Post[] }) {
   const [active, setActive] = useState<MapLayerId[]>(DEFAULT_LAYERS);
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const [showList, setShowList] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [recenter, setRecenter] = useState(0);
+  const [search, setSearch] = useState('');
+  const { data: shared = [] } = useSharedBoard(sector.id);
 
   // En Expo Go el mapa funciona sin clave; la clave de Google solo hace falta en builds de producción.
   const nativeMap = Platform.OS !== 'web';
 
   const all = useMemo(() => {
-    const board = buildBoard({ sectorId: sector.id, sectorName: sector.name, reports, vulnerable, offers, now });
-    return buildMapPoints({ sector, posts, board, volunteer: { available: volunteerAvailable, showSector } });
-  }, [sector, posts, reports, vulnerable, offers, now, volunteerAvailable, showSector]);
+    // Lo que el servidor ya muestra en vivo no se repite desde el teléfono.
+    const sharedIds = new Set(shared.map((s) => s.id));
+    const board = buildBoard({
+      sectorId: sector.id,
+      sectorName: sector.name,
+      reports: reports.filter((r) => !sharedIds.has(r.id)),
+      vulnerable: vulnerable.filter((v) => !sharedIds.has(v.id)),
+      offers,
+      now,
+    });
+    return buildMapPoints({ sector, posts, board, shared, volunteer: { available: volunteerAvailable, showSector } });
+  }, [sector, posts, reports, vulnerable, offers, now, shared, volunteerAvailable, showSector]);
 
-  const visible = all.filter((p) => active.includes(p.layer));
+  const needle = search.trim().toLowerCase();
+  const visible = all.filter(
+    (p) =>
+      active.includes(p.layer) &&
+      (!needle || p.title.toLowerCase().includes(needle) || (p.detail ?? '').toLowerCase().includes(needle)),
+  );
   const selected = visible.find((p) => p.id === selectedId);
   const counts = useMemo(() => {
     const map = new Map<MapLayerId, number>();
@@ -85,7 +104,7 @@ export function CommunityMap({ posts }: { posts: Post[] }) {
     const t = point.target;
     if (t.kind === 'post') router.push({ pathname: '/publicacion/[id]', params: { id: t.id } });
     else if (t.kind === 'report') router.push({ pathname: '/emergencias/estado/[id]', params: { id: t.id } });
-    else if (t.kind === 'board') router.push('/emergencias/tablero');
+    else if (t.kind === 'board' || t.kind === 'shared') router.push('/emergencias/tablero');
   };
 
   const listVisible = !nativeMap || showList;
@@ -104,6 +123,17 @@ export function CommunityMap({ posts }: { posts: Post[] }) {
         ))}
       </ScrollView>
 
+      <TextField
+        label="Buscar en el mapa"
+        hideLabel
+        leadingIcon="magnify"
+        placeholder="Buscar bodega, ayuda, herramienta…"
+        value={search}
+        onChangeText={setSearch}
+        onClear={() => setSearch('')}
+        returnKeyType="search"
+      />
+
       {!nativeMap ? (
         <Card tone="warning">
           <View className="flex-row items-center gap-2">
@@ -115,13 +145,37 @@ export function CommunityMap({ posts }: { posts: Post[] }) {
           </Text>
         </Card>
       ) : (
-        <NativeLayerMap
-          center={sector.center}
-          radiusKm={sector.radiusKm}
-          points={visible}
-          selectedId={selectedId}
-          onSelect={setSelectedId}
-        />
+        <View>
+          <NativeLayerMap
+            center={sector.center}
+            radiusKm={sector.radiusKm}
+            points={visible}
+            selectedId={selectedId}
+            height={expanded ? 560 : 360}
+            recenterSignal={recenter}
+            onSelect={setSelectedId}
+          />
+          <View className="absolute right-3 top-3 gap-2">
+            <MapFab
+              icon={expanded ? 'arrow-collapse' : 'arrow-expand'}
+              label={expanded ? 'Reducir el mapa' : 'Ampliar el mapa'}
+              onPress={() => setExpanded((v) => !v)}
+            />
+            <MapFab
+              icon="target"
+              label="Volver a centrar el mapa en tu sector"
+              onPress={() => {
+                setSelectedId(undefined);
+                setRecenter((n) => n + 1);
+              }}
+            />
+          </View>
+          <View className="absolute bottom-3 left-3 rounded-full bg-surface-container-lowest px-3 py-1.5 shadow-sm elevation-xs">
+            <Text variant="label-md">
+              {visible.length} {visible.length === 1 ? 'punto' : 'puntos'} en el mapa
+            </Text>
+          </View>
+        </View>
       )}
 
       {selected ? (
@@ -138,7 +192,11 @@ export function CommunityMap({ posts }: { posts: Post[] }) {
             <Badge label={`Fuente: ${selected.source}`} tone="neutral" />
           </View>
           {selected.target.kind !== 'none' ? (
-            <Button label="Ver detalle" icon="arrow-right" onPress={() => open(selected)} />
+            <Button
+              label={selected.target.kind === 'shared' ? 'Abrir en el tablero y ayudar' : 'Ver detalle'}
+              icon={selected.target.kind === 'shared' ? 'hand-heart-outline' : 'arrow-right'}
+              onPress={() => open(selected)}
+            />
           ) : null}
         </Card>
       ) : nativeMap ? (

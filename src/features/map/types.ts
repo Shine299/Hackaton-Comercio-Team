@@ -1,6 +1,14 @@
 import type { IconName } from '@/shared/ui';
 
-export type MapLayerId = 'incidents' | 'needs' | 'resources' | 'volunteers' | 'zones' | 'posts' | 'places';
+export type MapLayerId =
+  | 'incidents'
+  | 'needs'
+  | 'resources'
+  | 'volunteers'
+  | 'zones'
+  | 'business'
+  | 'posts'
+  | 'places';
 
 export type MapLayerMeta = {
   id: MapLayerId;
@@ -15,6 +23,8 @@ export type MapTarget =
   | { kind: 'post'; id: string }
   | { kind: 'report'; id: string }
   | { kind: 'board' }
+  /** Aviso real de un vecino del sector (tablero compartido): se abre en el tablero para «Voy a ayudar». */
+  | { kind: 'shared'; id: string }
   | { kind: 'none' };
 
 export type LatLng = { latitude: number; longitude: number };

@@ -1,4 +1,4 @@
-import type { BoardItem } from '@/features/emergency';
+import { describeSharedItem, type BoardItem, type SharedBoardItem } from '@/features/emergency';
 import { POST_KIND_LABEL, type Post } from '@/features/posts';
 import type { Sector } from '@/features/sector';
 
@@ -31,6 +31,8 @@ type Input = {
   sector: Sector;
   posts: Post[];
   board: BoardItem[];
+  /** Avisos reales de vecinos (tablero compartido). */
+  shared?: SharedBoardItem[];
   volunteer: { available: boolean; showSector: boolean };
 };
 
@@ -38,7 +40,7 @@ type Input = {
  * Convierte lo que ya existe en la app (publicaciones, tablero, perfil) en puntos de mapa.
  * Todos los puntos usan una zona aproximada derivada del centro del sector.
  */
-export function buildMapPoints({ sector, posts, board, volunteer }: Input): MapPoint[] {
+export function buildMapPoints({ sector, posts, board, shared = [], volunteer }: Input): MapPoint[] {
   const center = sector.center;
   const points: MapPoint[] = [];
 
@@ -56,12 +58,36 @@ export function buildMapPoints({ sector, posts, board, volunteer }: Input): MapP
     });
   }
 
+  for (const item of shared) {
+    if (item.status === 'resolved') continue;
+    const { title } = describeSharedItem(item, sector.name);
+    const priority = item.source === 'vulnerable' || item.immediateDanger;
+    const crowd =
+      item.responders > 0
+        ? `${item.responders === 1 ? '1 vecino va' : `${item.responders} vecinos van`} en camino`
+        : 'Nadie ha respondido todavía';
+    points.push({
+      id: `shared:${item.id}`,
+      layer: item.source === 'incident' ? 'incidents' : 'needs',
+      title,
+      detail: priority ? `No validada · ${crowd}` : crowd,
+      coord: approxPoint(center, item.id, 0.25, 0.7),
+      isDemo: false,
+      source: item.mine ? 'Tu aviso (en vivo)' : 'Un vecino de tu sector (en vivo)',
+      target: { kind: 'shared', id: item.id },
+    });
+  }
+
   for (const post of posts) {
+    const isBusiness = post.category === 'business';
     points.push({
       id: `post:${post.id}`,
-      layer: 'posts',
+      layer: isBusiness ? 'business' : 'posts',
       title: post.title,
-      detail: POST_KIND_LABEL[post.kind],
+      detail: isBusiness
+        ? [post.priceLabel, post.availableNow ? 'Disponible ahora' : undefined].filter(Boolean).join(' · ') ||
+          POST_KIND_LABEL[post.kind]
+        : POST_KIND_LABEL[post.kind],
       coord: approxPoint(center, post.id),
       isDemo: post.isDemo,
       source: post.isDemo ? SOURCE_DEMO : 'Publicación hecha en este teléfono',

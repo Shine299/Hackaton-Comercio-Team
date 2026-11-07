@@ -8,7 +8,8 @@ export const MAP_LAYERS: MapLayerMeta[] = [
   { id: 'resources', label: 'Recursos', icon: 'package-variant', color: colors.primary, defaultOn: true },
   { id: 'volunteers', label: 'Voluntarios', icon: 'hand-heart-outline', color: colors.success, defaultOn: false },
   { id: 'zones', label: 'Zonas afectadas', icon: 'map-marker-radius-outline', color: colors.warning, defaultOn: false },
-  { id: 'posts', label: 'Publicaciones', icon: 'storefront-outline', color: colors.primaryContainer, defaultOn: true },
+  { id: 'business', label: 'Emprendimientos', icon: 'storefront-outline', color: '#b45f06', defaultOn: true },
+  { id: 'posts', label: 'Publicaciones', icon: 'tag-outline', color: colors.primaryContainer, defaultOn: true },
   { id: 'places', label: 'Lugares de referencia', icon: 'town-hall', color: colors.tertiary, defaultOn: false },
 ];
 
