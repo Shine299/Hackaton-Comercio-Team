@@ -6,12 +6,13 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "yunta",
+    "runtimeVersion": "1.0.0",
     "userInterfaceStyle": "light",
     "ios": {
       "icon": "./assets/images/icon.png",
       "bundleIdentifier": "com.yunta.app",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Usamos tu ubicación solo para sugerir tu sector. Puedes elegirlo manualmente y la app funciona igual."
+        "NSLocationWhenInUseUsageDescription": "Usamos tu ubicación para sugerir tu sector y, solo si confirmas una emergencia con el Modo guardia, tu ubicación exacta una vez para tu aviso (no se guarda). Puedes elegir el sector manualmente y la app funciona igual."
       }
     },
     "android": {
@@ -42,7 +43,7 @@
       [
         "expo-audio",
         {
-          "microphonePermission": "Usamos el micrófono solo cuando tú lo pides: para una nota de voz opcional en Emergencia (se queda en tu teléfono) o para hablarle al asistente (tu voz se pasa a texto y no se guarda)."
+          "microphonePermission": "Usamos el micrófono solo cuando tú lo pides: para una nota de voz opcional en Emergencia (se queda en tu teléfono), para hablarle al asistente o con el Modo guardia activado, que escucha mientras la pantalla está abierta. Los clips con sonido se pasan a texto y no se guardan."
         }
       ],
       "expo-secure-store",
@@ -55,7 +56,7 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Usamos tu ubicación solo para sugerir tu sector. Puedes elegirlo manualmente y la app funciona igual."
+          "locationWhenInUsePermission": "Usamos tu ubicación para sugerir tu sector y, solo si confirmas una emergencia con el Modo guardia, tu ubicación exacta una vez para tu aviso (no se guarda). Puedes elegir el sector manualmente y la app funciona igual."
         }
       ]
     ],
