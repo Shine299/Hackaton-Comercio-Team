@@ -264,9 +264,9 @@ export function HomeScreen() {
         />
       </View>
 
-      <View className="gap-3" accessibilityLabel="Juntos por el barrio: fondos, cámaras y el perrito comunitario">
+      <View className="gap-3" accessibilityLabel="Nuevas funcionalidades: fondos, cámaras y el perrito comunitario">
         <Text variant="headline-sm" accessibilityRole="header">
-          Juntos por el barrio
+          Nuevas funcionalidades
         </Text>
         {featuredFund ? <FundCard fund={featuredFund} now={fundsData?.fetchedAt ?? 0} /> : null}
         <CamerasTeaser />
