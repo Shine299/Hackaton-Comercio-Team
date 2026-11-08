@@ -9,7 +9,7 @@ Un celular viejo con la app IP Webcam, apuntando a la calle, se convierte en cá
 ven desde Yunta. Une la parte financiera con la de seguridad: la cámara 1 muestra «Financiada por N vecinos».
 
 ## Criterios de aceptación
-1. **Dado** Inicio, **cuando** lo abro, **entonces** veo «Juntos por el barrio» con el fondo destacado y el acceso «Cámaras del barrio» con cuántas están en vivo.
+1. **Dado** Inicio, **cuando** lo abro, **entonces** veo «Nuevas funcionalidades» (antes «Juntos por el barrio»; renombrada en SPEC-054) con el fondo destacado y el acceso «Cámaras del barrio» con cuántas están en vivo.
 2. **Dado** una cámara de demostración, **cuando** la abro, **entonces** veo una vista ilustrada con «Vista de demostración», su estado en texto («En vivo» / «Sin señal») y `DemoTag`.
 3. **Dado** una cámara financiada por un fondo, **cuando** la abro, **entonces** veo «Financiada por N vecinos» y al tocarlo llego al fondo.
 4. **Dado** que escribo la dirección de IP Webcam (`http://192.168.x.x:8080`), **cuando** toco «Probar conexión» en la misma red, **entonces** veo la imagen refrescándose y «En vivo»; sin conexión, «Sin señal» y reintenta.

@@ -31,8 +31,9 @@ Cada criterio se comprueba mirando la pantalla (Expo Go) y, para «no cambia el 
 3. **Dado** reportes propios sin resolver, **entonces** «Tienes pendiente» aparece justo después de la alerta oficial (antes
    de los accesos), y su tarjeta muestra **un solo chip** (el estado real) y «N personas en riesgo» como texto. «Mis reportes»
    y Ayuda muestran la tarjeta como antes.
-4. **Dado** los accesos del Inicio, **entonces** son filas compactas (≥ 72 dp) con título corto y una línea de apoyo: «Cerca de
-   ti», «Comercios», «Pide auxilio» y «Ayuda vecinal». Abren las mismas rutas que antes y conservan sus degradados.
+4. **Dado** los accesos del Inicio, **entonces** son filas compactas de ≥ 90 dp de alto (un cuarto más que los 72 dp
+   iniciales; la ilustración crece en la misma proporción y la letra no se escala) con título corto y una línea de apoyo:
+   «Cerca de ti», «Comercios», «Pide auxilio» y «Ayuda vecinal». Abren las mismas rutas que antes y conservan sus degradados.
 5. **Dado** una publicación sin foto en el feed, **entonces** no se ve el bloque de color con ícono grande ni el renglón «Ver
    detalle»; con foto, la foto se ve igual. Toda la parte de arriba sigue abriendo el detalle y «Escribir» sigue aparte.
 6. **Dado** un evento o un aviso, **entonces** su recuadro de fecha usa un degradado de la marca: ya no hay rojo en avisos
@@ -46,6 +47,9 @@ Cada criterio se comprueba mirando la pantalla (Expo Go) y, para «no cambia el 
 10. **Dado** letra del sistema al máximo y el modo fácil, **entonces** nada se corta sin poder leerse y todo mide ≥ 48 dp.
 11. **Dado** el diff de la rama, **entonces** no incluye ningún `*.test.ts`, `src/app/`, `feed.ts`, `places.ts`, `logic.ts`,
     stores ni hooks, y `npm run check` pasa sin modificar pruebas.
+12. **Dado** el Inicio, **entonces** la sección inferior (el fondo vecinal, «Cámaras del barrio» y el perrito comunitario) se
+    titula **«Nuevas funcionalidades»** (antes «Juntos por el barrio»), también para el lector de pantalla. Su contenido,
+    orden y rutas no cambian.
 
 ## Alcance
 - **Toca:** `home/HomeScreen.tsx`, `home/ActionTile.tsx`, `home/FeedCard.tsx`, `emergency/components/ReportCard.tsx`
@@ -62,7 +66,8 @@ Cada criterio se comprueba mirando la pantalla (Expo Go) y, para «no cambia el 
 |---|---|---|---|
 | Inicio · saludo | Recuadro degradado con saludo grande, frase y chip | Saludo de una línea y «N vecinos activos» pequeño | `HomeScreen.tsx` |
 | Inicio · pendiente | Después del feed, con 3 chips | Bajo la alerta, con 1 chip | `HomeScreen.tsx`, `ReportCard.tsx` |
-| Inicio · accesos | Cuatro botones altos con textos largos | Cuatro filas compactas con título corto | `HomeScreen.tsx`, `ActionTile.tsx` |
+| Inicio · accesos | Cuatro botones altos (144 dp) con textos largos | Cuatro filas de 90 dp con título corto e ilustración de 56 dp | `HomeScreen.tsx`, `ActionTile.tsx` |
+| Inicio · sección inferior | Título «Juntos por el barrio» | Título «Nuevas funcionalidades» (mismo contenido) | `HomeScreen.tsx` |
 | Inicio · feed | Bloque de degradado de 112 px sin foto y «Ver detalle» | Sin bloque ni «Ver detalle» | `FeedCard.tsx` |
 | Comunidad | Banner de 3 pasos y botón ancho | Sin banner; «Crear» compacto | `EventsScreen.tsx` |
 | Comunidad · eventos | Avisos en rojo y fechas en marrón | Degradados de la marca | `EventCard.tsx` |
