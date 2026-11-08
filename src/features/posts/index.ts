@@ -18,6 +18,8 @@ export {
 export { useContactStore, type ContactRequest } from './contactStore';
 export { postsKeys, useNearbyPosts, usePost } from './hooks';
 export { useLocalPostsStore } from './localStore';
+export { useInterestStore } from './interestStore';
+export { recommendPosts, type Recommendation } from './recommend';
 export { useSavedStore, type SavedCollection } from './savedStore';
 export { rankPosts, scorePost, type RankContext, type RankedPost } from './relevance';
 export { POST_STATUS_LABEL } from './status';

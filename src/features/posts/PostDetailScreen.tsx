@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { useOutboxStore } from '@/features/outbox';
@@ -22,6 +22,7 @@ import { getCategory, POST_KIND_LABEL, TRUST_LABEL } from './categories';
 import { ContactRequestSheet } from './components/ContactRequestSheet';
 import { ReportSheet } from './components/ReportSheet';
 import { useContactStore } from './contactStore';
+import { useInterestStore } from './interestStore';
 import { usePost } from './hooks';
 import { useLocalPostsStore } from './localStore';
 import { useReportStore } from './reportStore';
@@ -61,6 +62,11 @@ export function PostDetailScreen() {
   const enqueue = useOutboxStore((s) => s.enqueue);
   const [contactOpen, setContactOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
+
+  const recordView = useInterestStore((s) => s.recordView);
+  useEffect(() => {
+    if (post) recordView(post);
+  }, [post?.id, recordView]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const status = post ? effectiveStatus(post, now) : 'active';
   const canContact = Boolean(post && !post.isOwn && status === 'active');

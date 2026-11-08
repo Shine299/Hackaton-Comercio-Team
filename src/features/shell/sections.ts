@@ -5,7 +5,7 @@ import type { IconName } from '@/shared/ui';
 /**
  * Las 4 secciones de la app más el Inicio (referencia: lienzo de rediseño).
  * Hay una sola barra fija de 5: Inicio · Comunidad · Emprendimientos · Emergencia · Ayuda.
- * Aparece solo en la pantalla raíz de cada sección; formularios y detalles se abren sin barra.
+ * Aparece solo en la pantalla raíz de cada sección (no en Inicio ni en el tutorial); formularios y detalles se abren sin barra.
  */
 export type SectionId = 'inicio' | 'comunidad' | 'emprendimientos' | 'emergencia' | 'ayuda';
 
