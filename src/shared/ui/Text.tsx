@@ -8,6 +8,9 @@ import { MAX_FONT_SCALE } from './theme';
 
 export type TextVariant =
   | 'display'
+  | 'headline-xl'
+  | 'body-xl'
+  | 'label-lg'
   | 'headline-lg'
   | 'headline-md'
   | 'headline-sm'
@@ -33,6 +36,9 @@ export type TextTone =
 
 const variantClass: Record<TextVariant, string> = {
   display: 'font-inter-bold text-display',
+  'headline-xl': 'font-inter-bold text-headline-xl',
+  'body-xl': 'font-inter text-body-xl',
+  'label-lg': 'font-inter-semibold text-label-lg',
   'headline-lg': 'font-inter-bold text-headline-lg',
   'headline-md': 'font-inter-semibold text-headline-md',
   'headline-sm': 'font-inter-semibold text-headline-sm',

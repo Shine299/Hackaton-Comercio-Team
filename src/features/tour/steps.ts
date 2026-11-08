@@ -1,8 +1,11 @@
 import type { Href } from 'expo-router';
 
 import type { TourRect } from '@/shared/nav/tourStore';
+import type { YuntaPose } from '@/shared/ui';
 
 export type TourStep = {
+  /** Gesto de Yunta que acompaña el paso (SPEC-057). */
+  pose: YuntaPose;
   /** Botón real que hay que tocar (id de su `TourTarget`), o `null` en el paso de cierre. */
   target: string | null;
   /** Pantalla donde está ese botón; `null` = cualquiera. */
@@ -17,46 +20,53 @@ export type TourStep = {
  */
 export const TOUR_STEPS: TourStep[] = [
   {
+    pose: 'point',
     target: 'tile-comunidad',
     path: '/',
-    title: 'Tu barrio, en vivo',
-    body: 'Este es el Inicio. Estos botones grandes te llevan a cada sección. Toca «Comunidad» para ver qué se organiza cerca.',
+    title: 'Esta es tu casa en Yunta',
+    body: 'Estos botones grandes te llevan a cada parte. Toca «Comunidad» para ver qué se organiza cerca de ti.',
   },
   {
+    pose: 'curious',
     target: 'tab-negocios',
     path: '/eventos',
-    title: 'Lo que se viene',
-    body: 'Charlas, ferias y reuniones del barrio. Ahora toca «Negocios».',
+    title: '¡Mira lo que se viene!',
+    body: 'Charlas, ferias y reuniones de tu barrio. Ahora toca «Negocios».',
   },
   {
+    pose: 'thumbs-up',
     target: 'tab-ayuda',
     path: '/explorar',
-    title: 'Compra local',
+    title: 'Compra a tus vecinos',
     body: 'Negocios del barrio, a pasos de tu casa. Toca «Ayuda» para pedir u ofrecer una mano.',
   },
   {
+    pose: 'shield',
     target: 'header-sos',
     path: '/ayuda',
     title: 'Si hay una emergencia',
-    body: 'El botón SOS está siempre arriba y funciona sin cuenta. Tócalo para ver la pantalla de Emergencia.',
+    body: 'El botón SOS siempre está arriba y funciona sin cuenta. Tócalo para ver la pantalla de Emergencia.',
   },
   {
+    pose: 'point',
     target: 'tab-inicio',
     path: '/emergencias',
-    title: 'Siempre hay salida',
-    body: 'Aquí reportas o pides auxilio. La barra de abajo sigue visible: toca «Inicio» para volver.',
+    title: 'Siempre puedes volver',
+    body: 'Aquí avisas o pides auxilio. La barra de abajo sigue ahí: toca «Inicio» para regresar.',
   },
   {
+    pose: 'assistant',
     target: 'assistant-fab',
     path: '/',
-    title: 'Yunta te acompaña',
-    body: 'Esta burbuja es Yunta, tu asistente: te cuenta lo que pasa en el barrio y resuelve tus dudas, escribiendo o hablando. Tócala. Tus conversaciones con vecinos están en la pestaña «Chat».',
+    title: 'Aquí me tienes a mí',
+    body: 'Esta burbuja soy yo, Yunta. Te cuento lo que pasa en tu barrio y resuelvo tus dudas, escribiendo o hablando. Tócala. Tus charlas con vecinos están en «Chat».',
   },
   {
+    pose: 'celebrate',
     target: null,
     path: null,
     title: '¡Listo, ya sabes moverte!',
-    body: 'Tu perfil, guardados y este recorrido están en el menú ☰. Yunta no reemplaza a los servicios oficiales de emergencia.',
+    body: 'Tu perfil, tus guardados y este recorrido están en el menú ☰. Recuerda: Yunta no reemplaza a los servicios oficiales de emergencia.',
   },
 ];
 
