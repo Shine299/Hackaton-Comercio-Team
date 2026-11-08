@@ -2,6 +2,7 @@
 
 - **Estado:** hecha. Migración `20261109000006_chat.sql` aplicada en el proyecto (9-nov-2026) y RLS comprobada con una transacción de prueba que se deshace (no hay plan Pro para ramas); falta probar con 2 teléfonos
 - **Sprint:** 2 (S2-7)
+- **Actualización:** los criterios 1–3 (aceptar la solicitud antes del chat) los reemplaza SPEC-045 (chat directo).
 
 ## Qué y por qué
 Que dos vecinos coordinen un préstamo o ayuda por mensajes, sin intercambiar teléfono ni dirección, y solo cuando el dueño de la publicación aceptó la solicitud de contacto.

@@ -3,7 +3,7 @@
 Plan de lo que falta para cerrar la app, pensado para que cada integrante pueda tomar una historia y avanzar sin preguntar.
 Metodología: **SDD (Spec-Driven Development) + TDD (Test-Driven Development)**, en sprints cortos.
 
-- **Última actualización:** 8 de noviembre de 2026 (integraciones nuevas, ver Sprint 2b). **Entrega final (sustentación de finalistas): 17 de noviembre de 2026, 6:00 p. m.**
+- **Última actualización:** 8 de noviembre de 2026 (integraciones nuevas, ver Sprint 2b; navegación «comunidad primero», ver Etapa 13). **Entrega final (sustentación de finalistas): 17 de noviembre de 2026, 6:00 p. m.**
 - **Formato de la final** (según las bases): 20 min como máximo = 5 de presentación + **15 de la aplicación funcionando**. Gana lo que funciona de punta a punta.
 - **Criterios del jurado:** aspectos funcionales, aspectos técnicos, valor de la solución, innovación y originalidad.
 - **Alcance de este documento:** solo la app. Sin deck ni guion de demo (decisión del equipo).
@@ -56,7 +56,7 @@ Metodología: **SDD (Spec-Driven Development) + TDD (Test-Driven Development)**,
 - Privacidad por diseño: solo sector aproximado, nunca GPS ni dirección exacta; el diagnóstico, el detalle, la foto y la nota de voz de un aviso **nunca** salen del teléfono.
 - Todo dato ficticio lleva la etiqueta **«DATO DE DEMO»**.
 - La app **no reemplaza** a los servicios oficiales de emergencia.
-- Un color = un significado: rojo = urgencia real, teal = acciones, azul = «Pide», verde = solo completado, terracota = solo prioridad, ámbar = pendiente.
+- Un color = un significado: rojo = urgencia real, **morado `#6A2BD9` = acciones y marca** (lavanda `#B78CFF` para seleccionado; amarillo Yunta `#F7C948` solo como acento, con texto oscuro), azul = «Pide», verde = solo completado, terracota = solo prioridad, ámbar = pendiente. Fondo: blanco cálido `#F8F5FF`. Tokens en `src/global.css`.
 
 ### 1.2 Accesibilidad mínima (se revisa en cada historia de pantalla)
 - Botones de al menos 48 dp, ícono siempre con texto, estados con texto además de color.
@@ -126,6 +126,7 @@ Mapa de código para quien empieza:
 | **1 — Validar el flujo central** | 10–12 nov | Que lo que ya existe funcione de verdad | Flujo de Rosa, modo avión, privacidad y accesibilidad verificados en 2 dispositivos |
 | **2 — Visual y pantallas** | 13–15 nov | Terminar el rediseño con las imágenes | Todas las pantallas con el estilo final; sin bloques vacíos |
 | **2b — Integraciones** | 8 nov (hecho) y lo que quede, en paralelo | Diferenciadores: fondos, cámaras, perrito, «Acompáñame» | Funcionando sin servidor y con `DemoTag`; servidor y pasarela gratis, después |
+| **13 — Comunidad primero** | 9–14 nov, en paralelo con 1 y 2 | Barra Inicio · Comunidad · Negocios · Ayuda · Chat (burbuja = asistente), feed en el Inicio, chat directo, eventos con «Voy», lugares con horario | Las 5 pestañas funcionan en Expo Go; 13a lista **antes del 10** para validar el Sprint 1 sobre la barra nueva |
 | **3 — Release y ensayo** | 16–17 nov | App instalable y congelada | APK instalado, regresión completa, **congelar código el 16 a las 12:00** |
 
 Estimaciones: **S** ≤ 2 h · **M** ≤ medio día · **L** ≤ 1 día. «Dueño» queda en blanco para asignar en la planificación.
@@ -225,7 +226,8 @@ Estimaciones: **S** ≤ 2 h · **M** ≤ medio día · **L** ≤ 1 día. «Dueñ
 | Confianza (perfil, guardados, privacidad, ajustes) | | | | | |
 | Barras inferiores (5 etiquetas sin cortes) | | | | | |
 
-**SPEC-014 — Navegación por sección** (criterios)
+**SPEC-014 — Navegación por sección** (criterios) — **reemplazada por SPEC-043** (barra única de 5, ADR 0006). Se conserva como historia.
+
 - *Dado* el Inicio, *entonces* no hay barra inferior y hay 4 tarjetas grandes que abren cada sección.
 - *Dado* cada sección, *entonces* su barra muestra exactamente las pestañas definidas en `sections.ts` y la primera vuelve al Inicio.
 - *Dado* un formulario o un detalle, *entonces* no hay barra.
@@ -312,7 +314,7 @@ Mientras las integraciones esperan, el siguiente trabajo es **visual y de orden 
 |---|---|---|---|---|---|
 | S2-12 | **Orden de Inicio:** saludo → «¿En qué te ayudamos hoy?» (destacado, sin cuadro) → alerta → «Juntos por el barrio» (fondo, cámaras, perrito) → próximo evento → novedades → negocios → «Pensado para ti» → pendientes. Revisar que no sobre nada y que lo nuevo se vea | SPEC-040 | M | Visual | — |
 | S2-13 | **Orden de los feeds:** Comunidad, Ayuda y Explorar con un criterio claro y el mismo en todas (urgente y cercano primero, luego lo reciente; los datos de demo nunca encima de los reales) | SPEC-041 | M | Visual | — |
-| S2-14 | **Ayuda: Objetos y favores / Animales.** Pulir las tarjetas «¿De qué se trata?», el selector de Explorar y los colores (animales en ámbar, objetos en teal) | SPEC-042 | S | Visual | — |
+| S2-14 | **Ayuda: Objetos y favores / Animales.** Pulir las tarjetas «¿De qué se trata?», el selector de Explorar y los colores (animales en ámbar, objetos en morado) | SPEC-042 | S | Visual | — |
 | S2-15 | **Pantallas nuevas con el estilo del lienzo:** Fondo (N1), Aportar (N2), Cámara (N3), Perrito (N4), Acompáñame (N5). El lienzo ya tiene la fila «5 · Integraciones nuevas» | SPEC-021 | L | Visual | — |
 | S2-16 | **Datos de demostración coherentes entre secciones:** mismos nombres, sector y fechas en publicaciones, fondos, cámaras, perrito y eventos (base para SPEC-031) | SPEC-031 | M | Visual | — |
 | S2-17 | **Animaciones en el celular:** revisar en Expo Go el toque de botones y tarjetas, las transiciones entre pantallas, el fundido entre secciones y el menú lateral que se recoge. Ajustar duraciones si algo se ve brusco o lento | — | S | Visual | — |
@@ -352,6 +354,47 @@ Mientras las integraciones esperan, el siguiente trabajo es **visual y de orden 
 | S2b-11 | **Reporte por WhatsApp, solo texto y sin IA:** número de prueba de Meta + clasificación por palabras clave → tablero con «vía WhatsApp · sin validar». La IA y los audios **no** entran (son de pago) | SPEC-037 | L | Integraciones | Gratis (número de prueba, hasta 5 destinatarios) |
 | S2b-12 | Contactos de confianza reales en el perfil para «Acompáñame» (hoy son de demostración) | SPEC-039 | M | Integraciones | Gratis |
 | S2b-13 | Cámaras en el APK: permitir `http://` de la red local (`usesCleartextTraffic`) y probar con 2 celulares en el mismo hotspot | SPEC-030 | S | Integraciones | Gratis |
+
+---
+
+### Etapa 13 — Comunidad primero (9–14 nov; plan: `docs/04_tecnico/plan_etapa13_comunidad_primero.md`)
+
+**Origen:** feedback de UX en 4 notas de voz: que la app se sienta como una comunidad, con una barra
+**Inicio · Eventos · Explorar · Marketplace · Chat** y el contacto por chat en lugar de solicitudes. _(Ajustada el 8 nov por SPEC-051 / ADR 0007: la barra final es **Inicio · Comunidad · Negocios · Ayuda · Chat**; la burbuja flotante es el asistente y Emergencia va por el SOS.)_
+**Meta:** reorganizar la navegación y completar las piezas que faltan, reutilizando lo que ya existe (chat de
+SPEC-025, eventos de SPEC-028, feed de Comunidad, Negocios).
+
+**Decisiones que asume** (plan §2, a confirmar con el equipo): Emergencia sale de la barra y se llega con el **SOS**
+de la cabecera (D4) · Perfil sigue en ☰ (D5) · Ayuda pasa a ser **Marketplace** y Comunidad deja de ser pestaña (D6; revertida por ADR 0007: vuelve «Ayuda» y Comunidad)
+· el chat se abre **sin aceptar solicitud**, con bloqueo y reporte (D1) · avatar con iniciales, foto opcional
+después (D2) · «Abierto ahora» solo con horario de OSM (D3).
+
+Orden: **S13-1 → S13-2 → S13-3 → S13-4 → S13-5 → S13-6**. Si falta tiempo, S13-5 se queda con datos demo y S13-6 se recorta.
+
+| ID | Historia | Spec | Estim. | Dueño | Depende de |
+|---|---|---|---|---|---|
+| S13-1 ✅ | **13a — Barra nueva y rutas:** 5 pestañas, `resolveBar`, redirecciones desde `/ayuda`, `/comunidad`, `/negocios`; la lista de publicaciones pasa a `/publicaciones`; se quita `ChatFab`; tour actualizado | SPEC-043 | M | | decisiones D4–D6 |
+| S13-2 ✅ | **13b — Inicio como feed + `Avatar`:** `buildHomeFeed` (puro, con prueba), `FeedCard` exportable, tarjeta «¿Emergencia?», «Juntos por el barrio» y dato agregado de vecinos activos (solo conteo) | SPEC-044 | L | | S13-1 |
+| S13-3 ✅ | **13c — Chat directo:** «Escribir» abre o reutiliza la conversación (`start_conversation`), bloquear y reportar, límite de mensajes por minuto; se retira `ContactRequestSheet` | SPEC-045 | L | | S13-1 |
+| S13-4 ✅ | **13d — Eventos de vecinos:** feature `events`, crear (2 pasos, Zod + RHF), «Voy» con conteo (nunca la lista), `event.create` y `event.rsvp` en el outbox | SPEC-046 | L | | S13-1 |
+| S13-5 ✅ | **13e — Explorar lugares:** ampliar `fetch-places.mjs` (tiendas, restaurantes, mercados) con `opening_hours`, parser propio `abierto / cerrado / no confirmado`, filtros y mapa | SPEC-047 | M | | S13-1 |
+| S13-7 | **13g — Modo guardia por voz** (botón en el Inicio, escucha en toda la app): frase «Hola Yunta, ayúdame…», confirmación hablada, marcador 105/106/116, ubicación exacta consentida (una vez), función `guardia` (gratis) | SPEC-052, ADR 0008 | L | | S13-1 |
+| S13-6 ✅ | **13f — Pulido:** foto de perfil opcional, estados vacíos, ADR 0006 (Emergencia fuera de la barra), actualizar SPEC-014/025/028, `README.md` y `context.md` | SPEC-048 | M | | S13-2 a S13-5 |
+
+**Criterios clave** (detalle en cada spec):
+- S13-1: las 5 pestañas (Inicio · Comunidad · Negocios · Ayuda · Chat) navegan; SOS abre Emergencia en un toque desde cualquier raíz; en Emergencia la barra se ve
+  sin pestaña resaltada; los enlaces viejos redirigen; etiquetas completas con letra al máximo.
+- S13-3: con 2 cuentas, «Escribir» → hilo → mensaje visible en el otro teléfono en ≤ 8 s; dos toques no crean dos
+  conversaciones; tras bloquear no se puede enviar; sin red el mensaje queda en la cola.
+- S13-4: con 2 cuentas, A crea un evento, B marca «Voy» y A ve el conteo subir en ≤ 10 s; nadie ve quiénes van.
+- S13-5: nunca se dice «Abierto» sin `opening_hours` interpretable.
+
+**Migraciones nuevas:** `20261110000008_open_chat.sql` (S13-3), `20261110000009_neighbor_events.sql` (S13-4) y
+`20261110000010_chat_last_from_me.sql` (S13-6) y `20261111000012_guard_usage.sql` (S13-7, **aplicada** en Supabase; la función `guardia` está desplegada, falta `GROQ_API_KEY`).
+
+**Estado (8 nov):** las 6 historias están hechas en la app (✅ = `npm run check` en verde, 165 pruebas). **Falta:**
+aplicar las 3 migraciones en Supabase (ninguna se ha ejecutado contra una base), sus pruebas de RLS y verificar en
+Expo Go con dos celulares. Decisiones D1–D7 aprobadas; ADR 0006.
 
 ---
 
@@ -462,6 +505,9 @@ Pasos en Expo Go (y con 2 dispositivos si aplica) y resultado.
 | Cámaras por `http://` bloqueadas en el APK | Cámaras sin imagen en la final | S2b-13 o mostrar las cámaras desde Expo Go |
 | Animaciones no vistas en un celular | Pueden verse lentas o bruscas | S2-17 en Expo Go antes del 13 de nov |
 | ¿Hay verificación real de vecinos (confianza)? | Hoy es solo demostración | Declararlo como límite; no inventar métricas |
+| Emergencia sale de la barra (Etapa 13, D4) | Menos visible en la demo | SOS en todas las cabeceras y tarjeta fija en el Inicio; validarlo con TalkBack en SPEC-013 |
+| La Etapa 13 se cruza con el Sprint 1 | Validar dos veces la navegación | Terminar S13-1 antes del 10 de nov y correr SPEC-010 sobre la barra nueva |
+| Chat sin aceptar solicitud (Etapa 13, D1) | Más riesgo de mensajes no deseados | Registro obligatorio, bloqueo, reporte y límite de mensajes por minuto (S13-3) |
 
 ## 8. Fuera de alcance (backlog posterior)
 Push remoto · verificación de identidad real · panel para coordinadores y moderadores · pagos reales y convenios con comercios (solo simulado o sandbox gratis) · juntas de ahorro · ubicación en vivo en «Acompáñame» · IA y audios por WhatsApp · versión para iPhone instalable · reconocimiento de voz (dictado a texto).

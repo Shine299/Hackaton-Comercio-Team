@@ -1,3 +1,6 @@
-import { CommunityScreen } from '@/features/home';
+import { Redirect } from 'expo-router';
 
-export default CommunityScreen;
+/** Ruta vieja: Comunidad abre sus eventos y novedades (SPEC-051). */
+export default function ComunidadRedirect() {
+  return <Redirect href="/eventos" />;
+}

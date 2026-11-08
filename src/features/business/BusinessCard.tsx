@@ -8,7 +8,7 @@ import { DemoTag, Icon, SyncStatusBadge, Text } from '@/shared/ui';
 
 import { DETAIL_DELIVERY, DETAIL_HOURS, detailOf, hasDelivery, rubroOf } from './rubros';
 
-/** Tarjeta de un emprendimiento para la cuadrícula de 2: rubro, nombre, precio, horario y distancia aproximada. */
+/** Tarjeta de un negocio para la cuadrícula de 2: rubro, nombre, precio, horario y distancia aproximada. */
 export function BusinessCard({ post }: { post: Post }) {
   const router = useRouter();
   const easy = useEasyMode();

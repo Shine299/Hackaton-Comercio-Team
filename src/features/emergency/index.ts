@@ -9,7 +9,7 @@ export {
   type SectorImpact,
   type ResponseState,
 } from './sharedBoard';
-export { EMERGENCY_NUMBERS, type EmergencyNumber } from './emergencyNumbers';
+export { EMERGENCY_NUMBERS, type EmergencyNumber, type EmergencyNumbersConfig } from './emergencyNumbers';
 export { EmergencyCenterScreen } from './EmergencyCenterScreen';
 export { HelpRequestScreen } from './HelpRequestScreen';
 export { IncidentReportScreen } from './IncidentReportScreen';

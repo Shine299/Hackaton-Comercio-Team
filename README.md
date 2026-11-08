@@ -1,7 +1,7 @@
 # Yunta
 
 **Tu comunidad, más cerca.** Aplicación **solo para celular** (Android e iOS) que conecta a vecinos para resolver
-necesidades del día a día — prestar y pedir herramientas, comprar a emprendimientos del barrio, enterarse de lo
+necesidades del día a día — prestar y pedir herramientas, comprar a negocios del barrio, enterarse de lo
 que pasa cerca — y para coordinar ayuda cuando hay una emergencia. Construida con Expo + React Native + TypeScript.
 
 > Yunta coordina ayuda entre vecinos. **No reemplaza a los servicios oficiales de emergencia** ni garantiza que
@@ -13,18 +13,31 @@ que pasa cerca — y para coordinar ayuda cuando hay una emergencia. Construida 
 
 ## Qué hace
 
-La app tiene **Inicio** y cuatro secciones, cada una con una función principal:
+La app tiene una **barra inferior de 5 pestañas: Inicio · Comunidad · Negocios · Ayuda · Chat** (ver ADR 0007 y SPEC-051; el Inicio no la muestra), el botón **SOS** en la
+cabecera y una **burbuja flotante con la mascota: el asistente virtual de Yunta** (puedes hablarle, SPEC-053):
 
-| Sección | Para qué sirve | Ruta |
+| Pestaña | Para qué sirve | Ruta |
 |---|---|---|
-| **Inicio** | Puerta de entrada: buscador, qué puedes hacer, novedades, emprendimientos con foto, préstamos y recomendaciones | `/` |
-| **Comunidad** | Novedades del barrio en lista o **mapa** (ofertas, pedidos, negocios, avisos) | `/comunidad` |
-| **Emprendimientos** | Negocios y oficios del barrio (lista/mapa), con registro gratuito de tu negocio | `/negocios` |
-| **Ayuda** | Pedir u ofrecer ayuda entre vecinos (herramientas, favores, trueque) y avisar por un vecino vulnerable | `/ayuda`, `/explorar`, `/publicar` |
-| **Emergencia** | Reportar un incidente o pedir auxilio **sin cuenta**, números oficiales, tablero de coordinación y mapa | `/emergencias/*` |
+| **Inicio** | Feed del barrio: personas y lo que ofrecen, necesitan u organizan; alerta del sector, 4 botones grandes (Comunidad, Negocios, Emergencia, Ayuda; sin barra inferior en esta pantalla) y «Juntos por el barrio» | `/` |
+| **Comunidad** | Eventos del barrio: los crean los vecinos y los demás marcan «Voy» (solo se ve cuántos van) | `/eventos`, `/evento/[id]`, `/eventos/crear` |
+| **Negocios** | Lugares del barrio (OpenStreetMap) con «Abierto ahora» solo si hay horario, y negocios de vecinos | `/explorar` |
+| **Ayuda** (antes «Marketplace») | Pedir u ofrecer ayuda entre vecinos: objetos, favores y animales; «Escribir» abre el chat con quien publicó | `/ayuda`, `/publicaciones`, `/publicar` |
+| **Emergencia** (botón SOS de la cabecera, no es pestaña) | Reportar un incidente o pedir auxilio **sin cuenta**, números oficiales, tablero y mapa | `/emergencias/*` |
+| **Modo guardia por voz** (botón en el Inicio, SPEC-052) | «Hola Yunta, ayúdame, me pasó algo» → confirma por voz, abre el marcador (105/106/116), deja listo el aviso con tu ubicación exacta para tu contacto y avisa al sector. Escucha en toda la app, con la app a la vista | `/emergencias/guardia` (ajustes) |
+| **Chat** (pestaña) | Conversaciones 1 a 1 por publicación, con bloqueo, reporte y aviso de mensajes sin leer | `/mensajes`, `/chat/[id]` |
 
-Transversales: menú lateral con perfil (icono ☰ o deslizar desde el borde izquierdo), campana de actividad,
+Transversales: menú lateral con perfil (tu avatar o ☰, o deslizar desde el borde izquierdo), campana de actividad,
 cambio de sector, tutorial inicial y **recomendaciones** según lo que cada persona mira y guarda.
+
+**Asistente «Pregúntale a Yunta»** (`/asistente`, desde el Inicio): responde dudas sobre la app y el barrio con IA
+gratuita en cadena (**Mistral → Groq → respuestas fijas**). Se le puede **hablar** (grabación transcrita
+con Groq Whisper, el texto queda editable antes de enviar) y **escuchar** las respuestas (`expo-speech`). Reglas:
+
+- Un mensaje que suena a emergencia **nunca pasa por la IA**: muestra al instante el SOS y el 105.
+- Teléfonos, correos y DNI se reemplazan por «[dato oculto]» **antes** de salir del teléfono.
+- Límite de 20 mensajes por persona y 400 en total al día; al agotarse, o sin red ni servidor, contestan las
+  respuestas fijas marcadas como tales (nunca se simula una respuesta de IA).
+- La conversación se guarda solo en el teléfono. Ver SPEC-049 y SPEC-050.
 
 Principios de producto: accesibilidad por defecto, ubicación siempre **aproximada** (por sector), datos
 ficticios marcados con `DemoTag`, y honestidad de estado: «guardado en tu teléfono» nunca se presenta como «recibido».
@@ -42,6 +55,18 @@ npx expo start           # escanea el QR con Expo Go en tu celular (Android/iOS)
 | `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY` | Backend real (clave **anónima**; la seguridad es RLS) | No |
 | `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Mapas en builds nativas (en Expo Go no hace falta) | No |
 
+**Servidor (Supabase), lo hace el equipo una vez.** Las claves de IA son secretas: van como *secrets* de Supabase,
+**nunca** en `.env` ni en una variable `EXPO_PUBLIC_*`.
+
+```bash
+npx supabase db push                          # aplica las migraciones de supabase/migrations/
+npx supabase secrets set MISTRAL_API_KEY=… GROQ_API_KEY=…
+npx supabase functions deploy asistente       # Edge Function del asistente (IA + voz)
+```
+
+Opcionales: `MISTRAL_MODEL`, `GROQ_MODEL`, `GROQ_STT_MODEL`. Un proveedor sin clave se salta; sin ninguna, el
+asistente usa las respuestas fijas. La clave de Groq además activa la voz a texto: sin ella no hay entrada por voz. En la consola de Mistral, **desactiva el uso de datos para entrenamiento**.
+
 Comandos útiles: `npm run check` (todo junto), `npm test`, `npm run typecheck`, `npm run lint`,
 `npm run arch:check`, `npx expo-doctor`. Builds: `npx eas-cli@latest build` (ver `eas.json`).
 
@@ -56,6 +81,9 @@ Comandos útiles: `npm run check` (todo junto), `npm test`, `npm run typecheck`,
 | Datos remotos | TanStack Query | Caché y refresco de lecturas |
 | Persistencia | `expo-sqlite` (kv), `expo-secure-store` | Offline-first; secretos fuera del kv |
 | Backend | Supabase (Postgres + Auth anónima + RLS) | Sin servidores propios ni datos personales |
+| Funciones de servidor | Supabase Edge Functions (Deno) | Claves de IA fuera del cliente, límite de uso |
+| Asistente con IA | Mistral → Groq (planes gratuitos), Groq Whisper para voz | Sin costo, con respaldo en cadena |
+| Voz | `expo-audio` (grabar), `expo-speech` (leer en voz alta) | Más fácil para quien escribe con dificultad |
 | Mapas | `react-native-maps` (nativo) · Leaflet + OpenStreetMap (web) | Mapa nativo en el celular |
 | Formularios | React Hook Form + Zod | Validación tipada |
 | Pruebas | Jest (`jest-expo`) | Lógica pura rápida |
@@ -66,7 +94,8 @@ Comandos útiles: `npm run check` (todo junto), `npm test`, `npm run typecheck`,
 src/
 ├── app/            Rutas (Expo Router). Delgadas: re-exportan una pantalla desde `@/features/<x>`
 ├── features/       Una carpeta por funcionalidad: UI + estado + datos, con un `index.ts` público
-│   ├── Secciones:      home · business · help · emergency (+ explore, publish, map)
+│   ├── Pestañas:       home (feed) · events · explore (lugares) · help (Ayuda) · chat · emergency (SOS)
+│   ├── Apoyo:          assistant (IA y voz) · business · publish · map · funds · cameras · pets · walk · payments
 │   ├── Contenido:      posts (publicaciones, relevancia, recomendaciones) · activity · profile
 │   ├── Contexto:       sector · session · onboarding · shell (cabecera, barra, menú) · notifications
 │   ├── Datos offline:  outbox (cola de salida) · sync (transporte Supabase + reconciliación)
@@ -74,9 +103,10 @@ src/
 ├── shared/         Sin dependencias de features: ui (design system, degradados, ilustraciones),
 │                   hooks, nav (stores de UI), storage (kv), supabase (cliente), sync (estados), geo, format
 └── global.css      Tokens de diseño (Tailwind v4 @theme)
-supabase/           Migraciones SQL (esquema, RLS, alertas, ofertas y tablero compartido) y semillas
+supabase/           Migraciones SQL (esquema, RLS, tablero, chat, eventos de vecinos, uso del asistente), semillas
+                    y functions/ (Edge Functions: `asistente`, y `_shared` con la lógica pura de la cadena de IA)
 docs/               Producto, UX, accesibilidad, técnico, specs (SDD) y ADR (decisiones)
-scripts/            Ingesta de lugares de referencia (OpenStreetMap) y chequeos
+scripts/            Ingesta de lugares y comercios con horario (OpenStreetMap) y chequeos
 ```
 
 ### Reglas de dependencia (automatizadas)
@@ -99,18 +129,21 @@ pasa el mapa a la pantalla como `nearbyMap`).
 ```mermaid
 flowchart TD
   subgraph APP["app/ — rutas (Expo Router)"]
-    R1["/ · /comunidad · /negocios · /ayuda"]
+    R1["/ · /eventos · /explorar · /ayuda · /mensajes"]
     R2["/emergencias/*"]
-    R3["/publicacion/[id] · /vecino/[id] · /perfil · /sector"]
+    R3["/publicacion/[id] · /evento/[id] · /chat/[id] · /asistente · /vecino/[id] · /perfil · /sector"]
   end
 
   subgraph FEATURES["features/ — verticales (solo por index.ts)"]
     direction TB
-    subgraph SEC["Secciones"]
-      home & business & help & emergency & explore & publish
+    subgraph SEC["Pestañas y SOS"]
+      home & events & explore & help & chat & emergency
+    end
+    subgraph SUP["Apoyo"]
+      assistant & business & publish & map
     end
     subgraph CON["Contenido y contexto"]
-      posts & map & activity & profile & sector & session & onboarding & shell & notifications
+      posts & activity & profile & sector & session & onboarding & shell & notifications
     end
     subgraph DATA["Datos offline"]
       outbox --> sync
@@ -122,10 +155,15 @@ flowchart TD
     hooks & nav["nav (stores de UI)"] & storage["storage (SQLite kv)"] & supabase["supabase (cliente)"] & geo & format
   end
 
+  EF["supabase/functions/asistente (Edge Function)"]
+
   APP --> FEATURES
   FEATURES --> SHARED
   sync --> supabase
-  storage -.persiste.-> posts & outbox & sector & session
+  assistant -->|pregunta / audio| EF
+  EF -->|Mistral → Groq| IA["IA gratuita"]
+  chat -.contador sin leer.-> nav
+  storage -.persiste.-> posts & outbox & sector & session & assistant
 ```
 
 ### 2. Flujo offline-first (de la acción al «recibido»)
@@ -172,6 +210,13 @@ erDiagram
   posts ||--o{ post_reports : post_id
   emergency_reports ||--o{ board_responses : target_id
   vulnerable_alerts ||--o{ board_responses : target_id
+  posts ||--o{ conversations : post_id
+  post_requests |o--o| conversations : request_id
+  conversations ||--o{ messages : conversation_id
+  messages ||--o{ message_reports : message_id
+  sectors ||--o{ events : sector_id
+  events ||--o{ event_rsvps : event_id
+  sectors ||--o{ sector_events : sector_id
 
   sectors { text id PK  text name  float center_lat  float center_lng  numeric radius_km }
   profiles { uuid id PK  uuid user_id  text display_name  text trust  int recommendations }
@@ -183,32 +228,47 @@ erDiagram
   resource_offers { uuid id PK  uuid user_id  text resource  text sector_id FK  text stage }
   sector_alerts { uuid id PK  text sector_id FK  text title  text severity  text source  bool active }
   board_responses { uuid id PK  uuid target_id  uuid responder_id  text status }
+  conversations { uuid id PK  uuid post_id FK  uuid request_id FK  uuid owner_id  uuid requester_id }
+  messages { uuid id PK  uuid conversation_id FK  uuid sender_id  text body }
+  blocks { uuid blocker_id PK  uuid blocked_id PK }
+  message_reports { uuid id PK  uuid message_id FK  uuid reporter_id  text reason }
+  events { uuid id PK  uuid organizer_id  text sector_id FK  text title  timestamptz starts_at  text venue_kind  text venue_name  text status }
+  event_rsvps { uuid event_id PK  uuid user_id PK }
+  sector_events { uuid id PK  text sector_id FK  text kind  text title  timestamptz starts_at  text place_label  text source  bool is_demo }
+  assistant_usage { uuid user_id PK  date day PK  int count }
 ```
 
-> Sin columnas de ubicación precisa: solo `sector_id`. Texto privado, fotos y diagnóstico de «vecino vulnerable»
-> se quedan en el teléfono. El detalle exacto de columnas y políticas está en `supabase/migrations/`.
+> Sin columnas de ubicación precisa: solo `sector_id` (los eventos usan un lugar público o una zona aproximada).
+> Texto privado, fotos y diagnóstico de «vecino vulnerable» se quedan en el teléfono. `request_id` de
+> `conversations` es opcional desde el chat directo (SPEC-045). `assistant_usage` no tiene políticas: solo la toca
+> la Edge Function con `service_role`, y guarda cuántos mensajes hubo, nunca su contenido. El detalle exacto de
+> columnas y políticas está en `supabase/migrations/`.
 
 ### 4. Navegación
 
 ```mermaid
 flowchart LR
   OB["/onboarding (1.ª vez)"] --> HOME
-  HOME["Inicio /"] -->|tarjetas, accesos| COM["Comunidad"]
-  HOME --> NEG["Emprendimientos"]
-  HOME --> AYU["Ayuda"]
-  HOME --> EME["Emergencia"]
 
-  BAR["Barra inferior de 5 (no en Inicio)"] --- COM & NEG & AYU & EME
-  MENU["☰ Menú lateral / gesto borde izquierdo"] --> PER["Perfil · Guardados · Privacidad · Ajustes"]
-  MENU --> ACT["Solicitudes y avisos"]
+  BAR["Barra inferior de 5 (todas las raíces menos el Inicio)"] --- HOME["Inicio / (feed)"] & EVE["Comunidad"] & EXP["Negocios"] & MKT["Ayuda"] & CHAT["Chat /mensajes"]
+  FAB["Burbuja: asistente virtual"] --> ASI2["/asistente (conversación por voz)"]
+  SOS["SOS en la cabecera: siempre, sin cuenta"] --> EME["Emergencia (stack propio)"]
+  HOME -->|botón grande «Emergencia»| EME
+  HOME -->|«Pregúntale a Yunta»| ASI["/asistente"]
+  ASI -->|emergencia detectada| EME
+  MENU["Avatar / ☰ menú lateral"] --> PER["Perfil · Guardados · Privacidad · Ajustes · Registrar negocio"]
 
-  COM -->|Lista ⇄ Mapa| DET["/publicacion/[id]"]
-  NEG -->|Lista ⇄ Mapa| DET
-  NEG --> REG["/negocios/registrar"]
-  AYU --> EXP["/explorar (Quiero ayudar)"]
-  AYU --> PUB["/publicar (Necesito ayuda)"]
-  EME --> REP["Reportar · Pedir ayuda · Tablero · Recursos · Mis reportes"]
-  SOS["SOS: siempre accesible, sin cuenta"] --> EME
+  HOME --> DET["/publicacion/[id]"]
+  HOME --> EVD["/evento/[id]"]
+  EVE --> EVD
+  EVE --> EVC["/eventos/crear"]
+  EXP -->|Lugares y negocios| REG["/negocios/registrar"]
+  MKT --> LIST["/publicaciones"] --> DET
+  MKT --> PUB["/publicar"]
+  DET -->|Escribir| CHT["/chat/[id]"]
+  CHAT --> CHT
+  EME --> REP["Reportar · Pedir ayuda · Tablero · Recursos · Mis reportes · Acompáñame"]
+  OLD["/marketplace · /comunidad · /negocios"] -.->|redirigen| MKT & EVE & EXP
 ```
 
 ## Estado y persistencia
@@ -219,13 +279,15 @@ flowchart LR
 | Sesión anónima de Supabase | Mismo kv (sin datos personales) | Se crea al primer envío |
 | Cola de envío | `outbox` (store persistido) | UUID del cliente = idempotencia |
 | Lecturas remotas (publicaciones, tablero, alertas) | TanStack Query, `staleTime` corto | Con respaldo de datos de demo |
+| Conversación con el asistente | Store persistido en el teléfono (`features/assistant/store.ts`) | El servidor no guarda mensajes, solo el conteo diario en `assistant_usage` |
 | Secretos/tokens | `expo-secure-store` | Nunca en el kv |
+| Claves de IA (Mistral, Groq) | Secrets de Supabase, solo en la Edge Function | Nunca en el cliente |
 
 ## Mapas
 
 `CommunityMap` es **un solo componente reutilizable** que se incrusta en cada sección (`layers`, `embedded`, `height`):
-Emprendimientos y Comunidad con alternador Lista ⇄ Mapa, Explorar para publicaciones y Emergencia para
-incidentes y recursos. Se dibuja con `react-native-maps` (la vista web de desarrollo usa Leaflet, solo para revisar en el computador). Los marcadores son
+Explorar (capa «Comercios» de OSM y negocios) y Publicaciones con alternador Lista ⇄ Mapa, y Emergencia
+para incidentes, recursos y la capa «Lugares de referencia» (salud, farmacia, seguridad, refugio: sin comercios). Se dibuja con `react-native-maps` (la vista web de desarrollo usa Leaflet, solo para revisar en el computador). Los marcadores son
 **pines** con la punta sobre la coordenada y el icono de su capa; todos los puntos son zona aproximada.
 
 ## Recomendaciones
@@ -238,7 +300,10 @@ frescura, confianza, urgencia) y suma peso a las categorías que la persona más
 ## Pruebas y CI
 
 - `npm test` — Jest (`jest-expo`), pruebas de lógica pura junto al código (`*.test.ts`): relevancia,
-  recomendaciones, filtros, rubros, resolución de secciones de la barra.
+  recomendaciones, filtros, rubros, barra (`resolveBar`), feed del Inicio, chat (inicio, sin leer), eventos
+  (agrupación, «Voy», esquema), horarios de OSM (`openingHours`), lugares de Explorar y asistente (detección de
+  emergencias, ocultar datos personales, respuestas fijas, cadena de proveedores en `assistantCore`, voz).
+- La Edge Function se revisa con `deno check supabase/functions/asistente/index.ts`.
 - `npm run check` — typecheck + lint (incluye límites entre features) + ciclos (`madge`) + pruebas.
 - GitHub Actions (`.github/workflows/ci.yml`) corre `npm run check` en cada push a `main` y en cada PR.
 - Lo que no cubre una prueba (pantallas, dos dispositivos, modo avión, letra grande) se verifica a mano en Expo Go.
@@ -251,7 +316,8 @@ El repo está preparado para trabajar con asistentes de IA sin romper la arquite
 - [`AGENTS.md`](AGENTS.md): reglas de Expo (las APIs cambian por SDK; consultar la doc versionada).
 - **SDD + TDD** ([`sprints.md`](sprints.md)): spec corta con criterios Dado/Cuando/Entonces
   ([plantilla](docs/specs/_plantilla.md)) → prueba que falla → código mínimo → refactor → `npm run check`.
-- [`docs/adr/`](docs/adr): decisiones de arquitectura (features verticales, offline-first, Supabase+RLS, NativeWind fijado).
+- [`docs/adr/`](docs/adr): decisiones de arquitectura (features verticales, offline-first, Supabase+RLS, NativeWind
+  fijado, pagos fuera del outbox y navegación «comunidad primero», ADR 0006).
 - Las reglas son **ejecutables** (lint, madge, Jest, CI): si la IA se salta una, el chequeo falla.
 
 ## Convenciones de producto
@@ -272,4 +338,7 @@ El repo está preparado para trabajar con asistentes de IA sin romper la arquite
 - Más pruebas: `buildMapPoints`, orden de la cola `outbox`, y pruebas de RLS contra una rama de Supabase (nunca producción).
 - Pruebas de pantallas con React Native Testing Library para Inicio, barra y formularios.
 - Notificaciones push remotas (hoy son locales) y tablero con tiempo real.
+- Asistente: cargar las claves, desplegar la función y probarlo con los proveedores reales. Hasta ahora nunca se
+  llamó a Mistral, Groq ni Whisper desde este repo; falta también probar la voz en un celular (SPEC-049/050).
+- Verificar el SOS de la cabecera y el botón grande «Emergencia» del Inicio con TalkBack y letra grande (ADR 0006, SPEC-013).
 - Normalizar saltos de línea a LF en todo el repo (`.gitattributes` + `.editorconfig` ya definidos).

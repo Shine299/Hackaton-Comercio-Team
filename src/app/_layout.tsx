@@ -9,7 +9,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BoardNotifier } from '@/features/notifications';
 import { BrandSplash, EdgeSwipe, ProfileDrawer, SectionBar } from '@/features/shell';
 import { ActivityBadgeSync } from '@/features/activity';
-import { ChatFab } from '@/features/chat';
+import { AssistantFab } from '@/features/assistant';
+import { ChatNotifier } from '@/features/chat';
+import { GuardProvider } from '@/features/guard';
 import { hasServerTransport, useOutboxStore } from '@/features/outbox';
 import { reconcileWithServer, registerSupabaseTransport, syncNow } from '@/features/sync';
 import { Stack } from 'expo-router';
@@ -62,12 +64,14 @@ export default function RootLayout() {
         <StatusBar style="dark" />
         <BoardNotifier />
         <ActivityBadgeSync />
+        <ChatNotifier />
+        <GuardProvider>
         <View style={{ flex: 1 }}>
           <View style={{ flex: 1 }}>
           <Stack
             screenOptions={{
               headerShown: false,
-              contentStyle: { backgroundColor: '#f9f9ff' },
+              contentStyle: { backgroundColor: '#F8F5FF' },
               // Entrada suave tipo iOS también en Android (la pantalla anterior se desplaza un poco).
               animation: 'ios_from_right',
               gestureEnabled: true,
@@ -78,6 +82,10 @@ export default function RootLayout() {
             <Stack.Screen name="vecino/[id]" />
             <Stack.Screen name="chat/[id]" />
             <Stack.Screen name="negocios/registrar" />
+            <Stack.Screen name="evento/[id]" />
+            <Stack.Screen name="eventos/crear" />
+            <Stack.Screen name="asistente" />
+            <Stack.Screen name="conversacion" options={{ animation: 'fade', gestureEnabled: false }} />
             <Stack.Screen name="fondos/[id]" />
             <Stack.Screen name="fondos/aportar/[id]" />
             <Stack.Screen name="camaras/index" />
@@ -88,13 +96,15 @@ export default function RootLayout() {
             <Stack.Screen name="sector" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
             <Stack.Screen name="galeria" />
           </Stack>
-          <ChatFab />
+          {/* SPEC-051: la burbuja flotante es el asistente virtual, dentro del contenido para quedar sobre la barra. */}
+          <AssistantFab />
           </View>
           <SectionBar />
           <EdgeSwipe />
           {showBrand ? <BrandSplash onDone={hideBrand} /> : null}
         </View>
         <ProfileDrawer />
+        </GuardProvider>
       </QueryClientProvider>
     </SafeAreaProvider>
   );

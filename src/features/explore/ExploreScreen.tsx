@@ -226,7 +226,7 @@ export function ExploreScreen() {
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="¿Buscas un negocio del barrio? Abrir Negocios"
-        onPress={() => router.push('/negocios')}
+        onPress={() => router.push('/explorar')}
         className="flex-row items-center gap-3 rounded-2xl bg-primary-fixed p-3 active:opacity-80">
         <Icon name="storefront-outline" size={28} color="primary" />
         <View className="min-w-0 flex-1">

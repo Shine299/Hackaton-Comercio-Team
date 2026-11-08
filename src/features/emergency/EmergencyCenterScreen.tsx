@@ -4,7 +4,7 @@ import { useMemo, useState, type ReactNode } from 'react';
 import { Linking, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
-import { Badge, cn, GRADIENTS, Icon, type IconName, Screen, SECCION_AYUDA_XML, SectionHero, Text, PressableScale } from '@/shared/ui';
+import { Badge, cn, colors, GRADIENTS, Icon, type IconName, Screen, SECCION_AYUDA_XML, SectionHero, Text, PressableScale } from '@/shared/ui';
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
@@ -203,21 +203,22 @@ export function EmergencyCenterScreen({ nearbyMap }: { nearbyMap?: ReactNode }) 
         <Option icon="package-variant" title="Necesidades y recursos" onPress={() => router.push('/emergencias/recursos')} />
         <Option icon="cctv" title="Cámaras del barrio" badge="Nuevo" onPress={() => router.push('/camaras')} />
         <Option icon="walk" title="Acompáñame: llegué bien" badge="Nuevo" onPress={() => router.push('/emergencias/acompaname')} />
+        <Option icon="ear-hearing" title="Modo guardia: pide ayuda con tu voz" badge="Nuevo" onPress={() => router.push('/emergencias/guardia')} />
       </View>
 
       <PressableScale
         accessibilityRole="button"
         accessibilityLabel="¿Alguien no puede pedir ayuda? Pide por un vecino vulnerable"
         onPress={() => router.push('/emergencias/vecino-vulnerable')}
-        className="mt-1 flex-row items-center gap-3 rounded-3xl bg-tertiary-container p-2 pr-4">
-        <View className="h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-primary-container">
+        className="mt-1 flex-row items-center gap-3 rounded-3xl bg-primary-container p-2 pr-4">
+        <View className="h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-primary">
           <SvgXml xml={SECCION_AYUDA_XML} width={64} height={48} />
         </View>
         <View className="flex-1">
           <Text variant="body-lg-bold" tone="onPrimary">
             ¿Alguien no puede pedir ayuda?
           </Text>
-          <Text variant="label-md" style={{ color: '#aceeef' }}>
+          <Text variant="label-md" style={{ color: colors.onPrimaryContainer }}>
             Pide por un vecino vulnerable
           </Text>
         </View>

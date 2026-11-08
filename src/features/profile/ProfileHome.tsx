@@ -1,10 +1,12 @@
 import { useRouter } from 'expo-router';
+import { useEffect } from 'react';
 import { View } from 'react-native';
 
 import { PostCard, TRUST_LABEL, useLocalPostsStore } from '@/features/posts';
 import { useSessionStore } from '@/features/session';
 import { useSectorStore } from '@/features/sector';
-import { Badge, Button, Card, Icon, Text } from '@/shared/ui';
+import { usePickPhoto } from '@/shared/hooks/usePickPhoto';
+import { Avatar, Badge, Button, Card, Icon, Text } from '@/shared/ui';
 
 import { useProfilePrefsStore, VOLUNTEER_SKILLS } from './store';
 
@@ -13,6 +15,13 @@ export function ProfileHome() {
   const router = useRouter();
   const displayName = useSessionStore((s) => s.displayName);
   const deviceId = useSessionStore((s) => s.deviceId);
+  const photoUri = useSessionStore((s) => s.photoUri);
+  const setPhoto = useSessionStore((s) => s.setPhoto);
+  const picker = usePickPhoto();
+  // La foto elegida (sin EXIF) pasa a ser la del perfil.
+  useEffect(() => {
+    if (picker.photoUri) setPhoto(picker.photoUri);
+  }, [picker.photoUri, setPhoto]);
   const sectorName = useSectorStore((s) => s.sector.name);
   const posts = useLocalPostsStore((s) => s.posts);
   const bio = useProfilePrefsStore((s) => s.bio);
@@ -26,11 +35,7 @@ export function ProfileHome() {
     <>
       <Card>
         <View className="flex-row items-center gap-3">
-          <View className="h-14 w-14 items-center justify-center rounded-full bg-primary-fixed">
-            <Text variant="headline-sm" tone="primary">
-              {displayName.charAt(0) || '?'}
-            </Text>
-          </View>
+          <Avatar name={displayName} id={deviceId} size={56} uri={photoUri} accessibilityLabel={`Tu foto de perfil, ${displayName}`} />
           <View className="min-w-0 flex-1 gap-1">
             <Text variant="headline-md">{displayName}</Text>
             <View className="flex-row items-center gap-1">
@@ -41,6 +46,31 @@ export function ProfileHome() {
             </View>
           </View>
         </View>
+        <View className="flex-row gap-2">
+          <Button
+            label={photoUri ? 'Cambiar foto' : 'Poner foto'}
+            variant="tonal"
+            icon="camera-outline"
+            fullWidth={false}
+            className="flex-1"
+            onPress={() => void picker.pick()}
+          />
+          {photoUri ? (
+            <Button
+              label="Quitar foto"
+              variant="ghost"
+              icon="close"
+              fullWidth={false}
+              onPress={() => {
+                picker.clear();
+                setPhoto(undefined);
+              }}
+            />
+          ) : null}
+        </View>
+        <Text variant="label-md" tone="muted">
+          {picker.hint ?? 'Opcional. La foto se queda solo en este teléfono: tus vecinos ven tus iniciales.'}
+        </Text>
         <Text>{bio.trim() || 'Añade una frase pública en Ajustes. Sin teléfono ni dirección.'}</Text>
         {showSector ? (
           <Text variant="label-md" tone="muted">

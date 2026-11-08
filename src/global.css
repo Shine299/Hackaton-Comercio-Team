@@ -7,38 +7,39 @@
 
 /*
  * Design tokens de Yunta.
- * Fuente: stitch_red_vecinal_solidaria_app/civic_mutual_aid_system/DESIGN.md
- * (paleta teal + terracota usada por casi todas las pantallas de Stitch).
+ * Paleta de marca (8 nov 2026): Morado #6A2BD9 · Lavanda #B78CFF · Amarillo Yunta #F7C948 · Blanco cálido #F8F5FF.
+ * Los colores con significado (rojo urgencia, verde completado, ámbar pendiente, terracota «necesito»/prioridad) no
+ * cambian. Texto sobre amarillo o lavanda: siempre oscuro (el blanco no alcanza 4,5:1).
  */
 @theme {
   /* Superficies */
-  --color-background: #f9f9ff;
-  --color-surface: #f9f9ff;
-  --color-surface-dim: #cfdaf1;
-  --color-surface-bright: #f9f9ff;
+  --color-background: #F8F5FF;
+  --color-surface: #F8F5FF;
+  --color-surface-dim: #D9CFEF;
+  --color-surface-bright: #F8F5FF;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f0f3ff;
-  --color-surface-container: #e7eeff;
-  --color-surface-container-high: #dee8ff;
-  --color-surface-container-highest: #d8e3fa;
-  --color-surface-variant: #d8e3fa;
-  --color-surface-tint: #226869;
-  --color-on-surface: #111c2c;
-  --color-on-background: #111c2c;
-  --color-on-surface-variant: #3f4948;
-  --color-inverse-surface: #263142;
-  --color-inverse-on-surface: #ebf1ff;
-  --color-outline: #6f7979;
-  --color-outline-variant: #bfc8c8;
+  --color-surface-container-low: #F3EEFF;
+  --color-surface-container: #ECE5FB;
+  --color-surface-container-high: #E5DCF8;
+  --color-surface-container-highest: #DDD3F3;
+  --color-surface-variant: #E7E0F5;
+  --color-surface-tint: #6A2BD9;
+  --color-on-surface: #1D1530;
+  --color-on-background: #1D1530;
+  --color-on-surface-variant: #4A4458;
+  --color-inverse-surface: #322A44;
+  --color-inverse-on-surface: #F4EEFF;
+  --color-outline: #7A7289;
+  --color-outline-variant: #CBC3DA;
 
-  /* Primario (teal) */
-  --color-primary: #004243;
+  /* Primario (morado de marca) */
+  --color-primary: #6A2BD9;
   --color-on-primary: #ffffff;
-  --color-primary-container: #0f5b5c;
-  --color-on-primary-container: #8fd0d1;
-  --color-primary-fixed: #aceeef;
-  --color-primary-fixed-dim: #91d2d2;
-  --color-inverse-primary: #91d2d2;
+  --color-primary-container: #5520B8;
+  --color-on-primary-container: #EADDFF;
+  --color-primary-fixed: #EADDFF;
+  --color-primary-fixed-dim: #B78CFF;
+  --color-inverse-primary: #B78CFF;
 
   /* Secundario (terracota) */
   --color-secondary: #a0401c;
@@ -48,13 +49,13 @@
   --color-secondary-fixed: #ffdbcf;
   --color-secondary-fixed-dim: #ffb59c;
 
-  /* Terciario (azul) */
-  --color-tertiary: #003b71;
+  /* Terciario (amarillo Yunta: el contenedor es el amarillo; el texto, dorado oscuro) */
+  --color-tertiary: #7A5A00;
   --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #005299;
-  --color-on-tertiary-container: #a3c7ff;
-  --color-tertiary-fixed: #d4e3ff;
-  --color-tertiary-fixed-dim: #a5c8ff;
+  --color-tertiary-container: #F7C948;
+  --color-on-tertiary-container: #3B2A00;
+  --color-tertiary-fixed: #FFEFC2;
+  --color-tertiary-fixed-dim: #F7C948;
 
   /* Error / SOS */
   --color-error: #ba1a1a;

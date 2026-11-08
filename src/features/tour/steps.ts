@@ -17,34 +17,40 @@ export type TourStep = {
  */
 export const TOUR_STEPS: TourStep[] = [
   {
-    target: 'tab-comunidad',
+    target: 'tile-comunidad',
     path: '/',
     title: 'Tu barrio, en vivo',
-    body: 'Abajo están las 5 secciones. Toca «Comunidad» para ver lo que pasa cerca.',
+    body: 'Este es el Inicio. Estos botones grandes te llevan a cada sección. Toca «Comunidad» para ver qué se organiza cerca.',
   },
   {
-    target: 'tab-emprendimientos',
-    path: '/comunidad',
-    title: 'Compra local',
-    body: 'Aquí verás avisos, eventos y fondos del barrio. Ahora toca «Negocios».',
+    target: 'tab-negocios',
+    path: '/eventos',
+    title: 'Lo que se viene',
+    body: 'Charlas, ferias y reuniones del barrio. Ahora toca «Negocios».',
   },
   {
     target: 'tab-ayuda',
-    path: '/negocios',
-    title: 'Una mano vecina',
-    body: 'Negocios del barrio, a pasos de tu casa. Toca «Ayuda» para pedir o prestar.',
+    path: '/explorar',
+    title: 'Compra local',
+    body: 'Negocios del barrio, a pasos de tu casa. Toca «Ayuda» para pedir u ofrecer una mano.',
   },
   {
     target: 'header-sos',
     path: '/ayuda',
     title: 'Si hay una emergencia',
-    body: 'El botón SOS está arriba en todas las secciones y funciona sin cuenta. Tócalo para ver Emergencia.',
+    body: 'El botón SOS está siempre arriba y funciona sin cuenta. Tócalo para ver la pantalla de Emergencia.',
   },
   {
-    target: 'chat-fab',
+    target: 'tab-inicio',
     path: '/emergencias',
-    title: 'Habla con tus vecinos',
-    body: 'Aquí reportas o pides auxilio. Con este botón abres tus mensajes. Tócalo.',
+    title: 'Siempre hay salida',
+    body: 'Aquí reportas o pides auxilio. La barra de abajo sigue visible: toca «Inicio» para volver.',
+  },
+  {
+    target: 'assistant-fab',
+    path: '/',
+    title: 'Yunta te acompaña',
+    body: 'Esta burbuja es Yunta, tu asistente: te cuenta lo que pasa en el barrio y resuelve tus dudas, escribiendo o hablando. Tócala. Tus conversaciones con vecinos están en la pestaña «Chat».',
   },
   {
     target: null,

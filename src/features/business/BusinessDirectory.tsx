@@ -13,8 +13,7 @@ import {
   useSavedStore,
 } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
-import { SectionHeader } from '@/features/shell';
-import { Badge, Button, Card, Chip, cn, GRADIENTS, Icon, type IconName, Screen, SECCION_EMPRENDIMIENTOS_XML, SectionHero, SegmentedControl, StatRow, Text, TextField } from '@/shared/ui';
+import { Badge, Button, Card, Chip, cn, GRADIENTS, Icon, type IconName, SegmentedControl, StatRow, Text, TextField } from '@/shared/ui';
 import { CommunityMap } from '@/features/map';
 
 import { BusinessCard } from './BusinessCard';
@@ -40,10 +39,10 @@ function RubroButton({ label, icon, selected, onPress }: { label: string; icon: 
 }
 
 /**
- * Emprendimientos: sección propia (pestaña Negocios), separada de la ayuda entre vecinos de Explorar.
- * Listado de negocios del sector con búsqueda, rubro, «Disponible ahora» y «Delivery».
+ * Negocios de vecinos: búsqueda, rubro, «Disponible ahora» y «Delivery». Vive dentro de Explorar (SPEC-047).
+ * «Disponible ahora» lo declara el negocio: nunca se presenta como «abierto» (no hay horario estructurado, D3).
  */
-export function BusinessesScreen() {
+export function BusinessDirectory() {
   const router = useRouter();
   const sector = useSectorStore((s) => s.sector);
   const { data, isLoading, isError, refetch } = useNearbyPosts(sector.id);
@@ -90,25 +89,11 @@ export function BusinessesScreen() {
   };
 
   return (
-    <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
-      <SectionHeader title="Negocios" />
-
-      <SectionHero
-        gradient={GRADIENTS.emprendimientos}
-        title="Compra a tus vecinos"
-        description="Negocios a pasos de tu casa."
-        xml={SECCION_EMPRENDIMIENTOS_XML}
-        steps={[
-          { icon: 'magnify', label: 'Busca' },
-          { icon: 'storefront-outline', label: 'Visita' },
-          { icon: 'message-text-outline', label: 'Escribe' },
-        ]}
-      />
-
+    <View className="gap-4">
       <StatRow
         stats={[
           { icon: 'storefront-outline', value: results.length, label: 'cerca de ti', gradient: GRADIENTS.emprendimientos },
-          { icon: 'check-circle-outline', value: results.filter((r) => r.post.availableNow).length, label: 'abiertos ahora', gradient: GRADIENTS.comunidad },
+          { icon: 'check-circle-outline', value: results.filter((r) => r.post.availableNow).length, label: 'disponibles ahora', gradient: GRADIENTS.comunidad },
           { icon: 'moped-outline', value: results.filter((r) => hasDelivery(r.post)).length, label: 'con delivery', gradient: GRADIENTS.ayuda },
         ]}
       />
@@ -116,7 +101,7 @@ export function BusinessesScreen() {
       <View className="flex-row gap-2.5">
         <View className="flex-1">
           <TextField
-            label="Buscar emprendimientos"
+            label="Buscar negocios"
             hideLabel
             leadingIcon="magnify"
             placeholder="Busca productos o servicios"
@@ -152,7 +137,7 @@ export function BusinessesScreen() {
       </View>
 
       <SegmentedControl
-        accessibilityLabel="Ver emprendimientos como"
+        accessibilityLabel="Ver negocios como"
         value={view}
         onChange={setView}
         options={[
@@ -162,12 +147,12 @@ export function BusinessesScreen() {
       />
 
       {isLoading ? (
-        <View className="items-center py-10" accessibilityLabel="Cargando emprendimientos">
+        <View className="items-center py-10" accessibilityLabel="Cargando negocios">
           <ActivityIndicator />
         </View>
       ) : isError ? (
         <Card tone="warning">
-          <Text variant="headline-sm">No pudimos cargar los emprendimientos</Text>
+          <Text variant="headline-sm">No pudimos cargar los negocios</Text>
           <Text>Revisa tu conexión e inténtalo de nuevo.</Text>
           <Button label="Reintentar" icon="refresh" onPress={() => refetch()} />
         </Card>
@@ -175,7 +160,7 @@ export function BusinessesScreen() {
         <>
           <View className="flex-row flex-wrap items-center justify-between gap-2">
             <Text variant="body-md-medium" accessibilityLiveRegion="polite">
-              {results.length} {results.length === 1 ? 'emprendimiento cerca de ti' : 'emprendimientos cerca de ti'}
+              {results.length} {results.length === 1 ? 'negocio cerca de ti' : 'negocios cerca de ti'}
             </Text>
             <Badge label="Datos de demostración" tone="warning" icon="flask-outline" />
           </View>
@@ -188,7 +173,7 @@ export function BusinessesScreen() {
                   ? 'Aún no tienes favoritos'
                   : filtersActive
                     ? 'No encontramos resultados'
-                    : 'Aún no hay emprendimientos en tu sector'}
+                    : 'Aún no hay negocios en tu sector'}
               </Text>
               <Text tone="muted" className="text-center">
                 {onlyFavorites && favoritesCount === 0
@@ -213,20 +198,20 @@ export function BusinessesScreen() {
 
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="¿Tienes un emprendimiento? Regístralo gratis"
+        accessibilityLabel="¿Tienes un negocio? Regístralo gratis"
         onPress={() => router.push('/negocios/registrar')}
         className="flex-row items-center gap-3.5 rounded-3xl border-2 border-dashed border-outline bg-surface-container-lowest px-4 py-3.5 active:opacity-80">
         <LinearGradient colors={GRADIENTS.emprendimientos} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ height: 48, width: 48, borderRadius: 16, alignItems: 'center', justifyContent: 'center' }}>
           <Icon name="store-plus-outline" size={26} color="onPrimary" />
         </LinearGradient>
         <View className="flex-1">
-          <Text variant="body-lg-bold">¿Tienes un emprendimiento?</Text>
+          <Text variant="body-lg-bold">¿Tienes un negocio?</Text>
           <Text variant="label-md" tone="muted">
             Regístralo gratis y que tus vecinos te encuentren
           </Text>
         </View>
         <Icon name="chevron-right" size={22} color="primary" />
       </Pressable>
-    </Screen>
+    </View>
   );
 }

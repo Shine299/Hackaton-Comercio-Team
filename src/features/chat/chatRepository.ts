@@ -1,6 +1,6 @@
-import { supabase } from '@/shared/supabase/client';
+import { ensureAnonymousUser, supabase } from '@/shared/supabase/client';
 
-import type { ChatMessage, Conversation, PendingRequest } from './types';
+import type { ChatMessage, Conversation } from './types';
 
 type ConversationRow = {
   id: string;
@@ -9,14 +9,9 @@ type ConversationRow = {
   other_name: string;
   last_body: string;
   last_at: string;
-};
-type RequestRow = {
-  id: string;
-  post_id: string;
-  post_title: string;
-  message: string;
-  requester_name: string;
-  created_at: string;
+  blocked: boolean | null;
+  /** Desde la migración 10 (SPEC-048). Si aún no existe, se asume «mío» para no contar ni notificar de más. */
+  last_from_me?: boolean | null;
 };
 type MessageRow = { id: string; conversation_id: string; sender_id: string; body: string; created_at: string };
 
@@ -37,23 +32,8 @@ export async function fetchConversations(): Promise<Conversation[]> {
     lastBody: r.last_body,
     lastAt: ms(r.last_at),
     isDemo: false,
-  }));
-}
-
-/** Solicitudes de contacto que recibí y debo aceptar o rechazar. */
-export async function fetchPendingRequests(): Promise<PendingRequest[]> {
-  if (!supabase) return [];
-  const { data: session } = await supabase.auth.getSession();
-  if (!session.session) return [];
-  const { data, error } = await supabase.rpc('pending_requests');
-  if (error || !data) return [];
-  return (data as RequestRow[]).map((r) => ({
-    id: r.id,
-    postId: r.post_id,
-    postTitle: r.post_title,
-    message: r.message,
-    requesterName: r.requester_name,
-    createdAt: ms(r.created_at),
+    blocked: r.blocked === true,
+    lastFromMe: r.last_from_me !== false,
   }));
 }
 
@@ -80,16 +60,16 @@ export async function fetchMessages(conversationId: string): Promise<ChatMessage
   }));
 }
 
-/** El dueño acepta: el servidor abre la conversación y devuelve su id. */
-export async function acceptRequest(requestId: string): Promise<string> {
+/**
+ * SPEC-045: abre (o reutiliza) la conversación con el dueño de una publicación. Antes se asegura de que exista tu
+ * perfil público, para que la otra persona vea tu nombre y no «Vecino».
+ */
+export async function startConversation(postId: string, displayName: string): Promise<string> {
   if (!supabase) throw new Error('Sin servidor configurado');
-  const { data, error } = await supabase.rpc('accept_request', { p_request_id: requestId });
-  if (error || !data) throw new Error(error?.message ?? 'No se pudo aceptar la solicitud');
+  await ensureAnonymousUser();
+  const profile = await supabase.rpc('upsert_profile', { p_display_name: displayName || 'Vecino' });
+  if (profile.error) throw new Error(profile.error.message);
+  const { data, error } = await supabase.rpc('start_conversation', { p_post_id: postId });
+  if (error || !data) throw new Error(error?.message ?? 'No se pudo abrir la conversación');
   return data as string;
-}
-
-export async function declineRequest(requestId: string): Promise<void> {
-  if (!supabase) throw new Error('Sin servidor configurado');
-  const { error } = await supabase.rpc('decline_request', { p_request_id: requestId });
-  if (error) throw new Error(error.message);
 }

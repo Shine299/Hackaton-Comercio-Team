@@ -2,12 +2,14 @@
 export type Gradient = readonly [string, string];
 
 export const GRADIENTS = {
-  hero: ['#0f5b5c', '#2a8f9a'],
-  comunidad: ['#0f8b8d', '#41d1c0'],
-  emprendimientos: ['#ff8a3d', '#ff4f7b'],
-  emergencia: ['#e5383b', '#ff7a59'],
-  ayuda: ['#5b4bdb', '#3aa0ff'],
-  recomendado: ['#f5b700', '#ff8a3d'],
+  // Paleta de marca. Llevan texto blanco encima: ambos extremos tienen contraste ≥ 4,5:1 con blanco.
+  hero: ['#4A1BA0', '#6A2BD9'],
+  comunidad: ['#6A2BD9', '#8B4FE8'],
+  emprendimientos: ['#C2410C', '#BE185D'],
+  emergencia: ['#B91C1C', '#DC2626'],
+  ayuda: ['#5B22C6', '#7B3FE4'],
+  // Familia del amarillo Yunta, oscurecida para que el texto blanco se lea.
+  recomendado: ['#8A5A00', '#9E6400'],
 } as const satisfies Record<string, Gradient>;
 
 /** Degradado de una publicación según su categoría. */

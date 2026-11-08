@@ -3,11 +3,15 @@ import type { Href } from 'expo-router';
 import type { IconName } from '@/shared/ui';
 
 /**
- * Las 4 secciones de la app más el Inicio (referencia: lienzo de rediseño).
- * Hay una sola barra fija de 5: Inicio · Comunidad · Emprendimientos · Emergencia · Ayuda.
- * Aparece solo en la pantalla raíz de cada sección (no en Inicio ni en el tutorial); formularios y detalles se abren sin barra.
+ * Barra de 5 pestañas (SPEC-051): Inicio · Comunidad · Negocios · Ayuda · Chat.
+ * La burbuja flotante NO es el chat: es el asistente virtual de Yunta (`AssistantFab`). El chat entre vecinos es la pestaña «Chat».
+ * Emergencia no es pestaña: se abre con el SOS de la cabecera y, estando ahí, la barra sigue visible sin resaltar nada.
+ * El Inicio (/) **no muestra la barra**: ahí van los 4 botones grandes; la pestaña «Inicio» sirve para volver desde las demás.
+ *
+ * Cada pestaña abre una pantalla raíz:
+ * Comunidad → /eventos · Negocios → /explorar · Ayuda → /ayuda (antes «Marketplace», que ahora redirige) · Chat → /mensajes.
  */
-export type SectionId = 'inicio' | 'comunidad' | 'emprendimientos' | 'emergencia' | 'ayuda';
+export type SectionId = 'inicio' | 'comunidad' | 'negocios' | 'ayuda' | 'chat';
 
 export type BarItem = {
   key: SectionId;
@@ -19,40 +23,41 @@ export type BarItem = {
 };
 
 export const BAR_ITEMS: BarItem[] = [
-  { key: 'inicio', label: 'Inicio', icon: 'home-outline', iconActive: 'home', href: '/', a11y: 'Inicio' },
-  { key: 'comunidad', label: 'Comunidad', icon: 'account-group-outline', iconActive: 'account-group', href: '/comunidad', a11y: 'Comunidad: novedades del barrio' },
-  { key: 'emprendimientos', label: 'Negocios', icon: 'storefront-outline', iconActive: 'storefront', href: '/negocios', a11y: 'Negocios del barrio' },
-  { key: 'emergencia', label: 'Emergencia', icon: 'alarm-light-outline', iconActive: 'alarm-light', href: '/emergencias', a11y: 'Emergencia: reportar o pedir auxilio' },
-  { key: 'ayuda', label: 'Ayuda', icon: 'hand-heart-outline', iconActive: 'hand-heart', href: '/ayuda', a11y: 'Ayuda entre vecinos' },
+  { key: 'inicio', label: 'Inicio', icon: 'home-outline', iconActive: 'home', href: '/', a11y: 'Inicio: lo que pasa en tu barrio' },
+  { key: 'comunidad', label: 'Comunidad', icon: 'account-group-outline', iconActive: 'account-group', href: '/eventos', a11y: 'Comunidad: eventos y novedades del barrio' },
+  { key: 'negocios', label: 'Negocios', icon: 'storefront-outline', iconActive: 'storefront', href: '/explorar', a11y: 'Negocios: tiendas, comida y servicios del barrio' },
+  { key: 'ayuda', label: 'Ayuda', icon: 'hand-heart-outline', iconActive: 'hand-heart', href: '/ayuda', a11y: 'Ayuda: pedir u ofrecer una mano entre vecinos' },
+  { key: 'chat', label: 'Chat', icon: 'message-text-outline', iconActive: 'message-text', href: '/mensajes', a11y: 'Chat: tus conversaciones con vecinos' },
 ];
 
-/**
- * Qué pestaña resaltar según la pantalla. Solo las raíces de cada sección tienen barra;
- * `null` = sin barra (formularios, detalles, mapa, perfil, notificaciones).
- * «Vecinos» (explorar) y «Publicar» forman parte de Ayuda: Quiero ayudar / Necesito ayuda.
- */
-/** Pantallas raíz (con cabecera de sección): ahí viven el gesto del borde y el botón de chat. */
-export const ROOT_PATHS = new Set(['/', '/comunidad', '/negocios', '/emergencias', '/ayuda', '/explorar', '/publicar']);
+/** Pantallas raíz (con cabecera de sección): ahí viven la barra y el gesto del borde. */
+export const ROOT_PATHS = new Set(['/', '/eventos', '/explorar', '/ayuda', '/mensajes', '/emergencias']);
 
-export function resolveSection(pathname: string): SectionId | null {
-  switch (pathname) {
-    case '/':
-      // Inicio es la puerta de entrada: sus tarjetas grandes reemplazan a la barra.
-      return null;
-    case '/comunidad':
-      return 'comunidad';
-    case '/negocios':
-      return 'emprendimientos';
-    case '/emergencias':
-    case '/emergencias/tablero':
-    case '/emergencias/recursos':
-    case '/emergencias/mis-reportes':
-      return 'emergencia';
-    case '/ayuda':
-    case '/explorar':
-    case '/publicar':
-      return 'ayuda';
-    default:
-      return null;
-  }
+const ACTIVE_BY_PATH: Record<string, SectionId> = {
+  '/eventos': 'comunidad',
+  '/explorar': 'negocios',
+  '/ayuda': 'ayuda',
+  '/mensajes': 'chat',
+};
+
+/** Pantallas que muestran la barra sin resaltar ninguna pestaña: siempre hay salida. */
+const BAR_WITHOUT_ACTIVE = new Set(['/emergencias', '/emergencias/tablero', '/emergencias/recursos', '/emergencias/mis-reportes', '/emergencias/guardia']);
+
+export type BarState = { active: SectionId | null };
+
+/**
+ * Cómo se ve la barra en cada pantalla. `null` = sin barra (Inicio, formularios, detalles, perfil, rutas viejas que
+ * redirigen); `{ active: null }` = barra sin pestaña resaltada (el centro de Emergencia y sus pantallas hermanas).
+ */
+export function resolveBar(pathname: string): BarState | null {
+  const active = ACTIVE_BY_PATH[pathname];
+  if (active) return { active };
+  if (BAR_WITHOUT_ACTIVE.has(pathname)) return { active: null };
+  return null;
+}
+
+/** La burbuja del asistente se ve en el Inicio y en las raíces de las pestañas (en Emergencia nada debe distraer). */
+export function assistantFabVisible(pathname: string): boolean {
+  const bar = resolveBar(pathname);
+  return pathname === '/' || Boolean(bar && bar.active !== null);
 }

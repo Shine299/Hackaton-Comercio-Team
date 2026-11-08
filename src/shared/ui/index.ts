@@ -1,6 +1,6 @@
 export { Badge, type BadgeTone } from './Badge';
 export { BottomSheet } from './BottomSheet';
-export { Button, type ButtonVariant } from './Button';
+export { Button, type ButtonProps, type ButtonVariant } from './Button';
 export { Card } from './Card';
 export { Chip } from './Chip';
 export { cn } from './cn';
@@ -25,3 +25,5 @@ export { EASY_MIN_TOUCH, EASY_TEXT_SCALE, scaledSize } from './easyMode';
 export { BrandLogo } from './BrandLogo';
 export { PressableScale, type PressableScaleProps } from './PressableScale';
 export { TourTarget } from './TourTarget';
+export { Avatar } from './Avatar';
+export { AVATAR_PALETTE, avatarColor, initialsOf } from './avatarColors';

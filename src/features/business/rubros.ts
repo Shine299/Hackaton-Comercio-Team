@@ -2,7 +2,7 @@ import type { Post } from '@/features/posts';
 import type { IconName } from '@/shared/ui';
 
 /**
- * Rubros de Emprendimientos. No hay columna nueva en el servidor: el rubro, el horario y la forma de
+ * Rubros de Negocios. No hay columna nueva en el servidor: el rubro, el horario y la forma de
  * entrega viajan en `details` (jsonb) de la publicación, con estas etiquetas fijas.
  */
 export const BUSINESS_RUBROS = [
@@ -28,7 +28,7 @@ export function detailOf(post: Post, label: string): string | undefined {
   return post.details?.find((d) => d.label === label)?.value;
 }
 
-/** Rubro de un emprendimiento; si no lo declaró, «Otro». */
+/** Rubro de un negocio; si no lo declaró, «Otro». */
 export function rubroOf(post: Post) {
   const label = detailOf(post, DETAIL_RUBRO);
   return BUSINESS_RUBROS.find((r) => r.label === label) ?? BUSINESS_RUBROS[BUSINESS_RUBROS.length - 1];

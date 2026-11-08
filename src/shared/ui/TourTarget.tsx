@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, type ComponentRef, type ReactNode } from 'react';
 import { View } from 'react-native';
 
 import { useTourStore } from '@/shared/nav/tourStore';
@@ -11,7 +11,7 @@ const REMEASURE_MS = [0, 120, 420, 800];
  * cuando el recorrido lo pide y avisa cuando se toca (el toque llega igual al botón de adentro).
  */
 export function TourTarget({ id, children, className }: { id: string; children: ReactNode; className?: string }) {
-  const ref = useRef<View>(null);
+  const ref = useRef<ComponentRef<typeof View>>(null);
   const expected = useTourStore((s) => s.active && s.expected === id);
   const setRect = useTourStore((s) => s.setRect);
   const hit = useTourStore((s) => s.hit);

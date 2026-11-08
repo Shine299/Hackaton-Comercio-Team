@@ -79,9 +79,9 @@ export default function NativeLayerMap({
     group.clearLayers();
     L.circle([center.latitude, center.longitude], {
       radius: radiusKm * 1000,
-      color: '#0f5b5c',
+      color: '#6A2BD9',
       weight: 2,
-      fillColor: '#0f5b5c',
+      fillColor: '#6A2BD9',
       fillOpacity: 0.08,
       interactive: false,
     }).addTo(group);
@@ -104,7 +104,7 @@ export default function NativeLayerMap({
         continue;
       }
       // Pin de gota (como Google Maps): la punta marca la coordenada.
-      const w = selected ? 36 : p.layer === 'places' ? 20 : 28;
+      const w = selected ? 36 : p.layer === 'places' || p.layer === 'shops' ? 20 : 28;
       const h = Math.round(w * 1.3);
       const icon = L.divIcon({
         className: '',

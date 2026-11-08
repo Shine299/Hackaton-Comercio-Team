@@ -44,7 +44,7 @@ export function BrandSplash({ onDone }: { onDone: () => void }) {
       accessibilityLabel="Yunta"
       accessibilityRole="image"
       style={[StyleSheet.absoluteFill, { zIndex: 100 }]}>
-      <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor: '#ffffff' }, backdrop]} />
+      <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor: '#F8F5FF' }, backdrop]} />
       <View style={[StyleSheet.absoluteFill, { alignItems: 'center', justifyContent: 'center' }]}>
         <Animated.View style={wordmark}>
           <BrandLogo variant="wordmark" height={96} />

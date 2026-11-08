@@ -3,7 +3,7 @@ import { POST_KIND_LABEL, type Post } from '@/features/posts';
 import type { Sector } from '@/features/sector';
 
 import { approxPoint } from './approx';
-import { getPlacePoints } from './places';
+import { getPlacePoints, getShopPoints } from './places';
 import type { MapLayerId, MapPoint } from './types';
 
 const SOURCE_DEMO = 'Dato de demostración (ficticio)';
@@ -122,6 +122,7 @@ export function buildMapPoints({ sector, posts, board, shared = [], volunteer, c
   }
 
   points.push(...getPlacePoints(center, sector.radiusKm));
+  points.push(...getShopPoints(center, sector.radiusKm));
 
   return points;
 }

@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { useOutboxStore } from '@/features/outbox';
@@ -19,9 +19,7 @@ import {
 } from '@/shared/ui';
 
 import { getCategory, POST_KIND_LABEL, TRUST_LABEL } from './categories';
-import { ContactRequestSheet } from './components/ContactRequestSheet';
 import { ReportSheet } from './components/ReportSheet';
-import { useContactStore } from './contactStore';
 import { useInterestStore } from './interestStore';
 import { usePost } from './hooks';
 import { useLocalPostsStore } from './localStore';
@@ -41,8 +39,16 @@ function effectiveStatus(post: Post, now: number): PostStatus {
   return post.status;
 }
 
-/** Detalle: autor, vigencia, campos de categoría, guardar, solicitud de contacto y reporte. */
-export function PostDetailScreen() {
+type PostDetailScreenProps = {
+  /**
+   * Acción de contacto (SPEC-045: «Escribir»). La inyecta la ruta porque `posts` no puede importar `chat`
+   * (sería un ciclo). Solo se muestra en publicaciones activas de otra persona.
+   */
+  renderContact?: (post: Post) => ReactNode;
+};
+
+/** Detalle: autor, vigencia, campos de categoría, guardar, escribir y reportar. */
+export function PostDetailScreen({ renderContact }: PostDetailScreenProps = {}) {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const postId = String(id ?? '');
@@ -54,13 +60,10 @@ export function PostDetailScreen() {
   const toggleSaved = useSavedStore((s) => s.toggle);
   const savedProfiles = useSavedStore((s) => s.profileIds);
   const toggleProfile = useSavedStore((s) => s.toggleProfile);
-  const request = useContactStore((s) => s.requests.find((item) => item.postId === postId));
-  const addRequest = useContactStore((s) => s.add);
   const reported = useReportStore((s) => s.reports.some((item) => item.postId === postId));
   const addReport = useReportStore((s) => s.add);
   const updateOwn = useLocalPostsStore((s) => s.update);
   const enqueue = useOutboxStore((s) => s.enqueue);
-  const [contactOpen, setContactOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
 
   const recordView = useInterestStore((s) => s.recordView);
@@ -84,13 +87,6 @@ export function PostDetailScreen() {
     );
   };
 
-  const onContact = () => {
-    if (request) return;
-    requireRegistration('Para pedir contacto, crea tu cuenta vecinal. No pedimos teléfono ni dirección.', () =>
-      setContactOpen(true),
-    );
-  };
-
   const onReport = () => {
     if (reported) return;
     requireRegistration('Para reportar, crea tu cuenta vecinal.', () => setReportOpen(true));
@@ -100,7 +96,7 @@ export function PostDetailScreen() {
     <Screen
       header={
         <ScreenHeader
-          title={post?.category === 'business' ? 'Emprendimiento' : 'Publicación'}
+          title={post?.category === 'business' ? 'Negocio' : 'Publicación'}
           backLabel="Volver a la lista"
           trailing={
             post ? (
@@ -117,23 +113,7 @@ export function PostDetailScreen() {
       }
       safeBottom
       footer={
-        canContact ? (
-          <Button
-            label={
-              request
-                ? 'Solicitud guardada en tu teléfono'
-                : isBusiness
-                  ? 'Enviar solicitud al negocio'
-                  : isOffer
-                    ? 'Pedir contacto'
-                    : 'Ofrecer ayuda'
-            }
-            size="lg"
-            icon={request ? 'cellphone-check' : 'message-text-outline'}
-            disabled={Boolean(request)}
-            onPress={onContact}
-          />
-        ) : undefined
+        canContact && post && renderContact ? renderContact(post) : undefined
       }>
       {isLoading ? (
         <View className="items-center py-10">
@@ -262,8 +242,8 @@ export function PostDetailScreen() {
             <Card tone="low" className="flex-row items-start gap-2">
               <Icon name="shield-lock-outline" size={20} color="primary" />
               <Text variant="label-md" tone="muted" className="flex-1">
-                Para cuidar tu privacidad, el contacto se abre cuando el negocio acepta tu solicitud. Nunca
-                mostramos su dirección exacta.
+                Escríbele por el chat de Yunta: no hace falta compartir tu teléfono. Nunca mostramos su dirección
+                exacta.
               </Text>
             </Card>
           ) : null}
@@ -303,14 +283,6 @@ export function PostDetailScreen() {
             </Card>
           ) : null}
 
-          {request ? (
-            <Card>
-              <Text variant="headline-sm">Solicitud enviada</Text>
-              <Text tone="muted">«{request.message}»</Text>
-              <SyncStatusBadge status={request.syncStatus} />
-            </Card>
-          ) : null}
-
           {!post.isOwn ? (
             <Button
               label={reported ? 'Ya reportaste esta publicación' : 'Reportar publicación'}
@@ -330,18 +302,6 @@ export function PostDetailScreen() {
       )}
 
       {sheet}
-      {post ? (
-        <ContactRequestSheet
-          visible={contactOpen}
-          postTitle={post.title}
-          onClose={() => setContactOpen(false)}
-          onSubmit={(message) => {
-            addRequest(post.id, message);
-            enqueue('interaction.request', { postId: post.id, message }, post.urgent ? 'urgent' : 'normal');
-            setContactOpen(false);
-          }}
-        />
-      ) : null}
       <ReportSheet
         visible={reportOpen}
         onClose={() => setReportOpen(false)}

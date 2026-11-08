@@ -1,5 +1,10 @@
 import { demoSectorEvents, eventDateParts, upcomingEvents, type SectorEvent } from './sectorEvents';
 
+// Con `.env` presente, el cliente real de Supabase abre SQLite al cargar y Jest no tiene el módulo nativo.
+jest.mock('@/shared/supabase/client', () => ({ supabase: null }));
+// El store local trae la cola de envío (y con ella módulos nativos); aquí solo se prueba lógica pura.
+jest.mock('./localStore', () => ({ useEventsLocalStore: jest.fn() }));
+
 const NOW = new Date(2026, 10, 8, 10, 0, 0).getTime(); // 8-nov-2026, 10:00 (hora local)
 const HOUR = 3_600_000;
 
@@ -12,6 +17,10 @@ const ev = (id: string, startsAt: number): SectorEvent => ({
   placeLabel: 'Zona',
   source: 'Prueba',
   isDemo: true,
+  origin: 'official',
+  goingCount: 0,
+  iAmGoing: false,
+  isMine: false,
 });
 
 describe('upcomingEvents', () => {
@@ -21,7 +30,10 @@ describe('upcomingEvents', () => {
   });
 
   it('quita los que ya pasaron hace más de 2 horas, pero conserva el que está en curso', () => {
-    const out = upcomingEvents([ev('viejo', NOW - 3 * HOUR), ev('en-curso', NOW - HOUR), ev('futuro', NOW + HOUR)], NOW);
+    const out = upcomingEvents(
+      [ev('viejo', NOW - 3 * HOUR), ev('en-curso', NOW - HOUR), ev('futuro', NOW + HOUR)],
+      NOW,
+    );
     expect(out.map((e) => e.id)).toEqual(['en-curso', 'futuro']);
   });
 });

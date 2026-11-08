@@ -1,6 +1,6 @@
 export { BackHeader } from './BackHeader';
 export { EdgeSwipe } from './EdgeSwipe';
-export { ROOT_PATHS } from './sections';
+export { assistantFabVisible, ROOT_PATHS } from './sections';
 export { ProfileDrawer } from './ProfileDrawer';
 export { SectionBar } from './SectionBar';
 export { SectionHeader } from './SectionHeader';
