@@ -1,109 +1,275 @@
 # Yunta
 
-Prototipo Android/iOS (Expo + React Native + TypeScript) para una hackatón de 48 horas.
-**Tu comunidad, más cerca.**
+**Tu comunidad, más cerca.** App móvil (Android/iOS, y web de apoyo) que conecta a vecinos para resolver
+necesidades del día a día — prestar y pedir herramientas, comprar a emprendimientos del barrio, enterarse de lo
+que pasa cerca — y para coordinar ayuda cuando hay una emergencia. Construida con Expo + React Native + TypeScript.
 
-> La app coordina ayuda entre vecinos. **No reemplaza a los servicios oficiales de emergencia**
-> ni garantiza que un reporte haya sido recibido. No publicar ubicaciones exactas ni datos médicos
-> sensibles.
+> Yunta coordina ayuda entre vecinos. **No reemplaza a los servicios oficiales de emergencia** ni garantiza que
+> un reporte haya sido recibido. No publiques ubicaciones exactas ni datos médicos sensibles.
+
+- [Qué hace](#qué-hace) · [Ejecutar](#ejecutar) · [Stack](#stack) · [Arquitectura](#arquitectura) ·
+  [Diagramas](#diagramas) · [Estado y datos](#estado-y-persistencia) · [Pruebas y CI](#pruebas-y-ci) ·
+  [Trabajar con IA](#trabajar-con-ia) · [Deuda técnica](#deuda-técnica-y-próximos-pasos)
+
+## Qué hace
+
+La app tiene **Inicio** y cuatro secciones, cada una con una función principal:
+
+| Sección | Para qué sirve | Ruta |
+|---|---|---|
+| **Inicio** | Puerta de entrada: buscador, qué puedes hacer, novedades, emprendimientos con foto, préstamos y recomendaciones | `/` |
+| **Comunidad** | Novedades del barrio en lista o **mapa** (ofertas, pedidos, negocios, avisos) | `/comunidad` |
+| **Emprendimientos** | Negocios y oficios del barrio (lista/mapa), con registro gratuito de tu negocio | `/negocios` |
+| **Ayuda** | Pedir u ofrecer ayuda entre vecinos (herramientas, favores, trueque) y avisar por un vecino vulnerable | `/ayuda`, `/explorar`, `/publicar` |
+| **Emergencia** | Reportar un incidente o pedir auxilio **sin cuenta**, números oficiales, tablero de coordinación y mapa | `/emergencias/*` |
+
+Transversales: menú lateral con perfil (icono ☰ o deslizar desde el borde izquierdo), campana de actividad,
+cambio de sector, tutorial inicial y **recomendaciones** según lo que cada persona mira y guarda.
+
+Principios de producto: accesibilidad por defecto, ubicación siempre **aproximada** (por sector), datos
+ficticios marcados con `DemoTag`, y honestidad de estado: «guardado en tu teléfono» nunca se presenta como «recibido».
 
 ## Ejecutar
 
 ```bash
 npm install
-cp .env.example .env     # opcional por ahora (Supabase y Google Maps llegan en etapas 8 y 10)
+cp .env.example .env     # opcional: sin variables la app funciona con datos de demostración
 npx expo start           # QR con Expo Go, o "w" para web
 ```
 
-Comandos útiles: `npm run typecheck`, `npx eslint src`, `npx expo-doctor`.
+| Variable (`.env`) | Para qué | Obligatoria |
+|---|---|---|
+| `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY` | Backend real (clave **anónima**; la seguridad es RLS) | No |
+| `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Mapas en builds nativas (en Expo Go y web no hace falta) | No |
 
-## Estructura del repo
-
-```
-.
-├── docs/                     Especificación de producto y UX (fuente de verdad)
-│   ├── 01_producto/          Brief y decisiones confirmadas
-│   ├── 02_ux_ui/             Arquitectura de información y flujos
-│   ├── 03_accesibilidad_emergencias/   Inclusión, crisis y offline
-│   ├── 04_tecnico/           Stack y alcance MVP de 48 h
-│   └── 05_prompts_ia/        Prompts de implementación y diseño
-├── design/
-│   └── stitch/               Pantallas de referencia visual (HTML + PNG) y DESIGN.md
-├── src/
-│   ├── app/                  Rutas de Expo Router (delgadas: solo importan pantallas)
-│   ├── features/             Una carpeta por funcionalidad (UI + dominio + datos)
-│   │   ├── shell/            TopBar y barra de pestañas
-│   │   ├── onboarding/       Tutorial inicial (pasos, store, pantalla)
-│   │   ├── sector/           Sector del vecino (GPS opcional/manual, store, pantallas)
-│   │   ├── posts/            Publicaciones: tipos, categorías, relevancia, filtros, repositorio (mock)
-│   │   ├── home/  explore/  publish/  activity/  profile/
-│   │   ├── emergency/        Centro de emergencias y su cabecera
-│   │   └── dev/              Galería del sistema de diseño (solo revisión)
-│   ├── shared/
-│   │   ├── ui/               Design system: Text, Button, Card, Badge, Screen…
-│   │   ├── sync/             Estados de sincronización (dominio compartido)
-│   │   ├── storage/          Almacén clave-valor local (SQLite; localStorage en web)
-│   │   └── geo/              Utilidades geográficas (distancia)
-│   └── global.css            Tokens de diseño (Tailwind v4 @theme)
-├── scripts/                  Scripts de ingesta (p. ej. lugares de OpenStreetMap, etapa 7b)
-├── supabase/                 Esquema SQL, RLS y datos semilla (etapa 10)
-├── assets/                   Iconos y splash
-├── app.json  package.json  metro.config.js  postcss.config.mjs  tsconfig.json
-└── AGENTS.md                 Guía para agentes de IA sobre Expo
-```
-
-### Reglas de organización
-
-- Una funcionalidad nueva = una carpeta en `src/features/<nombre>/` con `components/`, `data/`,
-  `hooks/` y `types.ts` según haga falta, y un `index.ts` público.
-- `src/app/` solo contiene rutas; la lógica y la UI viven en `features/`.
-- `shared/` no puede importar de `features/`. Una feature puede importar de `shared/` y, solo a
-  través de su `index.ts`, de otras features.
-- Alias de importación: `@/*` apunta a `src/*`.
+Comandos útiles: `npm run check` (todo junto), `npm test`, `npm run typecheck`, `npm run lint`,
+`npm run arch:check`, `npx expo-doctor`. Builds: `npx eas-cli@latest build` (ver `eas.json`).
 
 ## Stack
 
-Expo SDK 58 · Expo Router · NativeWind v5 (Tailwind v4) · TanStack Query · Zustand ·
-React Hook Form + Zod · expo-sqlite · expo-secure-store · expo-location · react-native-maps.
+| Capa | Tecnología | Por qué |
+|---|---|---|
+| App | Expo SDK 58, React Native 0.88, React 19, TypeScript estricto | Un código para Android, iOS y web |
+| Rutas | Expo Router (typed routes) | Rutas por archivos, `app/` delgado |
+| Estilos | NativeWind v5 (Tailwind v4) + tokens en `src/global.css` | Clases + tema compartido (versiones **fijadas**, ver ADR-0004) |
+| Estado local | Zustand (+ `persist`) | Stores pequeños por feature |
+| Datos remotos | TanStack Query | Caché y refresco de lecturas |
+| Persistencia | `expo-sqlite` (kv), `expo-secure-store` | Offline-first; secretos fuera del kv |
+| Backend | Supabase (Postgres + Auth anónima + RLS) | Sin servidores propios ni datos personales |
+| Mapas | `react-native-maps` (nativo) · Leaflet + OpenStreetMap (web) | Mapa en todas las plataformas |
+| Formularios | React Hook Form + Zod | Validación tipada |
+| Pruebas | Jest (`jest-expo`) | Lógica pura rápida |
 
-NativeWind v5 está en release candidate: `nativewind`, `react-native-css`, `tailwindcss` y
-`lightningcss` están **fijados** en `package.json`. No los actualices sin probar.
+## Arquitectura
+
+```
+src/
+├── app/            Rutas (Expo Router). Delgadas: re-exportan una pantalla desde `@/features/<x>`
+├── features/       Una carpeta por funcionalidad: UI + estado + datos, con un `index.ts` público
+│   ├── Secciones:      home · business · help · emergency (+ explore, publish, map)
+│   ├── Contenido:      posts (publicaciones, relevancia, recomendaciones) · activity · profile
+│   ├── Contexto:       sector · session · onboarding · shell (cabecera, barra, menú) · notifications
+│   ├── Datos offline:  outbox (cola de salida) · sync (transporte Supabase + reconciliación)
+│   └── dev             Galería del sistema de diseño (solo revisión)
+├── shared/         Sin dependencias de features: ui (design system, degradados, ilustraciones),
+│                   hooks, nav (stores de UI), storage (kv), supabase (cliente), sync (estados), geo, format
+└── global.css      Tokens de diseño (Tailwind v4 @theme)
+supabase/           Migraciones SQL (esquema, RLS, alertas, ofertas y tablero compartido) y semillas
+docs/               Producto, UX, accesibilidad, técnico, specs (SDD) y ADR (decisiones)
+scripts/            Ingesta de lugares de referencia (OpenStreetMap) y chequeos
+```
+
+### Reglas de dependencia (automatizadas)
+
+1. `app/` → `features/` → `shared/`. **`shared/` nunca importa de `features/`.**
+2. Entre features, **solo por `index.ts`**: `@/features/posts` sí, `@/features/posts/algo` no
+   (ESLint `no-restricted-imports`).
+3. **Sin ciclos** entre módulos (`npm run arch:check`, con `madge`).
+4. `sync/` es la capa de orquestación: conoce `outbox`, `posts`, `emergency` y Supabase; solo `app/` depende de ella.
+
+Cómo se resuelven los acoplamientos típicos sin romper las reglas: lo común sube a `shared/` (p. ej.
+`gradients`, `illustrations`, `PhotoField`, `usePickPhoto`); un dato que una feature necesita de otra se
+inyecta (la campana lee `shared/nav/activityBadgeStore`, que llena `ActivityBadgeSync`; la ruta de Emergencia
+pasa el mapa a la pantalla como `nearbyMap`).
+
+## Diagramas
+
+### 1. Capas y módulos
+
+```mermaid
+flowchart TD
+  subgraph APP["app/ — rutas (Expo Router)"]
+    R1["/ · /comunidad · /negocios · /ayuda"]
+    R2["/emergencias/*"]
+    R3["/publicacion/[id] · /vecino/[id] · /perfil · /sector"]
+  end
+
+  subgraph FEATURES["features/ — verticales (solo por index.ts)"]
+    direction TB
+    subgraph SEC["Secciones"]
+      home & business & help & emergency & explore & publish
+    end
+    subgraph CON["Contenido y contexto"]
+      posts & map & activity & profile & sector & session & onboarding & shell & notifications
+    end
+    subgraph DATA["Datos offline"]
+      outbox --> sync
+    end
+  end
+
+  subgraph SHARED["shared/ — sin dependencias de features"]
+    ui["ui (design system, gradients, illustrations)"]
+    hooks & nav["nav (stores de UI)"] & storage["storage (SQLite kv)"] & supabase["supabase (cliente)"] & geo & format
+  end
+
+  APP --> FEATURES
+  FEATURES --> SHARED
+  sync --> supabase
+  storage -.persiste.-> posts & outbox & sector & session
+```
+
+### 2. Flujo offline-first (de la acción al «recibido»)
+
+```mermaid
+sequenceDiagram
+  actor U as Vecino
+  participant UI as Pantalla (feature)
+  participant S as Store local (Zustand + SQLite kv)
+  participant O as outbox (cola con UUID)
+  participant T as SyncTransport (sync/supabaseTransport)
+  participant DB as Supabase (RLS)
+  participant R as reconcile
+
+  U->>UI: Reporta / publica / pide ayuda
+  UI->>S: Guarda en el teléfono (estado: "guardado")
+  UI->>O: Encola la acción (UUID del cliente, prioridad)
+  Note over UI: Muestra "Guardado en tu teléfono" (nunca "recibido")
+  O->>T: Envía al abrir la app, al volver a primer plano o manualmente
+  alt Hay red y servidor
+    T->>DB: upsert (reintentar no duplica)
+    DB-->>T: OK real
+    T-->>O: received
+    R->>DB: Lee estados confirmados
+    R->>S: Actualiza estado a "recibido"
+    UI-->>U: "Recibido por el servidor"
+  else Sin red / sin servidor
+    T-->>O: error (se queda en cola)
+    UI-->>U: Sigue "Guardado en tu teléfono"
+  end
+```
+
+### 3. Modelo de datos (Supabase, RLS en todas las tablas)
+
+```mermaid
+erDiagram
+  sectors ||--o{ posts : sector_id
+  sectors ||--o{ sector_alerts : sector_id
+  sectors ||--o{ emergency_reports : sector_id
+  sectors ||--o{ vulnerable_alerts : sector_id
+  sectors ||--o{ resource_offers : sector_id
+  profiles ||--o{ posts : author_id
+  posts ||--o{ post_requests : post_id
+  posts ||--o{ post_reports : post_id
+  emergency_reports ||--o{ board_responses : target_id
+  vulnerable_alerts ||--o{ board_responses : target_id
+
+  sectors { text id PK  text name  float center_lat  float center_lng  numeric radius_km }
+  profiles { uuid id PK  uuid user_id  text display_name  text trust  int recommendations }
+  posts { uuid id PK  uuid author_id FK  text kind  text category  text title  text sector_id FK  jsonb details  text status  timestamptz expires_at }
+  post_requests { uuid id PK  uuid post_id FK  uuid requester_id  text status }
+  post_reports { uuid id PK  uuid post_id FK  uuid reporter_id  text reason  text status }
+  emergency_reports { uuid id PK  uuid user_id  text kind  text category  bool immediate_danger  text sector_id FK  text status }
+  vulnerable_alerts { uuid id PK  uuid user_id  text need  text basis  text sector_id FK  text status }
+  resource_offers { uuid id PK  uuid user_id  text resource  text sector_id FK  text stage }
+  sector_alerts { uuid id PK  text sector_id FK  text title  text severity  text source  bool active }
+  board_responses { uuid id PK  uuid target_id  uuid responder_id  text status }
+```
+
+> Sin columnas de ubicación precisa: solo `sector_id`. Texto privado, fotos y diagnóstico de «vecino vulnerable»
+> se quedan en el teléfono. El detalle exacto de columnas y políticas está en `supabase/migrations/`.
+
+### 4. Navegación
+
+```mermaid
+flowchart LR
+  OB["/onboarding (1.ª vez)"] --> HOME
+  HOME["Inicio /"] -->|tarjetas, accesos| COM["Comunidad"]
+  HOME --> NEG["Emprendimientos"]
+  HOME --> AYU["Ayuda"]
+  HOME --> EME["Emergencia"]
+
+  BAR["Barra inferior de 5 (no en Inicio)"] --- COM & NEG & AYU & EME
+  MENU["☰ Menú lateral / gesto borde izquierdo"] --> PER["Perfil · Guardados · Privacidad · Ajustes"]
+  MENU --> ACT["Solicitudes y avisos"]
+
+  COM -->|Lista ⇄ Mapa| DET["/publicacion/[id]"]
+  NEG -->|Lista ⇄ Mapa| DET
+  NEG --> REG["/negocios/registrar"]
+  AYU --> EXP["/explorar (Quiero ayudar)"]
+  AYU --> PUB["/publicar (Necesito ayuda)"]
+  EME --> REP["Reportar · Pedir ayuda · Tablero · Recursos · Mis reportes"]
+  SOS["SOS: siempre accesible, sin cuenta"] --> EME
+```
+
+## Estado y persistencia
+
+| Qué | Dónde | Notas |
+|---|---|---|
+| Preferencias, sector, tutorial, intereses, guardados, publicaciones propias, reportes | Zustand `persist` sobre `shared/storage/kv` (SQLite en nativo, `localStorage` en web) | No secretos |
+| Sesión anónima de Supabase | Mismo kv (sin datos personales) | Se crea al primer envío |
+| Cola de envío | `outbox` (store persistido) | UUID del cliente = idempotencia |
+| Lecturas remotas (publicaciones, tablero, alertas) | TanStack Query, `staleTime` corto | Con respaldo de datos de demo |
+| Secretos/tokens | `expo-secure-store` | Nunca en el kv |
+
+## Mapas
+
+`CommunityMap` es **un solo componente reutilizable** que se incrusta en cada sección (`layers`, `embedded`, `height`):
+Emprendimientos y Comunidad con alternador Lista ⇄ Mapa, Explorar para publicaciones y Emergencia para
+incidentes y recursos. Nativo: `react-native-maps`; web: Leaflet/OSM (`NativeLayerMap.web.tsx`). Los marcadores son
+**pines** con la punta sobre la coordenada y el icono de su capa; todos los puntos son zona aproximada.
+
+## Recomendaciones
+
+`recommendPosts` (`features/posts/recommend.ts`) parte de la relevancia general (`rankPosts`: cercanía,
+frescura, confianza, urgencia) y suma peso a las categorías que la persona más abre o guarda
+(`interestStore`, solo en su teléfono); baja lo ya visto, nunca recomienda lo propio y explica el motivo
+(«Porque miras herramientas»).
+
+## Pruebas y CI
+
+- `npm test` — Jest (`jest-expo`), pruebas de lógica pura junto al código (`*.test.ts`): relevancia,
+  recomendaciones, filtros, rubros, resolución de secciones de la barra.
+- `npm run check` — typecheck + lint (incluye límites entre features) + ciclos (`madge`) + pruebas.
+- GitHub Actions (`.github/workflows/ci.yml`) corre `npm run check` en cada push a `main` y en cada PR.
+- Lo que no cubre una prueba (pantallas, dos dispositivos, modo avión, letra grande) se verifica a mano en Expo Go.
+
+## Trabajar con IA
+
+El repo está preparado para trabajar con asistentes de IA sin romper la arquitectura:
+
+- [`CLAUDE.md`](CLAUDE.md): comandos, dónde va cada cosa, reglas de dependencia, convenciones y trampas conocidas.
+- [`AGENTS.md`](AGENTS.md): reglas de Expo (las APIs cambian por SDK; consultar la doc versionada).
+- **SDD + TDD** ([`sprints.md`](sprints.md)): spec corta con criterios Dado/Cuando/Entonces
+  ([plantilla](docs/specs/_plantilla.md)) → prueba que falla → código mínimo → refactor → `npm run check`.
+- [`docs/adr/`](docs/adr): decisiones de arquitectura (features verticales, offline-first, Supabase+RLS, NativeWind fijado).
+- Las reglas son **ejecutables** (lint, madge, Jest, CI): si la IA se salta una, el chequeo falla.
 
 ## Convenciones de producto
 
-- Accesibilidad por defecto: áreas táctiles >= 48 dp, `accessibilityLabel`/`accessibilityRole`,
-  estados con texto + icono (nunca solo color), escalado de fuente del sistema.
-- Todo dato ficticio se muestra con `DemoTag` («DATO DE DEMO»).
-- Los estados de sincronización usan `SyncStatusBadge`; «guardado en el teléfono» nunca se
-  presenta como «recibido».
+- Accesibilidad: áreas táctiles ≥ 48 dp, `accessibilityLabel`/`Role`, estado con texto + icono, escalado de fuente.
+- Todo dato ficticio muestra `DemoTag`; los estados de envío usan `SyncStatusBadge`.
+- Código en inglés; textos de interfaz y documentación en español.
 - Tokens de color en `src/global.css`, espejados en `src/shared/ui/theme.ts`.
-- Código en inglés, textos de interfaz y documentación en español.
 
-## Leer antes de programar
+## Documentación
 
-1. `docs/01_producto/brief_producto_y_decisiones.md`
-2. `docs/02_ux_ui/arquitectura_y_flujos.md`
-3. `docs/03_accesibilidad_emergencias/requisitos_inclusion_y_crisis.md`
-4. `docs/04_tecnico/stack_y_mvp_48h.md`
-5. `docs/05_prompts_ia/prompt_implementacion_react_native.md`
+[`PRODUCT.md`](PRODUCT.md) (producto) · [`context.md`](context.md) (contexto de la app) · [`sprints.md`](sprints.md)
+(plan de sprints) · [`docs/`](docs) (brief, UX, accesibilidad, técnico) · `design/stitch/` (referencias visuales).
 
-Las pantallas de `design/stitch/` son **referencia visual**; ante cualquier diferencia, mandan los
-documentos de `docs/`. El mapa de rutas de Stitch está en
-`design/stitch/arquitectura_de_rutas_y_enlaces_html_red_vecinal_solidaria.md`.
+## Deuda técnica y próximos pasos
 
-## Estado de implementación
-
-| Etapa | Estado |
-|---|---|
-| 0. Scaffold | Hecho |
-| 1. Design system y navegación | Hecho |
-| 2. Onboarding y sector | Hecho (tutorial de 7 pasos, sector por GPS o manual, persistencia local) |
-| 3. Inicio y Explorar | Hecho (datos de demo, filtros, relevancia inteligente; el mapa llega en la etapa 8) |
-| 4. Detalle y publicar | Hecho (solicitud antes del chat, guardar, reportar, flujo en 3 pasos, borrador local) |
-| 5. Perfil y confianza | Hecho (perfil público, colecciones, privacidad y disponibilidad voluntaria; verificación real en la etapa 10) |
-| 6. Centro de emergencias | Hecho (peligro inmediato en un toque, necesito ayuda, reportar incidente, ofrecer ayuda con ciclo de recursos, necesidades y recursos de demo, números configurables con aviso; todo queda «Guardado en tu teléfono» en la cola local con prioridad emergencia/urgente) |
-| 7. Seguimiento y tablero | Hecho (vecino vulnerable en 3 pasos sin nombre ni diagnóstico, tablero del sector con motivo/fuente/hora/validación, bandeja de Actividad con filtros y leído/no leído local) |
-| 8. Mapa por capas | Hecho (Explorar → Mapa: 7 capas, react-native-maps con `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY`, lista equivalente sin clave, puntos en zona aproximada, lugares OSM de Lince versionados con `scripts/fetch-places.mjs`) |
-| 9. Cola offline | Hecho (`sync_queue` en expo-sqlite, salida emergencia→urgente→normal, reintento visible, descarte crítico con confirmación, bloque «Cola de envío» en Ajustes; sin servidor el tope es «local»/«pendiente») |
-| 10. Supabase | Hecho (esquema, RLS, transporte, estados y alertas reales) |
-| 11. Tablero compartido y emprendimientos | Hecho («Voy a ayudar» entre dos teléfonos, emprendimientos como apartado, sección propia de Emprendimientos con pestaña Negocios, Inicio y mapa renovados, nota de voz real, «Escuchar» y notificaciones locales) |
+- Partir `features/emergency` (~3 000 líneas, 29 archivos) y `publish/PublishScreen.tsx` (~570 líneas) en subfeatures.
+- Más pruebas: `buildMapPoints`, orden de la cola `outbox`, y pruebas de RLS contra una rama de Supabase (nunca producción).
+- Pruebas de pantallas con React Native Testing Library para Inicio, barra y formularios.
+- Notificaciones push remotas (hoy son locales) y tablero con tiempo real.
+- Normalizar saltos de línea a LF en todo el repo (`.gitattributes` + `.editorconfig` ya definidos).

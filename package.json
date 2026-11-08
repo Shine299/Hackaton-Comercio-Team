@@ -54,10 +54,13 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.1.12",
+    "@types/jest": "30.0.0",
     "@types/leaflet": "^1.9.22",
     "@types/react": "~19.3.0",
     "eslint": "^9.0.0",
     "eslint-config-expo": "~58.0.4",
+    "jest": "~30.5.2",
+    "jest-expo": "~58.0.14",
     "lightningcss": "1.30.1",
     "postcss": "8.5.32",
     "tailwindcss": "4.1.12",
@@ -69,7 +72,11 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "arch:check": "npx --yes madge@8.0.0 --circular --extensions ts,tsx --ts-config tsconfig.json src",
+    "check": "npm run typecheck && npm run lint && npm run arch:check && npm test"
   },
   "private": true,
   "overrides": {
