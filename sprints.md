@@ -379,6 +379,7 @@ Orden: **S13-1 → S13-2 → S13-3 → S13-4 → S13-5 → S13-6**. Si falta tie
 | S13-4 ✅ | **13d — Eventos de vecinos:** feature `events`, crear (2 pasos, Zod + RHF), «Voy» con conteo (nunca la lista), `event.create` y `event.rsvp` en el outbox | SPEC-046 | L | | S13-1 |
 | S13-5 ✅ | **13e — Explorar lugares:** ampliar `fetch-places.mjs` (tiendas, restaurantes, mercados) con `opening_hours`, parser propio `abierto / cerrado / no confirmado`, filtros y mapa | SPEC-047 | M | | S13-1 |
 | S13-6 ✅ | **13f — Pulido:** foto de perfil opcional, estados vacíos, ADR 0006 (Emergencia fuera de la barra), actualizar SPEC-014/025/028, `README.md` y `context.md` | SPEC-048 | M | | S13-2 a S13-5 |
+| S13-7 | **13g — Inicio más limpio:** saludo en una línea, «Tienes pendiente» arriba con un solo chip, botones de sección compactos con título corto, feed sin bloque de color cuando no hay foto. Sin cambios de color ni de navegación. Pendiente de revisión y Expo Go | SPEC-052 | S | Shay | SPEC-051 |
 
 **Criterios clave** (detalle en cada spec):
 - S13-1: las 4 pestañas (Inicio · Comunidad · Negocios · Ayuda) navegan; SOS abre Emergencia en un toque desde cualquier raíz; en Emergencia la barra se ve

@@ -1,6 +1,6 @@
 import type { Post } from '@/features/posts';
 
-import { activeNeighbors, buildHomeFeed, feedTagFor } from './feed';
+import { activeNeighbors, buildHomeFeed, feedTagFor, neighborsLabel } from './feed';
 import type { SectorEvent } from '@/features/events';
 
 // Con `.env` presente, el cliente real de Supabase abre SQLite al cargar y Jest no tiene el módulo nativo.
@@ -132,5 +132,12 @@ describe('feedTagFor', () => {
     expect(feedTagFor(post({ kind: 'offer' })).label).toBe('Ofrezco');
     expect(feedTagFor(post({ kind: 'request' })).label).toBe('Necesito');
     expect(feedTagFor(post({ category: 'business' })).label).toBe('Negocio');
+  });
+});
+
+describe('neighborsLabel (SPEC-052)', () => {
+  it('dice el número de vecinos activos y el sector, en singular o plural', () => {
+    expect(neighborsLabel(7, 'San Isidro')).toBe('7 vecinos activos en San Isidro');
+    expect(neighborsLabel(1, 'San Isidro')).toBe('1 vecino activo en San Isidro');
   });
 });

@@ -59,6 +59,11 @@ export function activeNeighbors(posts: Post[], now: number): { count: number; is
   return { count, isDemo: recent.length > 0 && recent.every((p) => p.isDemo) };
 }
 
+/** Línea corta bajo el saludo del Inicio (SPEC-052): «7 vecinos activos en San Isidro». */
+export function neighborsLabel(count: number, sectorName: string): string {
+  return `${count} ${count === 1 ? 'vecino activo' : 'vecinos activos'} en ${sectorName}`;
+}
+
 /** Etiqueta de tipo de la tarjeta: siempre texto + ícono. */
 export function feedTagFor(post: Post): { label: 'Ofrezco' | 'Necesito' | 'Negocio'; icon: IconName } {
   if (post.category === 'business') return { label: 'Negocio', icon: 'storefront-outline' };
