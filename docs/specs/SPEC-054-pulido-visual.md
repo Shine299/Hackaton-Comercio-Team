@@ -45,8 +45,10 @@ Cada criterio se comprueba mirando la pantalla (Expo Go) y, para «no cambia el 
    ruta), no un botón de ancho completo.
 8. **Dado** Negocios (Lugares), **entonces** «Abierto ahora» está en la misma fila de chips que los grupos; cada lugar muestra un
    ícono de su tipo (panadería, peluquería…) y el botón final dice «Ver más lugares», sin el número de restantes.
-9. **Dado** Ayuda, **entonces** «Necesito ayuda» y «Quiero ayudar» van primero; los conteos «piden/ofrecen cerca» están en su
-   texto de apoyo, no en tres cuadros aparte, y se lee «¿Es una emergencia? Usa el SOS de arriba.».
+9. **Dado** Ayuda, **entonces** «Necesito ayuda» y «Quiero ayudar» van primero; los conteos están en su texto de apoyo, no en
+   tres cuadros aparte, y cada conteo habla de **lo que encontrarás al tocar**: «Necesito ayuda» dice «N ofrecen cerca»
+   (vecinos que ofrecen una mano) y «Quiero ayudar» dice «N piden ayuda cerca» (lo que ese botón lista). Se lee también
+   «¿Es una emergencia? Usa el SOS de arriba.».
 10. **Dado** letra del sistema al máximo y el modo fácil, **entonces** nada se corta sin poder leerse y todo mide ≥ 48 dp.
 11. **Dado** el diff de la rama, **entonces** no incluye ningún `*.test.ts`, `src/app/`, `feed.ts`, `places.ts`, `logic.ts`,
     stores ni hooks, y `npm run check` pasa sin modificar pruebas.
