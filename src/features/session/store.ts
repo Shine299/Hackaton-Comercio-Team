@@ -15,6 +15,9 @@ type SessionState = {
   displayName: string;
   /** Identifica este dispositivo en la cola de sincronización. */
   deviceId: string;
+  /** Foto de perfil opcional (SPEC-048). Solo en este teléfono: los vecinos ven tus iniciales. */
+  photoUri?: string;
+  setPhoto: (photoUri: string | undefined) => void;
   register: (displayName: string) => void;
   updateDisplayName: (displayName: string) => void;
   signOut: () => void;
@@ -28,7 +31,8 @@ export const useSessionStore = create<SessionState>()(
       deviceId: Crypto.randomUUID(),
       register: (displayName) => set({ registered: true, displayName: displayName.trim() }),
       updateDisplayName: (displayName) => set({ displayName: displayName.trim() }),
-      signOut: () => set({ registered: false, displayName: '' }),
+      setPhoto: (photoUri) => set({ photoUri }),
+      signOut: () => set({ registered: false, displayName: '', photoUri: undefined }),
     }),
     {
       name: 'rvs.session.v1',

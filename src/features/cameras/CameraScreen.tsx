@@ -58,7 +58,7 @@ export function CameraScreen() {
           accessibilityLabel={`Financiada por ${funding.progress.contributors} vecinos. Ver el fondo y sus boletas`}
           onPress={() => router.push({ pathname: '/fondos/[id]', params: { id: funding.fund.id } })}
           className="overflow-hidden rounded-2xl active:opacity-90">
-          <LinearGradient colors={['#0f5b5c', '#2a8f9a']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14 }}>
+          <LinearGradient colors={['#4A1BA0', '#6A2BD9']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14 }}>
             <View className="h-11 w-11 items-center justify-center rounded-xl bg-white/20">
               <Icon name="piggy-bank-outline" size={24} color="onPrimary" />
             </View>

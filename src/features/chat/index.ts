@@ -1,5 +1,6 @@
-export { ChatFab } from './ChatFab';
 export { ChatInboxScreen } from './ChatInboxScreen';
 export { ChatScreen } from './ChatScreen';
+export { StartChatButton } from './StartChatButton';
 export { useLocalMessagesStore } from './localMessages';
-export { canOpenChat, checkMessageBody, mergeMessages } from './logic';
+export { canStartChat, checkMessageBody, mergeMessages } from './logic';
+export { ChatNotifier } from './ChatNotifier';

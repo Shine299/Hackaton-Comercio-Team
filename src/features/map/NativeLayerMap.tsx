@@ -84,9 +84,9 @@ export default function NativeLayerMap({
         <Circle
           center={center}
           radius={radiusKm * 1000}
-          strokeColor="#0f5b5c"
+          strokeColor="#6A2BD9"
           strokeWidth={2}
-          fillColor="#0f5b5c14"
+          fillColor="#6A2BD914"
         />
         {zones.map((p) => {
           const color = getLayer(p.layer).color;
@@ -98,7 +98,7 @@ export default function NativeLayerMap({
           const layer = getLayer(p.layer);
           const selected = p.id === selectedId;
           // Los lugares de referencia son cientos: pin simple. El resto, marcador con ícono de su capa.
-          if (p.layer === 'places') {
+          if (p.layer === 'places' || p.layer === 'shops') {
             return (
               <Marker
                 key={p.id}

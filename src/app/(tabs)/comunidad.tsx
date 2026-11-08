@@ -1,3 +1,6 @@
-import { CommunityScreen } from '@/features/home';
+import { Redirect } from 'expo-router';
 
-export default CommunityScreen;
+/** Ruta vieja (SPEC-043): lo de Comunidad vive ahora en el Inicio. */
+export default function ComunidadRedirect() {
+  return <Redirect href="/" />;
+}

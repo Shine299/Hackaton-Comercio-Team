@@ -72,7 +72,9 @@ src/
 `Text` (variantes display…overline, tonos), `Button` (primary/secondary/tonal/danger/outline/ghost),
 `Card` (default/low/error/warning), `Badge`, `Chip` (radio/checkbox), `TextField`, `BottomSheet`,
 `SegmentedControl`, `SyncStatusBadge`, `DemoTag`, `Icon` (MaterialCommunityIcons), `Screen`
-(safe areas, footer fijo), `ScreenHeader`, `ComingSoon` (marcador honesto de etapa), `cn`, `colors`.
+(safe areas, footer fijo), `ScreenHeader`, `ComingSoon` (marcador honesto de etapa), `cn`, `colors`, `Avatar`.
+Paleta (8 nov 2026): morado `#6A2BD9` (primario), lavanda `#B78CFF`, amarillo Yunta `#F7C948` (acento, texto oscuro
+encima), blanco cálido `#F8F5FF` (fondo); los degradados con texto blanco tienen ≥ 4,5:1 en ambos extremos.
 
 ### Estado global reutilizable
 | Store | Dónde | Clave | Qué guarda |
@@ -108,12 +110,19 @@ Emergencias usa además su propio `IncidentStatus` (`features/emergency/types.ts
 |---|---|---|
 | `/onboarding` | Tutorial de 7 pasos (omitible, con SOS) | onboarding |
 | `/sector` (modal) | Elegir sector por GPS o manual | sector |
-| `/(tabs)/` Inicio | Inicio inteligente + aviso de sector (demo) + accesos SOS | home |
-| `/(tabs)/explorar` | Lista con filtros y relevancia; segmento Mapa = mapa por capas (`?view=map` lo abre directo) | explore |
+| `/(tabs)/` Inicio | **Feed comunitario** (SPEC-044): alerta, «¿Emergencia?», «Juntos por el barrio», publicaciones y eventos | home |
+| `/(tabs)/eventos` | Eventos del sector por fecha + «Crear evento» (SPEC-046) | events |
+| `/(tabs)/explorar` | **Lugares del barrio** (OSM, «Abierto ahora» honesto) + Emprendimientos (SPEC-047) | explore, business |
+| `/(tabs)/marketplace` | Marketplace (antes Ayuda): ofrecer, pedir, objetos y animales | help |
+| `/(tabs)/publicaciones` | Lista de publicaciones con filtros y relevancia; Lista ⇄ Mapa (antes `/explorar`) | explore |
+| `/(tabs)/mensajes` | Pestaña Chat: conversaciones, sin leer (SPEC-045/048) | chat |
 | `/(tabs)/publicar` | Publicar en 3 pasos con borrador local | publish |
+| `/(tabs)/ayuda`, `/comunidad`, `/negocios` | Rutas viejas: redirigen a Marketplace, Inicio y Explorar | — |
+| `/evento/[id]`, `/eventos/crear` | Detalle con «Voy» / cancelar; crear en 2 pasos | events |
+| `/chat/[id]` | Hilo 1 a 1: bloquear, reportar mensaje | chat |
 | `/(tabs)/actividad` | Bandeja: cola local + solicitudes, filtros, leído/no leído | activity |
 | `/(tabs)/perfil` | Perfil / Guardados / Ajustes | profile |
-| `/publicacion/[id]` | Detalle: guardar, solicitar contacto, reportar | posts |
+| `/publicacion/[id]` | Detalle: guardar, «Escribir» (chat directo, inyectado desde la ruta), reportar | posts |
 | `/vecino/[id]` | Perfil público de un vecino | profile |
 | `/emergencias` | Centro de emergencias (stack propio, cabecera roja) | emergency |
 | `/emergencias/necesito-ayuda` | Tipo, zona, detalle/foto opcionales, peligro inmediato | emergency |
@@ -126,6 +135,8 @@ Emergencias usa además su propio `IncidentStatus` (`features/emergency/types.ts
 | `/galeria` | Galería del design system (solo revisión) | dev |
 
 Las tabs redirigen a `/onboarding` si no se completó; `/emergencias` nunca se bloquea.
+**Barra (Etapa 13, ADR 0006):** Inicio · Eventos · Explorar · Marketplace · Chat, en todas las raíces. Emergencia se abre
+con el SOS de la cabecera; en sus raíces la barra se ve sin pestaña resaltada (`shell/sections.ts` → `resolveBar`).
 
 ## 6. Features en detalle
 
@@ -150,7 +161,7 @@ Las tabs redirigen a `/onboarding` si no se completó; `/emergencias` nunca se b
   `emergencyNumbers.ts`, con fecha y aviso), seis accesos y «Mis reportes en este teléfono».
   Fotos sin EXIF. Zona = sector.
 - **activity** — `feed.ts` (cola + contactos, alertas arriba), `readStore.ts` (rvs.activity-read.v1), filtros Todo/Solicitudes/Mensajes (vacío honesto)/Comunidad/Alertas.
-- **map** (etapa 8) — `CommunityMap` (chips de 7 capas, mapa nativo o lista), `buildMapPoints` (publicaciones + tablero + perfil), `approx.ts` (zona aproximada determinista desde el centro del sector; nunca GPS), `places.ts` + `data/places.json` (975 lugares OSM de los 4 sectores, ODbL; se regenera con `node scripts/fetch-places.mjs`), `NativeLayerMap` (`.web` devuelve null). `app.config.js` inyecta la clave a las builds nativas.
+- **map** (etapa 8) — `CommunityMap` (chips de 7 capas, mapa nativo o lista), `buildMapPoints` (publicaciones + tablero + perfil), `approx.ts` (zona aproximada determinista desde el centro del sector; nunca GPS), `places.ts` + `data/places.json` (2424 lugares OSM de los 4 sectores, ODbL: 975 de referencia de Emergencia + 1449 comercios con `opening_hours` cuando existe, capa «Comercios»; se regenera con `node scripts/fetch-places.mjs`), `NativeLayerMap` (`.web` devuelve null). `app.config.js` inyecta la clave a las builds nativas.
 - **dev** — galería del design system.
 
 ## 7. Estado por etapas
@@ -169,8 +180,16 @@ Las tabs redirigen a `/onboarding` si no se completó; `/emergencias` nunca se b
 | 9. Cola offline en SQLite | Hecho (pendiente verificación en modo avión en Expo Go) |
 | 10. Supabase | Hecho (rama `etapa-10-supabase`, ya en `main`) |
 | 11. Tablero compartido y emprendimientos | Hecho (rama `etapa-11-tablero-emprendimientos`; pendiente probar con dos dispositivos) |
+| 13. Comunidad primero (SPEC-043 a 048) | Hecho en la app (rama `shay`); pendiente aplicar migraciones 08–10 y probar con dos dispositivos |
 
 ## 8. Lo que falta
+
+### Etapa 13 — Comunidad primero — HECHA en la app (plan: `docs/04_tecnico/plan_etapa13_comunidad_primero.md`)
+- 13a barra de 5 + redirecciones (SPEC-043) · 13b Inicio como feed + `Avatar` (SPEC-044) · 13c chat directo con
+  bloqueo/reporte (SPEC-045) · 13d eventos de vecinos con «Voy» (SPEC-046) · 13e Explorar lugares con horario honesto
+  (SPEC-047) · 13f sin leer + notificación del chat, foto de perfil local, ADR 0006 (SPEC-048).
+- **Falta:** aplicar en Supabase `20261110000008_open_chat.sql`, `…09_neighbor_events.sql` y `…10_chat_last_from_me.sql`
+  (ninguna se ha ejecutado contra una base), sus pruebas de RLS y la verificación con dos celulares.
 
 ### Etapa 7 — HECHA (referencia de lo implementado)
 - «Ayudar a un vecino vulnerable» en 3 pasos: acción → tarjeta de necesidad + zona → revisar y

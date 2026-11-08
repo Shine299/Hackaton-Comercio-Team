@@ -1,4 +1,4 @@
-import { canOpenChat, checkMessageBody, demoReply, mergeMessages } from './logic';
+import { canStartChat, chatModeFor, checkMessageBody, demoConversationIdFor, demoReply, mergeMessages, startChatErrorText } from './logic';
 import type { ChatMessage } from './types';
 
 const msg = (id: string, createdAt: number, extra: Partial<ChatMessage> = {}): ChatMessage => ({
@@ -10,11 +10,40 @@ const msg = (id: string, createdAt: number, extra: Partial<ChatMessage> = {}): C
   ...extra,
 });
 
-describe('canOpenChat', () => {
-  it('solo se abre cuando la solicitud fue aceptada', () => {
-    expect(canOpenChat({ status: 'accepted' })).toBe(true);
-    expect(canOpenChat({ status: 'received' })).toBe(false);
-    expect(canOpenChat({ status: 'declined' })).toBe(false);
+// SPEC-045: «Escribir» abre el chat sin solicitud previa.
+const UUID = '3f1c2a9e-8b7d-4c6e-9a1b-2c3d4e5f6a7b';
+const target = (extra: Partial<Parameters<typeof canStartChat>[0]> = {}) => ({ id: UUID, isOwn: false, status: 'active', isDemo: false, ...extra });
+
+describe('canStartChat', () => {
+  it('se puede escribir en una publicación activa de otra persona', () => {
+    expect(canStartChat(target())).toBe(true);
+  });
+
+  it('no en la propia ni en una que no está activa', () => {
+    expect(canStartChat(target({ isOwn: true }))).toBe(false);
+    for (const status of ['paused', 'closed', 'completed', 'expired', 'in_coordination']) {
+      expect(canStartChat(target({ status }))).toBe(false);
+    }
+  });
+});
+
+describe('chatModeFor', () => {
+  it('con servidor y una publicación real, el chat es real', () => {
+    expect(chatModeFor(target(), true)).toBe('server');
+  });
+
+  it('sin servidor, con una publicación de demo o con un id que no es UUID, el chat es de demostración', () => {
+    expect(chatModeFor(target(), false)).toBe('demo');
+    expect(chatModeFor(target({ isDemo: true }), true)).toBe('demo');
+    expect(chatModeFor(target({ id: 'demo-p1' }), true)).toBe('demo');
+  });
+});
+
+describe('demoConversationIdFor', () => {
+  it('una sola conversación de demo por publicación', () => {
+    expect(demoConversationIdFor('demo-p1')).toBe(demoConversationIdFor('demo-p1'));
+    expect(demoConversationIdFor('demo-p1')).not.toBe(demoConversationIdFor('demo-p2'));
+    expect(demoConversationIdFor('demo-p1').startsWith('demo-conv-')).toBe(true);
   });
 });
 
@@ -60,5 +89,18 @@ describe('demoReply', () => {
     expect(demoReply(3)).toBeDefined();
     expect(demoReply(4)).toBeUndefined();
     expect(demoReply(0)).toBeUndefined();
+  });
+});
+
+describe('startChatErrorText', () => {
+  it('muestra tal cual los motivos que da el servidor', () => {
+    expect(startChatErrorText('No puedes escribir a este vecino')).toBe('No puedes escribir a este vecino.');
+    expect(startChatErrorText('Esta publicación ya no está activa')).toBe('Esta publicación ya no está activa.');
+  });
+
+  it('cualquier otro error se explica como falta de conexión (sin detalles técnicos)', () => {
+    expect(startChatErrorText('TypeError: Network request failed')).toBe(
+      'No se pudo abrir el chat. Revisa tu conexión e inténtalo de nuevo.',
+    );
   });
 });

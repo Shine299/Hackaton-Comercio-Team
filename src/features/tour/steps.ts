@@ -17,34 +17,34 @@ export type TourStep = {
  */
 export const TOUR_STEPS: TourStep[] = [
   {
-    target: 'tab-comunidad',
+    target: 'tab-eventos',
     path: '/',
     title: 'Tu barrio, en vivo',
-    body: 'Abajo están las 5 secciones. Toca «Comunidad» para ver lo que pasa cerca.',
+    body: 'Este es el Inicio. Abajo están las 5 pestañas. Toca «Eventos» para ver qué se organiza cerca.',
   },
   {
-    target: 'tab-emprendimientos',
-    path: '/comunidad',
+    target: 'tab-explorar',
+    path: '/eventos',
+    title: 'Lo que se viene',
+    body: 'Charlas, ferias y reuniones del barrio. Ahora toca «Explorar».',
+  },
+  {
+    target: 'tab-marketplace',
+    path: '/explorar',
     title: 'Compra local',
-    body: 'Aquí verás avisos, eventos y fondos del barrio. Ahora toca «Negocios».',
-  },
-  {
-    target: 'tab-ayuda',
-    path: '/negocios',
-    title: 'Una mano vecina',
-    body: 'Negocios del barrio, a pasos de tu casa. Toca «Ayuda» para pedir o prestar.',
+    body: 'Negocios del barrio, a pasos de tu casa. Toca «Marketplace» para ofrecer, pedir o prestar.',
   },
   {
     target: 'header-sos',
-    path: '/ayuda',
+    path: '/marketplace',
     title: 'Si hay una emergencia',
-    body: 'El botón SOS está arriba en todas las secciones y funciona sin cuenta. Tócalo para ver Emergencia.',
+    body: 'El botón SOS está arriba en todas las pestañas y funciona sin cuenta. Tócalo para ver Emergencia.',
   },
   {
-    target: 'chat-fab',
+    target: 'tab-chat',
     path: '/emergencias',
     title: 'Habla con tus vecinos',
-    body: 'Aquí reportas o pides auxilio. Con este botón abres tus mensajes. Tócalo.',
+    body: 'Aquí reportas o pides auxilio. Abajo sigue la barra para salir. Toca «Chat» para ver tus mensajes.',
   },
   {
     target: null,

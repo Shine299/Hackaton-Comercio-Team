@@ -1,2 +1,2 @@
 export { HomeScreen } from './HomeScreen';
-export { CommunityScreen } from './CommunityScreen';
+export { FeedCard } from './FeedCard';

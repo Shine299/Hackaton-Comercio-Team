@@ -1,6 +1,7 @@
 import { useEmergencyStore, type IncidentStatus, type ResourceStage } from '@/features/emergency';
 import { isUnsent, useOutboxStore, type OutboxItem } from '@/features/outbox';
 import { useLocalMessagesStore } from '@/features/chat';
+import { useEventsLocalStore } from '@/features/events';
 import { useContactStore, useLocalPostsStore, useReportStore } from '@/features/posts';
 import { supabase } from '@/shared/supabase/client';
 import type { SyncStatus } from '@/shared/sync/status';
@@ -81,6 +82,18 @@ export async function reconcileWithServer(): Promise<void> {
     const messageStatuses: Record<string, SyncStatus> = {};
     for (const id of receivedByType(items, 'chat.message', 'messageId')) messageStatuses[id] = 'received';
     useLocalMessagesStore.getState().setSyncStatus(messageStatuses);
+    const messageReportStatuses: Record<string, SyncStatus> = {};
+    for (const id of receivedByType(items, 'chat.report', 'messageId')) messageReportStatuses[id] = 'received';
+    useLocalMessagesStore.getState().setReportStatus(messageReportStatuses);
+
+    // Eventos (SPEC-046). Un «Voy» solo pasa a recibido si no queda otro cambio de ese evento por enviar.
+    const createdEvents: Record<string, SyncStatus> = {};
+    for (const id of receivedByType(items, 'event.create', 'eventId')) createdEvents[id] = 'received';
+    useEventsLocalStore.getState().setCreatedStatus(createdEvents);
+    const unsentRsvps = new Set(items.filter((i) => i.type === 'event.rsvp' && isUnsent(i)).map((i) => str(i.payload.eventId)));
+    const rsvpStatuses: Record<string, SyncStatus> = {};
+    for (const id of receivedByType(items, 'event.rsvp', 'eventId')) if (!unsentRsvps.has(id)) rsvpStatuses[id] = 'received';
+    useEventsLocalStore.getState().setRsvpStatus(rsvpStatuses);
 
     // 2) Servidor → estados locales (sobrescribe lo anterior donde hay dato real).
     const server = await fetchServerRows().catch(() => null);

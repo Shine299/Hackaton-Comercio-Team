@@ -1,27 +1,33 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 
+import { useSessionStore } from '@/features/session';
 import { isSupabaseConfigured } from '@/shared/supabase/client';
 
-import { acceptRequest, declineRequest, fetchConversations, fetchMessages, fetchPendingRequests } from './chatRepository';
+import { fetchConversations, fetchMessages, startConversation } from './chatRepository';
 import { useLocalMessagesStore } from './localMessages';
-import { mergeMessages } from './logic';
-import { demoPendingRequest, demoSeedMessage } from './demo';
-import type { ChatMessage, Conversation, PendingRequest } from './types';
+import { chatModeFor, mergeMessages, type ChatPostTarget } from './logic';
+import { demoSeedMessage } from './demo';
+import type { ChatMessage, Conversation } from './types';
 
-/** Conversación de demostración: existe solo cuando no hay servidor, con respuestas guionadas. */
+/** Conversación de demostración por defecto: se ofrece cuando todavía no tienes ninguna otra. */
 export const DEMO_CONVERSATION_ID = 'demo-conv-1';
 
 export const chatKeys = {
   conversations: ['chat', 'conversations'] as const,
-  pending: ['chat', 'pending'] as const,
   messages: (id: string) => ['chat', 'messages', id] as const,
 };
 
-/** Bandeja de conversaciones. Con servidor se refresca sola; sin servidor aparece la de demostración. */
+export const isDemoConversation = (id: string) => id.startsWith('demo-conv-');
+
+/**
+ * Bandeja: conversaciones reales (servidor, se refrescan solas) y las de demostración abiertas en este teléfono.
+ * Si no hay ninguna, se ofrece una de demostración para probar el chat. Lo bloqueado aquí se marca al instante.
+ */
 export function useConversations() {
   const local = useLocalMessagesStore((s) => s.messages);
-  const demoHandled = useLocalMessagesStore((s) => s.demoRequestHandled);
+  const demoConversations = useLocalMessagesStore((s) => s.demoConversations);
+  const blockedIds = useLocalMessagesStore((s) => s.blockedConversationIds);
   const query = useQuery({
     queryKey: chatKeys.conversations,
     queryFn: fetchConversations,
@@ -30,55 +36,57 @@ export function useConversations() {
   });
 
   const conversations = useMemo<Conversation[]>(() => {
+    const lastLocal = (id: string) => local.filter((m) => m.conversationId === id).at(-1);
+    const withLocal = (c: Conversation): Conversation => {
+      const last = c.isDemo ? lastLocal(c.id) : undefined;
+      return {
+        ...c,
+        lastBody: last?.body ?? c.lastBody,
+        lastAt: last?.createdAt ?? c.lastAt,
+        lastFromMe: last ? last.mine : c.lastFromMe,
+        blocked: c.blocked || blockedIds.includes(c.id),
+      };
+    };
     const real = isSupabaseConfigured ? (query.data ?? []) : [];
-    // La conversación de demostración se ofrece una vez atendida la solicitud demo (o si no hay servidor).
-    if (isSupabaseConfigured && !demoHandled) return real;
-    const mine = local.filter((m) => m.conversationId === DEMO_CONVERSATION_ID);
-    const last = mine[mine.length - 1];
-    return [
-      ...real,
-      {
+    const all = [...real, ...demoConversations];
+    if (all.length === 0) {
+      all.push({
         id: DEMO_CONVERSATION_ID,
         postId: 'demo',
         postTitle: 'Escalera telescópica en préstamo',
         otherName: 'Carlos V. (demo)',
-        lastBody: last?.body ?? 'Toca para probar el chat de demostración.',
-        lastAt: last?.createdAt ?? 0,
+        lastBody: 'Toca para probar el chat de demostración.',
+        lastAt: 0,
         isDemo: true,
-      },
-    ];
-  }, [query.data, local, demoHandled]);
+        blocked: false,
+        lastFromMe: true,
+      });
+    }
+    return all.map(withLocal).sort((a, b) => b.lastAt - a.lastAt);
+  }, [query.data, demoConversations, local, blockedIds]);
 
   return { conversations, isLoading: isSupabaseConfigured && query.isLoading, refetch: query.refetch };
 }
 
-/** Solicitudes por responder (para quien publicó). */
-export function usePendingRequests() {
-  const query = useQuery({
-    queryKey: chatKeys.pending,
-    queryFn: fetchPendingRequests,
-    refetchInterval: 15_000,
-    enabled: isSupabaseConfigured,
-  });
-  const demoHandled = useLocalMessagesStore((s) => s.demoRequestHandled);
-  // Con servidor, la solicitud de demostración se muestra además de las reales (para enseñar el flujo).
-  const data = useMemo<PendingRequest[]>(
-    () => [...(demoHandled || !isSupabaseConfigured ? [] : [demoPendingRequest()]), ...(query.data ?? [])],
-    [query.data, demoHandled],
-  );
-  return { ...query, data };
-}
+/** Lo que «Escribir» necesita saber de una publicación (sin depender de `features/posts`). */
+export type StartChatTarget = ChatPostTarget & { title: string; author: { displayName: string } };
 
-/** Aceptar abre la conversación; rechazar la descarta. Ambas refrescan bandeja y solicitudes. */
-export function useRespondToRequest() {
+/**
+ * SPEC-045: «Escribir» abre (o reutiliza) la conversación. Con servidor y publicación real, la crea el servidor;
+ * si no, abre una conversación de demostración local. Devuelve el id para navegar.
+ */
+export function useStartChat() {
   const client = useQueryClient();
-  const refresh = () => {
-    void client.invalidateQueries({ queryKey: chatKeys.pending });
-    void client.invalidateQueries({ queryKey: chatKeys.conversations });
-  };
-  const accept = useMutation({ mutationFn: acceptRequest, onSuccess: refresh });
-  const decline = useMutation({ mutationFn: declineRequest, onSuccess: refresh });
-  return { accept, decline };
+  const openDemo = useLocalMessagesStore((s) => s.openDemoConversation);
+  return useMutation({
+    mutationFn: async (post: StartChatTarget): Promise<string> => {
+      if (chatModeFor(post, isSupabaseConfigured) === 'demo') {
+        return openDemo({ postId: post.id, postTitle: post.title, otherName: `${post.author.displayName} (demo)` });
+      }
+      return startConversation(post.id, useSessionStore.getState().displayName);
+    },
+    onSuccess: () => void client.invalidateQueries({ queryKey: chatKeys.conversations }),
+  });
 }
 
 /**
@@ -86,7 +94,7 @@ export function useRespondToRequest() {
  * teléfono que aún no llegó. Cuando el servidor confirma un mensaje, se quita de lo local.
  */
 export function useMessages(conversationId: string) {
-  const isDemo = conversationId === DEMO_CONVERSATION_ID;
+  const isDemo = isDemoConversation(conversationId);
   const local = useLocalMessagesStore((s) => s.messages);
   const dropConfirmed = useLocalMessagesStore((s) => s.dropConfirmed);
 
@@ -107,9 +115,9 @@ export function useMessages(conversationId: string) {
     () =>
       mergeMessages(
         serverMessages ?? [],
-        [...(isDemo ? [seed] : []), ...local.filter((m) => m.conversationId === conversationId)],
+        [...(conversationId === DEMO_CONVERSATION_ID ? [seed] : []), ...local.filter((m) => m.conversationId === conversationId)],
       ),
-    [serverMessages, local, conversationId, isDemo, seed],
+    [serverMessages, local, conversationId, seed],
   );
 
   return { messages, isLoading: query.isLoading && !isDemo, isError: query.isError, isDemo };

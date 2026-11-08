@@ -127,7 +127,7 @@ export function PostCard({ post, now, compact = false }: PostCardProps) {
         {!compact ? (
           <View className={`min-h-11 flex-row items-center gap-1.5 rounded-xl px-3.5 ${isOffer ? 'bg-primary' : 'bg-secondary'}`}>
             <Text variant="label-md" tone={isOffer ? 'onPrimary' : 'onSecondary'}>
-              {isOffer ? 'Ver y contactar' : 'Ofrecer ayuda'}
+              {isOffer ? 'Ver y escribir' : 'Ver y ofrecer ayuda'}
             </Text>
           </View>
         ) : null}

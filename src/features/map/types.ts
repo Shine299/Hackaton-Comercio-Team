@@ -9,6 +9,7 @@ export type MapLayerId =
   | 'business'
   | 'posts'
   | 'places'
+  | 'shops'
   | 'cameras';
 
 export type MapLayerMeta = {

@@ -246,7 +246,7 @@ export function CommunityMap({
         <View className="gap-3">
           {MAP_LAYERS.filter((l) => active.includes(l.id)).map((layer) => {
             const rows = visible.filter((p) => p.layer === layer.id);
-            const shown = layer.id === 'places' ? rows.slice(0, LIST_CAP) : rows;
+            const shown = layer.id === 'places' || layer.id === 'shops' ? rows.slice(0, LIST_CAP) : rows;
             return (
               <View key={layer.id} className="gap-2">
                 <Text variant="overline" tone="muted">
@@ -277,7 +277,7 @@ export function CommunityMap({
         <Text variant="label-md" tone="muted" className="flex-1">
           Todos los puntos son zona aproximada de tu sector; nunca usamos tu ubicación exacta. Lo marcado
           como demo es ficticio.
-          {active.includes('places') ? ` ${PLACES_ATTRIBUTION}` : ''}
+          {active.includes('places') || active.includes('shops') ? ` ${PLACES_ATTRIBUTION}` : ''}
         </Text>
       </View>
     </View>

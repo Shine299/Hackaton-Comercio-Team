@@ -4,7 +4,9 @@
 //   node scripts/fetch-places.mjs
 //
 // Datos © colaboradores de OpenStreetMap, licencia ODbL (https://www.openstreetmap.org/copyright).
-// Solo se guardan lugares públicos (salud, seguridad, refugio posible). Nunca personas.
+// Solo se guardan lugares públicos (salud, seguridad, refugio posible y comercios con nombre). Nunca personas.
+// SPEC-047: los comercios llevan categoría `commerce` (el mapa de Emergencia no los muestra como referencia) y su
+// `opening_hours` tal cual, para mostrar «Abierto ahora» solo cuando el horario se entiende.
 // No se scrapea Google Maps (sus términos lo prohíben): la fuente es OSM.
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -32,12 +34,36 @@ const CATEGORY_BY_AMENITY = {
   townhall: 'shelter',
 };
 
+// Comercios del barrio para Explorar (SPEC-047). Radio de cobertura del sector (2 km) para no inflar el JSON.
+const COMMERCE_RADIUS_M = 2000;
+const COMMERCE_AMENITIES = ['restaurant', 'cafe', 'fast_food', 'marketplace', 'bank'];
+const COMMERCE_SHOPS = [
+  'supermarket',
+  'convenience',
+  'bakery',
+  'hardware',
+  'greengrocer',
+  'butcher',
+  'hairdresser',
+  'laundry',
+  'mall',
+  'optician',
+  'stationery',
+  'pet',
+];
+
 const amenities = Object.keys(CATEGORY_BY_AMENITY).join('|');
 const parts = SECTORS.flatMap((s) => {
   const around = `around:${RADIUS_M},${s.latitude},${s.longitude}`;
-  return [`node["amenity"~"^(${amenities})$"](${around});`, `way["amenity"~"^(${amenities})$"](${around});`];
+  const near = `around:${COMMERCE_RADIUS_M},${s.latitude},${s.longitude}`;
+  return [
+    `node["amenity"~"^(${amenities})$"](${around});`,
+    `way["amenity"~"^(${amenities})$"](${around});`,
+    `nwr["amenity"~"^(${COMMERCE_AMENITIES.join('|')})$"]["name"](${near});`,
+    `nwr["shop"~"^(${COMMERCE_SHOPS.join('|')})$"]["name"](${near});`,
+  ];
 });
-const query = `[out:json][timeout:90];(${parts.join('')});out center tags;`;
+const query = `[out:json][timeout:180];(${parts.join('')});out center tags;`;
 
 const response = await fetch(ENDPOINT, {
   method: 'POST',
@@ -56,17 +82,24 @@ for (const el of json.elements ?? []) {
   const lat = el.lat ?? el.center?.lat;
   const lon = el.lon ?? el.center?.lon;
   if (!name || lat == null || lon == null) continue; // sin nombre no sirve como referencia
-  const key = `${tags.amenity}|${name.toLowerCase()}`;
+  // Tipo: el amenity de referencia (misma categoría de siempre) o el del comercio.
+  const reference = CATEGORY_BY_AMENITY[tags.amenity];
+  const kind = reference ? tags.amenity : COMMERCE_SHOPS.includes(tags.shop) ? tags.shop : tags.amenity;
+  if (!reference && !COMMERCE_AMENITIES.includes(kind) && !COMMERCE_SHOPS.includes(kind)) continue;
+  const key = `${kind}|${name.toLowerCase()}`;
   if (seen.has(key)) continue;
   seen.add(key);
-  places.push({
+  const place = {
     id: `osm-${el.type}-${el.id}`,
     name,
-    amenity: tags.amenity,
-    category: CATEGORY_BY_AMENITY[tags.amenity],
+    amenity: kind,
+    category: reference ?? 'commerce',
     latitude: round(lat),
     longitude: round(lon),
-  });
+  };
+  const hours = (tags.opening_hours ?? '').trim();
+  if (hours) place.openingHours = hours;
+  places.push(place);
 }
 places.sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name, 'es'));
 
@@ -81,5 +114,8 @@ const out = {
 
 const file = resolve(dirname(fileURLToPath(import.meta.url)), '../src/features/map/data/places.json');
 mkdirSync(dirname(file), { recursive: true });
-writeFileSync(file, `${JSON.stringify(out, null, 2)}\n`);
+// Una línea por lugar: el archivo pesa menos y el diff se lee.
+const { places: list, ...meta } = out;
+const head = JSON.stringify(meta, null, 2).replace(/\n}$/, ',\n  "places": [\n');
+writeFileSync(file, `${head}${list.map((p) => `    ${JSON.stringify(p)}`).join(',\n')}\n  ]\n}\n`);
 console.log(`${places.length} lugares guardados en ${file}`);

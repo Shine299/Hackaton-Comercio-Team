@@ -5,8 +5,8 @@ import { useOnboardingStore } from '@/features/onboarding';
 import { BackHeader } from '@/features/shell';
 
 /**
- * Pantallas con barra inferior fija de 5 (SectionBar, en el diseño raíz):
- * Inicio · Comunidad · Emprendimientos · Emergencia · Ayuda. «Explorar» y «Publicar» se abren desde Ayuda.
+ * Pantallas con barra inferior fija de 5 (SectionBar, en el diseño raíz, SPEC-043):
+ * Inicio · Eventos · Explorar · Marketplace · Chat. Emergencia se abre con el SOS de la cabecera.
  */
 export default function TabsLayout() {
   const onboardingCompleted = useOnboardingStore((s) => s.completed);
@@ -21,20 +21,25 @@ export default function TabsLayout() {
       screenOptions={{
         header: () => <BackHeader />,
         headerShown: true,
-        // Cambiar de sección con un fundido corto, sin saltos.
+        // Cambiar de pestaña con un fundido corto, sin saltos.
         animation: 'fade',
       }}>
-      {/* Pantallas raíz con cabecera propia (SectionHeader). */}
+      {/* Pestañas: pantallas raíz con cabecera propia (SectionHeader). */}
       <Tabs.Screen name="index" options={{ title: 'Inicio', headerShown: false }} />
-      <Tabs.Screen name="comunidad" options={{ title: 'Comunidad', headerShown: false }} />
-      <Tabs.Screen name="ayuda" options={{ title: 'Ayuda', headerShown: false }} />
-      <Tabs.Screen name="explorar" options={{ title: 'Quiero ayudar' }} />
-      <Tabs.Screen name="publicar" options={{ title: 'Necesito ayuda' }} />
-      <Tabs.Screen name="negocios" options={{ title: 'Negocios', headerShown: false }} />
+      <Tabs.Screen name="eventos" options={{ title: 'Eventos', headerShown: false }} />
+      <Tabs.Screen name="explorar" options={{ title: 'Explorar', headerShown: false }} />
+      <Tabs.Screen name="marketplace" options={{ title: 'Marketplace', headerShown: false }} />
+      <Tabs.Screen name="mensajes" options={{ title: 'Chat', headerShown: false }} />
+      {/* Se abren desde Marketplace, sin barra. */}
+      <Tabs.Screen name="publicaciones" options={{ title: 'Marketplace' }} />
+      <Tabs.Screen name="publicar" options={{ title: 'Publicar' }} />
       <Tabs.Screen name="perfil" options={{ title: 'Perfil' }} />
       {/* Sin pestaña propia: se abre desde la campana. */}
       <Tabs.Screen name="actividad" options={{ title: 'Actividad' }} />
-      <Tabs.Screen name="mensajes" options={{ title: 'Mensajes' }} />
+      {/* Rutas viejas que redirigen (enlaces y notificaciones ya programadas). */}
+      <Tabs.Screen name="ayuda" options={{ headerShown: false }} />
+      <Tabs.Screen name="comunidad" options={{ headerShown: false }} />
+      <Tabs.Screen name="negocios" options={{ headerShown: false }} />
     </Tabs>
   );
 }

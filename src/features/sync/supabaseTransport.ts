@@ -118,6 +118,53 @@ async function sendToServer(item: OutboxItem): Promise<SendResult> {
       }));
       break;
     }
+    case 'chat.block': {
+      if (!UUID.test(str(p.conversationId))) return { ok: false, error: 'Conversación no válida' };
+      const blocked = await supabase.rpc('block_in_conversation', { p_conversation_id: p.conversationId });
+      if (blocked.error) return { ok: false, error: blocked.error.message };
+      return { ok: true, status: 'received' };
+    }
+    case 'chat.report': {
+      if (!UUID.test(str(p.reportId)) || !UUID.test(str(p.messageId))) return { ok: false, error: 'Reporte no válido' };
+      const reported = await supabase.rpc('report_message', {
+        p_id: p.reportId,
+        p_message_id: p.messageId,
+        p_reason: str(p.reason) || 'other',
+      });
+      if (reported.error) return { ok: false, error: reported.error.message };
+      return { ok: true, status: 'received' };
+    }
+    case 'event.create': {
+      if (!UUID.test(str(p.eventId))) return { ok: false, error: 'Evento no válido' };
+      // El organizador se muestra con su nombre público: el perfil debe existir antes.
+      const profile = await supabase.rpc('upsert_profile', {
+        p_display_name: useSessionStore.getState().displayName || 'Vecino',
+      });
+      if (profile.error) return { ok: false, error: profile.error.message };
+      const created = await supabase.rpc('create_event', {
+        p_id: p.eventId,
+        p_sector: str(p.sectorId),
+        p_title: str(p.title),
+        p_body: str(p.body),
+        p_starts_at: str(p.startsAt),
+        p_venue_kind: str(p.venueKind),
+        p_venue_name: str(p.venueName),
+      });
+      if (created.error) return { ok: false, error: created.error.message };
+      return { ok: true, status: 'received' };
+    }
+    case 'event.rsvp': {
+      if (!UUID.test(str(p.eventId))) return { ok: false, error: 'El evento de demostración no admite asistencia real' };
+      const rsvp = await supabase.rpc('rsvp_event', { p_event_id: p.eventId, p_going: p.going === true });
+      if (rsvp.error) return { ok: false, error: rsvp.error.message };
+      return { ok: true, status: 'received' };
+    }
+    case 'event.cancel': {
+      if (!UUID.test(str(p.eventId))) return { ok: false, error: 'Evento no válido' };
+      const cancelled = await supabase.rpc('cancel_my_event', { p_event_id: p.eventId });
+      if (cancelled.error) return { ok: false, error: cancelled.error.message };
+      return { ok: true, status: 'received' };
+    }
     case 'resource.update': {
       // La fila debe existir (la oferta sale antes: misma prioridad y más antigua). Si no, se reintenta.
       const updated = await supabase.rpc('update_my_offer', {

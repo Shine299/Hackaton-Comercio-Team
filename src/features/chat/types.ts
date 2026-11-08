@@ -11,7 +11,7 @@ export type ChatMessage = {
   syncStatus?: SyncStatus;
 };
 
-/** Conversación abierta tras aceptar una solicitud de contacto. */
+/** Conversación entre dos vecinos sobre una publicación (SPEC-045: se abre con «Escribir»). */
 export type Conversation = {
   id: string;
   postId: string;
@@ -22,16 +22,10 @@ export type Conversation = {
   lastAt: number;
   /** `true` para la conversación de demostración (respuestas guionadas, sin servidor). */
   isDemo: boolean;
-};
-
-/** Solicitud de contacto que recibió el dueño de una publicación y debe aceptar o rechazar. */
-export type PendingRequest = {
-  id: string;
-  postId: string;
-  postTitle: string;
-  message: string;
-  requesterName: string;
-  createdAt: number;
+  /** Hay un bloqueo entre los dos (en cualquier sentido): ya no se puede escribir. */
+  blocked: boolean;
+  /** El último mensaje lo escribí yo (no cuenta como «sin leer», SPEC-048). */
+  lastFromMe: boolean;
 };
 
 export const MAX_MESSAGE_LENGTH = 500;

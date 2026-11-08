@@ -2,6 +2,8 @@
 
 - **Estado:** hecha; migración `20261109000005_sector_events.sql` aplicada (las filas demo de `supabase/seed.sql` aún no se cargaron: sin ellas la app usa eventos demo locales)
 - **Sprint:** 2 (S2-10)
+- **Actualización:** la pestaña Comunidad ya no existe (SPEC-043); los eventos viven en la pestaña **Eventos** y los
+  vecinos pueden crearlos y marcar «Voy» (SPEC-046). Los criterios de lectura de esta spec siguen valiendo.
 
 ## Qué y por qué
 Que Comunidad muestre también lo que pasa en el barrio (ferias, charlas, jornadas, avisos), no solo publicaciones y tablero.

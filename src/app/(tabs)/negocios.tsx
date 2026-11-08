@@ -1,3 +1,6 @@
-import { BusinessesScreen } from '@/features/business';
+import { Redirect } from 'expo-router';
 
-export default BusinessesScreen;
+/** Ruta vieja (SPEC-043): los negocios del barrio están ahora en Explorar. */
+export default function NegociosRedirect() {
+  return <Redirect href="/explorar" />;
+}

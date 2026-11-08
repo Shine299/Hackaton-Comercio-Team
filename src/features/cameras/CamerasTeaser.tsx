@@ -19,7 +19,7 @@ export function CamerasTeaser() {
       accessibilityLabel={`Cámaras del barrio. ${live} de ${cameras.length} en vivo.${funded ? ' Financiadas por los vecinos.' : ''} Ver cámaras`}
       onPress={() => router.push('/camaras')}
       className="overflow-hidden rounded-3xl shadow-sm elevation-xs">
-      <LinearGradient colors={['#123c3d', '#1f6466']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flexDirection: 'row', alignItems: 'center', gap: 14, padding: 16 }}>
+      <LinearGradient colors={['#24104F', '#3B1580']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flexDirection: 'row', alignItems: 'center', gap: 14, padding: 16 }}>
         <View className="h-14 w-14 items-center justify-center rounded-2xl bg-white/15">
           <Icon name="cctv" size={30} color="onPrimary" />
         </View>

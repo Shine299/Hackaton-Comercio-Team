@@ -99,7 +99,7 @@ export function HelpHomeScreen() {
 
   return (
     <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
-      <SectionHeader title="Ayuda" />
+      <SectionHeader title="Marketplace" />
 
       <SectionHero
         gradient={GRADIENTS.ayuda}
@@ -134,7 +134,7 @@ export function HelpHomeScreen() {
           hint="Mira quién necesita una mano"
           icon="hand-heart-outline"
           gradient={GRADIENTS.comunidad}
-          onPress={() => router.navigate({ pathname: '/explorar', params: { kind: 'request' } })}
+          onPress={() => router.navigate({ pathname: '/publicaciones', params: { kind: 'request' } })}
         />
       </View>
 
@@ -150,7 +150,7 @@ export function HelpHomeScreen() {
             count={objects}
             bg="bg-primary-fixed"
             color="primary"
-            onPress={() => router.navigate({ pathname: '/explorar', params: { group: 'objects', t: String(Date.now()) } })}
+            onPress={() => router.navigate({ pathname: '/publicaciones', params: { group: 'objects', t: String(Date.now()) } })}
           />
           <GroupCard
             title="Animales"
@@ -159,7 +159,7 @@ export function HelpHomeScreen() {
             count={animals}
             bg="bg-warning-container"
             color="warning"
-            onPress={() => router.navigate({ pathname: '/explorar', params: { group: 'animals', t: String(Date.now()) } })}
+            onPress={() => router.navigate({ pathname: '/publicaciones', params: { group: 'animals', t: String(Date.now()) } })}
           />
         </View>
         <PetTeaser />

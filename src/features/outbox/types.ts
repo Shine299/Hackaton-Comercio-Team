@@ -9,7 +9,12 @@ export type OutboxType =
   | 'emergency.vulnerable'
   | 'resource.offer'
   | 'resource.update'
-  | 'chat.message';
+  | 'chat.message'
+  | 'chat.block'
+  | 'chat.report'
+  | 'event.create'
+  | 'event.rsvp'
+  | 'event.cancel';
 
 export type OutboxPriority = 'emergency' | 'urgent' | 'normal';
 
@@ -49,6 +54,11 @@ export const OUTBOX_TYPE_LABEL: Record<OutboxType, string> = {
   'resource.offer': 'Oferta de recurso',
   'resource.update': 'Cambio en una oferta',
   'chat.message': 'Mensaje de chat',
+  'chat.block': 'Bloqueo de un vecino',
+  'chat.report': 'Reporte de mensaje',
+  'event.create': 'Evento nuevo',
+  'event.rsvp': 'Asistencia a un evento',
+  'event.cancel': 'Cancelación de un evento',
 };
 
 /** Estados desde los que todavía hay algo por enviar. */

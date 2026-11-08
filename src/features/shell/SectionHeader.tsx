@@ -3,9 +3,10 @@ import type { ReactNode } from 'react';
 import { View } from 'react-native';
 
 import { useSectorStore } from '@/features/sector';
+import { useSessionStore } from '@/features/session';
 import { useActivityBadgeStore } from '@/shared/nav/activityBadgeStore';
 import { useDrawerStore } from '@/shared/nav/drawerStore';
-import { BrandLogo, Icon, PressableScale, Text, TourTarget } from '@/shared/ui';
+import { Avatar, BrandLogo, Icon, PressableScale, Text, TourTarget } from '@/shared/ui';
 
 /** Mismo tamaño de logo en todas las secciones y en Inicio, para que la parte de arriba se vea pareja. */
 const BRAND_HEIGHT = 34;
@@ -27,17 +28,23 @@ export function SectionHeader({ title, danger = false, eyebrow }: SectionHeaderP
   const sector = useSectorStore((s) => s.sector);
   const unread = useActivityBadgeStore((s) => s.unread);
   const setDrawerOpen = useDrawerStore((s) => s.setOpen);
+  const registered = useSessionStore((s) => s.registered);
+  const displayName = useSessionStore((s) => s.displayName);
+  const deviceId = useSessionStore((s) => s.deviceId);
+  const photoUri = useSessionStore((s) => s.photoUri);
+  const showAvatar = registered && displayName.length > 0;
 
   return (
     <View className="gap-3">
       <View className="flex-row items-center justify-between gap-3">
         <PressableScale
           accessibilityRole="button"
-          accessibilityLabel="Abrir el menú"
+          accessibilityLabel={showAvatar ? `Abrir el menú con tu perfil, ${displayName}` : 'Abrir el menú'}
           accessibilityHint="También puedes deslizar desde el borde izquierdo"
           onPress={() => setDrawerOpen(true)}
-          className="h-11 w-11 items-center justify-center rounded-full bg-surface-container-lowest shadow-sm elevation-xs">
-          <Icon name="menu" size={24} color="primary" />
+          className="h-12 w-12 items-center justify-center rounded-full bg-surface-container-lowest shadow-sm elevation-xs">
+          {/* SPEC-044: con cuenta, tu avatar; sin cuenta, el ícono de menú. */}
+          {showAvatar ? <Avatar name={displayName} id={deviceId} size={40} uri={photoUri} /> : <Icon name="menu" size={24} color="primary" />}
         </PressableScale>
 
         <View className="min-w-0 flex-1 items-center">

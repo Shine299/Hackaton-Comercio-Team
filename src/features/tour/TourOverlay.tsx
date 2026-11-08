@@ -42,7 +42,7 @@ function PulseRing({ rect }: { rect: TourRect }) {
           height: rect.height,
           borderRadius: 18,
           borderWidth: 3,
-          borderColor: '#aceeef',
+          borderColor: '#B78CFF', // lavanda de marca
         },
         style,
       ]}

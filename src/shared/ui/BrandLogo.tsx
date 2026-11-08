@@ -1,15 +1,14 @@
 import { Image } from 'expo-image';
-import { View } from 'react-native';
 
 const MARK = require('../../../assets/images/logo-yunta.png');
 const WORDMARK = require('../../../assets/images/texto-yunta.png');
 
 // Proporciones reales de las imágenes recortadas (ancho / alto).
-const MARK_RATIO = 274 / 226;
-const WORDMARK_RATIO = 509 / 196;
+const MARK_RATIO = 791 / 685;
+const WORDMARK_RATIO = 1456 / 406;
 
 type BrandLogoProps = {
-  /** `mark` = emblema; `wordmark` = el nombre escrito; `lockup` = emblema + nombre. */
+  /** `mark` = emblema (la mano del ícono); `wordmark` y `lockup` = el logo «Yunta» con sus destellos. */
   variant: 'mark' | 'wordmark' | 'lockup';
   /** Alto en dp. */
   height?: number;
@@ -28,26 +27,14 @@ export function BrandLogo({ variant, height = 32 }: BrandLogoProps) {
       />
     );
   }
-  if (variant === 'wordmark') {
-    return (
-      <Image
-        source={WORDMARK}
-        style={{ width: height * WORDMARK_RATIO, height }}
-        contentFit="contain"
-        accessibilityLabel="Yunta"
-        accessibilityIgnoresInvertColors
-      />
-    );
-  }
-  // El nombre se ve un poco más bajo que el emblema para que los dos pesen parecido.
-  const textHeight = height * 0.78;
+  // El logo nuevo ya incluye nombre y destellos: `lockup` y `wordmark` muestran la misma imagen.
   return (
-    <View
-      accessible
+    <Image
+      source={WORDMARK}
+      style={{ width: height * WORDMARK_RATIO, height }}
+      contentFit="contain"
       accessibilityLabel="Yunta"
-      style={{ flexDirection: 'row', alignItems: 'center', gap: height * 0.12 }}>
-      <Image source={MARK} style={{ width: height * MARK_RATIO, height }} contentFit="contain" accessibilityIgnoresInvertColors />
-      <Image source={WORDMARK} style={{ width: textHeight * WORDMARK_RATIO, height: textHeight }} contentFit="contain" accessibilityIgnoresInvertColors />
-    </View>
+      accessibilityIgnoresInvertColors
+    />
   );
 }

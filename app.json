@@ -8,7 +8,7 @@
     "scheme": "yunta",
     "userInterfaceStyle": "light",
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/images/icon.png",
       "bundleIdentifier": "com.yunta.app",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Usamos tu ubicación solo para sugerir tu sector. Puedes elegirlo manualmente y la app funciona igual."
@@ -17,7 +17,7 @@
     "android": {
       "package": "com.yunta.app",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#7220BD",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -33,7 +33,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#F8F5FF",
           "image": "./assets/images/texto-yunta.png",
           "imageWidth": 250
         }
@@ -42,7 +42,7 @@
       [
         "expo-audio",
         {
-          "microphonePermission": "Usamos el micrófono solo para grabar una nota de voz opcional. Se queda en tu teléfono y no se envía a nadie."
+          "microphonePermission": "Usamos el micrófono solo cuando tú lo pides: para una nota de voz opcional en Emergencia (se queda en tu teléfono) o para hablarle al asistente (tu voz se pasa a texto y no se guarda)."
         }
       ],
       "expo-secure-store",
