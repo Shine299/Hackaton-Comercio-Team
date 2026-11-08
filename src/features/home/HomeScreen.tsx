@@ -133,7 +133,7 @@ export function HomeScreen() {
       ) : null}
 
       {/* SPEC-051: el Inicio no tiene barra; estos 4 botones llevan a cada sección. Emergencia sigue a un toque.
-          SPEC-054: filas compactas con título corto y una línea de apoyo. */}
+          SPEC-054: cajas compactas con título corto y una línea de apoyo; 2 iguales arriba y 2 anchas debajo. */}
       <View className="gap-3" accessibilityLabel="Qué puedes hacer con la app">
         <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
           <ActionTile
@@ -157,28 +157,27 @@ export function HomeScreen() {
             onPress={() => router.navigate('/explorar')}
           />
         </View>
-        <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
-          <ActionTile
-            tourId="tile-emergencia"
-            stacked={easy}
-            title="Pide auxilio"
-            detail="Sin crear cuenta"
-            section="Emergencia"
-            xml={SECCION_EMERGENCIA_XML}
-            gradient={GRADIENTS.emergencia}
-            onPress={() => router.push('/emergencias')}
-          />
-          <ActionTile
-            tourId="tile-ayuda"
-            stacked={easy}
-            title="Ayuda vecinal"
-            detail="Presta, pide, trueque"
-            section="Ayuda"
-            xml={SECCION_AYUDA_XML}
-            gradient={GRADIENTS.ayuda}
-            onPress={() => router.navigate('/ayuda')}
-          />
-        </View>
+        {/* SPEC-054: las dos de abajo van a todo el ancho, una sobre otra (`stacked`, como en el modo fácil). */}
+        <ActionTile
+          tourId="tile-emergencia"
+          stacked
+          title="Pide auxilio"
+          detail="Sin crear cuenta"
+          section="Emergencia"
+          xml={SECCION_EMERGENCIA_XML}
+          gradient={GRADIENTS.emergencia}
+          onPress={() => router.push('/emergencias')}
+        />
+        <ActionTile
+          tourId="tile-ayuda"
+          stacked
+          title="Ayuda vecinal"
+          detail="Presta, pide, trueque"
+          section="Ayuda"
+          xml={SECCION_AYUDA_XML}
+          gradient={GRADIENTS.ayuda}
+          onPress={() => router.navigate('/ayuda')}
+        />
       </View>
 
       {/* SPEC-052: Modo guardia. Enciende o apaga la escucha por voz en toda la app. */}
