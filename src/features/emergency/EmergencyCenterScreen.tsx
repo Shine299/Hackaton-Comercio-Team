@@ -4,13 +4,11 @@ import { useMemo, useState } from 'react';
 import { Linking, Pressable, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
-import { GRADIENTS } from '@/features/home/palette';
+import { Badge, cn, GRADIENTS, Icon, type IconName, Screen, SECCION_AYUDA_XML, SectionHero, Text } from '@/shared/ui';
 import { CommunityMap } from '@/features/map';
-import { SECCION_AYUDA_XML } from '@/features/home/sectionArt';
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
-import { Badge, cn, Icon, Screen, SectionHero, Text, type IconName } from '@/shared/ui';
 
 import { buildBoard } from './board';
 import { EMERGENCY_NUMBERS, formatReviewDate } from './emergencyNumbers';

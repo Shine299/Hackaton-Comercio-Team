@@ -12,10 +12,8 @@ import {
 } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
-import { GRADIENTS } from '@/features/home/palette';
-import { SECCION_EMPRENDIMIENTOS_XML } from '@/features/home/sectionArt';
+import { Badge, Button, Card, Chip, cn, GRADIENTS, Icon, type IconName, Screen, SECCION_EMPRENDIMIENTOS_XML, SectionHero, SegmentedControl, Text, TextField } from '@/shared/ui';
 import { CommunityMap } from '@/features/map';
-import { Badge, Button, Card, Chip, cn, Icon, Screen, SectionHero, SegmentedControl, Text, TextField, type IconName } from '@/shared/ui';
 
 import { BusinessCard } from './BusinessCard';
 import { BUSINESS_RUBROS, hasDelivery, rubroOf, type RubroId } from './rubros';

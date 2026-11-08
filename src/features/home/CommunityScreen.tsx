@@ -17,10 +17,8 @@ import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
 import { CommunityMap } from '@/features/map';
-import { Card, Chip, DemoTag, Icon, ListenButton, Screen, SectionHero, SegmentedControl, Text, type IconName } from '@/shared/ui';
+import { Card, Chip, DemoTag, type Gradient, GRADIENTS, Icon, type IconName, ListenButton, Screen, SECCION_COMUNIDAD_XML, SectionHero, SegmentedControl, Text } from '@/shared/ui';
 
-import { GRADIENTS, type Gradient } from './palette';
-import { SECCION_COMUNIDAD_XML } from './sectionArt';
 
 
 type FeedSection = 'dia' | 'negocios' | 'emergencia' | 'confianza';

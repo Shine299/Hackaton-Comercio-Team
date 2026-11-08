@@ -16,3 +16,5 @@ export { SyncStatusBadge } from './SyncStatusBadge';
 export { Text } from './Text';
 export { TextField } from './TextField';
 export { colors } from './theme';
+export { GRADIENTS, gradientForCategory, type Gradient } from './gradients';
+export * from './illustrations';

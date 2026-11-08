@@ -7,10 +7,8 @@ import { SvgXml } from 'react-native-svg';
 import { rubroOf } from '@/features/business/rubros';
 import { getCategory, type Post } from '@/features/posts';
 import { formatApproxDistance, formatRelativeTime } from '@/shared/format';
-import { DemoTag, Icon, Text } from '@/shared/ui';
+import { DemoTag, gradientForCategory, Icon, SECCION_EMPRENDIMIENTOS_XML, Text } from '@/shared/ui';
 
-import { gradientForCategory } from './palette';
-import { SECCION_EMPRENDIMIENTOS_XML } from './sectionArt';
 
 const CARD_W = 264;
 

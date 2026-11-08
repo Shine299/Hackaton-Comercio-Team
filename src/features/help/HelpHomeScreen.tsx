@@ -4,10 +4,8 @@ import { Pressable, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { ReportCard, useEmergencyStore } from '@/features/emergency';
-import { GRADIENTS, type Gradient } from '@/features/home/palette';
-import { SECCION_AYUDA_XML } from '@/features/home/sectionArt';
+import { Badge, type Gradient, GRADIENTS, Icon, type IconName, Screen, SECCION_AYUDA_XML, SectionHero, Text } from '@/shared/ui';
 import { SectionHeader } from '@/features/shell';
-import { Badge, Icon, Screen, SectionHero, Text, type IconName } from '@/shared/ui';
 
 type BigActionProps = {
   title: string;

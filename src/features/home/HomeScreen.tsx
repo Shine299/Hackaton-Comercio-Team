@@ -10,11 +10,9 @@ import { useSectorStore } from '@/features/sector';
 import { useSessionStore } from '@/features/session';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
-import { Button, Card, Chip, Icon, ListenButton, Screen, Text, TextField } from '@/shared/ui';
+import { Button, Card, Chip, type Gradient, GRADIENTS, Icon, ListenButton, Screen, SECCION_AYUDA_XML, SECCION_COMUNIDAD_XML, SECCION_EMERGENCIA_XML, SECCION_EMPRENDIMIENTOS_XML, Text, TextField } from '@/shared/ui';
 
 import { BusinessPhotoCard, NewsCard, Rail } from './HomeCarousels';
-import { GRADIENTS, type Gradient } from './palette';
-import { SECCION_AYUDA_XML, SECCION_COMUNIDAD_XML, SECCION_EMERGENCIA_XML, SECCION_EMPRENDIMIENTOS_XML } from './sectionArt';
 
 /** Qué puedes hacer: una función por sección, con degradado propio, ilustración y un verbo claro. */
 function ActionTile({
