@@ -111,7 +111,7 @@ export function HelpHomeScreen() {
         <BigAction
           title="Necesito ayuda"
           hint="Cuéntales qué te hace falta"
-          note={`${asking} ${asking === 1 ? 'pide ayuda' : 'piden ayuda'} cerca`}
+          note={`${offering} ${offering === 1 ? 'ofrece' : 'ofrecen'} cerca`}
           icon="hand-back-left-outline"
           gradient={GRADIENTS.ayuda}
           onPress={() => router.navigate({ pathname: '/publicar', params: { kind: 'request', t: String(Date.now()) } })}
@@ -119,7 +119,7 @@ export function HelpHomeScreen() {
         <BigAction
           title="Quiero ayudar"
           hint="Mira quién necesita una mano"
-          note={`${offering} ${offering === 1 ? 'ofrece' : 'ofrecen'} cerca`}
+          note={`${asking} ${asking === 1 ? 'pide ayuda' : 'piden ayuda'} cerca`}
           icon="hand-heart-outline"
           gradient={GRADIENTS.comunidad}
           onPress={() => router.navigate({ pathname: '/publicaciones', params: { kind: 'request' } })}
