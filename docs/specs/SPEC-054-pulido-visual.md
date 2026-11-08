@@ -34,9 +34,9 @@ Cada criterio se comprueba mirando la pantalla (Expo Go) y, para «no cambia el 
 4. **Dado** los accesos del Inicio, **entonces** son filas compactas de ≥ 90 dp de alto (un cuarto más que los 72 dp
    iniciales; la ilustración crece en la misma proporción y la letra no se escala) con título corto y una línea de apoyo:
    «Cerca de ti», «Comercios», «Pide auxilio» y «Ayuda vecinal». Abren las mismas rutas que antes y conservan sus degradados.
-   **Disposición:** arriba, dos cajas de igual ancho («Cerca de ti» y «Comercios»); debajo, dos cajas a todo el ancho, una
-   sobre otra («Pide auxilio» y «Ayuda vecinal»). En modo fácil las cuatro van en una columna. El orden de lectura y de foco
-   no cambia (Comunidad, Negocios, Emergencia, Ayuda).
+   **Disposición:** arriba, dos cajas de igual ancho («Pide auxilio» a la izquierda y «Cerca de ti» a la derecha); debajo, dos
+   cajas a todo el ancho, una sobre otra («Ayuda vecinal» y luego «Comercios»). En modo fácil las cuatro van en una columna,
+   en ese mismo orden. El orden de lectura y de foco pasa a ser: Emergencia, Comunidad, Ayuda, Negocios (lo urgente primero).
 5. **Dado** una publicación sin foto en el feed, **entonces** no se ve el bloque de color con ícono grande ni el renglón «Ver
    detalle»; con foto, la foto se ve igual. Toda la parte de arriba sigue abriendo el detalle y «Escribir» sigue aparte.
 6. **Dado** un evento o un aviso, **entonces** su recuadro de fecha usa un degradado de la marca: ya no hay rojo en avisos
@@ -69,7 +69,7 @@ Cada criterio se comprueba mirando la pantalla (Expo Go) y, para «no cambia el 
 |---|---|---|---|
 | Inicio · saludo | Recuadro degradado con saludo grande, frase y chip | Saludo de una línea y «N vecinos activos» pequeño | `HomeScreen.tsx` |
 | Inicio · pendiente | Después del feed, con 3 chips | Bajo la alerta, con 1 chip | `HomeScreen.tsx`, `ReportCard.tsx` |
-| Inicio · accesos | Cuatro botones altos (144 dp) con textos largos, en 2 filas de 2 | Cuatro cajas de 90 dp con título corto e ilustración de 56 dp: 2 iguales arriba y 2 a todo el ancho debajo | `HomeScreen.tsx`, `ActionTile.tsx` |
+| Inicio · accesos | Cuatro botones altos (144 dp) con textos largos, en 2 filas de 2 | Cuatro cajas de 90 dp con título corto e ilustración de 56 dp: 2 iguales arriba (Pide auxilio, Cerca de ti) y 2 a todo el ancho debajo (Ayuda vecinal, Comercios) | `HomeScreen.tsx`, `ActionTile.tsx` |
 | Inicio · sección inferior | Título «Juntos por el barrio» | Título «Nuevas funcionalidades» (mismo contenido) | `HomeScreen.tsx` |
 | Inicio · feed | Bloque de degradado de 112 px sin foto y «Ver detalle» | Sin bloque ni «Ver detalle» | `FeedCard.tsx` |
 | Comunidad | Banner de 3 pasos y botón ancho | Sin banner; «Crear» compacto | `EventsScreen.tsx` |
