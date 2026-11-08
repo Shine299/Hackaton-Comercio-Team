@@ -3,12 +3,12 @@ import { Pressable } from 'react-native';
 import { Icon } from '@/shared/ui';
 
 type Props = {
-  icon: 'target' | 'arrow-expand' | 'arrow-collapse';
+  icon: 'target' | 'arrow-expand' | 'arrow-collapse' | 'crosshairs-gps';
   label: string;
   onPress: () => void;
 };
 
-/** Botón flotante sobre el mapa (recentrar en el sector, ampliar). No usa la ubicación del dispositivo. */
+/** Botón flotante sobre el mapa (recentrar en el sector, ampliar, ir a tu ubicación). */
 export function MapFab({ icon, label, onPress }: Props) {
   return (
     <Pressable

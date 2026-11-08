@@ -12,7 +12,7 @@
       "icon": "./assets/images/icon.png",
       "bundleIdentifier": "com.yunta.app",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Usamos tu ubicación para sugerir tu sector y, solo si confirmas una emergencia con el Modo guardia, tu ubicación exacta una vez para tu aviso (no se guarda). Puedes elegir el sector manualmente y la app funciona igual."
+        "NSLocationWhenInUseUsageDescription": "Usamos tu ubicación para mostrarte dónde estás en los mapas, sugerir tu sector y, solo si confirmas una emergencia con el Modo guardia, tu ubicación exacta una vez para tu aviso (no se guarda). Puedes elegir el sector manualmente y la app funciona igual."
       }
     },
     "android": {

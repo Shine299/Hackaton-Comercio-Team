@@ -10,7 +10,8 @@ export type MapLayerId =
   | 'posts'
   | 'places'
   | 'shops'
-  | 'cameras';
+  | 'cameras'
+  | 'events';
 
 export type MapLayerMeta = {
   id: MapLayerId;
@@ -29,6 +30,8 @@ export type MapTarget =
   | { kind: 'shared'; id: string }
   /** Cámara vecinal: se abre su visor. */
   | { kind: 'camera'; id: string }
+  /** Evento del barrio: se abre su detalle. */
+  | { kind: 'event'; id: string }
   | { kind: 'none' };
 
 export type LatLng = { latitude: number; longitude: number };

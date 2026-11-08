@@ -1,13 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { View } from 'react-native';
-import {
-  Camera,
-  GeoJSONSource,
-  Layer,
-  Map,
-  ViewAnnotation,
-  type CameraRef,
-} from '@maplibre/maplibre-react-native';
+import { Camera, GeoJSONSource, Layer, Map, ViewAnnotation, type CameraRef } from '@maplibre/maplibre-react-native';
 
 import { useScrollLockStore } from '@/shared/nav/scrollLockStore';
 import { Icon } from '@/shared/ui';
@@ -24,6 +17,10 @@ type Props = {
   height?: number;
   /** Cambia para volver a centrar el mapa en el sector. */
   recenterSignal?: number;
+  /** Dónde está la persona (solo en memoria; se dibuja siempre que se conozca). */
+  userLocation?: LatLng | null;
+  /** Cambia para llevar la cámara a la ubicación de la persona. */
+  locateSignal?: number;
   onSelect: (id: string | undefined) => void;
 };
 
@@ -33,8 +30,8 @@ const PRESS_GUARD_MS = 350;
 
 /**
  * Mapa nativo con MapLibre + teselas de OpenStreetMap (gratis, sin clave de Google).
- * No pide ni muestra la ubicación del dispositivo: todo lo que se ve es zona aproximada del sector.
- * Interactivo: marcadores con ícono por capa, la cámara sigue a lo seleccionado, tocar el fondo
+ * Los puntos del barrio son zona aproximada del sector; la ubicación de la persona (punto azul) se dibuja siempre
+ * que se conozca, solo en su pantalla. Interactivo: marcadores con ícono por capa, la cámara sigue a lo seleccionado, tocar el fondo
  * deselecciona y el círculo muestra el alcance del sector. Solo módulo nativo: no corre en Expo Go.
  */
 export default function NativeLayerMap({
@@ -44,6 +41,8 @@ export default function NativeLayerMap({
   selectedId,
   height = 360,
   recenterSignal = 0,
+  userLocation = null,
+  locateSignal = 0,
   onSelect,
 }: Props) {
   const cameraRef = useRef<CameraRef>(null);
@@ -80,6 +79,18 @@ export default function NativeLayerMap({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recenterSignal]);
 
+  useEffect(() => {
+    if (locateSignal > 0 && userLocation) {
+      cameraRef.current?.easeTo({
+        center: [userLocation.longitude, userLocation.latitude],
+        zoom: zoomForRadiusKm(ZOOM_ON_SELECT_KM, userLocation.latitude),
+        duration: 400,
+      });
+    }
+    // Solo cuando se pide: no al moverse la persona.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locateSignal]);
+
   const select = (id: string) => {
     lastPointPress.current = Date.now();
     onSelect(id);
@@ -109,7 +120,10 @@ export default function NativeLayerMap({
         .map((p) => ({
           type: 'Feature' as const,
           properties: { id: p.id, color: getLayer(p.layer).color },
-          geometry: { type: 'Point' as const, coordinates: [p.coord.longitude, p.coord.latitude] },
+          geometry: {
+            type: 'Point' as const,
+            coordinates: [p.coord.longitude, p.coord.latitude],
+          },
         })),
     }),
     [points],
@@ -123,7 +137,8 @@ export default function NativeLayerMap({
       style={{ height, borderRadius: 16, overflow: 'hidden' }}
       onTouchStart={lockScroll}
       onTouchEnd={unlockScroll}
-      onTouchCancel={unlockScroll}>
+      onTouchCancel={unlockScroll}
+    >
       <Map
         style={{ width: '100%', height: '100%' }}
         mapStyle={OSM_STYLE}
@@ -137,10 +152,14 @@ export default function NativeLayerMap({
           if (Date.now() - lastPointPress.current < PRESS_GUARD_MS) return;
           onSelect(undefined);
         }}
-        accessibilityLabel="Mapa barrial con capas. Debajo hay una lista con la misma información">
+        accessibilityLabel="Mapa barrial con capas. Debajo hay una lista con la misma información"
+      >
         <Camera
           ref={cameraRef}
-          initialViewState={{ center: [center.longitude, center.latitude], zoom: sectorZoom }}
+          initialViewState={{
+            center: [center.longitude, center.latitude],
+            zoom: sectorZoom,
+          }}
         />
 
         <GeoJSONSource id="sector" data={sectorShape}>
@@ -160,7 +179,8 @@ export default function NativeLayerMap({
           onPress={(e) => {
             const id = e.nativeEvent.features[0]?.properties?.id;
             if (typeof id === 'string') select(id);
-          }}>
+          }}
+        >
           <Layer
             id="reference-dots"
             type="circle"
@@ -184,9 +204,18 @@ export default function NativeLayerMap({
               id={`pin-${p.id}`}
               lngLat={[p.coord.longitude, p.coord.latitude]}
               anchor="bottom"
-              onPress={() => select(p.id)}>
+              onPress={() => select(p.id)}
+            >
               {/* Pin de gota: cuadrado con una esquina recta, girado 45° para que apunte abajo. */}
-              <View style={{ width: size * 1.45, height: size * 1.45, alignItems: 'center', justifyContent: 'flex-start', opacity: selectedId && !selected ? 0.8 : 1 }}>
+              <View
+                style={{
+                  width: size * 1.45,
+                  height: size * 1.45,
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  opacity: selectedId && !selected ? 0.8 : 1,
+                }}
+              >
                 <View
                   style={{
                     width: size,
@@ -200,7 +229,8 @@ export default function NativeLayerMap({
                     borderColor: '#ffffff',
                     alignItems: 'center',
                     justifyContent: 'center',
-                  }}>
+                  }}
+                >
                   <View style={{ transform: [{ rotate: '-45deg' }] }}>
                     <Icon name={layer.icon} size={selected ? 20 : 16} color="onPrimary" />
                   </View>
@@ -209,6 +239,42 @@ export default function NativeLayerMap({
             </ViewAnnotation>
           );
         })}
+
+        {userLocation ? (
+          <ViewAnnotation id="pin-me" lngLat={[userLocation.longitude, userLocation.latitude]} anchor="center">
+            {/* «Tú estás aquí»: punto azul con halo, distinto de los pines de gota. */}
+            <View
+              accessible
+              accessibilityLabel="Tu ubicación"
+              style={{
+                width: 44,
+                height: 44,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <View
+                style={{
+                  position: 'absolute',
+                  width: 44,
+                  height: 44,
+                  borderRadius: 22,
+                  backgroundColor: 'rgba(37,99,235,0.22)',
+                }}
+              />
+              <View
+                style={{
+                  width: 20,
+                  height: 20,
+                  borderRadius: 10,
+                  backgroundColor: '#2563EB',
+                  borderWidth: 3,
+                  borderColor: '#ffffff',
+                }}
+              />
+            </View>
+          </ViewAnnotation>
+        ) : null}
       </Map>
     </View>
   );

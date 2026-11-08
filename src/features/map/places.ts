@@ -59,9 +59,14 @@ export function getNeighborhoodPlaces(center: { latitude: number; longitude: num
     .sort((a, b) => a.distanceM - b.distanceM);
 }
 
-/** Capa «Comercios» (SPEC-047): tiendas, restaurantes y servicios de OSM. */
+/** Comercios que vale la pena marcar en el mapa (la lista corta de Explorar → Lugares; ver `explore/places.ts`). */
+export const RELEVANT_COMMERCE_KINDS = ['restaurant', 'cafe', 'bakery', 'supermarket', 'convenience', 'marketplace', 'bank'];
+
+/** Capa «Comercios» (SPEC-047): solo los comercios relevantes de OSM. */
 export function getShopPoints(center: { latitude: number; longitude: number }, radiusKm: number): MapPoint[] {
-  return ALL_PLACES.filter((p) => p.category === 'commerce' && distanceKm(center, p) <= radiusKm).map<MapPoint>((p) => ({
+  return ALL_PLACES.filter(
+    (p) => p.category === 'commerce' && RELEVANT_COMMERCE_KINDS.includes(p.amenity) && distanceKm(center, p) <= radiusKm,
+  ).map<MapPoint>((p) => ({
     id: p.id,
     layer: 'shops',
     title: p.name,

@@ -13,6 +13,8 @@ export const MAP_LAYERS: MapLayerMeta[] = [
   { id: 'places', label: 'Lugares de referencia', icon: 'town-hall', color: colors.tertiary, defaultOn: false },
   { id: 'shops', label: 'Comercios', icon: 'shopping-outline', color: '#7A5A00', defaultOn: false },
   { id: 'cameras', label: 'Cámaras vecinales', icon: 'cctv', color: '#3B1580', defaultOn: true },
+  // Solo se dibuja desde Eventos (que pasa sus propios puntos); no es una capa del mapa general.
+  { id: 'events', label: 'Eventos', icon: 'calendar-star', color: '#C2410C', defaultOn: false },
 ];
 
 export const DEFAULT_LAYERS: MapLayerId[] = MAP_LAYERS.filter((l) => l.defaultOn).map((l) => l.id);

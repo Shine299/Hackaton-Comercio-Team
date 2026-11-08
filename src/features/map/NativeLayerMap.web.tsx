@@ -12,6 +12,8 @@ type Props = {
   selectedId?: string;
   height?: number;
   recenterSignal?: number;
+  userLocation?: LatLng | null;
+  locateSignal?: number;
   onSelect: (id: string | undefined) => void;
 };
 
@@ -37,6 +39,8 @@ export default function NativeLayerMap({
   selectedId,
   height = 360,
   recenterSignal = 0,
+  userLocation = null,
+  locateSignal = 0,
   onSelect,
 }: Props) {
   const hostRef = useRef<HTMLDivElement | null>(null);
@@ -52,10 +56,10 @@ export default function NativeLayerMap({
     ensureCss();
     const host = hostRef.current;
     if (!host) return;
-    const map = L.map(host, { zoomControl: true, attributionControl: true }).setView(
-      [center.latitude, center.longitude],
-      14,
-    );
+    const map = L.map(host, {
+      zoomControl: true,
+      attributionControl: true,
+    }).setView([center.latitude, center.longitude], 14);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap',
@@ -123,7 +127,25 @@ export default function NativeLayerMap({
         })
         .addTo(group);
     }
-  }, [points, selectedId, center, radiusKm]);
+    if (userLocation) {
+      L.circleMarker([userLocation.latitude, userLocation.longitude], {
+        radius: 9,
+        color: '#ffffff',
+        weight: 3,
+        fillColor: '#2563EB',
+        fillOpacity: 1,
+      })
+        .bindTooltip('Tu ubicación')
+        .addTo(group);
+    }
+  }, [points, selectedId, center, radiusKm, userLocation]);
+
+  useEffect(() => {
+    if (locateSignal > 0 && userLocation) {
+      mapRef.current?.flyTo([userLocation.latitude, userLocation.longitude], 17, { duration: 0.4 });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locateSignal]);
 
   // La cámara sigue a lo seleccionado.
   useEffect(() => {

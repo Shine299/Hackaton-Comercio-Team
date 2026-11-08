@@ -21,10 +21,12 @@ describe('placeGroupOf', () => {
     expect(placeGroupOf('bank')).toBe('services');
     expect(placeGroupOf('police')).toBeNull();
     expect(placeGroupOf('school')).toBeNull();
+    expect(placeGroupOf('hairdresser')).toBeNull();
+    expect(placeGroupOf('hardware')).toBeNull();
   });
 
   it('cada tipo que se muestra tiene nombre en español', () => {
-    for (const kind of ['restaurant', 'cafe', 'supermarket', 'convenience', 'pharmacy', 'bank', 'hairdresser']) {
+    for (const kind of ['restaurant', 'cafe', 'supermarket', 'convenience', 'pharmacy', 'bank']) {
       expect(PLACE_KIND_LABEL[kind]).toBeTruthy();
     }
   });

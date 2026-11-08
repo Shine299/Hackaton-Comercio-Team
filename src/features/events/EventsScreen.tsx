@@ -2,12 +2,14 @@ import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
+import { approxPoint, CommunityMap } from '@/features/map';
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
 import { Button, Card, Icon, Screen, Text } from '@/shared/ui';
 
 import { EventCard } from './EventCard';
 import { groupEventsByWhen } from './logic';
+import { eventMapPoints } from './mapPoints';
 import { useSectorEvents } from './sectorEvents';
 import type { SectorEvent } from './types';
 
@@ -43,6 +45,10 @@ export function EventsScreen() {
   const now = data?.fetchedAt ?? 0;
   const groups = useMemo(() => groupEventsByWhen(data?.events ?? [], now), [data?.events, now]);
   const empty = groups.today.length + groups.week.length + groups.later.length === 0;
+  const pins = useMemo(
+    () => eventMapPoints(data?.events ?? [], now, (id) => approxPoint(sector.center, id, 0.2, 0.9)),
+    [data?.events, sector.center, now],
+  );
 
   return (
     <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
@@ -66,6 +72,9 @@ export function EventsScreen() {
           onPress={() => router.push('/eventos/crear')}
         />
       </View>
+
+      {/* El mapa va siempre arriba: dónde son los eventos y dónde estás tú (punto azul). */}
+      <CommunityMap posts={[]} pins={pins} layers={['events']} embedded height={300} />
 
       {isLoading ? (
         <View className="items-center py-6" accessibilityLabel="Cargando eventos">

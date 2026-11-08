@@ -1,3 +1,4 @@
 export { CommunityMap } from './CommunityMap';
-export type { MapLayerId } from './types';
-export { getNeighborhoodPlaces, PLACES_ATTRIBUTION, type NeighborhoodPlace } from './places';
+export { approxPoint } from './approx';
+export type { LatLng, MapLayerId, MapPoint } from './types';
+export { getNeighborhoodPlaces, PLACES_ATTRIBUTION, RELEVANT_COMMERCE_KINDS, type NeighborhoodPlace } from './places';

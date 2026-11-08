@@ -15,11 +15,14 @@ import { DEFAULT_LAYERS, getLayer, MAP_LAYERS } from './layers';
 import { MapFab } from './MapFab';
 import { PLACES_ATTRIBUTION } from './places';
 import type { MapLayerId, MapPoint } from './types';
+import { useDeviceLocation } from './useDeviceLocation';
 
 // MapLibre es un módulo nativo: Expo Go no lo trae. Ahí ni se importa y se muestra la lista (el APK sí lo trae).
 const IN_EXPO_GO = Platform.OS !== 'web' && Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const NativeLayerMap: typeof import('./NativeLayerMap').default | null = IN_EXPO_GO ? null : require('./NativeLayerMap').default;
+const NativeLayerMap: typeof import('./NativeLayerMap').default | null = IN_EXPO_GO
+  ? null
+  : require('./NativeLayerMap').default;
 
 const LIST_CAP = 8;
 
@@ -35,7 +38,8 @@ function PointRow({ point, selected, onPress }: { point: MapPoint; selected: boo
         selected
           ? 'flex-row items-start gap-3 rounded-xl border-2 border-primary bg-surface-container-lowest p-3 active:opacity-80'
           : 'flex-row items-start gap-3 rounded-xl bg-surface-container-lowest p-3 active:opacity-80'
-      }>
+      }
+    >
       <Icon name={layer.icon} size={22} color="primary" />
       <View className="min-w-0 flex-1 gap-0.5">
         <Text variant="body-md-medium" numberOfLines={2}>
@@ -54,16 +58,20 @@ function PointRow({ point, selected, onPress }: { point: MapPoint; selected: boo
 
 /**
  * Mapa barrial por capas (Explorar → Mapa). En iOS y Android muestra MapLibre (OpenStreetMap); en la vista web de desarrollo,
- * la misma información en lista y un aviso claro. Los puntos son siempre zona aproximada.
+ * la misma información en lista y un aviso claro. Los puntos son siempre zona aproximada; la ubicación de la persona
+ * (punto azul) se muestra siempre que haya permiso, solo en su pantalla.
  */
 export function CommunityMap({
   posts,
+  pins,
   initialLayers,
   layers,
   embedded = false,
   height,
 }: {
   posts: Post[];
+  /** Si se pasa, el mapa dibuja solo estos puntos (Explorar y Eventos arman los suyos) en vez de las capas generales. */
+  pins?: MapPoint[];
   initialLayers?: MapLayerId[];
   /** Capas fijas de la sección donde vive el mapa (oculta los chips de capas). */
   layers?: MapLayerId[];
@@ -84,7 +92,9 @@ export function CommunityMap({
   const [showList, setShowList] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [recenter, setRecenter] = useState(0);
+  const [locate, setLocate] = useState(0);
   const [search, setSearch] = useState('');
+  const me = useDeviceLocation();
   const { data: shared = [] } = useSharedBoard(sector.id);
   const cameras = useSectorCameras();
 
@@ -92,6 +102,7 @@ export function CommunityMap({
   const nativeMap = NativeLayerMap !== null;
 
   const all = useMemo(() => {
+    if (pins) return pins;
     // Lo que el servidor ya muestra en vivo no se repite desde el teléfono.
     const sharedIds = new Set(shared.map((s) => s.id));
     const board = buildBoard({
@@ -102,8 +113,15 @@ export function CommunityMap({
       offers,
       now,
     });
-    return buildMapPoints({ sector, posts, board, shared, volunteer: { available: volunteerAvailable, showSector }, cameras });
-  }, [sector, posts, reports, vulnerable, offers, now, shared, volunteerAvailable, showSector, cameras]);
+    return buildMapPoints({
+      sector,
+      posts,
+      board,
+      shared,
+      volunteer: { available: volunteerAvailable, showSector },
+      cameras,
+    });
+  }, [pins, sector, posts, reports, vulnerable, offers, now, shared, volunteerAvailable, showSector, cameras]);
 
   const needle = search.trim().toLowerCase();
   // Memoizado: si cambia la identidad del arreglo, el mapa nativo recarga todos los puntos en cada toque.
@@ -129,9 +147,14 @@ export function CommunityMap({
   const open = (point: MapPoint) => {
     const t = point.target;
     if (t.kind === 'post') router.push({ pathname: '/publicacion/[id]', params: { id: t.id } });
-    else if (t.kind === 'report') router.push({ pathname: '/emergencias/estado/[id]', params: { id: t.id } });
+    else if (t.kind === 'report')
+      router.push({
+        pathname: '/emergencias/estado/[id]',
+        params: { id: t.id },
+      });
     else if (t.kind === 'board' || t.kind === 'shared') router.push('/emergencias/tablero');
     else if (t.kind === 'camera') router.push({ pathname: '/camaras/[id]', params: { id: t.id } });
+    else if (t.kind === 'event') router.push({ pathname: '/evento/[id]', params: { id: t.id } });
   };
 
   const listVisible = !embedded && (!nativeMap || showList);
@@ -139,30 +162,30 @@ export function CommunityMap({
   return (
     <View className="gap-3">
       {!layers ? (
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
-        {MAP_LAYERS.map((layer) => (
-          <Chip
-            key={layer.id}
-            label={`${layer.label} · ${counts.get(layer.id) ?? 0}`}
-            icon={layer.icon}
-            selected={active.includes(layer.id)}
-            onPress={() => toggle(layer.id)}
-          />
-        ))}
-      </ScrollView>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
+          {MAP_LAYERS.filter((layer) => layer.id !== 'events').map((layer) => (
+            <Chip
+              key={layer.id}
+              label={`${layer.label} · ${counts.get(layer.id) ?? 0}`}
+              icon={layer.icon}
+              selected={active.includes(layer.id)}
+              onPress={() => toggle(layer.id)}
+            />
+          ))}
+        </ScrollView>
       ) : null}
 
       {!embedded ? (
-      <TextField
-        label="Buscar en el mapa"
-        hideLabel
-        leadingIcon="magnify"
-        placeholder="Buscar bodega, ayuda, herramienta…"
-        value={search}
-        onChangeText={setSearch}
-        onClear={() => setSearch('')}
-        returnKeyType="search"
-      />
+        <TextField
+          label="Buscar en el mapa"
+          hideLabel
+          leadingIcon="magnify"
+          placeholder="Buscar bodega, ayuda, herramienta…"
+          value={search}
+          onChangeText={setSearch}
+          onClear={() => setSearch('')}
+          returnKeyType="search"
+        />
       ) : null}
 
       {!nativeMap ? (
@@ -172,7 +195,8 @@ export function CommunityMap({
             <Text variant="body-lg-bold">Mapa no disponible</Text>
           </View>
           <Text>
-            El mapa necesita la app instalada (APK) y no funciona en Expo Go. Te mostramos la misma información en lista.
+            El mapa necesita la app instalada (APK) y no funciona en Expo Go. Te mostramos la misma información en
+            lista.
           </Text>
         </Card>
       ) : (
@@ -184,6 +208,8 @@ export function CommunityMap({
             selectedId={selectedId}
             height={expanded ? 560 : (height ?? 360)}
             recenterSignal={recenter}
+            userLocation={me.coord}
+            locateSignal={locate}
             onSelect={setSelectedId}
           />
           <View className="absolute right-3 top-3 gap-2">
@@ -200,6 +226,16 @@ export function CommunityMap({
                 setRecenter((n) => n + 1);
               }}
             />
+            {me.coord ? (
+              <MapFab
+                icon="crosshairs-gps"
+                label="Ir a tu ubicación"
+                onPress={() => {
+                  setSelectedId(undefined);
+                  setLocate((n) => n + 1);
+                }}
+              />
+            ) : null}
           </View>
           <View className="absolute bottom-3 left-3 rounded-full bg-surface-container-lowest px-3 py-1.5 shadow-sm elevation-xs">
             <Text variant="label-md">
@@ -208,6 +244,17 @@ export function CommunityMap({
           </View>
         </View>
       )}
+
+      {nativeMap && (me.status === 'denied' || me.status === 'unavailable') ? (
+        <View className="flex-row items-start gap-2 rounded-xl bg-surface-container-low p-3">
+          <Icon name="crosshairs-off" size={20} color="primary" />
+          <Text variant="label-md" tone="muted" className="flex-1">
+            {me.status === 'denied'
+              ? 'No podemos mostrar dónde estás: el permiso de ubicación está desactivado. Actívalo en los ajustes del teléfono.'
+              : 'No pudimos saber dónde estás ahora. Revisa que el GPS esté encendido.'}
+          </Text>
+        </View>
+      ) : null}
 
       {selected ? (
         <Card tone="low" accessibilityLiveRegion="polite">
@@ -284,8 +331,8 @@ export function CommunityMap({
       <View className="flex-row items-start gap-2 rounded-xl bg-surface-container-low p-3">
         <Icon name="shield-lock-outline" size={20} color="primary" />
         <Text variant="label-md" tone="muted" className="flex-1">
-          Todos los puntos son zona aproximada de tu sector; nunca usamos tu ubicación exacta. Lo marcado
-          como demo es ficticio.
+          Los puntos del barrio son zona aproximada de tu sector. El punto azul eres tú: tu ubicación solo se ve en tu
+          teléfono, no se guarda ni se comparte. Lo marcado como demo es ficticio.
           {active.includes('places') || active.includes('shops') ? ` ${PLACES_ATTRIBUTION}` : ''}
         </Text>
       </View>
