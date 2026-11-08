@@ -1,6 +1,6 @@
 # Yunta
 
-**Tu comunidad, más cerca.** App móvil (Android/iOS, y web de apoyo) que conecta a vecinos para resolver
+**Tu comunidad, más cerca.** Aplicación **solo para celular** (Android e iOS) que conecta a vecinos para resolver
 necesidades del día a día — prestar y pedir herramientas, comprar a emprendimientos del barrio, enterarse de lo
 que pasa cerca — y para coordinar ayuda cuando hay una emergencia. Construida con Expo + React Native + TypeScript.
 
@@ -34,13 +34,13 @@ ficticios marcados con `DemoTag`, y honestidad de estado: «guardado en tu telé
 ```bash
 npm install
 cp .env.example .env     # opcional: sin variables la app funciona con datos de demostración
-npx expo start           # QR con Expo Go, o "w" para web
+npx expo start           # escanea el QR con Expo Go en tu celular (Android/iOS)
 ```
 
 | Variable (`.env`) | Para qué | Obligatoria |
 |---|---|---|
 | `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY` | Backend real (clave **anónima**; la seguridad es RLS) | No |
-| `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Mapas en builds nativas (en Expo Go y web no hace falta) | No |
+| `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Mapas en builds nativas (en Expo Go no hace falta) | No |
 
 Comandos útiles: `npm run check` (todo junto), `npm test`, `npm run typecheck`, `npm run lint`,
 `npm run arch:check`, `npx expo-doctor`. Builds: `npx eas-cli@latest build` (ver `eas.json`).
@@ -49,14 +49,14 @@ Comandos útiles: `npm run check` (todo junto), `npm test`, `npm run typecheck`,
 
 | Capa | Tecnología | Por qué |
 |---|---|---|
-| App | Expo SDK 58, React Native 0.88, React 19, TypeScript estricto | Un código para Android, iOS y web |
+| App | Expo SDK 58, React Native 0.88, React 19, TypeScript estricto | Un código para Android e iOS |
 | Rutas | Expo Router (typed routes) | Rutas por archivos, `app/` delgado |
 | Estilos | NativeWind v5 (Tailwind v4) + tokens en `src/global.css` | Clases + tema compartido (versiones **fijadas**, ver ADR-0004) |
 | Estado local | Zustand (+ `persist`) | Stores pequeños por feature |
 | Datos remotos | TanStack Query | Caché y refresco de lecturas |
 | Persistencia | `expo-sqlite` (kv), `expo-secure-store` | Offline-first; secretos fuera del kv |
 | Backend | Supabase (Postgres + Auth anónima + RLS) | Sin servidores propios ni datos personales |
-| Mapas | `react-native-maps` (nativo) · Leaflet + OpenStreetMap (web) | Mapa en todas las plataformas |
+| Mapas | `react-native-maps` (nativo) · Leaflet + OpenStreetMap (web) | Mapa nativo en el celular |
 | Formularios | React Hook Form + Zod | Validación tipada |
 | Pruebas | Jest (`jest-expo`) | Lógica pura rápida |
 
@@ -215,7 +215,7 @@ flowchart LR
 
 | Qué | Dónde | Notas |
 |---|---|---|
-| Preferencias, sector, tutorial, intereses, guardados, publicaciones propias, reportes | Zustand `persist` sobre `shared/storage/kv` (SQLite en nativo, `localStorage` en web) | No secretos |
+| Preferencias, sector, tutorial, intereses, guardados, publicaciones propias, reportes | Zustand `persist` sobre `shared/storage/kv` (SQLite en el celular; `localStorage` solo en la vista web de desarrollo) | No secretos |
 | Sesión anónima de Supabase | Mismo kv (sin datos personales) | Se crea al primer envío |
 | Cola de envío | `outbox` (store persistido) | UUID del cliente = idempotencia |
 | Lecturas remotas (publicaciones, tablero, alertas) | TanStack Query, `staleTime` corto | Con respaldo de datos de demo |
@@ -225,7 +225,7 @@ flowchart LR
 
 `CommunityMap` es **un solo componente reutilizable** que se incrusta en cada sección (`layers`, `embedded`, `height`):
 Emprendimientos y Comunidad con alternador Lista ⇄ Mapa, Explorar para publicaciones y Emergencia para
-incidentes y recursos. Nativo: `react-native-maps`; web: Leaflet/OSM (`NativeLayerMap.web.tsx`). Los marcadores son
+incidentes y recursos. Se dibuja con `react-native-maps` (la vista web de desarrollo usa Leaflet, solo para revisar en el computador). Los marcadores son
 **pines** con la punta sobre la coordenada y el icono de su capa; todos los puntos son zona aproximada.
 
 ## Recomendaciones

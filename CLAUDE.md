@@ -12,7 +12,7 @@ npm run typecheck    # tsc --noEmit
 npm run lint         # expo lint (incluye las reglas de límites entre features)
 npm run arch:check   # madge: falla si hay ciclos de dependencia
 npm test             # jest (lógica pura, junto al código: *.test.ts)
-npx expo start       # dev server (Expo Go / "w" para web)
+npx expo start       # dev server: escanea el QR con Expo Go en el celular
 npx expo install <paquete>   # SIEMPRE así (versiones compatibles con el SDK), nunca npm/yarn add
 ```
 
@@ -50,9 +50,10 @@ npx expo install <paquete>   # SIEMPRE así (versiones compatibles con el SDK), 
   multilínea falla **en silencio**. Para editar usa la herramienta Edit y verifica con `git diff`.
 - **Git Bash en Windows** convierte argumentos que empiezan con `/` o `@/` en rutas: usa `MSYS_NO_PATHCONV=1`.
 - NativeWind v5 (`nativewind`, `react-native-css`, `tailwindcss`, `lightningcss`) está **fijado**: no actualizar sin probar.
-- `expo-notifications` no existe en web: hay un `BoardNotifier.web.tsx` que no hace nada. Mantén los archivos
-  `*.web.tsx` al agregar módulos nativos.
-- Mapas: `react-native-maps` en nativo, Leaflet/OpenStreetMap en web (`NativeLayerMap.web.tsx`).
+- **Yunta es solo para celular (Android/iOS).** Diseña y prueba en móvil: gestos, áreas táctiles, teclado, área
+  segura, poca señal. No inviertas en pantallas ni layouts de escritorio.
+- Los `*.web.tsx` (`BoardNotifier`, `NativeLayerMap` con Leaflet, `kv`, `queueDb`) son **solo una vista previa de
+  desarrollo** en el navegador: que no se rompa al agregar módulos nativos, pero no es un objetivo de producto.
 
 ## Cómo trabajamos (SDD + TDD, ver `sprints.md`)
 
@@ -61,4 +62,4 @@ npx expo install <paquete>   # SIEMPRE así (versiones compatibles con el SDK), 
 2. **Prueba** que falla, **código** mínimo, **refactor**, y `npm run check`.
 3. Decisiones de arquitectura nuevas → un ADR corto en `docs/adr/`.
 4. No hagas commit ni push sin que el usuario lo pida. Un cambio, un commit; mensajes en español.
-5. Antes de afirmar que algo funciona: corre `npm run check`; para UI, ábrelo en Expo Go o web.
+5. Antes de afirmar que algo funciona: corre `npm run check`; para UI, ábrelo en Expo Go en un celular (el navegador no es referencia).

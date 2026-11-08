@@ -47,7 +47,7 @@ function PointRow({ point, selected, onPress }: { point: MapPoint; selected: boo
 }
 
 /**
- * Mapa barrial por capas (Explorar → Mapa). En iOS y Android muestra react-native-maps; en web,
+ * Mapa barrial por capas (Explorar → Mapa). En iOS y Android muestra react-native-maps; en la vista web de desarrollo,
  * la misma información en lista y un aviso claro. Los puntos son siempre zona aproximada.
  */
 export function CommunityMap({
@@ -82,7 +82,7 @@ export function CommunityMap({
   const { data: shared = [] } = useSharedBoard(sector.id);
 
   // En Expo Go el mapa funciona sin clave; la clave de Google solo hace falta en builds de producción.
-  // En web se usa Leaflet/OpenStreetMap (NativeLayerMap.web.tsx), así que hay mapa en todas las plataformas.
+  // La app es solo móvil; la vista web de desarrollo usa Leaflet (NativeLayerMap.web.tsx) únicamente para revisar.
   const nativeMap = true;
 
   const all = useMemo(() => {
