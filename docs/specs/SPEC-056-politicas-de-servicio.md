@@ -1,7 +1,7 @@
 # SPEC-056 — Políticas de servicios y marca de agua «Yunta Perú» en el menú lateral
 
-- **Estado:** borrador (rama `shay-spec-056-politicas-de-servicio`, 8 nov 2026). Pasa a «implementada» con `npm run check`
-  en verde y probada en Expo Go.
+- **Estado:** implementada en la rama `shay-spec-056-politicas-de-servicio` (8 nov 2026); `npm run check` en verde (41
+  suites, 320 pruebas, 9 nuevas). **Falta** probarla en Expo Go, la revisión de otra persona y la **revisión legal** del texto.
 - **Dueño / revisor:** Shay / _(pendiente: otra persona del equipo)_
 - **Sprint:** Etapa 13 (menú lateral), historia **S13-10**.
 - **Depende de:** SPEC-055 (la rama se apila sobre `shay-spec-055-atras-a-la-seccion`; no comparten archivos de la pantalla).
@@ -18,13 +18,15 @@ la app no reemplaza a los servicios oficiales. Esta spec agrega una **sección �
 | Id | Título | De dónde sale lo que dice |
 |---|---|---|
 | `terminos` | Términos de uso | Qué es Yunta, cuenta mínima (nombre público), convivencia, publicaciones «urgentes sin validar», datos de demo (SPEC-045, `CLAUDE.md`) |
-| `privacidad` | Privacidad y datos | Lo que se guarda en el teléfono, sector aproximado, estados honestos, «nadie ve quién va» (SPEC-046), lo que nunca sale del teléfono |
+| `privacidad` | Uso de tus datos | Lo que se guarda en el teléfono, sector aproximado, estados honestos, «nadie ve quién va» (SPEC-046), lo que nunca sale del teléfono |
 | `emergencias` | Emergencias y Modo guardia | No reemplaza a los servicios oficiales, SOS sin cuenta, micrófono y ubicación consentidos del Modo guardia (ADR 0008), Acompáñame (SPEC-039) |
 | `ia-pagos` | Asistente con IA y pagos | IA externa y gratuita que puede equivocarse (SPEC-049), voz solo para pasarla a texto, «Yunta no guarda dinero» y pagos solo en línea (ADR 0005) |
 
 ## Criterios de aceptación
 1. **Dado** el menú lateral, **entonces** debajo de los accesos actuales hay un bloque con el encabezado «Políticas de servicios» y
-   4 accesos (Términos de uso, Privacidad y datos, Emergencias y Modo guardia, Asistente con IA y pagos), cada uno de ≥ 56 dp.
+   4 accesos (Términos de uso, Uso de tus datos, Emergencias y Modo guardia, Asistente con IA y pagos), cada uno de ≥ 56 dp.
+   Se llama «Uso de tus datos» y no «Privacidad…» para no confundirse con el acceso existente «Privacidad y disponibilidad»
+   (tus preferencias de perfil).
 2. **Dado** uno de esos accesos, **cuando** lo toco, **entonces** el menú se cierra y se abre `/politicas` con **esa** política
    desplegada y las demás cerradas.
 3. **Dado** `/politicas`, **entonces** veo las 4 políticas como tarjetas desplegables (título, resumen de una línea, ícono);

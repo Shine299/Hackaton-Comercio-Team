@@ -4,11 +4,12 @@ import { Modal, Pressable, ScrollView, useWindowDimensions, View } from 'react-n
 import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { POLICIES } from '@/features/policies';
 import { TRUST_LABEL } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
 import { useSessionStore } from '@/features/session';
 import { useDrawerStore } from '@/shared/nav/drawerStore';
-import { Button, colors, Icon, Text, type IconName } from '@/shared/ui';
+import { BrandWatermark, Button, colors, Icon, Text, type IconName } from '@/shared/ui';
 
 type DrawerLink = { label: string; icon: IconName; href: Href };
 
@@ -26,6 +27,25 @@ const LINKS: DrawerLink[] = [
   { label: 'Solicitudes y avisos', icon: 'inbox-outline', href: '/actividad' },
   { label: 'Ver el tutorial', icon: 'school-outline', href: '/onboarding' },
 ];
+
+/** Un acceso del menú: ícono, texto y flecha, de ≥ 56 dp. */
+function DrawerRow({ label, icon, onPress }: { label: string; icon: IconName; onPress: () => void }) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      onPress={onPress}
+      className="min-h-14 flex-row items-center gap-3 rounded-2xl px-3 active:bg-surface-container">
+      <View className="h-10 w-10 items-center justify-center rounded-xl bg-primary-fixed">
+        <Icon name={icon} size={22} color="primary" />
+      </View>
+      <Text variant="body-lg" className="flex-1">
+        {label}
+      </Text>
+      <Icon name="chevron-right" size={22} color="onSurfaceVariant" />
+    </Pressable>
+  );
+}
 
 /**
  * Barra lateral con tu perfil. Se abre con el ícono de menú o deslizando desde el borde izquierdo; toca fuera o usa «Atrás» para
@@ -79,6 +99,8 @@ export function ProfileDrawer() {
       <View className="flex-1 flex-row" accessibilityViewIsModal>
         <Animated.View pointerEvents="none" className="absolute inset-0 bg-black/40" style={backdropStyle} />
         <Animated.View style={[{ width: panelWidth, backgroundColor: colors.surface }, panelStyle]}>
+          {/* SPEC-056: marca de agua «Yunta Perú», muy tenue y detrás del contenido; no recibe toques. */}
+          <BrandWatermark />
           <ScrollView
             contentContainerClassName="gap-4 px-4 pb-6"
             contentContainerStyle={{ paddingTop: insets.top + 16, paddingBottom: Math.max(insets.bottom, 16) }}
@@ -123,25 +145,28 @@ export function ProfileDrawer() {
 
             <View className="gap-1">
               {LINKS.map((link) => (
-                <Pressable
-                  key={link.label}
-                  accessibilityRole="button"
-                  accessibilityLabel={link.label}
-                  onPress={() => go(link.href)}
-                  className="min-h-14 flex-row items-center gap-3 rounded-2xl px-3 active:bg-surface-container">
-                  <View className="h-10 w-10 items-center justify-center rounded-xl bg-primary-fixed">
-                    <Icon name={link.icon} size={22} color="primary" />
-                  </View>
-                  <Text variant="body-lg" className="flex-1">
-                    {link.label}
-                  </Text>
-                  <Icon name="chevron-right" size={22} color="onSurfaceVariant" />
-                </Pressable>
+                <DrawerRow key={link.label} label={link.label} icon={link.icon} onPress={() => go(link.href)} />
+              ))}
+            </View>
+
+            {/* SPEC-056: políticas de servicios. Cada acceso abre /politicas con esa política desplegada. */}
+            <View className="gap-1" accessibilityLabel="Políticas de servicios">
+              <View className="mb-1 h-px bg-outline-variant" />
+              <Text variant="label-md" tone="muted" accessibilityRole="header" className="px-3 pb-1 pt-1 uppercase">
+                Políticas de servicios
+              </Text>
+              {POLICIES.map((policy) => (
+                <DrawerRow
+                  key={policy.id}
+                  label={policy.title}
+                  icon={policy.icon}
+                  onPress={() => go({ pathname: '/politicas', params: { tema: policy.id } })}
+                />
               ))}
             </View>
 
             <Text variant="label-md" tone="muted">
-              Yunta · Tu comunidad, más cerca. Tu perfil se guarda en este teléfono.
+              Yunta Perú · Tu comunidad, más cerca. Tu perfil se guarda en este teléfono.
             </Text>
           </ScrollView>
         </Animated.View>
