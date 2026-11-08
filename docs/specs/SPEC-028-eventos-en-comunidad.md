@@ -1,6 +1,6 @@
 # SPEC-028 — Avisos y eventos reales en Comunidad
 
-- **Estado:** hecha (la migración `20261109000005_sector_events.sql` y las filas de `supabase/seed.sql` deben aplicarse en Supabase)
+- **Estado:** hecha; migración `20261109000005_sector_events.sql` aplicada (las filas demo de `supabase/seed.sql` aún no se cargaron: sin ellas la app usa eventos demo locales)
 - **Sprint:** 2 (S2-10)
 
 ## Qué y por qué

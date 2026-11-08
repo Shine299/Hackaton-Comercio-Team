@@ -1,6 +1,6 @@
 # SPEC-025 — Mensajes y Chat
 
-- **Estado:** hecha en la app; **la migración `20261109000006_chat.sql` debe aplicarse y su RLS probarse en una rama de Supabase** antes de usarla con personas reales
+- **Estado:** hecha. Migración `20261109000006_chat.sql` aplicada en el proyecto (9-nov-2026) y RLS comprobada con una transacción de prueba que se deshace (no hay plan Pro para ramas); falta probar con 2 teléfonos
 - **Sprint:** 2 (S2-7)
 
 ## Qué y por qué

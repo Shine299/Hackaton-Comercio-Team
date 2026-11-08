@@ -1,6 +1,6 @@
 # SPEC-029 — «¿Cuántas personas?» y «¿Hay personas en riesgo?»
 
-- **Estado:** hecha (la migración `20261109000004_people_counts.sql` debe aplicarse en Supabase)
+- **Estado:** hecha; migración `20261109000004_people_counts.sql` aplicada en Supabase
 - **Sprint:** 2 (S2-11)
 
 ## Qué y por qué

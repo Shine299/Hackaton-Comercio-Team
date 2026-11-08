@@ -70,9 +70,10 @@ declare
   v_requester uuid;
   v_owner uuid;
   v_conv uuid;
+  v_status text;
 begin
-  select po.id, r.requester_id, owner.user_id
-    into v_post, v_requester, v_owner
+  select po.id, r.requester_id, owner.user_id, r.status
+    into v_post, v_requester, v_owner, v_status
   from public.post_requests r
   join public.posts po on po.id = r.post_id
   join public.profiles owner on owner.id = po.author_id
@@ -80,6 +81,10 @@ begin
 
   if v_owner is null or v_owner is distinct from auth.uid() then
     raise exception 'No puedes responder esta solicitud';
+  end if;
+
+  if v_status = 'declined' then
+    raise exception 'Esta solicitud ya fue rechazada';
   end if;
 
   update public.post_requests set status = 'accepted' where id = p_request_id;
