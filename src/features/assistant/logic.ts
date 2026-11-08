@@ -167,7 +167,8 @@ export async function resolveAnswer(
     const reply = await ask([...history, { role: 'user', text }]);
     if (reply.text === null) return { text: faqAnswer(text), source: 'faq', reason: reply.reason, redacted };
     return { text: plainText(reply.text), source: 'ai', provider: reply.provider, redacted };
-  } catch {
+  } catch (e) {
+    console.warn('[asistente]', e instanceof Error ? e.message : e);
     return { text: faqAnswer(text), source: 'faq', reason: 'offline', redacted };
   }
 }
