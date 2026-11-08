@@ -13,7 +13,9 @@ import { formatRelativeTime } from '@/shared/format';
 import { useEasyMode } from '@/shared/nav/viewModeStore';
 import { Button, Card, Chip, type Gradient, GRADIENTS, Icon, ListenButton, Screen, SECCION_AYUDA_XML, SECCION_COMUNIDAD_XML, SECCION_EMERGENCIA_XML, SECCION_EMPRENDIMIENTOS_XML, Text, TextField } from '@/shared/ui';
 
+import { EventCard } from './EventCard';
 import { greetingFor } from './greeting';
+import { useSectorEvents } from './sectorEvents';
 import { BusinessPhotoCard, NewsCard, Rail } from './HomeCarousels';
 
 /** Qué puedes hacer: una función por sección, con degradado propio, ilustración y un verbo claro. */
@@ -81,6 +83,9 @@ export function HomeScreen() {
   const [query, setQuery] = useState('');
   const [greeting] = useState(() => greetingFor(new Date().getHours()));
   const search = (q: string) => router.navigate({ pathname: '/explorar', params: { q: q.trim(), t: String(Date.now()) } });
+
+  const { data: eventsData } = useSectorEvents(sector.id, sector.name);
+  const nextEvent = eventsData?.events[0];
 
   const alert = alerts?.[0];
   const fetchedAt = data?.fetchedAt ?? 0;
@@ -193,6 +198,15 @@ export function HomeScreen() {
           </Pressable>
           <ListenButton text={`${alert.title}. ${alert.body} Activada por ${alert.source}.`} />
         </Card>
+      ) : null}
+
+      {nextEvent ? (
+        <View className="gap-2" accessibilityLabel="Próximo evento">
+          <Text variant="headline-sm" accessibilityRole="header">
+            Próximo en tu barrio
+          </Text>
+          <EventCard event={nextEvent} now={eventsData?.fetchedAt ?? 0} compact onPress={() => router.navigate('/comunidad')} />
+        </View>
       ) : null}
 
       <View className="gap-3" accessibilityLabel="Qué puedes hacer con la app">

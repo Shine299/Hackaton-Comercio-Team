@@ -23,3 +23,10 @@ insert into public.posts (id, author_id, kind, category, title, description, sec
   ('00000000-0000-4000-8000-0000000000b5','00000000-0000-4000-8000-0000000000a5','request','mobility','Necesito traslado a control médico','Uso silla de ruedas plegable. Necesito ir el jueves por la mañana a un centro de salud cercano.','san-isidro',null,true,false,'[]',true,now()-interval '2 hours',now()+interval '3 days'),
   ('00000000-0000-4000-8000-0000000000b6','00000000-0000-4000-8000-0000000000a6','offer','barter','Cambio libros escolares por útiles','Tengo libros de primaria en buen estado; me interesan cuadernos o colores.','la-victoria','Trueque',false,false,'[]',true,now()-interval '2 days',now()+interval '12 days')
 on conflict (id) do nothing;
+
+-- Eventos de demostración del barrio (fechas relativas a «ahora», siempre marcados como demo).
+insert into public.sector_events (id, sector_id, kind, title, body, starts_at, place_label, source, is_demo) values
+  ('00000000-0000-4000-8000-0000000000e1','lince','event','Feria de emprendedores del barrio','Vecinos que venden comida, ropa y artesanías. Entrada libre.', date_trunc('day', now()) + interval '2 days 16 hours','Parque de Lince','Junta vecinal (demo)', true),
+  ('00000000-0000-4000-8000-0000000000e2','lince','event','Charla: qué hacer ante un sismo','Recomendaciones simples para tu familia y tu cuadra.', date_trunc('day', now()) + interval '4 days 19 hours','Local comunal','Defensa civil (demo)', true),
+  ('00000000-0000-4000-8000-0000000000e3','lince','notice','Jornada de limpieza de la quebrada','Trae guantes y bolsas. Se entregan refrigerios.', date_trunc('day', now()) + interval '6 days 8 hours','Entrada de Lince','Municipalidad (demo)', true)
+on conflict (id) do nothing;

@@ -17,11 +17,13 @@ import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
 import { CommunityMap } from '@/features/map';
+import { EventCard } from './EventCard';
+import { useSectorEvents } from './sectorEvents';
 import { Card, Chip, DemoTag, type Gradient, GRADIENTS, Icon, type IconName, ListenButton, Screen, SECCION_COMUNIDAD_XML, SectionHero, SegmentedControl, StatRow, Text } from '@/shared/ui';
 
 
 
-type FeedSection = 'dia' | 'negocios' | 'emergencia' | 'confianza';
+type FeedSection = 'dia' | 'negocios' | 'emergencia' | 'confianza' | 'eventos';
 type FeedFilter = 'all' | Exclude<FeedSection, 'confianza'>;
 
 type FeedItem = {
@@ -44,6 +46,7 @@ const SECTION_STYLE: Record<
   negocios: { gradient: GRADIENTS.emprendimientos, tagIcon: 'storefront-outline', tagTone: 'primary' },
   emergencia: { gradient: GRADIENTS.emergencia, tagIcon: 'lifebuoy', tagTone: 'error' },
   confianza: { gradient: GRADIENTS.ayuda, tagIcon: 'shield-check-outline', tagTone: 'muted' },
+  eventos: { gradient: GRADIENTS.recomendado, tagIcon: 'calendar-star', tagTone: 'primary' },
 };
 
 function FeedCard({ item }: { item: FeedItem }) {
@@ -90,6 +93,7 @@ export function CommunityScreen() {
   const { data: impact } = useSectorImpact(sector.id);
   const [filter, setFilter] = useState<FeedFilter>('all');
   const [view, setView] = useState<'list' | 'map'>('list');
+  const { data: eventsData } = useSectorEvents(sector.id, sector.name);
 
   const alert = alerts?.[0];
   const now = data?.fetchedAt ?? 0;
@@ -160,6 +164,8 @@ export function CommunityScreen() {
   }, [biz, dia, board, impact, now, router, sector.name]);
 
   const visible = items.filter((item) => filter === 'all' || item.section === filter);
+  const events = eventsData?.events ?? [];
+  const eventList = filter === 'eventos' ? events : filter === 'all' ? events.slice(0, 2) : [];
 
 
   return (
@@ -211,6 +217,7 @@ export function CommunityScreen() {
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
         <Chip role="radio" label="Todo" selected={filter === 'all'} onPress={() => setFilter('all')} />
+        <Chip role="radio" label="Eventos" icon="calendar-star" selected={filter === 'eventos'} onPress={() => setFilter('eventos')} />
         <Chip role="radio" label="Día a día" icon="handshake-outline" selected={filter === 'dia'} onPress={() => setFilter('dia')} />
         <Chip role="radio" label="Negocios" icon="storefront-outline" selected={filter === 'negocios'} onPress={() => setFilter('negocios')} />
         <Chip role="radio" label="Emergencia" icon="lifebuoy" selected={filter === 'emergencia'} onPress={() => setFilter('emergencia')} />
@@ -232,7 +239,7 @@ export function CommunityScreen() {
         <View className="items-center py-8" accessibilityLabel="Cargando novedades">
           <ActivityIndicator />
         </View>
-      ) : visible.length === 0 ? (
+      ) : visible.length === 0 && eventList.length === 0 ? (
         <Card className="items-center gap-2 py-8">
           <Icon name="text-box-search-outline" size={34} color="primary" />
           <Text variant="headline-sm" className="text-center">
@@ -244,6 +251,9 @@ export function CommunityScreen() {
         </Card>
       ) : (
         <View className="gap-4">
+          {eventList.map((event) => (
+            <EventCard key={event.id} event={event} now={eventsData?.fetchedAt ?? 0} />
+          ))}
           {visible.map((item) => (
             <FeedCard key={item.id} item={item} />
           ))}
