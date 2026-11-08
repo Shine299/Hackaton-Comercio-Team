@@ -16,6 +16,7 @@ const LINKS: DrawerLink[] = [
   { label: 'Guardados', icon: 'bookmark-outline', href: { pathname: '/perfil', params: { tab: 'saved' } } },
   { label: 'Privacidad y disponibilidad', icon: 'lock-outline', href: { pathname: '/perfil', params: { tab: 'privacy' } } },
   { label: 'Ajustes de la cuenta', icon: 'cog-outline', href: { pathname: '/perfil', params: { tab: 'settings' } } },
+  { label: 'Mensajes', icon: 'message-text-outline', href: '/mensajes' },
   { label: 'Solicitudes y avisos', icon: 'inbox-outline', href: '/actividad' },
   { label: 'Ver el tutorial', icon: 'school-outline', href: '/onboarding' },
 ];

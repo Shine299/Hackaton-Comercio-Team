@@ -8,7 +8,8 @@ export type OutboxType =
   | 'emergency.incident'
   | 'emergency.vulnerable'
   | 'resource.offer'
-  | 'resource.update';
+  | 'resource.update'
+  | 'chat.message';
 
 export type OutboxPriority = 'emergency' | 'urgent' | 'normal';
 
@@ -47,6 +48,7 @@ export const OUTBOX_TYPE_LABEL: Record<OutboxType, string> = {
   'emergency.vulnerable': 'Alerta por un vecino',
   'resource.offer': 'Oferta de recurso',
   'resource.update': 'Cambio en una oferta',
+  'chat.message': 'Mensaje de chat',
 };
 
 /** Estados desde los que todavía hay algo por enviar. */

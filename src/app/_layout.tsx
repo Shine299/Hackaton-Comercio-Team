@@ -67,6 +67,7 @@ export default function RootLayout() {
             <Stack.Screen name="onboarding" options={{ gestureEnabled: false }} />
             <Stack.Screen name="publicacion/[id]" />
             <Stack.Screen name="vecino/[id]" />
+            <Stack.Screen name="chat/[id]" />
             <Stack.Screen name="negocios/registrar" />
             <Stack.Screen name="emergencias" />
             <Stack.Screen name="sector" options={{ presentation: 'modal' }} />

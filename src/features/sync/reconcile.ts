@@ -1,5 +1,6 @@
 import { useEmergencyStore, type IncidentStatus, type ResourceStage } from '@/features/emergency';
 import { isUnsent, useOutboxStore, type OutboxItem } from '@/features/outbox';
+import { useLocalMessagesStore } from '@/features/chat';
 import { useContactStore, useLocalPostsStore, useReportStore } from '@/features/posts';
 import { supabase } from '@/shared/supabase/client';
 import type { SyncStatus } from '@/shared/sync/status';
@@ -76,6 +77,10 @@ export async function reconcileWithServer(): Promise<void> {
     for (const id of receivedByType(items, 'interaction.request', 'postId')) contactStatuses[id] = 'received';
     const reportStatuses: Record<string, SyncStatus> = {};
     for (const id of receivedByType(items, 'moderation.report', 'postId')) reportStatuses[id] = 'received';
+
+    const messageStatuses: Record<string, SyncStatus> = {};
+    for (const id of receivedByType(items, 'chat.message', 'messageId')) messageStatuses[id] = 'received';
+    useLocalMessagesStore.getState().setSyncStatus(messageStatuses);
 
     // 2) Servidor → estados locales (sobrescribe lo anterior donde hay dato real).
     const server = await fetchServerRows().catch(() => null);

@@ -106,6 +106,18 @@ async function sendToServer(item: OutboxItem): Promise<SendResult> {
       }));
       break;
     }
+    case 'chat.message': {
+      if (!UUID.test(str(p.messageId)) || !UUID.test(str(p.conversationId))) {
+        return { ok: false, error: 'Mensaje o conversación no válidos' };
+      }
+      ({ error } = await supabase.from('messages').insert({
+        id: p.messageId,
+        conversation_id: p.conversationId,
+        sender_id: userId,
+        body: str(p.body),
+      }));
+      break;
+    }
     case 'resource.update': {
       // La fila debe existir (la oferta sale antes: misma prioridad y más antigua). Si no, se reintenta.
       const updated = await supabase.rpc('update_my_offer', {

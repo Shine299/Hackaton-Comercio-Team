@@ -32,6 +32,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="perfil" options={{ title: 'Perfil' }} />
       {/* Sin pestaña propia: se abre desde la campana. */}
       <Tabs.Screen name="actividad" options={{ title: 'Actividad' }} />
+      <Tabs.Screen name="mensajes" options={{ title: 'Mensajes' }} />
     </Tabs>
   );
 }
