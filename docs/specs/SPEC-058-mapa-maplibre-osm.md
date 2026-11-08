@@ -1,4 +1,4 @@
-# SPEC-057 — Mapa nativo sin clave (MapLibre + OpenStreetMap)
+# SPEC-058 — Mapa nativo sin clave (MapLibre + OpenStreetMap)
 
 - **Estado:** borrador
 - **Dueño / revisor:** Carlos / (otra persona del equipo)
