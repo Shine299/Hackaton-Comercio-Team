@@ -4,7 +4,9 @@ import { Pressable, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { ReportCard, useEmergencyStore } from '@/features/emergency';
-import { Badge, type Gradient, GRADIENTS, Icon, type IconName, Screen, SECCION_AYUDA_XML, SectionHero, Text } from '@/shared/ui';
+import { Badge, type Gradient, GRADIENTS, Icon, type IconName, Screen, SECCION_AYUDA_XML, SectionHero, StatRow, Text } from '@/shared/ui';
+import { useNearbyPosts } from '@/features/posts';
+import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
 
 type BigActionProps = {
@@ -48,6 +50,11 @@ export function HelpHomeScreen() {
   const router = useRouter();
   const reports = useEmergencyStore((s) => s.reports);
   const mine = reports.filter((r) => r.kind === 'help').slice(0, 3);
+  const sector = useSectorStore((s) => s.sector);
+  const { data } = useNearbyPosts(sector.id);
+  const nearby = (data?.posts ?? []).filter((p) => p.category !== 'business' && p.status === 'active' && p.distanceM / 1000 <= sector.radiusKm);
+  const asking = nearby.filter((p) => p.kind === 'request').length;
+  const offering = nearby.filter((p) => p.kind === 'offer').length;
 
   return (
     <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
@@ -55,13 +62,21 @@ export function HelpHomeScreen() {
 
       <SectionHero
         gradient={GRADIENTS.ayuda}
-        title="Una mano vecina cuando la necesitas"
-        description="Pide lo que te hace falta (una herramienta, un favor, compañía) o ofrece lo que te sobra. Tus vecinos ven tu publicación y te contactan por la app, sin dar tu teléfono ni tu dirección."
+        title="Una mano vecina"
+        description="Pide u ofrece, sin dar tus datos."
         xml={SECCION_AYUDA_XML}
         steps={[
-          { icon: 'hand-back-left-outline', label: 'Pide o ofrece' },
-          { icon: 'account-group-outline', label: 'Un vecino responde' },
-          { icon: 'handshake-outline', label: 'Coordinan juntos' },
+          { icon: 'hand-back-left-outline', label: 'Pide u ofrece' },
+          { icon: 'account-group-outline', label: 'Alguien responde' },
+          { icon: 'handshake-outline', label: 'Coordinan' },
+        ]}
+      />
+
+      <StatRow
+        stats={[
+          { icon: 'hand-back-left-outline', value: asking, label: 'piden ayuda cerca', gradient: GRADIENTS.ayuda },
+          { icon: 'hand-heart-outline', value: offering, label: 'ofrecen cerca', gradient: GRADIENTS.comunidad },
+          { icon: 'clipboard-text-clock-outline', value: reports.filter((r) => r.kind === 'help' && r.status !== 'resolved').length, label: 'tus pendientes', gradient: GRADIENTS.recomendado },
         ]}
       />
 

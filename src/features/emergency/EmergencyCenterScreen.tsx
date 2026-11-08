@@ -77,8 +77,8 @@ export function EmergencyCenterScreen({ nearbyMap }: { nearbyMap?: ReactNode }) 
       <SectionHero
         compact
         gradient={GRADIENTS.emergencia}
-        title="Ayuda rápida, sin cuenta ni formularios largos"
-        description="Reporta un incidente, pide auxilio o avisa por un vecino que no puede hacerlo. Tu aviso queda guardado y lo ven tus vecinos. No reemplaza a bomberos, policía ni ambulancia."
+        title="Ayuda rápida, sin cuenta"
+        description="Reporta o pide auxilio en pocos toques."
       />
 
       <Pressable

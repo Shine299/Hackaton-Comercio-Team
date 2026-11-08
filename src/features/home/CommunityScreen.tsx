@@ -17,7 +17,7 @@ import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
 import { CommunityMap } from '@/features/map';
-import { Card, Chip, DemoTag, type Gradient, GRADIENTS, Icon, type IconName, ListenButton, Screen, SECCION_COMUNIDAD_XML, SectionHero, SegmentedControl, Text } from '@/shared/ui';
+import { Card, Chip, DemoTag, type Gradient, GRADIENTS, Icon, type IconName, ListenButton, Screen, SECCION_COMUNIDAD_XML, SectionHero, SegmentedControl, StatRow, Text } from '@/shared/ui';
 
 
 
@@ -169,13 +169,21 @@ export function CommunityScreen() {
 
       <SectionHero
         gradient={GRADIENTS.comunidad}
-        title="Todo lo que pasa en tu barrio, en un solo lugar"
-        description="Aquí ves lo que tus vecinos ofrecen y piden, los negocios nuevos y los avisos del sector. Toca una tarjeta para ver el detalle y escribirle a quien publicó."
+        title="Tu barrio, en vivo"
+        description="Lo que pasa cerca de ti."
         xml={SECCION_COMUNIDAD_XML}
         steps={[
-          { icon: 'eye-outline', label: 'Mira las novedades' },
-          { icon: 'message-text-outline', label: 'Contacta a un vecino' },
-          { icon: 'square-edit-outline', label: 'Publica la tuya' },
+          { icon: 'eye-outline', label: 'Mira' },
+          { icon: 'message-text-outline', label: 'Contacta' },
+          { icon: 'square-edit-outline', label: 'Publica' },
+        ]}
+      />
+
+      <StatRow
+        stats={[
+          { icon: 'bullhorn-outline', value: dia.length + biz.length, label: 'novedades cerca', gradient: GRADIENTS.comunidad },
+          { icon: 'storefront-outline', value: biz.length, label: 'negocios', gradient: GRADIENTS.emprendimientos },
+          { icon: 'lifebuoy', value: board.filter((b) => b.status !== 'resolved').length, label: 'avisos activos', gradient: GRADIENTS.emergencia },
         ]}
       />
 

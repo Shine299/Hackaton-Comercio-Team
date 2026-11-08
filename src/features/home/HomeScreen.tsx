@@ -165,7 +165,7 @@ export function HomeScreen() {
           Tu barrio, a un toque de ti
         </Text>
         <Text variant="body-md" tone="onPrimary" className="opacity-95">
-          Entérate de lo que pasa, compra local, comparte lo que tienes y pide una mano cuando la necesites.
+          Descubre, compra local, comparte y pide ayuda.
         </Text>
       </LinearGradient>
 
@@ -247,7 +247,7 @@ export function HomeScreen() {
         <View className="gap-3">
           <Rail
             title="Sabores y oficios de tu zona"
-            subtitle="Vecinos que emprenden: ¡dales una vuelta!"
+            subtitle="Vecinos que emprenden"
             actionLabel="Ver todos"
             onAction={() => router.navigate('/negocios')}>
             {shops.map((post) => (
@@ -270,7 +270,7 @@ export function HomeScreen() {
               Presta hoy, ayuda mañana
             </Text>
             <Text variant="label-md" tone="muted">
-              Taladros, escaleras, trueques… lo que tus vecinos comparten
+              Lo que tus vecinos comparten
             </Text>
           </View>
           {lending.map((post) => (
@@ -304,8 +304,8 @@ export function HomeScreen() {
             </Text>
             <Text variant="label-md" tone="muted">
               {hasHistory
-                ? 'Elegido según lo que más miras y guardas.'
-                : 'Lo más útil cerca de ti. Mientras más explores, mejor acierta.'}
+                ? 'Según lo que miras y guardas.'
+                : 'Lo más útil cerca de ti.'}
             </Text>
           </View>
           {recommended.map(({ post, reason }) => (

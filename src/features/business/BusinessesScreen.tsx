@@ -12,7 +12,7 @@ import {
 } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
-import { Badge, Button, Card, Chip, cn, GRADIENTS, Icon, type IconName, Screen, SECCION_EMPRENDIMIENTOS_XML, SectionHero, SegmentedControl, Text, TextField } from '@/shared/ui';
+import { Badge, Button, Card, Chip, cn, GRADIENTS, Icon, type IconName, Screen, SECCION_EMPRENDIMIENTOS_XML, SectionHero, SegmentedControl, StatRow, Text, TextField } from '@/shared/ui';
 import { CommunityMap } from '@/features/map';
 
 import { BusinessCard } from './BusinessCard';
@@ -84,13 +84,21 @@ export function BusinessesScreen() {
 
       <SectionHero
         gradient={GRADIENTS.emprendimientos}
-        title="Compra a tus vecinos, cerca de casa"
-        description="Aquí están los negocios y oficios de tu barrio: comida, costura, bodegas y más. Ahorras en traslado y apoyas a quien vive a pasos de ti. ¿Vendes algo? Regístralo gratis."
+        title="Compra a tus vecinos"
+        description="Negocios a pasos de tu casa."
         xml={SECCION_EMPRENDIMIENTOS_XML}
         steps={[
-          { icon: 'magnify', label: 'Busca o elige un rubro' },
-          { icon: 'storefront-outline', label: 'Abre el negocio' },
-          { icon: 'message-text-outline', label: 'Escribe y coordina' },
+          { icon: 'magnify', label: 'Busca' },
+          { icon: 'storefront-outline', label: 'Visita' },
+          { icon: 'message-text-outline', label: 'Escribe' },
+        ]}
+      />
+
+      <StatRow
+        stats={[
+          { icon: 'storefront-outline', value: results.length, label: 'cerca de ti', gradient: GRADIENTS.emprendimientos },
+          { icon: 'check-circle-outline', value: results.filter((r) => r.post.availableNow).length, label: 'abiertos ahora', gradient: GRADIENTS.comunidad },
+          { icon: 'moped-outline', value: results.filter((r) => hasDelivery(r.post)).length, label: 'con delivery', gradient: GRADIENTS.ayuda },
         ]}
       />
 

@@ -7,28 +7,28 @@ import { Text } from './Text';
 
 type SectionHeroProps = {
   gradient: readonly [string, string];
-  /** Frase corta y con gancho. */
+  /** Frase muy corta (3 a 5 palabras). */
   title: string;
-  /** Qué hace esta sección, en lenguaje cotidiano. */
+  /** Una sola línea: qué hace la sección. */
   description: string;
   /** Ilustración de la sección (texto SVG). */
   xml?: string;
-  /** «Cómo funciona»: 2 o 3 verbos cortos con icono. */
+  /** «Cómo funciona»: 3 pasos con icono y 1 o 2 palabras. */
   steps?: { icon: IconName; label: string }[];
-  /** Versión baja: solo título y descripción (para pantallas donde la acción va primero). */
+  /** Versión baja: solo título y línea (para pantallas donde la acción va primero). */
   compact?: boolean;
 };
 
-/** Banner de color con degradado que explica de qué trata la sección y cómo se usa. */
+/** Banner de color con degradado: lo esencial de la sección de un vistazo, con poco texto. */
 export function SectionHero({ gradient, title, description, xml, steps, compact = false }: SectionHeroProps) {
   return (
     <LinearGradient
       colors={gradient}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
-      style={{ borderRadius: 28, padding: compact ? 16 : 20, gap: 10, overflow: 'hidden' }}>
+      style={{ borderRadius: 28, padding: compact ? 16 : 18, gap: 14, overflow: 'hidden' }}>
       <View className="flex-row items-center gap-3">
-        <View className="flex-1 gap-1.5">
+        <View className="flex-1 gap-1">
           <Text variant={compact ? 'body-lg-bold' : 'headline-md'} tone="onPrimary" accessibilityRole="header">
             {title}
           </Text>
@@ -44,11 +44,13 @@ export function SectionHero({ gradient, title, description, xml, steps, compact 
       </View>
       {steps && steps.length > 0 && !compact ? (
         <View className="flex-row gap-2" accessibilityLabel="Cómo funciona">
-          {steps.map((step, i) => (
-            <View key={step.label} className="flex-1 flex-row items-center gap-1.5 rounded-2xl bg-white/20 px-2.5 py-2">
-              <Icon name={step.icon} size={18} color="onPrimary" />
-              <Text variant="label-md" tone="onPrimary" className="flex-1" numberOfLines={2}>
-                {i + 1}. {step.label}
+          {steps.map((step) => (
+            <View key={step.label} className="flex-1 items-center gap-1.5 rounded-2xl bg-white/20 px-1.5 py-2.5">
+              <View className="h-10 w-10 items-center justify-center rounded-full bg-white">
+                <Icon name={step.icon} size={22} color="primary" />
+              </View>
+              <Text variant="label-md" tone="onPrimary" className="text-center" numberOfLines={2}>
+                {step.label}
               </Text>
             </View>
           ))}

@@ -7,14 +7,14 @@ import { Inter_600SemiBold } from '@expo-google-fonts/inter/600SemiBold';
 import { Inter_700Bold } from '@expo-google-fonts/inter/700Bold';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BoardNotifier } from '@/features/notifications';
-import { EdgeSwipe, ProfileDrawer, SectionBar } from '@/features/shell';
+import { BrandSplash, EdgeSwipe, ProfileDrawer, SectionBar } from '@/features/shell';
 import { ActivityBadgeSync } from '@/features/activity';
 import { hasServerTransport, useOutboxStore } from '@/features/outbox';
 import { reconcileWithServer, registerSupabaseTransport, syncNow } from '@/features/sync';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AppState, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -23,6 +23,8 @@ registerSupabaseTransport();
 
 export default function RootLayout() {
   const [queryClient] = useState(() => new QueryClient());
+  const [showBrand, setShowBrand] = useState(true);
+  const hideBrand = useCallback(() => setShowBrand(false), []);
 
   // Al abrir la app y al volver a primer plano, intenta enviar lo que quedó pendiente.
   useEffect(() => {
@@ -72,6 +74,7 @@ export default function RootLayout() {
           </Stack>
           <SectionBar />
           <EdgeSwipe />
+          {showBrand ? <BrandSplash onDone={hideBrand} /> : null}
         </View>
         <ProfileDrawer />
       </QueryClientProvider>
