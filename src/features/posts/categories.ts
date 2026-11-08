@@ -16,7 +16,7 @@ export const POST_CATEGORIES: CategoryInfo[] = [
 ];
 
 /**
- * Categorías de «ayuda entre vecinos» (Explorar y Publicar). Emprendimientos NO está aquí:
+ * Categorías de «ayuda entre vecinos» (Explorar y Publicar). Negocios NO está aquí:
  * tiene su propia sección (pestaña Negocios) y su propio registro.
  */
 export const HELP_CATEGORIES: CategoryInfo[] = POST_CATEGORIES.filter((c) => c.id !== 'business');

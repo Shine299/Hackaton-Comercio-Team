@@ -1,7 +1,7 @@
 # Yunta
 
 **Tu comunidad, más cerca.** Aplicación **solo para celular** (Android e iOS) que conecta a vecinos para resolver
-necesidades del día a día — prestar y pedir herramientas, comprar a emprendimientos del barrio, enterarse de lo
+necesidades del día a día — prestar y pedir herramientas, comprar a negocios del barrio, enterarse de lo
 que pasa cerca — y para coordinar ayuda cuando hay una emergencia. Construida con Expo + React Native + TypeScript.
 
 > Yunta coordina ayuda entre vecinos. **No reemplaza a los servicios oficiales de emergencia** ni garantiza que
@@ -13,17 +13,17 @@ que pasa cerca — y para coordinar ayuda cuando hay una emergencia. Construida 
 
 ## Qué hace
 
-La app tiene una **barra inferior de 5 pestañas** («comunidad primero», ver ADR 0006) y **Emergencia** siempre a un
-toque con el botón **SOS** de la cabecera:
+La app tiene una **barra inferior con Inicio y los 4 servicios** (ver ADR 0007 y SPEC-051), el botón **SOS** en la
+cabecera y una **burbuja flotante de chat**:
 
 | Pestaña | Para qué sirve | Ruta |
 |---|---|---|
 | **Inicio** | Feed del barrio: personas y lo que ofrecen, necesitan u organizan; alerta del sector, «¿Emergencia?» y «Juntos por el barrio» | `/` |
-| **Eventos** | Eventos del barrio: los crean los vecinos y los demás marcan «Voy» (solo se ve cuántos van) | `/eventos`, `/evento/[id]`, `/eventos/crear` |
-| **Explorar** | Lugares del barrio (OpenStreetMap) con «Abierto ahora» solo si hay horario, y emprendimientos de vecinos | `/explorar` |
-| **Marketplace** | Ofrecer, pedir, prestar o vender; «Escribir» abre el chat con quien publicó | `/marketplace`, `/publicaciones`, `/publicar` |
-| **Chat** | Conversaciones 1 a 1 por publicación, con bloqueo, reporte y aviso de mensajes sin leer | `/mensajes`, `/chat/[id]` |
-| **Emergencia** (SOS) | Reportar un incidente o pedir auxilio **sin cuenta**, números oficiales, tablero y mapa | `/emergencias/*` |
+| **Comunidad** | Eventos del barrio: los crean los vecinos y los demás marcan «Voy» (solo se ve cuántos van) | `/eventos`, `/evento/[id]`, `/eventos/crear` |
+| **Negocios** | Lugares del barrio (OpenStreetMap) con «Abierto ahora» solo si hay horario, y negocios de vecinos | `/explorar` |
+| **Emergencia** (en rojo) | Reportar un incidente o pedir auxilio **sin cuenta**, números oficiales, tablero y mapa | `/emergencias/*` |
+| **Marketplace** | Pedir u ofrecer ayuda entre vecinos: objetos, favores y animales; «Escribir» abre el chat con quien publicó | `/marketplace`, `/publicaciones`, `/publicar` |
+| **Chat** (burbuja, no pestaña) | Conversaciones 1 a 1 por publicación, con bloqueo, reporte y aviso de mensajes sin leer | `/mensajes`, `/chat/[id]` |
 
 Transversales: menú lateral con perfil (tu avatar o ☰, o deslizar desde el borde izquierdo), campana de actividad,
 cambio de sector, tutorial inicial y **recomendaciones** según lo que cada persona mira y guarda.
@@ -260,7 +260,7 @@ flowchart LR
   HOME --> EVD["/evento/[id]"]
   EVE --> EVD
   EVE --> EVC["/eventos/crear"]
-  EXP -->|Lugares · Emprendimientos| REG["/negocios/registrar"]
+  EXP -->|Lugares · Negocios| REG["/negocios/registrar"]
   MKT --> LIST["/publicaciones"] --> DET
   MKT --> PUB["/publicar"]
   DET -->|Escribir| CHT["/chat/[id]"]
@@ -284,7 +284,7 @@ flowchart LR
 ## Mapas
 
 `CommunityMap` es **un solo componente reutilizable** que se incrusta en cada sección (`layers`, `embedded`, `height`):
-Explorar (capa «Comercios» de OSM y emprendimientos) y Publicaciones con alternador Lista ⇄ Mapa, y Emergencia
+Explorar (capa «Comercios» de OSM y negocios) y Publicaciones con alternador Lista ⇄ Mapa, y Emergencia
 para incidentes, recursos y la capa «Lugares de referencia» (salud, farmacia, seguridad, refugio: sin comercios). Se dibuja con `react-native-maps` (la vista web de desarrollo usa Leaflet, solo para revisar en el computador). Los marcadores son
 **pines** con la punta sobre la coordenada y el icono de su capa; todos los puntos son zona aproximada.
 

@@ -46,7 +46,7 @@ export function EventsScreen() {
 
   return (
     <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
-      <SectionHeader title="Eventos" />
+      <SectionHeader title="Comunidad" />
 
       <SectionHero
         gradient={GRADIENTS.recomendado}

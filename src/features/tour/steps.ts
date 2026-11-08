@@ -17,34 +17,40 @@ export type TourStep = {
  */
 export const TOUR_STEPS: TourStep[] = [
   {
-    target: 'tab-eventos',
+    target: 'tab-comunidad',
     path: '/',
     title: 'Tu barrio, en vivo',
-    body: 'Este es el Inicio. Abajo están las 5 pestañas. Toca «Eventos» para ver qué se organiza cerca.',
+    body: 'Este es el Inicio. Abajo están los 4 servicios de Yunta. Toca «Comunidad» para ver qué se organiza cerca.',
   },
   {
-    target: 'tab-explorar',
+    target: 'tab-negocios',
     path: '/eventos',
     title: 'Lo que se viene',
-    body: 'Charlas, ferias y reuniones del barrio. Ahora toca «Explorar».',
+    body: 'Charlas, ferias y reuniones del barrio. Ahora toca «Negocios».',
   },
   {
     target: 'tab-marketplace',
     path: '/explorar',
     title: 'Compra local',
-    body: 'Negocios del barrio, a pasos de tu casa. Toca «Marketplace» para ofrecer, pedir o prestar.',
+    body: 'Negocios del barrio, a pasos de tu casa. Toca «Marketplace» para pedir u ofrecer una mano.',
   },
   {
-    target: 'header-sos',
+    target: 'tab-emergencia',
     path: '/marketplace',
     title: 'Si hay una emergencia',
-    body: 'El botón SOS está arriba en todas las pestañas y funciona sin cuenta. Tócalo para ver Emergencia.',
+    body: 'Emergencia está siempre abajo y funciona sin cuenta (el botón SOS de arriba también). Tócala para verla.',
   },
   {
-    target: 'tab-chat',
+    target: 'tab-inicio',
     path: '/emergencias',
+    title: 'Siempre hay salida',
+    body: 'Aquí reportas o pides auxilio. La barra de abajo sigue visible: toca «Inicio» para volver.',
+  },
+  {
+    target: 'chat-fab',
+    path: '/',
     title: 'Habla con tus vecinos',
-    body: 'Aquí reportas o pides auxilio. Abajo sigue la barra para salir. Toca «Chat» para ver tus mensajes.',
+    body: 'La burbuja de chat te acompaña en las pantallas principales. Tócala para ver tus mensajes.',
   },
   {
     target: null,

@@ -76,11 +76,11 @@ const FAQ: { keys: RegExp; answer: string }[] = [
   },
   {
     keys: /\bevento/,
-    answer: 'Ve a la pestaña Eventos y toca «Crear evento». Tus vecinos podrán marcar «Voy»; solo se ve cuántos van, no quiénes.',
+    answer: 'Ve a Comunidad (Eventos) y toca «Crear evento». Tus vecinos podrán marcar «Voy»; solo se ve cuántos van, no quiénes.',
   },
   {
     keys: /\b(publica|publico|publicar|vender|vendo|prestar|presto|ofrecer|ofrezco|necesito|pedir)\b/,
-    answer: 'En la pestaña Marketplace toca «Publicar»: eliges si ofreces o necesitas algo, la categoría y un título claro.',
+    answer: 'En Marketplace toca «Publicar»: eliges si ofreces o necesitas algo, la categoría y un título claro.',
   },
   {
     keys: /\b(chat|escribir|mensaje|contactar|bloquear|reportar)\b/,
@@ -91,12 +91,12 @@ const FAQ: { keys: RegExp; answer: string }[] = [
   {
     keys: /\b(abierto|abre|cierra|tienda|restaurante|farmacia|bodega|lugar)/,
     answer:
-      'En Explorar → Lugares ves tiendas, restaurantes y farmacias cerca. «Abierto ahora» solo aparece si el lugar ' +
+      'En Negocios (Explorar) → Lugares ves tiendas, restaurantes y farmacias cerca. «Abierto ahora» solo aparece si el lugar ' +
       'publica su horario; si no, dice «Horario no confirmado».',
   },
   {
-    keys: /\b(negocio|emprendimiento)/,
-    answer: 'Puedes registrar tu negocio gratis desde el menú (tu avatar o ☰) → «Registrar mi negocio». Aparecerá en Explorar.',
+    keys: /\b(negocio|negocio)/,
+    answer: 'Puedes registrar tu negocio gratis desde el menú (tu avatar o ☰) → «Registrar mi negocio». Aparecerá en Negocios.',
   },
   {
     keys: /\b(perfil|foto|nombre|cuenta)\b/,
@@ -109,7 +109,7 @@ export function faqAnswer(question: string): string {
   const hit = FAQ.find((f) => f.keys.test(t));
   return (
     hit?.answer ??
-    'Por ahora no tengo una respuesta para eso. Puedes revisar las pestañas Marketplace, Eventos y Explorar, o abrir el ' +
+    'Por ahora no tengo una respuesta para eso. Puedes revisar Marketplace, Comunidad (Eventos) y Negocios (Explorar), o abrir el ' +
       'tutorial desde el menú.'
   );
 }

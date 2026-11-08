@@ -72,7 +72,7 @@ function PlaceCard({ row }: { row: PlaceRow<NeighborhoodPlace> }) {
 }
 
 /**
- * Explorar (SPEC-047): lugares del barrio (OpenStreetMap) y emprendimientos de vecinos. «Abierto ahora» solo si el
+ * Explorar (SPEC-047): lugares del barrio (OpenStreetMap) y negocios de vecinos. «Abierto ahora» solo si el
  * lugar publica un horario que se entiende; si no, «Horario no confirmado». Nunca se inventa un estado.
  */
 export function PlacesScreen() {
@@ -100,7 +100,7 @@ export function PlacesScreen() {
 
   return (
     <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
-      <SectionHeader title="Explorar" />
+      <SectionHeader title="Negocios" />
 
       <SectionHero
         gradient={GRADIENTS.emprendimientos}
@@ -119,7 +119,7 @@ export function PlacesScreen() {
         onChange={setTab}
         options={[
           { value: 'places', label: 'Lugares', icon: 'map-marker-outline' },
-          { value: 'business', label: 'Emprendimientos', icon: 'storefront-outline' },
+          { value: 'business', label: 'Negocios', icon: 'storefront-outline' },
         ]}
       />
 

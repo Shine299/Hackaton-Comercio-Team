@@ -14,10 +14,10 @@ describe('TOUR_STEPS', () => {
     expect(TOUR_STEPS[TOUR_STEPS.length - 1].target).toBeNull();
   });
 
-  it('cada botón existe en la navegación nueva y cada pantalla es una raíz (SPEC-043)', () => {
+  it('cada botón existe en la navegación nueva y cada pantalla es una raíz (SPEC-051)', () => {
     const tabs = new Set(BAR_ITEMS.map((i) => `tab-${i.key}`));
     for (const step of TOUR_STEPS) {
-      if (step.target) expect(tabs.has(step.target) || step.target === 'header-sos').toBe(true);
+      if (step.target) expect(tabs.has(step.target) || step.target === 'header-sos' || step.target === 'chat-fab').toBe(true);
       if (step.path) expect(ROOT_PATHS.has(step.path)).toBe(true);
     }
   });

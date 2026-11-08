@@ -96,7 +96,7 @@ export function PostDetailScreen({ renderContact }: PostDetailScreenProps = {}) 
     <Screen
       header={
         <ScreenHeader
-          title={post?.category === 'business' ? 'Emprendimiento' : 'Publicación'}
+          title={post?.category === 'business' ? 'Negocio' : 'Publicación'}
           backLabel="Volver a la lista"
           trailing={
             post ? (

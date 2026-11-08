@@ -1,3 +1,4 @@
+export { ChatFab } from './ChatFab';
 export { ChatInboxScreen } from './ChatInboxScreen';
 export { ChatScreen } from './ChatScreen';
 export { StartChatButton } from './StartChatButton';

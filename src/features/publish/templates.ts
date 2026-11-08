@@ -216,7 +216,7 @@ export const CATEGORY_GUIDE: Record<PostCategoryId, CategoryGuide> = {
       request: [
         {
           title: 'Busco quien me haga tortas para un cumpleaños',
-          description: 'Para unas 15 personas el sábado. Prefiero un emprendimiento del barrio.',
+          description: 'Para unas 15 personas el sábado. Prefiero un negocio del barrio.',
         },
         {
           title: 'Necesito un costurero o costurera cercano',

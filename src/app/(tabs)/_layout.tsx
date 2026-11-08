@@ -5,8 +5,8 @@ import { useOnboardingStore } from '@/features/onboarding';
 import { BackHeader } from '@/features/shell';
 
 /**
- * Pantallas con barra inferior fija de 5 (SectionBar, en el diseño raíz, SPEC-043):
- * Inicio · Eventos · Explorar · Marketplace · Chat. Emergencia se abre con el SOS de la cabecera.
+ * Pantallas con barra inferior fija (SectionBar, en el diseño raíz, SPEC-051): Inicio · Comunidad (/eventos) ·
+ * Negocios (/explorar) · Emergencia (/emergencias) · Marketplace (/marketplace). El chat es la burbuja flotante.
  */
 export default function TabsLayout() {
   const onboardingCompleted = useOnboardingStore((s) => s.completed);

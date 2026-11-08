@@ -23,7 +23,7 @@ import {
 const DAY = 24 * 60 * 60 * 1000;
 
 /**
- * Registrar mi emprendimiento: una sola pantalla. Se guarda primero en el teléfono («Guardado en tu
+ * Registrar mi negocio: una sola pantalla. Se guarda primero en el teléfono («Guardado en tu
  * teléfono») y se envía por la cola cuando hay conexión. Solo se publica el sector, nunca la dirección.
  */
 export function RegisterBusinessScreen() {
@@ -57,7 +57,7 @@ export function RegisterBusinessScreen() {
     setError(undefined);
 
     requireRegistration(
-      'Para registrar tu emprendimiento, crea tu cuenta vecinal. Solo pedimos un nombre público.',
+      'Para registrar tu negocio, crea tu cuenta vecinal. Solo pedimos un nombre público.',
       () => {
         const rubroInfo = BUSINESS_RUBROS.find((r) => r.id === rubro) ?? BUSINESS_RUBROS[0];
         const delivery = [pickup ? DELIVERY_PICKUP : '', homeDelivery ? DELIVERY_HOME : ''].filter(Boolean).join(' y ');
@@ -98,10 +98,10 @@ export function RegisterBusinessScreen() {
     <Screen
       noTopInset
       contentClassName="gap-4"
-      footer={<Button label="Publicar emprendimiento" size="lg" icon="storefront-outline" onPress={publish} />}>
+      footer={<Button label="Publicar negocio" size="lg" icon="storefront-outline" onPress={publish} />}>
       <View className="gap-1">
         <Text variant="headline-lg" accessibilityRole="header">
-          Registra tu emprendimiento
+          Registra tu negocio
         </Text>
         <Text tone="muted">Es gratis. Aparecerá en Negocios de tu sector.</Text>
       </View>
