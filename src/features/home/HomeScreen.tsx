@@ -133,9 +133,20 @@ export function HomeScreen() {
       ) : null}
 
       {/* SPEC-051: el Inicio no tiene barra; estos 4 botones llevan a cada sección. Emergencia sigue a un toque.
-          SPEC-054: cajas compactas con título corto y una línea de apoyo; 2 iguales arriba y 2 anchas debajo. */}
+          SPEC-054: cajas compactas con título corto y una línea de apoyo; 2 iguales arriba (Pide auxilio, Cerca de ti) y
+          2 anchas debajo (Ayuda vecinal, Comercios). */}
       <View className="gap-3" accessibilityLabel="Qué puedes hacer con la app">
         <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
+          <ActionTile
+            tourId="tile-emergencia"
+            stacked={easy}
+            title="Pide auxilio"
+            detail="Sin crear cuenta"
+            section="Emergencia"
+            xml={SECCION_EMERGENCIA_XML}
+            gradient={GRADIENTS.emergencia}
+            onPress={() => router.push('/emergencias')}
+          />
           <ActionTile
             tourId="tile-comunidad"
             stacked={easy}
@@ -146,28 +157,8 @@ export function HomeScreen() {
             gradient={GRADIENTS.comunidad}
             onPress={() => router.navigate('/eventos')}
           />
-          <ActionTile
-            tourId="tile-negocios"
-            stacked={easy}
-            title="Comercios"
-            detail="Compra local"
-            section="Negocios"
-            xml={SECCION_EMPRENDIMIENTOS_XML}
-            gradient={GRADIENTS.emprendimientos}
-            onPress={() => router.navigate('/explorar')}
-          />
         </View>
         {/* SPEC-054: las dos de abajo van a todo el ancho, una sobre otra (`stacked`, como en el modo fácil). */}
-        <ActionTile
-          tourId="tile-emergencia"
-          stacked
-          title="Pide auxilio"
-          detail="Sin crear cuenta"
-          section="Emergencia"
-          xml={SECCION_EMERGENCIA_XML}
-          gradient={GRADIENTS.emergencia}
-          onPress={() => router.push('/emergencias')}
-        />
         <ActionTile
           tourId="tile-ayuda"
           stacked
@@ -177,6 +168,16 @@ export function HomeScreen() {
           xml={SECCION_AYUDA_XML}
           gradient={GRADIENTS.ayuda}
           onPress={() => router.navigate('/ayuda')}
+        />
+        <ActionTile
+          tourId="tile-negocios"
+          stacked
+          title="Comercios"
+          detail="Compra local"
+          section="Negocios"
+          xml={SECCION_EMPRENDIMIENTOS_XML}
+          gradient={GRADIENTS.emprendimientos}
+          onPress={() => router.navigate('/explorar')}
         />
       </View>
 
