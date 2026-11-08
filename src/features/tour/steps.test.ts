@@ -1,8 +1,16 @@
 import { BAR_ITEMS, ROOT_PATHS } from '@/features/shell/sections';
+import { isYuntaPose } from '@/shared/ui/yuntaPoses';
 
 import { isOnStepScreen, spotlightRect, TOUR_STEPS, tooltipPlacement } from './steps';
 
 describe('TOUR_STEPS', () => {
+  it('cada paso tiene una pose válida de Yunta y un texto (SPEC-057)', () => {
+    for (const step of TOUR_STEPS) {
+      expect(isYuntaPose(step.pose)).toBe(true);
+      expect(step.body.length).toBeGreaterThan(0);
+    }
+  });
+
   it('cada paso con botón dice en qué pantalla está y qué tocar', () => {
     for (const step of TOUR_STEPS) {
       if (step.target) expect(step.path).toMatch(/^\//);

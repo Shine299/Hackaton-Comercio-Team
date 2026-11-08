@@ -82,6 +82,12 @@
    */
   --text-display: 26px;
   --text-display--line-height: 1.3077;
+  --text-headline-xl: 28px;
+  --text-headline-xl--line-height: 1.2857;
+  --text-body-xl: 20px;
+  --text-body-xl--line-height: 1.4;
+  --text-label-lg: 16px;
+  --text-label-lg--line-height: 1.375;
   --text-headline-lg: 24px;
   --text-headline-lg--line-height: 1.3333;
   --text-headline-md: 20px;
