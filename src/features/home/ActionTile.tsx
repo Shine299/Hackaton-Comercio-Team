@@ -21,8 +21,8 @@ type ActionTileProps = {
 };
 
 /**
- * Acceso a una sección del Inicio (SPEC-054): fila compacta con su degradado, una ilustración pequeña, un título
- * corto y una línea de apoyo. Mide ≥ 90 dp de alto (más con letra grande); la letra no se escala.
+ * Acceso a una sección del Inicio (SPEC-054): caja con su degradado, una ilustración grande (76 dp), un título
+ * corto y una línea de apoyo. En fila si va a todo ancho; icono arriba si es de medio ancho. Mide ≥ 112 dp de alto (más con letra grande); la letra no se escala.
  */
 export function ActionTile({ tourId, title, detail, section, xml, gradient, onPress, stacked = false }: ActionTileProps) {
   return (
@@ -32,16 +32,23 @@ export function ActionTile({ tourId, title, detail, section, xml, gradient, onPr
         accessibilityLabel={`${title}. ${detail}`}
         accessibilityHint={`Abre ${section}`}
         onPress={onPress}
-        className="min-h-[90px] flex-1 overflow-hidden rounded-2xl shadow-sm elevation-xs">
+        className="min-h-[112px] flex-1 overflow-hidden rounded-2xl shadow-sm elevation-xs">
         <LinearGradient
           colors={gradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ flex: 1, paddingHorizontal: 15, paddingVertical: 12, flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-          <View className="h-14 w-14 items-center justify-end overflow-hidden rounded-xl bg-white/25">
-            <SvgXml xml={xml} width={60} height={48} />
+          style={{
+            flex: 1,
+            paddingHorizontal: 15,
+            paddingVertical: 14,
+            flexDirection: stacked ? 'row' : 'column',
+            alignItems: stacked ? 'center' : 'flex-start',
+            gap: stacked ? 14 : 10,
+          }}>
+          <View className="h-[76px] w-[76px] items-center justify-end overflow-hidden rounded-2xl bg-white/25">
+            <SvgXml xml={xml} width={84} height={68} />
           </View>
-          <View className="min-w-0 flex-1">
+          <View className={stacked ? 'min-w-0 flex-1' : 'w-full'}>
             <Text variant="body-lg-bold" tone="onPrimary" numberOfLines={2}>
               {title}
             </Text>
