@@ -13,7 +13,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useTourStore, type TourRect } from '@/shared/nav/tourStore';
-import { Button, Icon, Text } from '@/shared/ui';
+import { Button, Icon, Text, YuntaMascot } from '@/shared/ui';
 
 import { isOnStepScreen, spotlightRect, stepHref, TOUR_STEPS, tooltipPlacement, type TourStep } from './steps';
 
@@ -70,18 +70,18 @@ function Bubble({ step, index, children }: { step: TourStep; index: number; chil
       entering={FadeIn.duration(220)}
       accessibilityLiveRegion="polite"
       className="gap-2 rounded-3xl bg-surface-container-lowest p-4 shadow-lg elevation-md">
-      <View className="flex-row items-center gap-2">
-        <View className="h-8 w-8 items-center justify-center rounded-full bg-primary">
-          <Icon name={step.target ? 'gesture-tap' : 'party-popper'} size={18} color="onPrimary" />
+      <View className="flex-row items-center gap-3">
+        <YuntaMascot pose={step.pose} size={84} animated={false} />
+        <View className="flex-1 gap-0.5">
+          <Text variant="label-lg" tone="muted">
+            Paso {Math.min(index + 1, TOTAL)} de {TOTAL}
+          </Text>
+          <Text variant="headline-md" accessibilityRole="header">
+            {step.title}
+          </Text>
         </View>
-        <Text variant="body-lg-bold" className="flex-1" accessibilityRole="header">
-          {step.title}
-        </Text>
-        <Text variant="label-md" tone="muted">
-          {Math.min(index + 1, TOTAL)} de {TOTAL}
-        </Text>
       </View>
-      <Text>{step.body}</Text>
+      <Text variant="body-xl">{step.body}</Text>
       {children}
     </Animated.View>
   );
@@ -161,7 +161,7 @@ export function TourOverlay() {
         <Bubble step={step} index={index}>
           <View className="flex-row items-center gap-1.5">
             <Icon name={above ? 'arrow-down' : 'arrow-up'} size={18} color="primary" />
-            <Text variant="label-md" tone="primary" className="flex-1">
+            <Text variant="label-lg" tone="primary" className="flex-1">
               Toca el botón iluminado
             </Text>
           </View>
