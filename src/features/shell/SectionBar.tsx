@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useOnboardingStore } from '@/features/onboarding';
 import { useBarStore } from '@/shared/nav/barStore';
-import { cn, Icon, Text } from '@/shared/ui';
+import { cn, Icon, Text, TourTarget } from '@/shared/ui';
 
 import { BAR_ITEMS, resolveSection } from './sections';
 
@@ -38,15 +38,15 @@ export function SectionBar() {
         const danger = item.key === 'emergencia';
         const iconTone = danger ? 'error' : focused ? 'primary' : 'onSurfaceVariant';
         return (
+          <TourTarget key={item.key} id={`tab-${item.key}`} className={item.key === 'emprendimientos' ? 'flex-[1.5]' : 'flex-1'}>
           <Pressable
-            key={item.key}
             accessibilityRole="tab"
             accessibilityLabel={item.a11y}
             accessibilityState={{ selected: focused }}
             onPress={() => {
               if (!focused) router.navigate(item.href);
             }}
-            className={cn('min-h-14 items-center justify-end gap-1 active:opacity-70', item.key === 'emprendimientos' ? 'flex-[1.5]' : 'flex-1')}>
+            className="min-h-14 items-center justify-end gap-1 active:opacity-70">
             <View
               className={cn(
                 'h-8 w-14 items-center justify-center rounded-full',
@@ -63,6 +63,7 @@ export function SectionBar() {
               {item.label}
             </Text>
           </Pressable>
+          </TourTarget>
         );
       })}
     </View>

@@ -24,3 +24,4 @@ export { ViewModePicker } from './ViewModePicker';
 export { EASY_MIN_TOUCH, EASY_TEXT_SCALE, scaledSize } from './easyMode';
 export { BrandLogo } from './BrandLogo';
 export { PressableScale, type PressableScaleProps } from './PressableScale';
+export { TourTarget } from './TourTarget';

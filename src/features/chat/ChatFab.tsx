@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { useOnboardingStore } from '@/features/onboarding';
 import { ROOT_PATHS } from '@/features/shell';
-import { Icon, Text, PressableScale } from '@/shared/ui';
+import { Icon, PressableScale, Text, TourTarget } from '@/shared/ui';
 
 import { usePendingRequests } from './hooks';
 
@@ -23,6 +23,7 @@ export function ChatFab() {
 
   return (
     <View pointerEvents="box-none" style={{ position: 'absolute', right: 16, bottom: 16, zIndex: 50 }}>
+      <TourTarget id="chat-fab">
       <PressableScale
         accessibilityRole="button"
         accessibilityLabel={waiting > 0 ? `Abrir mensajes, ${waiting} por responder` : 'Abrir mensajes'}
@@ -37,6 +38,7 @@ export function ChatFab() {
           </View>
         ) : null}
       </PressableScale>
+      </TourTarget>
     </View>
   );
 }

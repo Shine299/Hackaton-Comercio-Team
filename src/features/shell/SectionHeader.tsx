@@ -5,7 +5,7 @@ import { View } from 'react-native';
 import { useSectorStore } from '@/features/sector';
 import { useActivityBadgeStore } from '@/shared/nav/activityBadgeStore';
 import { useDrawerStore } from '@/shared/nav/drawerStore';
-import { BrandLogo, Icon, Text, PressableScale } from '@/shared/ui';
+import { BrandLogo, Icon, PressableScale, Text, TourTarget } from '@/shared/ui';
 
 /** Mismo tamaño de logo en todas las secciones y en Inicio, para que la parte de arriba se vea pareja. */
 const BRAND_HEIGHT = 34;
@@ -59,6 +59,7 @@ export function SectionHeader({ title, danger = false, eyebrow }: SectionHeaderP
               </View>
             ) : null}
           </PressableScale>
+          <TourTarget id="header-sos">
           <PressableScale
             accessibilityRole="button"
             accessibilityLabel={
@@ -73,6 +74,7 @@ export function SectionHeader({ title, danger = false, eyebrow }: SectionHeaderP
               SOS
             </Text>
           </PressableScale>
+          </TourTarget>
         </View>
       </View>
 
