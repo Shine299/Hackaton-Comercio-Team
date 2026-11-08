@@ -1,3 +1,6 @@
-import { HelpHomeScreen } from '@/features/help';
+import { Redirect } from 'expo-router';
 
-export default HelpHomeScreen;
+/** Ruta vieja: «Marketplace» ahora se llama Ayuda y vive en /ayuda (SPEC-051). Se conserva para enlaces y notificaciones ya programadas. */
+export default function MarketplaceRedirect() {
+  return <Redirect href="/ayuda" />;
+}

@@ -110,14 +110,14 @@ Emergencias usa además su propio `IncidentStatus` (`features/emergency/types.ts
 |---|---|---|
 | `/onboarding` | Tutorial de 7 pasos (omitible, con SOS) | onboarding |
 | `/sector` (modal) | Elegir sector por GPS o manual | sector |
-| `/(tabs)/` Inicio | **Feed comunitario** (SPEC-044): alerta, «¿Emergencia?», «Juntos por el barrio», publicaciones y eventos | home |
+| `/(tabs)/` Inicio | **Feed comunitario** (SPEC-044): alerta, 4 botones grandes (sin barra inferior), «Juntos por el barrio», publicaciones y eventos | home |
 | `/(tabs)/eventos` | Eventos del sector por fecha + «Crear evento» (SPEC-046) | events |
 | `/(tabs)/explorar` | **Lugares del barrio** (OSM, «Abierto ahora» honesto) + Emprendimientos (SPEC-047) | explore, business |
-| `/(tabs)/marketplace` | Marketplace (antes Ayuda): ofrecer, pedir, objetos y animales | help |
+| `/(tabs)/ayuda` | Ayuda (antes «Marketplace»): ofrecer, pedir, objetos y animales | help |
 | `/(tabs)/publicaciones` | Lista de publicaciones con filtros y relevancia; Lista ⇄ Mapa (antes `/explorar`) | explore |
-| `/(tabs)/mensajes` | Pestaña Chat: conversaciones, sin leer (SPEC-045/048) | chat |
+| `/(tabs)/mensajes` | Bandeja de chat (se abre desde la burbuja): conversaciones, sin leer (SPEC-045/048) | chat |
 | `/(tabs)/publicar` | Publicar en 3 pasos con borrador local | publish |
-| `/(tabs)/ayuda`, `/comunidad`, `/negocios` | Rutas viejas: redirigen a Marketplace, Inicio y Explorar | — |
+| `/(tabs)/marketplace`, `/comunidad`, `/negocios` | Rutas viejas: redirigen a Ayuda, Comunidad (`/eventos`) y Negocios (`/explorar`) | — |
 | `/evento/[id]`, `/eventos/crear` | Detalle con «Voy» / cancelar; crear en 2 pasos | events |
 | `/chat/[id]` | Hilo 1 a 1: bloquear, reportar mensaje | chat |
 | `/(tabs)/actividad` | Bandeja: cola local + solicitudes, filtros, leído/no leído | activity |
@@ -135,8 +135,8 @@ Emergencias usa además su propio `IncidentStatus` (`features/emergency/types.ts
 | `/galeria` | Galería del design system (solo revisión) | dev |
 
 Las tabs redirigen a `/onboarding` si no se completó; `/emergencias` nunca se bloquea.
-**Barra (Etapa 13, ADR 0006):** Inicio · Eventos · Explorar · Marketplace · Chat, en todas las raíces. Emergencia se abre
-con el SOS de la cabecera; en sus raíces la barra se ve sin pestaña resaltada (`shell/sections.ts` → `resolveBar`).
+**Barra (Etapa 13, ADR 0007 / SPEC-051):** Inicio · Comunidad · Negocios · Ayuda, en las raíces; el chat es una burbuja flotante. Emergencia se abre
+con el SOS de la cabecera; el Inicio no muestra la barra (tiene 4 botones grandes); en Emergencia y Mensajes la barra se ve sin pestaña resaltada (`shell/sections.ts` → `resolveBar`).
 
 ## 6. Features en detalle
 

@@ -14,14 +14,14 @@ Esta historia junta todo en un solo feed en el Inicio y agrega un avatar con ini
 1. Cabecera (`SectionHeader`): el botón del menú muestra **tu avatar** si estás registrado (si no, ☰).
 2. Saludo + dato agregado: «N vecinos activos esta semana en {sector}» (solo un número; `DemoTag` si sale de datos demo).
 3. Alerta del sector (si hay), fija.
-4. Tarjeta **«¿Emergencia?»** → `/emergencias` (D4: Emergencia salió de la barra).
-5. Acciones rápidas: **Publicar** (`/publicar`) y **Ver eventos** (`/eventos`).
+4. **Los 4 botones grandes** (SPEC-051, devueltos al Inicio): Comunidad → `/eventos`, Negocios → `/explorar`, Emergencia → `/emergencias`, Ayuda → `/ayuda`. Reemplazan a la tarjeta «¿Emergencia?». **El Inicio no muestra la barra inferior.**
+5. Acción rápida: **Publicar** (`/publicar`), a todo el ancho. Ya no hay «Ver eventos»: lo cubre el botón grande de Comunidad.
 6. «Tienes pendiente» (tus reportes sin resolver), si hay.
 7. «Juntos por el barrio»: fondo, cámaras, perrito (sin cambios).
-8. **«Lo nuevo en tu barrio»**: el feed (máx. 30) + botón «Ver todo el Marketplace».
+8. **«Lo nuevo en tu barrio»**: el feed (máx. 30) + botón «Ver todas las publicaciones».
 9. Aviso «no reemplaza a los servicios oficiales».
 
-Se retiran del Inicio: las 4 tarjetas grandes, los carruseles (`HomeCarousels`), «Presta hoy» y «Pensado para ti»
+Se retiran del Inicio: los carruseles (`HomeCarousels`), «Presta hoy» y «Pensado para ti»
 (todo eso aparece ahora dentro del feed). Se borra `CommunityScreen`.
 
 ## Reglas del feed (`home/feed.ts`, función pura `buildHomeFeed`)
@@ -53,14 +53,15 @@ Necesito / Negocio**) · «Urgente · sin validar» si aplica · bloque de color
 2. **Dado** 4 publicaciones y 2 eventos del mismo grupo, **entonces** el orden es P P E P P E.
 3. **Dado** una publicación mía, vencida, pausada o fuera del radio, **entonces** no aparece en el feed.
 4. **Dado** un evento que empieza en más de 7 días, **entonces** no aparece en el feed (sí en Eventos).
-5. **Dado** más de 30 elementos, **entonces** se muestran 30 y el botón «Ver todo el Marketplace».
+5. **Dado** más de 30 elementos, **entonces** se muestran 30 y el botón «Ver todas las publicaciones».
 6. **Dado** 3 publicaciones de 2 autores en la última semana y 1 de hace 10 días de un tercero, **entonces** el saludo
    dice «2 vecinos activos esta semana».
 7. **Dado** una tarjeta de publicación, **entonces** muestra avatar con iniciales, nombre público, tipo con texto e
    ícono, y al tocarla abre el detalle.
 8. **Dado** que estoy registrado como «Rosa M.», **entonces** la cabecera muestra «RM» en lugar de ☰ y al tocarla se
    abre el menú.
-9. **Dado** el Inicio, **cuando** toco «¿Emergencia?», **entonces** se abre Emergencia sin cuenta.
+9. **Dado** el Inicio, **cuando** toco el botón grande «Pide auxilio al instante», **entonces** se abre Emergencia sin cuenta.
+10. **Dado** el Inicio, **entonces** no se ve la barra inferior; **cuando** toco un botón grande, **entonces** llego a su sección y ahí sí hay barra, con «Inicio» para volver.
 10. **Dado** letra al máximo y TalkBack, **entonces** cada tarjeta se lee completa (tipo, título, autor, distancia,
     hora, demo) y mide ≥ 48 dp.
 

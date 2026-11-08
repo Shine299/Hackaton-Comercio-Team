@@ -1,5 +1,7 @@
 # Plan de implementación — Etapa 13 «comunidad primero»
 
+> **Nota (8 nov):** la barra propuesta aquí (Inicio · Eventos · Explorar · Marketplace · Chat) fue reemplazada por **Inicio · Comunidad · Negocios · Ayuda** (SPEC-051 / ADR 0007). Se conserva como registro del plan.
+
 - **Estado:** propuesta (8 nov 2026), rama `shay`. Pendiente de aprobar las decisiones de la sección 2.
 - **Fuente:** feedback de UX (4 notas de voz) traducido en «Feedback de UX — navegación comunidad primero».
 - **Restricción de calendario:** congelamos el código el 16 nov a las 12:00 y el Sprint 1 (validar en dispositivos)

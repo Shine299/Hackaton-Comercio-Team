@@ -6,7 +6,7 @@ import { BackHeader } from '@/features/shell';
 
 /**
  * Pantallas con barra inferior fija (SectionBar, en el diseño raíz, SPEC-051): Inicio · Comunidad (/eventos) ·
- * Negocios (/explorar) · Emergencia (/emergencias) · Marketplace (/marketplace). El chat es la burbuja flotante.
+ * Negocios (/explorar) · Ayuda (/ayuda). Emergencia se abre con el SOS de la cabecera. El chat es la burbuja flotante.
  */
 export default function TabsLayout() {
   const onboardingCompleted = useOnboardingStore((s) => s.completed);
@@ -28,16 +28,16 @@ export default function TabsLayout() {
       <Tabs.Screen name="index" options={{ title: 'Inicio', headerShown: false }} />
       <Tabs.Screen name="eventos" options={{ title: 'Eventos', headerShown: false }} />
       <Tabs.Screen name="explorar" options={{ title: 'Explorar', headerShown: false }} />
-      <Tabs.Screen name="marketplace" options={{ title: 'Marketplace', headerShown: false }} />
+      <Tabs.Screen name="ayuda" options={{ title: 'Ayuda', headerShown: false }} />
       <Tabs.Screen name="mensajes" options={{ title: 'Chat', headerShown: false }} />
-      {/* Se abren desde Marketplace, sin barra. */}
-      <Tabs.Screen name="publicaciones" options={{ title: 'Marketplace' }} />
+      {/* Se abren desde Ayuda, sin barra. */}
+      <Tabs.Screen name="publicaciones" options={{ title: 'Ayuda' }} />
       <Tabs.Screen name="publicar" options={{ title: 'Publicar' }} />
       <Tabs.Screen name="perfil" options={{ title: 'Perfil' }} />
       {/* Sin pestaña propia: se abre desde la campana. */}
       <Tabs.Screen name="actividad" options={{ title: 'Actividad' }} />
       {/* Rutas viejas que redirigen (enlaces y notificaciones ya programadas). */}
-      <Tabs.Screen name="ayuda" options={{ headerShown: false }} />
+      <Tabs.Screen name="marketplace" options={{ headerShown: false }} />
       <Tabs.Screen name="comunidad" options={{ headerShown: false }} />
       <Tabs.Screen name="negocios" options={{ headerShown: false }} />
     </Tabs>

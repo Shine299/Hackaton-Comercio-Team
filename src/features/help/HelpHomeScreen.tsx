@@ -99,7 +99,7 @@ export function HelpHomeScreen() {
 
   return (
     <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
-      <SectionHeader title="Marketplace" />
+      <SectionHeader title="Ayuda" />
 
       <SectionHero
         gradient={GRADIENTS.ayuda}

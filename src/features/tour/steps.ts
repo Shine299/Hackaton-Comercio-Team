@@ -17,10 +17,10 @@ export type TourStep = {
  */
 export const TOUR_STEPS: TourStep[] = [
   {
-    target: 'tab-comunidad',
+    target: 'tile-comunidad',
     path: '/',
     title: 'Tu barrio, en vivo',
-    body: 'Este es el Inicio. Abajo están los 4 servicios de Yunta. Toca «Comunidad» para ver qué se organiza cerca.',
+    body: 'Este es el Inicio. Estos botones grandes te llevan a cada sección. Toca «Comunidad» para ver qué se organiza cerca.',
   },
   {
     target: 'tab-negocios',
@@ -29,16 +29,16 @@ export const TOUR_STEPS: TourStep[] = [
     body: 'Charlas, ferias y reuniones del barrio. Ahora toca «Negocios».',
   },
   {
-    target: 'tab-marketplace',
+    target: 'tab-ayuda',
     path: '/explorar',
     title: 'Compra local',
-    body: 'Negocios del barrio, a pasos de tu casa. Toca «Marketplace» para pedir u ofrecer una mano.',
+    body: 'Negocios del barrio, a pasos de tu casa. Toca «Ayuda» para pedir u ofrecer una mano.',
   },
   {
-    target: 'tab-emergencia',
-    path: '/marketplace',
+    target: 'header-sos',
+    path: '/ayuda',
     title: 'Si hay una emergencia',
-    body: 'Emergencia está siempre abajo y funciona sin cuenta (el botón SOS de arriba también). Tócala para verla.',
+    body: 'El botón SOS está siempre arriba y funciona sin cuenta. Tócalo para ver la pantalla de Emergencia.',
   },
   {
     target: 'tab-inicio',

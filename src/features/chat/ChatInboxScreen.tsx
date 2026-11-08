@@ -64,7 +64,7 @@ function ConversationRow({
 }
 
 /**
- * Pestaña Chat (SPEC-045): tus conversaciones. Se abren con «Escribir» en cualquier publicación del Marketplace,
+ * Pestaña Chat (SPEC-045): tus conversaciones. Se abren con «Escribir» en cualquier publicación de Ayuda,
  * sin solicitud previa.
  */
 export function ChatInboxScreen() {
@@ -114,7 +114,7 @@ export function ChatInboxScreen() {
           ))
         )}
         <Text variant="label-md" tone="muted" className="text-center">
-          Para empezar una conversación, toca «Escribir» en una publicación del Marketplace.
+          Para empezar una conversación, toca «Escribir» en una publicación de Ayuda.
         </Text>
       </View>
     </Screen>

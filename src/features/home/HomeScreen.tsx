@@ -14,8 +14,23 @@ import { useSessionStore } from '@/features/session';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
 import { useEasyMode } from '@/shared/nav/viewModeStore';
-import { Badge, Button, Card, DemoTag, GRADIENTS, Icon, ListenButton, PressableScale, Screen, Text } from '@/shared/ui';
+import {
+  Button,
+  Card,
+  DemoTag,
+  GRADIENTS,
+  Icon,
+  ListenButton,
+  PressableScale,
+  Screen,
+  SECCION_AYUDA_XML,
+  SECCION_COMUNIDAD_XML,
+  SECCION_EMERGENCIA_XML,
+  SECCION_EMPRENDIMIENTOS_XML,
+  Text,
+} from '@/shared/ui';
 
+import { ActionTile } from './ActionTile';
 import { activeNeighbors, buildHomeFeed } from './feed';
 import { FeedCard } from './FeedCard';
 import { greetingFor } from './greeting';
@@ -50,26 +65,21 @@ export function HomeScreen() {
   const neighbors = useMemo(() => activeNeighbors(data?.posts ?? [], now), [data?.posts, now]);
 
   return (
-    <Screen contentClassName="gap-5 px-5 pb-8 pt-4">
-      <SectionHeader title="Inicio" />
+    <Screen safeBottom contentClassName="gap-5 px-5 pb-24 pt-4">
+      <SectionHeader />
 
       <LinearGradient
         colors={GRADIENTS.hero}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={{ borderRadius: 28, padding: 20, gap: 12 }}>
-        <View className="flex-row items-center gap-3">
-          <View className="flex-1 gap-1">
-            <Text variant="headline-lg" tone="onPrimary" accessibilityRole="header">
-              {greeting.text}, {registered && displayName ? displayName : 'vecino'}
-            </Text>
-            <Text variant="body-lg" tone="onPrimary" className="opacity-95">
-              {greeting.line}
-            </Text>
-          </View>
-          <View className="h-14 w-14 items-center justify-center rounded-full bg-white/25">
-            <Icon name={greeting.icon} size={32} color="onPrimary" />
-          </View>
+        style={{ borderRadius: 28, padding: 18, gap: 10 }}>
+        <View className="gap-1">
+          <Text variant="headline-lg" tone="onPrimary" accessibilityRole="header">
+            {greeting.text}, {registered && displayName ? displayName : 'vecino'}
+          </Text>
+          <Text variant="body-lg" tone="onPrimary" className="opacity-95">
+            {greeting.line}
+          </Text>
         </View>
         {easy ? <ListenButton text={`${greeting.text}. ${greeting.line}`} /> : null}
         {neighbors.count > 0 ? (
@@ -110,25 +120,52 @@ export function HomeScreen() {
         </Card>
       ) : null}
 
-      {/* D4 (SPEC-043): Emergencia salió de la barra; aquí y en el SOS sigue a un toque. */}
-      <PressableScale
-        accessibilityRole="button"
-        accessibilityLabel="¿Emergencia? Reporta o pide auxilio, sin crear cuenta. Abrir Emergencia"
-        onPress={() => router.push('/emergencias')}
-        className="min-h-16 flex-row items-center gap-3 rounded-3xl bg-error-container px-4 py-3">
-        <View className="h-11 w-11 items-center justify-center rounded-2xl bg-error">
-          <Icon name="alarm-light-outline" size={24} color="onError" />
+      {/* SPEC-051: el Inicio no tiene barra; estos 4 botones llevan a cada sección. Emergencia sigue a un toque. */}
+      <View className="gap-3" accessibilityLabel="Qué puedes hacer con la app">
+        <Text variant="headline-sm" accessibilityRole="header">
+          ¿En qué te ayudamos hoy?
+        </Text>
+        <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
+          <ActionTile
+            tourId="tile-comunidad"
+            stacked={easy}
+            verb="Descubre qué pasa cerca"
+            detail="Eventos y novedades del barrio"
+            xml={SECCION_COMUNIDAD_XML}
+            gradient={GRADIENTS.comunidad}
+            onPress={() => router.navigate('/eventos')}
+          />
+          <ActionTile
+            tourId="tile-negocios"
+            stacked={easy}
+            verb="Compra local, apoya al barrio"
+            detail="Negocios y lugares a pasos de ti"
+            xml={SECCION_EMPRENDIMIENTOS_XML}
+            gradient={GRADIENTS.emprendimientos}
+            onPress={() => router.navigate('/explorar')}
+          />
         </View>
-        <View className="min-w-0 flex-1">
-          <Text variant="body-lg-bold" tone="error">
-            ¿Emergencia?
-          </Text>
-          <Text variant="label-md" tone="muted">
-            Reporta o pide auxilio, sin crear cuenta
-          </Text>
+        <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
+          <ActionTile
+            tourId="tile-emergencia"
+            stacked={easy}
+            verb="Pide auxilio al instante"
+            detail="Reporta sin crear cuenta"
+            xml={SECCION_EMERGENCIA_XML}
+            gradient={GRADIENTS.emergencia}
+            onPress={() => router.push('/emergencias')}
+          />
+          <ActionTile
+            tourId="tile-ayuda"
+            stacked={easy}
+            verb="Presta, pide, ayuda"
+            detail="Herramientas, favores y trueque"
+            xml={SECCION_AYUDA_XML}
+            gradient={GRADIENTS.ayuda}
+            onPress={() => router.navigate('/ayuda')}
+          />
         </View>
-        <Icon name="chevron-right" size={24} color="error" />
-      </PressableScale>
+      </View>
 
       <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
         <Button
@@ -138,24 +175,17 @@ export function HomeScreen() {
           className={easy ? undefined : 'flex-1'}
           onPress={() => router.navigate('/publicar')}
         />
+        {/* SPEC-049: asistente con IA gratuita (las emergencias nunca pasan por la IA). */}
         <Button
-          label="Ver eventos"
+          label="Pregunta a Yunta"
           variant="tonal"
-          icon="calendar-star"
+          icon="creation-outline"
           fullWidth={easy}
           className={easy ? undefined : 'flex-1'}
-          onPress={() => router.navigate('/eventos')}
+          accessibilityLabel="Pregúntale a Yunta: asistente con IA para dudas sobre la app y el barrio"
+          onPress={() => router.push('/asistente')}
         />
       </View>
-
-      {/* SPEC-049: asistente con IA gratuita (las emergencias nunca pasan por la IA). */}
-      <Button
-        label="Pregúntale a Yunta"
-        variant="outline"
-        icon="creation-outline"
-        accessibilityLabel="Pregúntale a Yunta: asistente con IA para dudas sobre la app y el barrio"
-        onPress={() => router.push('/asistente')}
-      />
 
       {pending.length > 0 ? (
         <View className="gap-3">
@@ -173,14 +203,8 @@ export function HomeScreen() {
       ) : null}
 
       <View className="gap-3" accessibilityLabel="Juntos por el barrio: fondos, cámaras y el perrito comunitario">
-        <View className="flex-row items-center gap-2">
-          <Text variant="headline-sm" accessibilityRole="header" className="flex-1">
-            Juntos por el barrio
-          </Text>
-          <Badge label="Nuevo" tone="primary" icon="star-four-points-outline" />
-        </View>
-        <Text variant="label-md" tone="muted" className="-mt-2">
-          Lo que los vecinos de {sector.name} logran entre todos
+        <Text variant="headline-sm" accessibilityRole="header">
+          Juntos por el barrio
         </Text>
         {featuredFund ? <FundCard fund={featuredFund} now={fundsData?.fetchedAt ?? 0} /> : null}
         <CamerasTeaser />
@@ -228,7 +252,7 @@ export function HomeScreen() {
         )}
 
         <Button
-          label="Ver todo el Marketplace"
+          label="Ver todas las publicaciones"
           variant="tonal"
           icon="storefront-outline"
           onPress={() => router.navigate('/publicaciones')}

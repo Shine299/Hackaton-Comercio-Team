@@ -41,7 +41,7 @@ describe('checkQuestion', () => {
 
 describe('faqAnswer', () => {
   it('responde las dudas frecuentes sin IA', () => {
-    expect(faqAnswer('¿Cómo publico algo?')).toMatch(/Marketplace/);
+    expect(faqAnswer('¿Cómo publico algo?')).toMatch(/Ayuda/);
     expect(faqAnswer('como creo un evento')).toMatch(/Eventos/);
     expect(faqAnswer('¿para qué sirve el SOS?')).toMatch(/105/);
   });
@@ -68,7 +68,7 @@ describe('resolveAnswer', () => {
       serverConfigured: true,
       ask: async (history) => {
         sent = history[history.length - 1].text;
-        return { text: 'Ve a Marketplace.', provider: 'mistral' };
+        return { text: 'Ve a Ayuda.', provider: 'mistral' };
       },
     });
     expect(sent).not.toMatch(/987654321/);

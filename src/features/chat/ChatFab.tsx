@@ -1,26 +1,31 @@
 import { usePathname, useRouter } from 'expo-router';
 import { View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useOnboardingStore } from '@/features/onboarding';
 import { chatFabVisible } from '@/features/shell';
+import { useBarStore } from '@/shared/nav/barStore';
 import { useChatBadgeStore } from '@/shared/nav/chatBadgeStore';
 import { Icon, PressableScale, Text, TourTarget } from '@/shared/ui';
 
 /**
- * Burbuja de chat (SPEC-051), abajo a la derecha de Inicio, Comunidad, Negocios y Marketplace. Abre la bandeja de
+ * Burbuja de chat (SPEC-051), abajo a la derecha del Inicio, Comunidad, Negocios y Ayuda. Abre la bandeja de
  * mensajes y muestra cuántas conversaciones tienes sin leer (número + texto para el lector, no solo color).
- * Se dibuja dentro del área de contenido, así que queda siempre por encima de la barra inferior.
+ * Se dibuja dentro del área de contenido, así que queda por encima de la barra inferior; en el Inicio (sin barra)
+ * sube lo que mide el área segura de abajo.
  */
 export function ChatFab() {
   const router = useRouter();
   const pathname = usePathname();
   const completed = useOnboardingStore((s) => s.completed);
   const unread = useChatBadgeStore((s) => s.unread);
+  const insets = useSafeAreaInsets();
+  const barVisible = useBarStore((s) => s.visible);
 
   if (!completed || !chatFabVisible(pathname)) return null;
 
   return (
-    <View pointerEvents="box-none" style={{ position: 'absolute', right: 16, bottom: 16, zIndex: 50 }}>
+    <View pointerEvents="box-none" style={{ position: 'absolute', right: 16, bottom: 16 + (barVisible ? 0 : insets.bottom), zIndex: 50 }}>
       <TourTarget id="chat-fab">
         <PressableScale
           accessibilityRole="button"

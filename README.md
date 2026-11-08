@@ -13,16 +13,16 @@ que pasa cerca — y para coordinar ayuda cuando hay una emergencia. Construida 
 
 ## Qué hace
 
-La app tiene una **barra inferior con Inicio y los 4 servicios** (ver ADR 0007 y SPEC-051), el botón **SOS** en la
+La app tiene una **barra inferior de 4 pestañas: Inicio · Comunidad · Negocios · Ayuda** (ver ADR 0007 y SPEC-051), el botón **SOS** en la
 cabecera y una **burbuja flotante de chat**:
 
 | Pestaña | Para qué sirve | Ruta |
 |---|---|---|
-| **Inicio** | Feed del barrio: personas y lo que ofrecen, necesitan u organizan; alerta del sector, «¿Emergencia?» y «Juntos por el barrio» | `/` |
+| **Inicio** | Feed del barrio: personas y lo que ofrecen, necesitan u organizan; alerta del sector, 4 botones grandes (Comunidad, Negocios, Emergencia, Ayuda; sin barra inferior en esta pantalla) y «Juntos por el barrio» | `/` |
 | **Comunidad** | Eventos del barrio: los crean los vecinos y los demás marcan «Voy» (solo se ve cuántos van) | `/eventos`, `/evento/[id]`, `/eventos/crear` |
 | **Negocios** | Lugares del barrio (OpenStreetMap) con «Abierto ahora» solo si hay horario, y negocios de vecinos | `/explorar` |
-| **Emergencia** (en rojo) | Reportar un incidente o pedir auxilio **sin cuenta**, números oficiales, tablero y mapa | `/emergencias/*` |
-| **Marketplace** | Pedir u ofrecer ayuda entre vecinos: objetos, favores y animales; «Escribir» abre el chat con quien publicó | `/marketplace`, `/publicaciones`, `/publicar` |
+| **Ayuda** (antes «Marketplace») | Pedir u ofrecer ayuda entre vecinos: objetos, favores y animales; «Escribir» abre el chat con quien publicó | `/ayuda`, `/publicaciones`, `/publicar` |
+| **Emergencia** (botón SOS de la cabecera, no es pestaña) | Reportar un incidente o pedir auxilio **sin cuenta**, números oficiales, tablero y mapa | `/emergencias/*` |
 | **Chat** (burbuja, no pestaña) | Conversaciones 1 a 1 por publicación, con bloqueo, reporte y aviso de mensajes sin leer | `/mensajes`, `/chat/[id]` |
 
 Transversales: menú lateral con perfil (tu avatar o ☰, o deslizar desde el borde izquierdo), campana de actividad,
@@ -93,7 +93,7 @@ Comandos útiles: `npm run check` (todo junto), `npm test`, `npm run typecheck`,
 src/
 ├── app/            Rutas (Expo Router). Delgadas: re-exportan una pantalla desde `@/features/<x>`
 ├── features/       Una carpeta por funcionalidad: UI + estado + datos, con un `index.ts` público
-│   ├── Pestañas:       home (feed) · events · explore (lugares) · help (Marketplace) · chat · emergency (SOS)
+│   ├── Pestañas:       home (feed) · events · explore (lugares) · help (Ayuda) · chat · emergency (SOS)
 │   ├── Apoyo:          assistant (IA y voz) · business · publish · map · funds · cameras · pets · walk · payments
 │   ├── Contenido:      posts (publicaciones, relevancia, recomendaciones) · activity · profile
 │   ├── Contexto:       sector · session · onboarding · shell (cabecera, barra, menú) · notifications
@@ -128,7 +128,7 @@ pasa el mapa a la pantalla como `nearbyMap`).
 ```mermaid
 flowchart TD
   subgraph APP["app/ — rutas (Expo Router)"]
-    R1["/ · /eventos · /explorar · /marketplace · /mensajes"]
+    R1["/ · /eventos · /explorar · /ayuda · /mensajes"]
     R2["/emergencias/*"]
     R3["/publicacion/[id] · /evento/[id] · /chat/[id] · /asistente · /vecino/[id] · /perfil · /sector"]
   end
@@ -249,9 +249,10 @@ erDiagram
 flowchart LR
   OB["/onboarding (1.ª vez)"] --> HOME
 
-  BAR["Barra inferior de 5 (todas las raíces)"] --- HOME["Inicio / (feed)"] & EVE["Eventos"] & EXP["Explorar"] & MKT["Marketplace"] & CHAT["Chat"]
+  BAR["Barra inferior de 4 (todas las raíces)"] --- HOME["Inicio / (feed)"] & EVE["Comunidad"] & EXP["Negocios"] & MKT["Ayuda"]
+  FAB["Burbuja de chat (4 pestañas)"] --> CHAT["/mensajes"]
   SOS["SOS en la cabecera: siempre, sin cuenta"] --> EME["Emergencia (stack propio)"]
-  HOME -->|«¿Emergencia?»| EME
+  HOME -->|botón grande «Emergencia»| EME
   HOME -->|«Pregúntale a Yunta»| ASI["/asistente"]
   ASI -->|emergencia detectada| EME
   MENU["Avatar / ☰ menú lateral"] --> PER["Perfil · Guardados · Privacidad · Ajustes · Registrar negocio"]
@@ -260,13 +261,13 @@ flowchart LR
   HOME --> EVD["/evento/[id]"]
   EVE --> EVD
   EVE --> EVC["/eventos/crear"]
-  EXP -->|Lugares · Negocios| REG["/negocios/registrar"]
+  EXP -->|Lugares y negocios| REG["/negocios/registrar"]
   MKT --> LIST["/publicaciones"] --> DET
   MKT --> PUB["/publicar"]
   DET -->|Escribir| CHT["/chat/[id]"]
   CHAT --> CHT
   EME --> REP["Reportar · Pedir ayuda · Tablero · Recursos · Mis reportes · Acompáñame"]
-  OLD["/ayuda · /comunidad · /negocios"] -.->|redirigen| MKT & HOME & EXP
+  OLD["/marketplace · /comunidad · /negocios"] -.->|redirigen| MKT & EVE & EXP
 ```
 
 ## Estado y persistencia
@@ -338,5 +339,5 @@ El repo está preparado para trabajar con asistentes de IA sin romper la arquite
 - Notificaciones push remotas (hoy son locales) y tablero con tiempo real.
 - Asistente: cargar las claves, desplegar la función y probarlo con los proveedores reales. Hasta ahora nunca se
   llamó a Mistral, Groq ni Whisper desde este repo; falta también probar la voz en un celular (SPEC-049/050).
-- Verificar el SOS de la cabecera y la tarjeta «¿Emergencia?» con TalkBack y letra grande (ADR 0006, SPEC-013).
+- Verificar el SOS de la cabecera y el botón grande «Emergencia» del Inicio con TalkBack y letra grande (ADR 0006, SPEC-013).
 - Normalizar saltos de línea a LF en todo el repo (`.gitattributes` + `.editorconfig` ya definidos).

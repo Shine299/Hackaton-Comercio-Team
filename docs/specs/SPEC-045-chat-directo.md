@@ -1,4 +1,4 @@
-# SPEC-045 — Chat directo desde el Marketplace
+# SPEC-045 — Chat directo desde Ayuda
 
 - **Estado:** implementada en la app (8 nov 2026); `npm run check` en verde. **Falta:** aplicar la migración
   `20261110000008_open_chat.sql` en Supabase (no se ha ejecutado contra ninguna base), las pruebas de base de datos y
@@ -8,7 +8,7 @@
 - **Reemplaza:** criterios 1–3 de SPEC-025 (el chat ya no espera a que acepten una solicitud). Decisión D1.
 
 ## Qué y por qué
-El feedback (audio 4): en el Marketplace «no se maneja como un request aparte: si estás interesado, vas al chat».
+El feedback (audio 4): en Ayuda (antes «Marketplace») «no se maneja como un request aparte: si estás interesado, vas al chat».
 Hoy hay que pedir contacto y esperar que el dueño acepte. Ahora **«Escribir» abre la conversación al instante**.
 Para compensar el riesgo de mensajes no deseados: cuenta vecinal obligatoria, **bloquear**, **reportar mensaje** y
 un **límite de mensajes por minuto**.

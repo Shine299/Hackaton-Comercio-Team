@@ -80,7 +80,7 @@ const FAQ: { keys: RegExp; answer: string }[] = [
   },
   {
     keys: /\b(publica|publico|publicar|vender|vendo|prestar|presto|ofrecer|ofrezco|necesito|pedir)\b/,
-    answer: 'En Marketplace toca «Publicar»: eliges si ofreces o necesitas algo, la categoría y un título claro.',
+    answer: 'En Ayuda toca «Publicar»: eliges si ofreces o necesitas algo, la categoría y un título claro.',
   },
   {
     keys: /\b(chat|escribir|mensaje|contactar|bloquear|reportar)\b/,
@@ -109,7 +109,7 @@ export function faqAnswer(question: string): string {
   const hit = FAQ.find((f) => f.keys.test(t));
   return (
     hit?.answer ??
-    'Por ahora no tengo una respuesta para eso. Puedes revisar Marketplace, Comunidad (Eventos) y Negocios (Explorar), o abrir el ' +
+    'Por ahora no tengo una respuesta para eso. Puedes revisar Ayuda, Comunidad (Eventos) y Negocios (Explorar), o abrir el ' +
       'tutorial desde el menú.'
   );
 }

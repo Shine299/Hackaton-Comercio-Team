@@ -1,5 +1,7 @@
 # SPEC-043 — Barra «comunidad primero»: Inicio · Eventos · Explorar · Marketplace · Chat
 
+> **Nota (8 nov):** la barra de este documento fue reemplazada por **Inicio · Comunidad · Negocios · Ayuda** (SPEC-051 / ADR 0007). Se conserva como registro de la decisión.
+
 - **Estado:** hecha (8 nov 2026). `npm run check` en verde, probada en Expo Go y aprobada (incluye D4–D6)
 - **Dueño / revisor:** … / … (quien revisa no es quien escribe)
 - **Sprint:** Etapa 13 — historia S13-1 (13a). Plan: `docs/04_tecnico/plan_etapa13_comunidad_primero.md`

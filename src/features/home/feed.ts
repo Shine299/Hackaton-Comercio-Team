@@ -3,7 +3,7 @@ import { categoryText, rankPosts, type Post } from '@/features/posts';
 import type { IconName } from '@/shared/ui';
 
 /**
- * Feed del Inicio (SPEC-044): publicaciones del Marketplace y eventos del barrio en una sola lista.
+ * Feed del Inicio (SPEC-044): publicaciones de Ayuda y eventos del barrio en una sola lista.
  * Lo real va antes que lo de demostración, y en cada grupo se intercala un evento cada 2 publicaciones.
  */
 export type HomeFeedEntry = { type: 'post'; id: string; post: Post } | { type: 'event'; id: string; event: SectorEvent };

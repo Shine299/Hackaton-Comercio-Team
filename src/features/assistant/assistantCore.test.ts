@@ -12,7 +12,7 @@ import {
 // SPEC-049: cadena Mistral → Groq (lógica pura que usa la Edge Function).
 const history: ChatTurn[] = [
   { role: 'user', text: '¿Cómo publico?' },
-  { role: 'assistant', text: 'Ve a Marketplace.' },
+  { role: 'assistant', text: 'Ve a Ayuda.' },
   { role: 'user', text: '¿Y un evento?' },
 ];
 

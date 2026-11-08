@@ -10,8 +10,8 @@ import { cn, Icon, Text, TourTarget } from '@/shared/ui';
 import { BAR_ITEMS, resolveBar } from './sections';
 
 /**
- * Barra inferior fija (SPEC-051): Inicio y los 4 servicios — Comunidad · Negocios · Emergencia · Marketplace.
- * Se muestra en las pantallas raíz; en la bandeja de mensajes aparece sin pestaña resaltada para que siempre haya salida.
+ * Barra inferior fija (SPEC-051): Inicio · Comunidad · Negocios · Ayuda.
+ * Se muestra en las pantallas raíz; en la bandeja de mensajes y en Emergencia aparece sin pestaña resaltada para que siempre haya salida.
  * El chat vive en la burbuja flotante (`ChatFab`), no aquí.
  */
 export function SectionBar() {
@@ -38,11 +38,10 @@ export function SectionBar() {
       style={{ paddingBottom: Math.max(insets.bottom, 8) }}>
       {BAR_ITEMS.map((item) => {
         const focused = item.key === active;
-        // Emergencia es la única en rojo: un color = un significado.
-        const iconTone = item.danger ? 'error' : focused ? 'primary' : 'onSurfaceVariant';
-        const labelTone = item.danger ? 'error' : focused ? 'primary' : 'muted';
+        // Los 4 accesos se ven igual (Emergencia ya no va aparte): el activo se marca con fondo, ícono relleno y texto.
+        const iconTone = focused ? 'primary' : 'onSurfaceVariant';
         return (
-          <TourTarget key={item.key} id={`tab-${item.key}`} className={item.key === 'marketplace' ? 'flex-[1.2]' : 'flex-1'}>
+          <TourTarget key={item.key} id={`tab-${item.key}`} className="flex-1">
           <Pressable
             accessibilityRole="tab"
             accessibilityLabel={item.a11y}
@@ -54,16 +53,16 @@ export function SectionBar() {
             <View
               className={cn(
                 'h-8 w-14 items-center justify-center rounded-full',
-                focused && (item.danger ? 'bg-error-container' : 'bg-primary-fixed'),
+                focused && 'bg-primary-fixed',
               )}>
               <Icon name={focused ? item.iconActive : item.icon} size={24} color={iconTone} />
             </View>
             <Text
               variant="label-sm"
-              // La barra tiene ancho fijo: limitamos el escalado para que las 5 etiquetas quepan.
+              // La barra tiene ancho fijo: limitamos el escalado para que las 4 etiquetas quepan.
               maxFontSizeMultiplier={1.2}
               numberOfLines={1}
-              tone={labelTone}>
+              tone={focused ? 'primary' : 'muted'}>
               {item.label}
             </Text>
           </Pressable>

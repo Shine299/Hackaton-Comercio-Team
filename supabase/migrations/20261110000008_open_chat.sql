@@ -1,4 +1,4 @@
--- SPEC-045 — Chat directo desde el Marketplace.
+-- SPEC-045 — Chat directo desde Ayuda.
 -- «Escribir» abre la conversación sin solicitud previa. A cambio: bloquear, reportar mensajes y límite de envío.
 -- Las conversaciones creadas con accept_request (SPEC-025) se conservan; esas funciones siguen para clientes viejos.
 -- Ninguna función devuelve ids de usuarios ni mensajes de terceros.

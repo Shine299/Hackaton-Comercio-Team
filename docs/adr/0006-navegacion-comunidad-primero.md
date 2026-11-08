@@ -1,6 +1,7 @@
 # ADR 0006 — Navegación «comunidad primero» y Emergencia fuera de la barra
 
 - **Estado:** aceptada
+- **Nota (8 nov):** la barra de 5 quedó **reemplazada por el ADR 0007** (barra de 4: Inicio · Comunidad · Negocios · Ayuda; chat en burbuja; Emergencia sigue fuera de la barra, por el SOS).
 - **Fecha:** 2026-11-08
 - **Relacionada con:** ADR 0001 (features verticales y Expo Router), SPEC-043 a SPEC-048 (Etapa 13)
 
