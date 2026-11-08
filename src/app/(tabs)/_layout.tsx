@@ -28,7 +28,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="ayuda" options={{ title: 'Ayuda', headerShown: false }} />
       <Tabs.Screen name="explorar" options={{ title: 'Quiero ayudar' }} />
       <Tabs.Screen name="publicar" options={{ title: 'Necesito ayuda' }} />
-      <Tabs.Screen name="negocios" options={{ title: 'Emprendimientos', headerShown: false }} />
+      <Tabs.Screen name="negocios" options={{ title: 'Negocios', headerShown: false }} />
       <Tabs.Screen name="perfil" options={{ title: 'Perfil' }} />
       {/* Sin pestaña propia: se abre desde la campana. */}
       <Tabs.Screen name="actividad" options={{ title: 'Actividad' }} />

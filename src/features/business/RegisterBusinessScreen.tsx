@@ -103,7 +103,7 @@ export function RegisterBusinessScreen() {
         <Text variant="headline-lg" accessibilityRole="header">
           Registra tu emprendimiento
         </Text>
-        <Text tone="muted">Es gratis. Aparecerá en Emprendimientos de tu sector.</Text>
+        <Text tone="muted">Es gratis. Aparecerá en Negocios de tu sector.</Text>
       </View>
 
       <TextField

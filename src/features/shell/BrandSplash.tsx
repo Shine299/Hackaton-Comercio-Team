@@ -1,41 +1,55 @@
-import { Image } from 'expo-image';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, { FadeIn, FadeOut, ZoomIn } from 'react-native-reanimated';
+import Animated, {
+  Easing,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 
-import { Text } from '@/shared/ui';
+import { BrandLogo } from '@/shared/ui';
 
-const LOGO = require('../../../assets/images/splash-yunta.png');
-const SHOW_MS = 1900;
+const HOLD_MS = 950;
+const LEAVE_MS = 650;
+const TOTAL_MS = HOLD_MS + LEAVE_MS;
 
 /**
- * Pantalla de bienvenida con el logo y el nombre de Yunta. Entra con un pequeño zoom, se queda un instante
- * y se desvanece sola. Toma el relevo de la pantalla nativa de arranque (mismo fondo blanco y mismo logo),
- * así que el paso de una a otra no parpadea.
+ * Entrada de la app: solo el nombre «Yunta». Parte exactamente donde lo deja la pantalla nativa de arranque
+ * (mismo fondo, mismo tamaño y posición), respira apenas y luego «entra» en la app: el nombre crece mientras se
+ * desvanece y el fondo se abre hacia el Inicio. Una sola curva continua, sin saltos ni rebotes.
  */
 export function BrandSplash({ onDone }: { onDone: () => void }) {
+  const t = useSharedValue(0);
+
   useEffect(() => {
-    const timer = setTimeout(onDone, SHOW_MS);
+    t.value = withSequence(
+      withTiming(0.5, { duration: HOLD_MS, easing: Easing.inOut(Easing.sin) }),
+      withTiming(1, { duration: LEAVE_MS, easing: Easing.bezier(0.4, 0, 0.2, 1) }),
+    );
+    const timer = setTimeout(onDone, TOTAL_MS + 60);
     return () => clearTimeout(timer);
-  }, [onDone]);
+  }, [onDone, t]);
+
+  const wordmark = useAnimatedStyle(() => ({
+    opacity: interpolate(t.value, [0, 0.55, 1], [1, 1, 0]),
+    transform: [{ scale: interpolate(t.value, [0, 0.5, 1], [1, 1.04, 1.45]) }],
+  }));
+  const backdrop = useAnimatedStyle(() => ({ opacity: interpolate(t.value, [0, 0.6, 1], [1, 1, 0]) }));
 
   return (
-    <Animated.View
-      exiting={FadeOut.duration(450)}
-      accessibilityLabel="Yunta. Tu comunidad, más cerca"
-      accessibilityRole="image"
+    <View
       pointerEvents="auto"
-      style={[StyleSheet.absoluteFill, { zIndex: 100, backgroundColor: '#ffffff' }]}>
-      <View className="flex-1 items-center justify-center gap-5 px-10">
-        <Animated.View entering={ZoomIn.duration(650)}>
-          <Image source={LOGO} style={{ width: 260, height: 236 }} contentFit="contain" accessibilityIgnoresInvertColors />
-        </Animated.View>
-        <Animated.View entering={FadeIn.delay(500).duration(600)}>
-          <Text variant="body-lg" tone="primary" className="text-center">
-            Tu comunidad, más cerca.
-          </Text>
+      accessibilityLabel="Yunta"
+      accessibilityRole="image"
+      style={[StyleSheet.absoluteFill, { zIndex: 100 }]}>
+      <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor: '#ffffff' }, backdrop]} />
+      <View style={[StyleSheet.absoluteFill, { alignItems: 'center', justifyContent: 'center' }]}>
+        <Animated.View style={wordmark}>
+          <BrandLogo variant="wordmark" height={96} />
         </Animated.View>
       </View>
-    </Animated.View>
+    </View>
   );
 }

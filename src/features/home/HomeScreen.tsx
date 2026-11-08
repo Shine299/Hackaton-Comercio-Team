@@ -112,22 +112,7 @@ export function HomeScreen() {
 
   return (
     <Screen contentClassName="gap-5 px-5 pb-8 pt-4">
-      <SectionHeader
-        title="YUNTA"
-        eyebrow={
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={`Tu sector: ${sector.name}, ${sector.radiusKm} kilómetros. Cambiar`}
-            onPress={() => router.push('/sector')}
-            className="min-h-7 flex-row items-center gap-0.5 self-start">
-            <Icon name="map-marker" size={18} color="primary" />
-            <Text variant="body-md-medium" tone="primary">
-              {sector.name} · {sector.radiusKm} km
-            </Text>
-            <Icon name="chevron-down" size={20} color="primary" />
-          </Pressable>
-        }
-      />
+      <SectionHeader title="Inicio" />
 
       <View className="gap-3">
         <TextField
@@ -207,7 +192,7 @@ export function HomeScreen() {
           />
           <ActionTile
             verb="Compra local, apoya al barrio"
-            detail={shops.length > 0 ? `${shops.length} negocios a pasos de ti` : 'Emprendimientos del barrio'}
+            detail={shops.length > 0 ? `${shops.length} negocios a pasos de ti` : 'Negocios del barrio'}
             xml={SECCION_EMPRENDIMIENTOS_XML}
             gradient={GRADIENTS.emprendimientos}
             onPress={() => router.navigate('/negocios')}

@@ -80,7 +80,7 @@ export function BusinessesScreen() {
 
   return (
     <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
-      <SectionHeader title="Emprendimientos" />
+      <SectionHeader title="Negocios" />
 
       <SectionHero
         gradient={GRADIENTS.emprendimientos}

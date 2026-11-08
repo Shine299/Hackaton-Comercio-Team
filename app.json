@@ -34,8 +34,8 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#ffffff",
-          "image": "./assets/images/splash-yunta.png",
-          "imageWidth": 240
+          "image": "./assets/images/texto-yunta.png",
+          "imageWidth": 250
         }
       ],
       "expo-sqlite",

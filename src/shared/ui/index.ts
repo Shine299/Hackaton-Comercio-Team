@@ -20,3 +20,4 @@ export { GRADIENTS, gradientForCategory, type Gradient } from './gradients';
 export * from './illustrations';
 export { PhotoField } from './PhotoField';
 export { StatRow, type Stat } from './StatRow';
+export { BrandLogo } from './BrandLogo';

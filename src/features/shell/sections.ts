@@ -21,7 +21,7 @@ export type BarItem = {
 export const BAR_ITEMS: BarItem[] = [
   { key: 'inicio', label: 'Inicio', icon: 'home-outline', iconActive: 'home', href: '/', a11y: 'Inicio' },
   { key: 'comunidad', label: 'Comunidad', icon: 'account-group-outline', iconActive: 'account-group', href: '/comunidad', a11y: 'Comunidad: novedades del barrio' },
-  { key: 'emprendimientos', label: 'Emprendimientos', icon: 'storefront-outline', iconActive: 'storefront', href: '/negocios', a11y: 'Emprendimientos del barrio' },
+  { key: 'emprendimientos', label: 'Negocios', icon: 'storefront-outline', iconActive: 'storefront', href: '/negocios', a11y: 'Negocios del barrio' },
   { key: 'emergencia', label: 'Emergencia', icon: 'alarm-light-outline', iconActive: 'alarm-light', href: '/emergencias', a11y: 'Emergencia: reportar o pedir auxilio' },
   { key: 'ayuda', label: 'Ayuda', icon: 'hand-heart-outline', iconActive: 'hand-heart', href: '/ayuda', a11y: 'Ayuda entre vecinos' },
 ];

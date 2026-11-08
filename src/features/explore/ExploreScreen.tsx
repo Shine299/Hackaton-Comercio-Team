@@ -202,7 +202,7 @@ export function ExploreScreen() {
 
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="¿Buscas un negocio del barrio? Abrir Emprendimientos"
+        accessibilityLabel="¿Buscas un negocio del barrio? Abrir Negocios"
         onPress={() => router.push('/negocios')}
         className="flex-row items-center gap-3 rounded-2xl bg-primary-fixed p-3 active:opacity-80">
         <Icon name="storefront-outline" size={28} color="primary" />
@@ -211,7 +211,7 @@ export function ExploreScreen() {
             ¿Buscas un negocio del barrio?
           </Text>
           <Text variant="label-md" tone="muted">
-            Bodegas, comida y servicios en Emprendimientos
+            Bodegas, comida y servicios en Negocios
           </Text>
         </View>
         <Icon name="chevron-right" size={22} color="primary" />

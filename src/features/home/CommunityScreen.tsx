@@ -110,7 +110,7 @@ export function CommunityScreen() {
       return {
         id: post.id,
         section: business ? 'negocios' : 'dia',
-        tag: business ? 'Emprendimientos' : `Día a día · ${POST_KIND_LABEL[post.kind]}`,
+        tag: business ? 'Negocios' : `Día a día · ${POST_KIND_LABEL[post.kind]}`,
         title: post.title,
         meta: `${post.author.displayName} · ${formatRelativeTime(post.createdAt, now)} · ${distance(post)}`,
         icon: business ? 'storefront-outline' : getCategory(post.category).icon,
