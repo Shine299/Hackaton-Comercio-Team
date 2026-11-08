@@ -1,6 +1,7 @@
 import type { IconName } from '@/shared/ui';
 
 import { getDemoResources } from './demoResources';
+import { atRiskWeightBonus } from './people';
 import {
   getHelpType,
   getIncidentCategory,
@@ -137,7 +138,7 @@ export function buildBoard({ sectorId, sectorName, reports, vulnerable, offers, 
         validation: status,
         icon: category.icon,
         isDemo: false,
-        weight: 2,
+        weight: 2 + atRiskWeightBonus(report.peopleAtRisk),
         reportId: report.id,
       });
     } else {
@@ -153,7 +154,7 @@ export function buildBoard({ sectorId, sectorName, reports, vulnerable, offers, 
         validation: status,
         icon: report.immediateDanger ? 'alarm-light-outline' : help.icon,
         isDemo: false,
-        weight: report.immediateDanger ? 2 : 1,
+        weight: (report.immediateDanger ? 2 : 1) + atRiskWeightBonus(report.peopleAtRisk),
         reportId: report.id,
       });
     }

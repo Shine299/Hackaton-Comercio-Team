@@ -8,6 +8,7 @@ import { Button, Card, Icon, Screen, Text } from '@/shared/ui';
 import { EmergencyNumbersCard } from './components/EmergencyNumbersCard';
 import { IncidentStatusBadge, IncidentStatusTimeline } from './components/IncidentStatus';
 import { reportIcon, reportTitle } from './components/ReportCard';
+import { peopleSummary } from './people';
 import { useEmergencyStore } from './store';
 import { INCIDENT_STATUS_INFO } from './types';
 
@@ -57,6 +58,11 @@ export function ReportStatusScreen() {
           Zona aproximada: {report.sectorName} · {formatRelativeTime(report.createdAt)}
         </Text>
         <IncidentStatusBadge status={report.status} />
+        {peopleSummary(report) ? (
+          <Text variant="body-md-medium" accessibilityLabel={`Personas: ${peopleSummary(report)}`}>
+            {peopleSummary(report)}
+          </Text>
+        ) : null}
         {report.detail ? <Text>{report.detail}</Text> : null}
         {report.photoUri ? (
           <Image

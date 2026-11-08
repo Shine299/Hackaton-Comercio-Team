@@ -5,9 +5,10 @@ import { View } from 'react-native';
 import { Button, PhotoField, Screen, Text, TextField } from '@/shared/ui';
 
 import { ChoiceTile } from './components/ChoiceTile';
+import { PeopleQuestions } from './components/PeopleQuestions';
 import { ApproxZoneCard } from './components/FormBits';
 import { useEmergencyStore } from './store';
-import { INCIDENT_CATEGORIES, type IncidentCategory } from './types';
+import { INCIDENT_CATEGORIES, type AtRisk, type IncidentCategory, type PeopleCount } from './types';
 import { usePickPhoto } from '@/shared/hooks/usePickPhoto';
 
 /** «Reportar incidente»: no requiere cuenta. Categoría + zona aproximada; lo demás es opcional. */
@@ -16,6 +17,7 @@ export function IncidentReportScreen() {
   const addIncident = useEmergencyStore((s) => s.addIncident);
   const [category, setCategory] = useState<IncidentCategory | undefined>();
   const [detail, setDetail] = useState('');
+  const [people, setPeople] = useState<{ peopleCount?: PeopleCount; peopleAtRisk?: AtRisk }>({});
   const [error, setError] = useState<string | undefined>();
   const photo = usePickPhoto();
 
@@ -24,7 +26,7 @@ export function IncidentReportScreen() {
       setError('Elige qué está pasando. Si no encaja, toca «Otro peligro».');
       return;
     }
-    const report = addIncident({ category, detail, photoUri: photo.photoUri });
+    const report = addIncident({ category, detail, photoUri: photo.photoUri, ...people });
     router.replace({ pathname: '/emergencias/estado/[id]', params: { id: report.id } });
   };
 
@@ -56,6 +58,8 @@ export function IncidentReportScreen() {
           {error}
         </Text>
       ) : null}
+
+      <PeopleQuestions {...people} onChange={setPeople} />
 
       <ApproxZoneCard />
 

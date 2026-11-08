@@ -6,10 +6,13 @@ import { useOutboxStore } from '@/features/outbox';
 import { useSectorStore } from '@/features/sector';
 import { kvStorage } from '@/shared/storage/kv';
 
+import { sanitizePeople } from './people';
 import {
   INCIDENT_FLOW,
   RESOURCE_STAGES,
+  type AtRisk,
   type EmergencyReport,
+  type PeopleCount,
   type HelpType,
   type IncidentCategory,
   type IncidentStatus,
@@ -21,8 +24,9 @@ import {
   type VulnerableNeed,
 } from './types';
 
-type HelpInput = { type: HelpType; immediateDanger: boolean; detail?: string; photoUri?: string };
-type IncidentInput = { category: IncidentCategory; detail?: string; photoUri?: string };
+type PeopleInput = { peopleCount?: PeopleCount; peopleAtRisk?: AtRisk };
+type HelpInput = { type: HelpType; immediateDanger: boolean; detail?: string; photoUri?: string } & PeopleInput;
+type IncidentInput = { category: IncidentCategory; detail?: string; photoUri?: string } & PeopleInput;
 
 type VulnerableInput = {
   need: VulnerableNeed;
@@ -82,12 +86,13 @@ export const useEmergencyStore = create<EmergencyState>()(
       reports: [],
       vulnerable: [],
       offers: [],
-      addHelp: ({ type, immediateDanger, detail = '', photoUri }) => {
+      addHelp: ({ type, immediateDanger, detail = '', photoUri, peopleCount, peopleAtRisk }) => {
         const id = Crypto.randomUUID();
         const zone = currentZone();
+        const people = sanitizePeople({ peopleCount, peopleAtRisk });
         const outbox = useOutboxStore
           .getState()
-          .enqueue('emergency.help', { reportId: id, type, immediateDanger, ...zone }, immediateDanger ? 'emergency' : 'urgent');
+          .enqueue('emergency.help', { reportId: id, type, immediateDanger, ...people, ...zone }, immediateDanger ? 'emergency' : 'urgent');
         const report: EmergencyReport = {
           id,
           kind: 'help',
@@ -95,6 +100,7 @@ export const useEmergencyStore = create<EmergencyState>()(
           immediateDanger,
           detail: detail.trim(),
           photoUri: photoUri || undefined,
+          ...people,
           ...zone,
           createdAt: Date.now(),
           status: 'local',
@@ -103,12 +109,13 @@ export const useEmergencyStore = create<EmergencyState>()(
         set((state) => ({ reports: [report, ...state.reports] }));
         return report;
       },
-      addIncident: ({ category, detail = '', photoUri }) => {
+      addIncident: ({ category, detail = '', photoUri, peopleCount, peopleAtRisk }) => {
         const id = Crypto.randomUUID();
         const zone = currentZone();
+        const people = sanitizePeople({ peopleCount, peopleAtRisk });
         const outbox = useOutboxStore
           .getState()
-          .enqueue('emergency.incident', { reportId: id, category, ...zone }, 'emergency');
+          .enqueue('emergency.incident', { reportId: id, category, ...people, ...zone }, 'emergency');
         const report: EmergencyReport = {
           id,
           kind: 'incident',
@@ -116,6 +123,7 @@ export const useEmergencyStore = create<EmergencyState>()(
           immediateDanger: false,
           detail: detail.trim(),
           photoUri: photoUri || undefined,
+          ...people,
           ...zone,
           createdAt: Date.now(),
           status: 'local',

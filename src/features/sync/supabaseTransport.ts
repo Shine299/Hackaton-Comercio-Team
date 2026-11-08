@@ -81,6 +81,8 @@ async function sendToServer(item: OutboxItem): Promise<SendResult> {
         category: str(help ? p.type : p.category),
         immediate_danger: Boolean(p.immediateDanger),
         sector_id: str(p.sectorId),
+        ...(p.peopleCount ? { people_count: str(p.peopleCount) } : {}),
+        ...(p.peopleAtRisk ? { people_at_risk: str(p.peopleAtRisk) } : {}),
       }));
       break;
     }

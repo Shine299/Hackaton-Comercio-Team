@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 import { formatRelativeTime } from '@/shared/format';
 import { Badge, Icon, Text } from '@/shared/ui';
 
+import { peopleSummary } from '../people';
 import { getHelpType, getIncidentCategory, type EmergencyReport } from '../types';
 
 import { IncidentStatusBadge } from './IncidentStatus';
@@ -39,6 +40,7 @@ export function ReportCard({ report, onPress }: { report: EmergencyReport; onPre
       </Text>
       <View className="flex-row flex-wrap gap-2">
         <IncidentStatusBadge status={report.status} />
+        {peopleSummary(report) ? <Badge label={peopleSummary(report) as string} icon={report.peopleAtRisk === 'yes' ? 'alert-octagon-outline' : 'account-multiple-outline'} tone={report.peopleAtRisk === 'yes' ? 'warning' : 'neutral'} /> : null}
         {report.kind === 'incident' ? <Badge label="Incidente" icon="alert-outline" /> : null}
       </View>
     </Pressable>

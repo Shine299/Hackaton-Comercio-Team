@@ -108,6 +108,22 @@ export const INCIDENT_STATUS_INFO: Record<
   },
 };
 
+/** ¿Cuántas personas necesitan ayuda? Solo un rango: nunca nombres ni datos de las personas. */
+export const PEOPLE_COUNTS = [
+  { id: 'one', label: '1 persona', icon: 'account-outline' },
+  { id: 'few', label: '2 a 5', icon: 'account-multiple-outline' },
+  { id: 'many', label: '6 o más', icon: 'account-group-outline' },
+] as const satisfies readonly { id: string; label: string; icon: IconName }[];
+export type PeopleCount = (typeof PEOPLE_COUNTS)[number]['id'];
+
+/** ¿Hay personas en riesgo? «No sé» es una respuesta válida: nadie está obligado a adivinar. */
+export const AT_RISK_OPTIONS = [
+  { id: 'yes', label: 'Sí', icon: 'alert-octagon-outline' },
+  { id: 'no', label: 'No', icon: 'shield-check-outline' },
+  { id: 'unknown', label: 'No sé', icon: 'help-circle-outline' },
+] as const satisfies readonly { id: string; label: string; icon: IconName }[];
+export type AtRisk = (typeof AT_RISK_OPTIONS)[number]['id'];
+
 export type EmergencyReport = {
   id: string;
   kind: 'help' | 'incident';
@@ -116,6 +132,8 @@ export type EmergencyReport = {
   immediateDanger: boolean;
   detail: string;
   photoUri?: string;
+  peopleCount?: PeopleCount;
+  peopleAtRisk?: AtRisk;
   /** Zona aproximada: solo el sector. Nunca coordenadas del dispositivo. */
   sectorId: string;
   sectorName: string;

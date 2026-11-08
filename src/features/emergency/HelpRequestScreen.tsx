@@ -5,9 +5,10 @@ import { Pressable, View } from 'react-native';
 import { Button, Icon, PhotoField, Screen, Text, TextField } from '@/shared/ui';
 
 import { ChoiceTile } from './components/ChoiceTile';
+import { PeopleQuestions } from './components/PeopleQuestions';
 import { ApproxZoneCard } from './components/FormBits';
 import { useEmergencyStore } from './store';
-import { HELP_TYPES, type HelpType } from './types';
+import { HELP_TYPES, type AtRisk, type HelpType, type PeopleCount } from './types';
 import { usePickPhoto } from '@/shared/hooks/usePickPhoto';
 
 /** «Necesito ayuda»: no requiere cuenta. Peligro inmediato guarda una alerta mínima al instante. */
@@ -16,13 +17,14 @@ export function HelpRequestScreen() {
   const addHelp = useEmergencyStore((s) => s.addHelp);
   const [type, setType] = useState<HelpType | undefined>();
   const [detail, setDetail] = useState('');
+  const [people, setPeople] = useState<{ peopleCount?: PeopleCount; peopleAtRisk?: AtRisk }>({});
   const [error, setError] = useState<string | undefined>();
   const photo = usePickPhoto();
 
   const goToStatus = (id: string) => router.replace({ pathname: '/emergencias/estado/[id]', params: { id } });
 
   const sendImmediate = () => {
-    const report = addHelp({ type: type ?? 'other', immediateDanger: true, detail, photoUri: photo.photoUri });
+    const report = addHelp({ type: type ?? 'other', immediateDanger: true, detail, photoUri: photo.photoUri, ...people });
     goToStatus(report.id);
   };
 
@@ -31,7 +33,7 @@ export function HelpRequestScreen() {
       setError('Elige qué tipo de ayuda necesitas. Si no estás seguro, toca «Otro».');
       return;
     }
-    const report = addHelp({ type, immediateDanger: false, detail, photoUri: photo.photoUri });
+    const report = addHelp({ type, immediateDanger: false, detail, photoUri: photo.photoUri, ...people });
     goToStatus(report.id);
   };
 
@@ -80,6 +82,8 @@ export function HelpRequestScreen() {
           </Text>
         ) : null}
       </View>
+
+      <PeopleQuestions {...people} onChange={setPeople} />
 
       <ApproxZoneCard />
 
