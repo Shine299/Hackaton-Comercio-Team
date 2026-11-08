@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BoardNotifier } from '@/features/notifications';
 import { BrandSplash, EdgeSwipe, ProfileDrawer, SectionBar } from '@/features/shell';
 import { ActivityBadgeSync } from '@/features/activity';
+import { ChatFab } from '@/features/chat';
 import { hasServerTransport, useOutboxStore } from '@/features/outbox';
 import { reconcileWithServer, registerSupabaseTransport, syncNow } from '@/features/sync';
 import { Stack } from 'expo-router';
@@ -62,6 +63,7 @@ export default function RootLayout() {
         <BoardNotifier />
         <ActivityBadgeSync />
         <View style={{ flex: 1 }}>
+          <View style={{ flex: 1 }}>
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#f9f9ff' } }}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="onboarding" options={{ gestureEnabled: false }} />
@@ -73,6 +75,8 @@ export default function RootLayout() {
             <Stack.Screen name="sector" options={{ presentation: 'modal' }} />
             <Stack.Screen name="galeria" />
           </Stack>
+          <ChatFab />
+          </View>
           <SectionBar />
           <EdgeSwipe />
           {showBrand ? <BrandSplash onDone={hideBrand} /> : null}

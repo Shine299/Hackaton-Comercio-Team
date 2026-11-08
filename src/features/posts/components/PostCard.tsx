@@ -56,17 +56,19 @@ export function PostCard({ post, now, compact = false }: PostCardProps) {
       onPress={open}
       className="gap-3 rounded-2xl bg-surface-container-lowest p-4 shadow-sm elevation-xs active:opacity-90">
       <View className="flex-row flex-wrap items-center gap-2">
-        <Badge
-          label={POST_KIND_LABEL[post.kind]}
-          tone={isOffer ? 'primary' : 'secondary'}
-          icon={isOffer ? 'gift-outline' : 'hand-extended-outline'}
-        />
         <Badge label={category.label} tone="neutral" icon={category.icon} />
         {post.urgent ? <Badge label="Urgente · sin validar" tone="error" icon="alert-outline" /> : null}
         {post.isOwn && post.syncStatus ? <SyncStatusBadge status={post.syncStatus} /> : null}
       </View>
 
-      <View className="gap-1">
+      {/* Lo que ofrece o necesita, en un bloque de color propio: verde = ofrece, naranja = necesita. */}
+      <View className={`gap-1 rounded-xl border-l-4 px-3 py-2.5 ${isOffer ? 'border-primary bg-primary-fixed' : 'border-secondary bg-secondary-fixed'}`}>
+        <View className="flex-row items-center gap-1.5">
+          <Icon name={isOffer ? 'gift-outline' : 'hand-extended-outline'} size={16} color={isOffer ? 'primary' : 'secondary'} />
+          <Text variant="overline" tone={isOffer ? 'primary' : 'secondary'}>
+            {isOffer ? 'Ofrece' : 'Necesita'}
+          </Text>
+        </View>
         <Text variant="headline-sm" numberOfLines={compact ? 2 : 3}>
           {post.title}
         </Text>
@@ -102,10 +104,10 @@ export function PostCard({ post, now, compact = false }: PostCardProps) {
         ) : null}
       </View>
 
-      <View className="flex-row items-center justify-between gap-3 border-t border-outline-variant pt-3">
+      <View className={`flex-row items-center justify-between gap-3 rounded-xl p-2.5 ${isOffer ? 'bg-primary-fixed/40' : 'bg-secondary-fixed/50'}`}>
         <View className="min-w-0 flex-1 flex-row items-center gap-2">
-          <View className="h-9 w-9 items-center justify-center rounded-full bg-primary-fixed">
-            <Text variant="label-md" tone="primary">
+          <View className={`h-9 w-9 items-center justify-center rounded-full ${isOffer ? 'bg-primary' : 'bg-secondary'}`}>
+            <Text variant="label-md" tone={isOffer ? 'onPrimary' : 'onSecondary'}>
               {post.author.displayName.charAt(0)}
             </Text>
           </View>
@@ -123,8 +125,8 @@ export function PostCard({ post, now, compact = false }: PostCardProps) {
           </View>
         </View>
         {!compact ? (
-          <View className="min-h-11 flex-row items-center gap-1.5 rounded-xl bg-primary px-3.5">
-            <Text variant="label-md" tone="onPrimary">
+          <View className={`min-h-11 flex-row items-center gap-1.5 rounded-xl px-3.5 ${isOffer ? 'bg-primary' : 'bg-secondary'}`}>
+            <Text variant="label-md" tone={isOffer ? 'onPrimary' : 'onSecondary'}>
               {isOffer ? 'Ver y contactar' : 'Ofrecer ayuda'}
             </Text>
           </View>

@@ -5,8 +5,7 @@ import { PanResponder, View } from 'react-native';
 import { useOnboardingStore } from '@/features/onboarding';
 import { useDrawerStore } from '@/shared/nav/drawerStore';
 
-/** Pantallas raíz (las que tienen cabecera con menú): ahí el borde izquierdo abre el menú lateral. */
-const ROOTS = new Set(['/', '/comunidad', '/negocios', '/emergencias', '/ayuda', '/explorar', '/publicar']);
+import { ROOT_PATHS } from './sections';
 
 /**
  * Franja invisible en el borde izquierdo: al arrastrarla hacia la derecha se abre el menú lateral.
@@ -28,7 +27,7 @@ export function EdgeSwipe() {
     [setOpen],
   );
 
-  if (!completed || !ROOTS.has(pathname)) return null;
+  if (!completed || !ROOT_PATHS.has(pathname)) return null;
 
   return <View {...responder.panHandlers} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 18 }} />;
 }

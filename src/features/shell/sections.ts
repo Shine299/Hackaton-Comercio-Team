@@ -31,6 +31,9 @@ export const BAR_ITEMS: BarItem[] = [
  * `null` = sin barra (formularios, detalles, mapa, perfil, notificaciones).
  * «Vecinos» (explorar) y «Publicar» forman parte de Ayuda: Quiero ayudar / Necesito ayuda.
  */
+/** Pantallas raíz (con cabecera de sección): ahí viven el gesto del borde y el botón de chat. */
+export const ROOT_PATHS = new Set(['/', '/comunidad', '/negocios', '/emergencias', '/ayuda', '/explorar', '/publicar']);
+
 export function resolveSection(pathname: string): SectionId | null {
   switch (pathname) {
     case '/':

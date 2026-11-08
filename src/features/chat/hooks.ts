@@ -1,12 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { isSupabaseConfigured } from '@/shared/supabase/client';
 
 import { acceptRequest, declineRequest, fetchConversations, fetchMessages, fetchPendingRequests } from './chatRepository';
 import { useLocalMessagesStore } from './localMessages';
 import { mergeMessages } from './logic';
-import type { ChatMessage, Conversation } from './types';
+import { demoPendingRequest, demoSeedMessage } from './demo';
+import type { ChatMessage, Conversation, PendingRequest } from './types';
 
 /** Conversación de demostración: existe solo cuando no hay servidor, con respuestas guionadas. */
 export const DEMO_CONVERSATION_ID = 'demo-conv-1';
@@ -20,6 +21,7 @@ export const chatKeys = {
 /** Bandeja de conversaciones. Con servidor se refresca sola; sin servidor aparece la de demostración. */
 export function useConversations() {
   const local = useLocalMessagesStore((s) => s.messages);
+  const demoHandled = useLocalMessagesStore((s) => s.demoRequestHandled);
   const query = useQuery({
     queryKey: chatKeys.conversations,
     queryFn: fetchConversations,
@@ -28,10 +30,13 @@ export function useConversations() {
   });
 
   const conversations = useMemo<Conversation[]>(() => {
-    if (isSupabaseConfigured) return query.data ?? [];
+    const real = isSupabaseConfigured ? (query.data ?? []) : [];
+    // La conversación de demostración se ofrece una vez atendida la solicitud demo (o si no hay servidor).
+    if (isSupabaseConfigured && !demoHandled) return real;
     const mine = local.filter((m) => m.conversationId === DEMO_CONVERSATION_ID);
     const last = mine[mine.length - 1];
     return [
+      ...real,
       {
         id: DEMO_CONVERSATION_ID,
         postId: 'demo',
@@ -42,19 +47,26 @@ export function useConversations() {
         isDemo: true,
       },
     ];
-  }, [query.data, local]);
+  }, [query.data, local, demoHandled]);
 
   return { conversations, isLoading: isSupabaseConfigured && query.isLoading, refetch: query.refetch };
 }
 
 /** Solicitudes por responder (para quien publicó). */
 export function usePendingRequests() {
-  return useQuery({
+  const query = useQuery({
     queryKey: chatKeys.pending,
     queryFn: fetchPendingRequests,
     refetchInterval: 15_000,
     enabled: isSupabaseConfigured,
   });
+  const demoHandled = useLocalMessagesStore((s) => s.demoRequestHandled);
+  // Con servidor, la solicitud de demostración se muestra además de las reales (para enseñar el flujo).
+  const data = useMemo<PendingRequest[]>(
+    () => [...(demoHandled || !isSupabaseConfigured ? [] : [demoPendingRequest()]), ...(query.data ?? [])],
+    [query.data, demoHandled],
+  );
+  return { ...query, data };
 }
 
 /** Aceptar abre la conversación; rechazar la descarta. Ambas refrescan bandeja y solicitudes. */
@@ -90,13 +102,14 @@ export function useMessages(conversationId: string) {
     if (serverMessages) dropConfirmed(serverMessages.map((m) => m.id));
   }, [serverMessages, dropConfirmed]);
 
+  const [seed] = useState(() => demoSeedMessage(DEMO_CONVERSATION_ID));
   const messages = useMemo<ChatMessage[]>(
     () =>
       mergeMessages(
         serverMessages ?? [],
-        local.filter((m) => m.conversationId === conversationId),
+        [...(isDemo ? [seed] : []), ...local.filter((m) => m.conversationId === conversationId)],
       ),
-    [serverMessages, local, conversationId],
+    [serverMessages, local, conversationId, isDemo, seed],
   );
 
   return { messages, isLoading: query.isLoading && !isDemo, isError: query.isError, isDemo };

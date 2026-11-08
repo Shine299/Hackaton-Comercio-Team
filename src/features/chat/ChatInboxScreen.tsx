@@ -4,12 +4,16 @@ import { ActivityIndicator, Pressable, View } from 'react-native';
 import { formatRelativeTime } from '@/shared/format';
 import { Button, Card, DemoTag, GRADIENTS, Icon, Screen, SectionHero, Text } from '@/shared/ui';
 
-import { useConversations, usePendingRequests, useRespondToRequest } from './hooks';
+import { DEMO_CONVERSATION_ID, useConversations, usePendingRequests, useRespondToRequest } from './hooks';
+import { useLocalMessagesStore } from './localMessages';
+import { DEMO_REQUEST_ID } from './demo';
 import type { Conversation, PendingRequest } from './types';
 
 function RequestRow({ request }: { request: PendingRequest }) {
   const router = useRouter();
   const { accept, decline } = useRespondToRequest();
+  const handleDemo = useLocalMessagesStore((s) => s.handleDemoRequest);
+  const isDemo = request.id === DEMO_REQUEST_ID;
   const busy = accept.isPending || decline.isPending;
 
   return (
@@ -20,6 +24,7 @@ function RequestRow({ request }: { request: PendingRequest }) {
           Sobre: {request.postTitle} · {formatRelativeTime(request.createdAt)}
         </Text>
         {request.message ? <Text>«{request.message}»</Text> : null}
+        {isDemo ? <DemoTag /> : null}
       </View>
       {accept.isError || decline.isError ? (
         <Text variant="label-md" tone="error" accessibilityLiveRegion="polite">
@@ -33,7 +38,7 @@ function RequestRow({ request }: { request: PendingRequest }) {
           fullWidth={false}
           className="flex-1"
           disabled={busy}
-          onPress={() => decline.mutate(request.id)}
+          onPress={() => (isDemo ? handleDemo() : decline.mutate(request.id))}
         />
         <Button
           label="Aceptar y chatear"
@@ -42,11 +47,16 @@ function RequestRow({ request }: { request: PendingRequest }) {
           className="flex-[1.6]"
           loading={accept.isPending}
           disabled={busy}
-          onPress={() =>
+          onPress={() => {
+            if (isDemo) {
+              handleDemo();
+              router.push({ pathname: '/chat/[id]', params: { id: DEMO_CONVERSATION_ID } });
+              return;
+            }
             accept.mutate(request.id, {
               onSuccess: (conversationId) => router.push({ pathname: '/chat/[id]', params: { id: conversationId } }),
-            })
-          }
+            });
+          }}
         />
       </View>
     </Card>

@@ -271,7 +271,7 @@ export function CommunityScreen() {
       accessibilityRole="button"
       accessibilityLabel="Publicar en tu barrio"
       onPress={() => router.navigate('/publicar')}
-      className="absolute bottom-4 right-5 h-14 flex-row items-center gap-2 rounded-2xl bg-primary px-5 shadow-lg elevation-md active:opacity-90">
+      className="absolute bottom-4 left-5 h-14 flex-row items-center gap-2 rounded-2xl bg-primary px-5 shadow-lg elevation-md active:opacity-90">
       <Icon name="square-edit-outline" size={26} color="onPrimary" />
       <Text variant="body-lg-bold" tone="onPrimary">
         Publicar

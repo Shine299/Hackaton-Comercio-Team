@@ -13,6 +13,9 @@ type LocalMessage = ChatMessage & { fromDemo?: boolean };
 
 type LocalMessagesState = {
   messages: LocalMessage[];
+  /** La solicitud de demostración ya se aceptó o rechazó. */
+  demoRequestHandled: boolean;
+  handleDemoRequest: () => void;
   /** Guarda un mensaje propio y lo pone en la cola de envío. Devuelve el mensaje creado. */
   send: (conversationId: string, body: string, options?: { demo?: boolean }) => ChatMessage;
   /** Respuesta de la otra persona en la conversación de demostración (nunca sale del teléfono). */
@@ -27,6 +30,8 @@ export const useLocalMessagesStore = create<LocalMessagesState>()(
   persist(
     (set) => ({
       messages: [],
+      demoRequestHandled: false,
+      handleDemoRequest: () => set({ demoRequestHandled: true }),
       send: (conversationId, body, options) => {
         const id = Crypto.randomUUID();
         const message: LocalMessage = {
