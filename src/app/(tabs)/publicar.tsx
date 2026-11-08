@@ -1,3 +1,3 @@
-import { PublishScreen } from '@/features/publish/PublishScreen';
+import { PublishScreen } from '@/features/publish';
 
 export default PublishScreen;

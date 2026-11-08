@@ -3,13 +3,12 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
 
-import { PhotoField } from '@/features/emergency/components/FormBits';
-import { usePickPhoto } from '@/features/emergency/usePickPhoto';
+import { usePickPhoto } from '@/shared/hooks/usePickPhoto';
 import { useOutboxStore } from '@/features/outbox';
 import { useLocalPostsStore, type Post, type PostDetail } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
 import { useRegistrationGate, useSessionStore } from '@/features/session';
-import { Button, Card, Chip, Icon, Screen, Text, TextField } from '@/shared/ui';
+import { Button, Card, Chip, Icon, PhotoField, Screen, Text, TextField } from '@/shared/ui';
 
 import {
   BUSINESS_RUBROS,

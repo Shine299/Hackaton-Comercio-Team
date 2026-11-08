@@ -1,7 +1,6 @@
 import { useEmergencyStore, type IncidentStatus, type ResourceStage } from '@/features/emergency';
 import { isUnsent, useOutboxStore, type OutboxItem } from '@/features/outbox';
-import { useContactStore, useLocalPostsStore } from '@/features/posts';
-import { useReportStore } from '@/features/posts/reportStore';
+import { useContactStore, useLocalPostsStore, useReportStore } from '@/features/posts';
 import { supabase } from '@/shared/supabase/client';
 import type { SyncStatus } from '@/shared/sync/status';
 

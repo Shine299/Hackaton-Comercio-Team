@@ -1,3 +1,3 @@
-import { CommunityScreen } from '@/features/home/CommunityScreen';
+import { CommunityScreen } from '@/features/home';
 
 export default CommunityScreen;

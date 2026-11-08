@@ -1,11 +1,10 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { Linking, Pressable, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { Badge, cn, GRADIENTS, Icon, type IconName, Screen, SECCION_AYUDA_XML, SectionHero, Text } from '@/shared/ui';
-import { CommunityMap } from '@/features/map';
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
@@ -46,7 +45,7 @@ function Option({ icon, title, onPress, badge, danger = false }: OptionProps) {
  * Inicio de Emergencia: un botón enorme para reportar, los 3 números oficiales, lo que pasa cerca de ti y
  * el resto de opciones. «Peligro inmediato» sigue a un toque y sin formulario.
  */
-export function EmergencyCenterScreen() {
+export function EmergencyCenterScreen({ nearbyMap }: { nearbyMap?: ReactNode }) {
   const router = useRouter();
   const sector = useSectorStore((s) => s.sector);
   const addHelp = useEmergencyStore((s) => s.addHelp);
@@ -186,7 +185,7 @@ export function EmergencyCenterScreen() {
       ))}
       {!alert && nearby.length === 0 ? <Text tone="muted">Sin avisos activos cerca de ti por ahora.</Text> : null}
 
-      <CommunityMap posts={[]} layers={['incidents', 'needs', 'resources', 'zones']} embedded height={280} />
+      {nearbyMap}
 
       <Text variant="headline-sm" className="mt-3 px-1">
         Más opciones

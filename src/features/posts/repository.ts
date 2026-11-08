@@ -2,17 +2,9 @@ import { isSupabaseConfigured } from '@/shared/supabase/client';
 
 import { createDemoPosts } from './demoPosts';
 import { createSupabasePostsRepository } from './supabaseRepository';
-import type { Post } from './types';
+import type { PostsRepository } from './types';
 
-/**
- * Contrato de acceso a publicaciones. Hoy lo cumple un mock con datos de demo;
- * en la etapa 10 se añade una implementación Supabase sin tocar la UI.
- */
-export interface PostsRepository {
-  /** Publicaciones cercanas al sector indicado (incluye sectores contiguos con su distancia). */
-  listNearby(sectorId: string): Promise<Post[]>;
-  getById(id: string): Promise<Post | null>;
-}
+export type { PostsRepository };
 
 /** MOCK: datos ficticios etiquetados como demo. No representa un servicio real. */
 export const demoPostsRepository: PostsRepository = {

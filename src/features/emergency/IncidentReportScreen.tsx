@@ -2,13 +2,13 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
 
-import { Button, Screen, Text, TextField } from '@/shared/ui';
+import { Button, PhotoField, Screen, Text, TextField } from '@/shared/ui';
 
 import { ChoiceTile } from './components/ChoiceTile';
-import { ApproxZoneCard, PhotoField } from './components/FormBits';
+import { ApproxZoneCard } from './components/FormBits';
 import { useEmergencyStore } from './store';
 import { INCIDENT_CATEGORIES, type IncidentCategory } from './types';
-import { usePickPhoto } from './usePickPhoto';
+import { usePickPhoto } from '@/shared/hooks/usePickPhoto';
 
 /** «Reportar incidente»: no requiere cuenta. Categoría + zona aproximada; lo demás es opcional. */
 export function IncidentReportScreen() {

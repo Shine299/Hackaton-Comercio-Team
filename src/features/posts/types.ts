@@ -1,5 +1,15 @@
 import type { SyncStatus } from '@/shared/sync/status';
 
+/**
+ * Contrato de acceso a publicaciones. Lo cumple un mock con datos de demo y una implementación Supabase,
+ * sin tocar la UI.
+ */
+export interface PostsRepository {
+  /** Publicaciones cercanas al sector indicado (incluye sectores contiguos con su distancia). */
+  listNearby(sectorId: string): Promise<Post[]>;
+  getById(id: string): Promise<Post | null>;
+}
+
 /** Ciclo de vida de una publicación (docs/02_ux_ui §6). */
 export type PostStatus = 'draft' | 'active' | 'paused' | 'in_coordination' | 'completed' | 'closed' | 'expired';
 

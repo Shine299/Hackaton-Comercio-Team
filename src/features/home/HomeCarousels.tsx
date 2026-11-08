@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
-import { rubroOf } from '@/features/business/rubros';
+import { rubroOf } from '@/features/business';
 import { getCategory, type Post } from '@/features/posts';
 import { formatApproxDistance, formatRelativeTime } from '@/shared/format';
 import { DemoTag, gradientForCategory, Icon, SECCION_EMPRENDIMIENTOS_XML, Text } from '@/shared/ui';

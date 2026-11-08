@@ -1,9 +1,8 @@
-import { SECTORS } from '@/features/sector/data';
+import { SECTORS } from '@/features/sector';
 import { distanceKm } from '@/shared/geo/distance';
 import { supabase } from '@/shared/supabase/client';
 
-import type { PostsRepository } from './repository';
-import type { Post, PostCategoryId, PostDetail, PostKind, PostStatus, TrustLevel } from './types';
+import type { Post, PostCategoryId, PostDetail, PostKind, PostsRepository, PostStatus, TrustLevel } from './types';
 
 type Row = {
   id: string;

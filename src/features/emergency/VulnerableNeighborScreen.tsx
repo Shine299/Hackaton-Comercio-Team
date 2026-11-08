@@ -2,11 +2,11 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
 
-import { Button, Card, Screen, Text, TextField } from '@/shared/ui';
+import { Button, Card, PhotoField, Screen, Text, TextField } from '@/shared/ui';
 
 import { ChoiceTile } from './components/ChoiceTile';
 import { EmergencyNumbersCard } from './components/EmergencyNumbersCard';
-import { ApproxZoneCard, PhotoField } from './components/FormBits';
+import { ApproxZoneCard } from './components/FormBits';
 import { VoiceNoteField } from './components/VoiceNoteField';
 import { IncidentStatusBadge } from './components/IncidentStatus';
 import { VulnerableLayers } from './components/VulnerableLayers';
@@ -21,7 +21,7 @@ import {
   type VulnerableAlert,
   type VulnerableNeed,
 } from './types';
-import { usePickPhoto } from './usePickPhoto';
+import { usePickPhoto } from '@/shared/hooks/usePickPhoto';
 
 type Step = 1 | 2 | 3;
 

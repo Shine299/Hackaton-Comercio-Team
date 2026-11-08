@@ -8,8 +8,9 @@ import { Inter_700Bold } from '@expo-google-fonts/inter/700Bold';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BoardNotifier } from '@/features/notifications';
 import { EdgeSwipe, ProfileDrawer, SectionBar } from '@/features/shell';
-import { hasServerTransport, registerSupabaseTransport, useOutboxStore } from '@/features/outbox';
-import { reconcileWithServer, syncNow } from '@/features/sync';
+import { ActivityBadgeSync } from '@/features/activity';
+import { hasServerTransport, useOutboxStore } from '@/features/outbox';
+import { reconcileWithServer, registerSupabaseTransport, syncNow } from '@/features/sync';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -57,6 +58,7 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <StatusBar style="dark" />
         <BoardNotifier />
+        <ActivityBadgeSync />
         <View style={{ flex: 1 }}>
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#f9f9ff' } }}>
             <Stack.Screen name="(tabs)" />

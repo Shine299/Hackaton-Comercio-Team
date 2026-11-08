@@ -1,3 +1,3 @@
-import { MyReportsScreen } from '@/features/emergency/MyReportsScreen';
+import { MyReportsScreen } from '@/features/emergency';
 
 export default MyReportsScreen;

@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-import { EmergencyHeader } from '@/features/emergency/components/EmergencyHeader';
+import { EmergencyHeader } from '@/features/emergency';
 
 /** Stack del Modo Emergencia. Es un stack aparte: no añade pestañas ni altera la navegación principal. */
 export default function EmergenciasLayout() {

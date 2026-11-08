@@ -2,13 +2,13 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { Button, Icon, Screen, Text, TextField } from '@/shared/ui';
+import { Button, Icon, PhotoField, Screen, Text, TextField } from '@/shared/ui';
 
 import { ChoiceTile } from './components/ChoiceTile';
-import { ApproxZoneCard, PhotoField } from './components/FormBits';
+import { ApproxZoneCard } from './components/FormBits';
 import { useEmergencyStore } from './store';
 import { HELP_TYPES, type HelpType } from './types';
-import { usePickPhoto } from './usePickPhoto';
+import { usePickPhoto } from '@/shared/hooks/usePickPhoto';
 
 /** «Necesito ayuda»: no requiere cuenta. Peligro inmediato guarda una alerta mínima al instante. */
 export function HelpRequestScreen() {

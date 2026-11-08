@@ -23,3 +23,5 @@ export * from './types';
 export { VulnerableNeighborScreen } from './VulnerableNeighborScreen';
 export { ReportCard } from './components/ReportCard';
 export { MyReports } from './components/MyReports';
+export { MyReportsScreen } from './MyReportsScreen';
+export { EmergencyHeader } from './components/EmergencyHeader';

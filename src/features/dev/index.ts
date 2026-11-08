@@ -1,0 +1,1 @@
+export { DesignGalleryScreen } from './DesignGalleryScreen';

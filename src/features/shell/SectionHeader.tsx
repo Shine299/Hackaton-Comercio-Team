@@ -2,9 +2,9 @@ import { useRouter } from 'expo-router';
 import type { ReactNode } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { useUnreadActivityCount } from '@/features/activity/useUnreadActivityCount';
 import { useSectorStore } from '@/features/sector';
 import { useSessionStore } from '@/features/session';
+import { useActivityBadgeStore } from '@/shared/nav/activityBadgeStore';
 import { useDrawerStore } from '@/shared/nav/drawerStore';
 import { Icon, Text } from '@/shared/ui';
 
@@ -23,7 +23,7 @@ type SectionHeaderProps = {
 export function SectionHeader({ title, danger = false, eyebrow }: SectionHeaderProps) {
   const router = useRouter();
   const sector = useSectorStore((s) => s.sector);
-  const unread = useUnreadActivityCount();
+  const unread = useActivityBadgeStore((s) => s.unread);
   const setDrawerOpen = useDrawerStore((s) => s.setOpen);
   const registered = useSessionStore((s) => s.registered);
   const displayName = useSessionStore((s) => s.displayName);

@@ -1,3 +1,3 @@
-import { DesignGalleryScreen } from '@/features/dev/DesignGalleryScreen';
+import { DesignGalleryScreen } from '@/features/dev';
 
 export default DesignGalleryScreen;

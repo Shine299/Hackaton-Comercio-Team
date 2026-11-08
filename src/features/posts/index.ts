@@ -33,3 +33,5 @@ export type {
   PostStatus,
   TrustLevel,
 } from './types';
+export { PostDetailScreen } from './PostDetailScreen';
+export { useReportStore } from './reportStore';

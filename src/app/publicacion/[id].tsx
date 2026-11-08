@@ -1,3 +1,3 @@
-import { PostDetailScreen } from '@/features/posts/PostDetailScreen';
+import { PostDetailScreen } from '@/features/posts';
 
 export default PostDetailScreen;

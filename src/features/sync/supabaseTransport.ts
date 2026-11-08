@@ -1,9 +1,8 @@
-import { useLocalPostsStore } from '@/features/posts/localStore';
+import { useLocalPostsStore } from '@/features/posts';
 import { useSessionStore } from '@/features/session';
 import { ensureAnonymousUser, isSupabaseConfigured, supabase } from '@/shared/supabase/client';
 
-import { setTransport, type SendResult, type SyncTransport } from './transport';
-import type { OutboxItem } from './types';
+import { setTransport, type OutboxItem, type SendResult, type SyncTransport } from '@/features/outbox';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const DUPLICATE_KEY = '23505';

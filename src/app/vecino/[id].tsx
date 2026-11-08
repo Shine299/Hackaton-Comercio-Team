@@ -1,3 +1,3 @@
-import { NeighborScreen } from '@/features/profile/NeighborScreen';
+import { NeighborScreen } from '@/features/profile';
 
 export default NeighborScreen;

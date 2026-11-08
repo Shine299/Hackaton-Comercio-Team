@@ -18,3 +18,4 @@ export { TextField } from './TextField';
 export { colors } from './theme';
 export { GRADIENTS, gradientForCategory, type Gradient } from './gradients';
 export * from './illustrations';
+export { PhotoField } from './PhotoField';
