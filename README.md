@@ -53,7 +53,6 @@ npx expo start           # escanea el QR con Expo Go en tu celular (Android/iOS)
 | Variable (`.env`) | Para qué | Obligatoria |
 |---|---|---|
 | `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY` | Backend real (clave **anónima**; la seguridad es RLS) | No |
-| `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Mapas en builds nativas (en Expo Go no hace falta) | No |
 
 **Servidor (Supabase), lo hace el equipo una vez.** Las claves de IA son secretas: van como *secrets* de Supabase,
 **nunca** en `.env` ni en una variable `EXPO_PUBLIC_*`.

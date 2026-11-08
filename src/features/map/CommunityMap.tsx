@@ -1,6 +1,7 @@
+import Constants, { ExecutionEnvironment } from 'expo-constants';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Platform, Pressable, ScrollView, View } from 'react-native';
 
 import { useSectorCameras } from '@/features/cameras';
 import { buildBoard, useEmergencyStore, useSharedBoard } from '@/features/emergency';
@@ -12,9 +13,13 @@ import { Badge, Button, Card, Chip, DemoTag, Icon, Text, TextField } from '@/sha
 import { buildMapPoints } from './buildMapPoints';
 import { DEFAULT_LAYERS, getLayer, MAP_LAYERS } from './layers';
 import { MapFab } from './MapFab';
-import NativeLayerMap from './NativeLayerMap';
 import { PLACES_ATTRIBUTION } from './places';
 import type { MapLayerId, MapPoint } from './types';
+
+// MapLibre es un módulo nativo: Expo Go no lo trae. Ahí ni se importa y se muestra la lista (el APK sí lo trae).
+const IN_EXPO_GO = Platform.OS !== 'web' && Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const NativeLayerMap: typeof import('./NativeLayerMap').default | null = IN_EXPO_GO ? null : require('./NativeLayerMap').default;
 
 const LIST_CAP = 8;
 
@@ -48,7 +53,7 @@ function PointRow({ point, selected, onPress }: { point: MapPoint; selected: boo
 }
 
 /**
- * Mapa barrial por capas (Explorar → Mapa). En iOS y Android muestra react-native-maps; en la vista web de desarrollo,
+ * Mapa barrial por capas (Explorar → Mapa). En iOS y Android muestra MapLibre (OpenStreetMap); en la vista web de desarrollo,
  * la misma información en lista y un aviso claro. Los puntos son siempre zona aproximada.
  */
 export function CommunityMap({
@@ -83,9 +88,8 @@ export function CommunityMap({
   const { data: shared = [] } = useSharedBoard(sector.id);
   const cameras = useSectorCameras();
 
-  // En Expo Go el mapa funciona sin clave; la clave de Google solo hace falta en builds de producción.
   // La app es solo móvil; la vista web de desarrollo usa Leaflet (NativeLayerMap.web.tsx) únicamente para revisar.
-  const nativeMap = true;
+  const nativeMap = NativeLayerMap !== null;
 
   const all = useMemo(() => {
     // Lo que el servidor ya muestra en vivo no se repite desde el teléfono.
@@ -163,7 +167,7 @@ export function CommunityMap({
             <Text variant="body-lg-bold">Mapa no disponible</Text>
           </View>
           <Text>
-            El mapa nativo no funciona en la versión web. Te mostramos la misma información en lista.
+            El mapa necesita la app instalada (APK) y no funciona en Expo Go. Te mostramos la misma información en lista.
           </Text>
         </Card>
       ) : (
