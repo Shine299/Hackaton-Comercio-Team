@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { SyncQueueCard } from '@/features/outbox';
 import { useSavedStore } from '@/features/posts';
 import { useSessionStore } from '@/features/session';
-import { Button, Card, Chip, Text, TextField } from '@/shared/ui';
+import { Button, Card, Chip, Text, TextField, ViewModePicker } from '@/shared/ui';
 
 import { useProfilePrefsStore, VOLUNTEER_SKILLS } from './store';
 
@@ -55,6 +55,10 @@ export function ProfileSettings({ part }: { part?: 'privacy' | 'account' }) {
     <>
       {part !== 'privacy' ? (
         <>
+        <Card>
+          <Text variant="headline-sm">Cómo ver la app</Text>
+          <ViewModePicker />
+        </Card>
         <TextField
           label="Nombre público"
           hint={nameHint ?? 'Nombre y la inicial del apellido. Sin teléfono ni correo.'}

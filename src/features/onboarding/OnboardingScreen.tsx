@@ -6,7 +6,7 @@ import Animated, { FadeIn, SlideInLeft, SlideInRight, ZoomIn } from 'react-nativ
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { SectorPicker } from '@/features/sector';
-import { BrandLogo, Button, Card, GRADIENTS, Icon, Screen, Text } from '@/shared/ui';
+import { BrandLogo, Button, Card, GRADIENTS, Icon, Screen, Text, ViewModePicker } from '@/shared/ui';
 
 import { InterestsDemo, OfflineDemo, SosDemo, StepsDemo } from './StepDemos';
 import { ONBOARDING_STEPS, TOTAL_ONBOARDING_STEPS } from './steps';
@@ -151,6 +151,7 @@ export function OnboardingScreen() {
             {step.demo === 'steps' ? <StepsDemo /> : null}
             {step.demo === 'sos' ? <SosDemo /> : null}
             {step.demo === 'offline' ? <OfflineDemo /> : null}
+            {step.demo === 'viewmode' ? <ViewModePicker /> : null}
 
             {step.points ? (
               <Card tone="low" className="gap-2">

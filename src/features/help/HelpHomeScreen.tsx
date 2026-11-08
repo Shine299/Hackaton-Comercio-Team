@@ -6,6 +6,7 @@ import { SvgXml } from 'react-native-svg';
 import { ReportCard, useEmergencyStore } from '@/features/emergency';
 import { Badge, type Gradient, GRADIENTS, Icon, type IconName, Screen, SECCION_AYUDA_XML, SectionHero, StatRow, Text } from '@/shared/ui';
 import { useNearbyPosts } from '@/features/posts';
+import { useEasyMode } from '@/shared/nav/viewModeStore';
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
 
@@ -49,6 +50,7 @@ function BigAction({ title, hint, icon, gradient, onPress }: BigActionProps) {
 export function HelpHomeScreen() {
   const router = useRouter();
   const reports = useEmergencyStore((s) => s.reports);
+  const easy = useEasyMode();
   const mine = reports.filter((r) => r.kind === 'help').slice(0, 3);
   const sector = useSectorStore((s) => s.sector);
   const { data } = useNearbyPosts(sector.id);
@@ -80,7 +82,7 @@ export function HelpHomeScreen() {
         ]}
       />
 
-      <View className="flex-row gap-3">
+      <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
         <BigAction
           title="Necesito ayuda"
           hint="Cuéntales qué te hace falta"

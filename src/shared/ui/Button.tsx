@@ -1,5 +1,7 @@
 import { ActivityIndicator, Pressable, View, type PressableProps } from 'react-native';
 
+import { useEasyMode } from '@/shared/nav/viewModeStore';
+
 import { cn } from './cn';
 import { Icon, type IconName } from './Icon';
 import { Text, type TextTone } from './Text';
@@ -62,6 +64,7 @@ export function Button({
   ...rest
 }: ButtonProps) {
   const isDisabled = disabled || loading;
+  const easy = useEasyMode();
   return (
     <Pressable
       accessibilityRole="button"
@@ -70,7 +73,7 @@ export function Button({
       disabled={isDisabled}
       className={cn(
         'flex-row items-center justify-center gap-2 rounded-2xl px-4 active:opacity-80',
-        size === 'lg' ? 'min-h-14' : 'min-h-12',
+        easy ? 'min-h-16' : size === 'lg' ? 'min-h-14' : 'min-h-12',
         fullWidth ? 'self-stretch' : 'self-start',
         containerClass[variant],
         isDisabled && 'opacity-50',

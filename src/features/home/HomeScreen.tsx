@@ -10,6 +10,7 @@ import { useSectorStore } from '@/features/sector';
 import { useSessionStore } from '@/features/session';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
+import { useEasyMode } from '@/shared/nav/viewModeStore';
 import { Button, Card, Chip, type Gradient, GRADIENTS, Icon, ListenButton, Screen, SECCION_AYUDA_XML, SECCION_COMUNIDAD_XML, SECCION_EMERGENCIA_XML, SECCION_EMPRENDIMIENTOS_XML, Text, TextField } from '@/shared/ui';
 
 import { greetingFor } from './greeting';
@@ -76,6 +77,7 @@ export function HomeScreen() {
   const viewedIds = useInterestStore((s) => s.viewedIds);
   const savedPostIds = useSavedStore((s) => s.postIds);
 
+  const easy = useEasyMode();
   const [query, setQuery] = useState('');
   const [greeting] = useState(() => greetingFor(new Date().getHours()));
   const search = (q: string) => router.navigate({ pathname: '/explorar', params: { q: q.trim(), t: String(Date.now()) } });
@@ -158,6 +160,7 @@ export function HomeScreen() {
             <Icon name={greeting.icon} size={32} color="onPrimary" />
           </View>
         </View>
+        {easy ? <ListenButton text={`${greeting.text}. ${greeting.line}`} /> : null}
         {news.length > 0 ? (
           <View className="flex-row items-center gap-2 self-start rounded-full bg-white/20 px-3 py-1.5">
             <Icon name="bullhorn-outline" size={16} color="onPrimary" />
@@ -196,7 +199,7 @@ export function HomeScreen() {
         <Text variant="headline-sm" accessibilityRole="header">
           ¿En qué te ayudamos hoy?
         </Text>
-        <View className="flex-row gap-3">
+        <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
           <ActionTile
             verb="Descubre qué pasa cerca"
             detail={news.length > 0 ? `${news.length} novedades frescas` : 'Novedades y avisos del área'}
@@ -212,7 +215,7 @@ export function HomeScreen() {
             onPress={() => router.navigate('/negocios')}
           />
         </View>
-        <View className="flex-row gap-3">
+        <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
           <ActionTile
             verb="Pide auxilio al instante"
             detail="Reporta sin crear cuenta"

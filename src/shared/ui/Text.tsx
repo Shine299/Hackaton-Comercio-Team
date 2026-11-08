@@ -1,6 +1,9 @@
 import { Text as RNText, type TextProps as RNTextProps } from 'react-native';
 
+import { useViewModeStore } from '@/shared/nav/viewModeStore';
+
 import { cn } from './cn';
+import { easyTextStyle } from './easyMode';
 import { MAX_FONT_SCALE } from './theme';
 
 export type TextVariant =
@@ -70,12 +73,15 @@ export function Text({
   tone = 'default',
   className,
   maxFontSizeMultiplier = MAX_FONT_SCALE,
+  style,
   ...rest
 }: TextProps) {
+  const mode = useViewModeStore((s) => s.mode);
   return (
     <RNText
       maxFontSizeMultiplier={maxFontSizeMultiplier}
       className={cn(variantClass[variant], toneClass[tone], className)}
+      style={[easyTextStyle(variant, mode), style]}
       {...rest}
     />
   );

@@ -1,6 +1,6 @@
 import { GRADIENTS, type IconName } from '@/shared/ui';
 
-export type OnboardingDemo = 'interests' | 'steps' | 'sos' | 'offline';
+export type OnboardingDemo = 'interests' | 'steps' | 'sos' | 'offline' | 'viewmode';
 
 export type OnboardingStep = {
   id: string;
@@ -70,6 +70,14 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     body: 'Prueba el modo avión: te diremos siempre si algo ya llegó o solo está en tu teléfono.',
     gradient: GRADIENTS.recomendado,
     demo: 'offline',
+  },
+  {
+    id: 'view-mode',
+    icon: 'eye-plus-outline',
+    title: 'Elige cómo ver la app',
+    body: 'Puedes cambiarlo cuando quieras. Prueba el modo Fácil: se aplica al instante.',
+    gradient: GRADIENTS.ayuda,
+    demo: 'viewmode',
   },
 ];
 
