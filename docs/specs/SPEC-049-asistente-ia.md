@@ -1,8 +1,8 @@
 # SPEC-049 — Asistente de Yunta con IA gratuita (Mistral → Groq → respuestas fijas)
 
-- **Estado:** implementada (8 nov 2026); `npm run check` en verde y `deno check` de la función en verde. **Falta:** crear
-  las claves, cargar los secretos, aplicar la migración 11, desplegar la función y probar con IA real (nunca se llamó a
-  un proveedor real desde este repo)
+- **Estado:** implementada y **probada de punta a punta contra el servidor real** (8 nov 2026): migración 11 aplicada, función `asistente`
+  desplegada, `GROQ_API_KEY` y `GROQ_MODEL` cargados; una pregunta real respondió con `provider: groq`. `npm run check` en verde.
+  **Falta:** probar en un celular y volver a desplegar `asistente` para llevar las instrucciones nuevas (Comunidad y texto sin formato)
 - **Dueño / revisor:** … / …
 - **Sprint:** Etapa 14 (después de la 13). Regla del proyecto: solo servicios gratuitos.
 
@@ -12,10 +12,10 @@ semana?») con IA, **sin gastar dinero**: usa planes gratuitos en cadena y, si t
 No reemplaza al chat entre vecinos ni a los servicios de emergencia.
 
 ## Cadena de proveedores (servidor)
-1. **Mistral** (`MISTRAL_API_KEY`, `MISTRAL_MODEL`, por defecto `mistral-small-latest`) — principal: cupo gratuito
+1. **Mistral** (`MISTRAL_API_KEY`, `MISTRAL_MODEL`, por defecto `mistral-small-latest`) — **opcional**: el 8 nov la consola pidió pago para crear la clave, así que por ahora no se usa. Si se consigue una clave gratuita pasa a ser el principal: cupo gratuito
    amplio y entrenamiento con los datos **desactivable** (desactivarlo en la consola de Mistral es parte de la puesta
    en marcha).
-2. **Groq** (`GROQ_API_KEY`, `GROQ_MODEL`, por defecto `llama-3.3-70b-versatile`) — respaldo rápido. La misma clave
+2. **Groq** (`GROQ_API_KEY`, `GROQ_MODEL`, por defecto `openai/gpt-oss-120b`) — hoy el proveedor principal. Groq retiró `llama-3.3-70b-versatile` el 16-ago-2026 (daba 404). La misma clave
    activa la voz a texto (SPEC-050), así que conviene configurarla siempre.
 3. **Respuestas fijas** (sin IA) — siempre funcionan, también sin red.
 

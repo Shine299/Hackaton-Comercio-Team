@@ -1,7 +1,7 @@
 import { ensureAnonymousUser, supabase } from '@/shared/supabase/client';
 
 import type { AssistantTurn, ServerReply } from './logic';
-import { audioMimeFromUri } from './voice';
+import { audioMimeFromUri, fileFromMime } from './voice';
 
 /**
  * Pregunta al asistente por la Edge Function `asistente` (SPEC-049). Necesita sesión (anónima vale) para el
@@ -27,16 +27,32 @@ export type TranscriptionResult = { text: string } | { text: null; reason: 'limi
  */
 export async function transcribeAudio(uri: string): Promise<TranscriptionResult> {
   if (!supabase) throw new Error('Sin servidor configurado');
-  const file = audioMimeFromUri(uri);
-  if (!file) return { text: null, reason: 'format' };
   await ensureAnonymousUser();
   const form = new FormData();
-  // React Native sube un archivo local con { uri, name, type }.
-  form.append('audio', { uri, name: file.name, type: file.type } as unknown as Blob);
+  if (!(await appendAudio(form, uri))) return { text: null, reason: 'format' };
   const { data, error } = await supabase.functions.invoke('asistente', { body: form });
   if (error) throw new Error(error.message);
   const reply = data as { text?: unknown; reason?: unknown } | null;
   if (reply && typeof reply.text === 'string' && reply.text.trim()) return { text: reply.text };
   const reason = reply?.reason;
   return { text: null, reason: reason === 'limit' || reason === 'empty' ? reason : 'unavailable' };
+}
+
+/**
+ * Agrega el audio al formulario. En el celular la grabación es un archivo local con extensión (React Native lo sube con
+ * `{ uri, name, type }`); en el navegador (vista previa de desarrollo) es una dirección `blob:` sin extensión, así que se
+ * descarga el blob y se sube con su tipo. `false` = formato que no se puede enviar.
+ */
+export async function appendAudio(form: FormData, uri: string): Promise<boolean> {
+  if (uri.startsWith('blob:') || uri.startsWith('data:')) {
+    const blob = await (await fetch(uri)).blob();
+    const file = fileFromMime(blob.type);
+    if (!file) return false;
+    form.append('audio', blob, file.name);
+    return true;
+  }
+  const file = audioMimeFromUri(uri);
+  if (!file) return false;
+  form.append('audio', { uri, name: file.name, type: file.type } as unknown as Blob);
+  return true;
 }

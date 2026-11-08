@@ -114,6 +114,22 @@ export function faqAnswer(question: string): string {
   );
 }
 
+/**
+ * La IA suele responder con formato (negritas, viñetas, enlaces). La pantalla muestra texto simple, así que se
+ * convierte antes de mostrarlo o leerlo en voz alta: sin asteriscos, con viñetas «•».
+ */
+export function plainText(raw: string): string {
+  return raw
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') // [texto](enlace) → texto
+    .replace(/^#{1,6}\s+/gm, '') // encabezados
+    .replace(/^\s*[-*]\s+/gm, '• ') // viñetas
+    .replace(/(\*\*|__)(.+?)\1/g, '$2') // negritas
+    .replace(/(?<![\w*])\*(?!\s)([^*\n]+?)(?<!\s)\*(?![\w*])/g, '$1') // cursivas con *
+    .replace(/`([^`]+)`/g, '$1') // código
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 export type AssistantTurn = { role: 'user' | 'assistant'; text: string };
 
 /** Lo que devuelve el servidor: texto de la IA, o `null` con el motivo. */
@@ -150,7 +166,7 @@ export async function resolveAnswer(
   try {
     const reply = await ask([...history, { role: 'user', text }]);
     if (reply.text === null) return { text: faqAnswer(text), source: 'faq', reason: reply.reason, redacted };
-    return { text: reply.text, source: 'ai', provider: reply.provider, redacted };
+    return { text: plainText(reply.text), source: 'ai', provider: reply.provider, redacted };
   } catch {
     return { text: faqAnswer(text), source: 'faq', reason: 'offline', redacted };
   }

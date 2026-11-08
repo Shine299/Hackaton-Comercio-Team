@@ -3,7 +3,6 @@ import { useRef, useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
-  Platform,
   Pressable,
   ScrollView,
   TextInput,
@@ -16,8 +15,10 @@ import { Button, Card, Chip, DemoTag, Icon, type IconName, ListenButton, Screen,
 
 import { checkQuestion, looksLikeEmergency, MAX_QUESTION_LENGTH, redactPersonalData, resolveAnswer } from './logic';
 import { askAssistant } from './repository';
+import { MicTest } from './MicTest';
 import { type AssistantMessage, useAssistantStore } from './store';
 import { useVoiceInput } from './useVoiceInput';
+import { VoiceTrail } from './VoiceTrail';
 
 const SUGGESTIONS = ['¿Cómo publico algo?', '¿Cómo creo un evento?', '¿Para qué sirve el SOS?', '¿Cómo sé si una tienda está abierta?'];
 
@@ -144,7 +145,7 @@ export function AssistantScreen() {
   };
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+    <KeyboardAvoidingView behavior="padding" className="flex-1">
       <Screen
         header={
           <ScreenHeader
@@ -177,6 +178,12 @@ export function AssistantScreen() {
                 {notice}
               </Text>
             ) : null}
+            {/* Diagnóstico de la voz: si algo falla, aquí se ve qué se grabó y qué respondió el servidor. */}
+            {voice.lastClip ? (
+              <Text variant="label-sm" tone="muted">
+                {voice.lastClip}
+              </Text>
+            ) : null}
             {emergencyHint ? (
               <View className="gap-2 rounded-2xl bg-error-container p-3" accessibilityLiveRegion="assertive">
                 <Text variant="body-md-medium" tone="error">
@@ -185,6 +192,7 @@ export function AssistantScreen() {
                 <Button label="Abrir Emergencia" variant="danger" icon="alarm-light-outline" onPress={() => router.push('/emergencias')} />
               </View>
             ) : null}
+            {voice.status === 'recording' ? <VoiceTrail levels={voice.levels} mode="listening" /> : null}
             {voice.status !== 'idle' ? (
               <View className="flex-row items-center gap-2" accessibilityLiveRegion="polite">
                 {voice.status === 'recording' ? (
@@ -245,6 +253,8 @@ export function AssistantScreen() {
           contentContainerClassName="gap-3 px-4 py-3"
           onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
           keyboardShouldPersistTaps="handled">
+          <Button label="Conversar con Yunta por voz" icon="microphone-outline" size="lg" onPress={() => router.push('/conversacion')} />
+          <MicTest />
           <Card tone="low" className="gap-1.5">
             <View className="flex-row items-center gap-2">
               <Icon name="creation-outline" size={18} color="primary" />

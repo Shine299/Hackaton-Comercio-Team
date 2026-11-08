@@ -1,4 +1,4 @@
-import { checkQuestion, faqAnswer, looksLikeEmergency, redactPersonalData, resolveAnswer } from './logic';
+import { checkQuestion, faqAnswer, looksLikeEmergency, plainText, redactPersonalData, resolveAnswer } from './logic';
 
 // SPEC-049: asistente con IA gratuita.
 describe('looksLikeEmergency', () => {
@@ -93,5 +93,35 @@ describe('resolveAnswer', () => {
       },
     });
     expect(offline).toMatchObject({ source: 'faq', reason: 'offline' });
+  });
+});
+
+describe('plainText (la IA responde con formato; la pantalla muestra texto simple)', () => {
+  it('quita negritas, cursivas y código', () => {
+    expect(plainText('Ve a **Ayuda** y toca *Publicar* o `Enviar`.')).toBe('Ve a Ayuda y toca Publicar o Enviar.');
+    expect(plainText('__Hola__ vecino')).toBe('Hola vecino');
+  });
+
+  it('convierte viñetas y encabezados en texto normal', () => {
+    expect(plainText('## Pasos\n- Abre la app\n* Toca Ayuda\n1. Publica')).toBe('Pasos\n• Abre la app\n• Toca Ayuda\n1. Publica');
+  });
+
+  it('deja el texto sin formato como está, con sus tildes y signos', () => {
+    const text = '¿Cómo estás? Usa 2 * 3 solo si quieres.';
+    expect(plainText(text)).toBe(text);
+  });
+
+  it('cambia los enlaces por su texto y compacta los saltos de línea de más', () => {
+    expect(plainText('Mira [la guía](https://yunta.app/guia).\n\n\n\nListo.')).toBe('Mira la guía.\n\nListo.');
+  });
+});
+
+describe('resolveAnswer con formato de la IA', () => {
+  it('la respuesta de la IA llega ya en texto simple', async () => {
+    const out = await resolveAnswer('¿cómo publico?', [], {
+      serverConfigured: true,
+      ask: async () => ({ text: 'Ve a **Ayuda** y pulsa **Publicar**.', provider: 'groq' }),
+    });
+    expect(out).toMatchObject({ source: 'ai', text: 'Ve a Ayuda y pulsa Publicar.' });
   });
 });
