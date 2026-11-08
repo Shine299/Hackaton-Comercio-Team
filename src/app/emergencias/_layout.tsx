@@ -26,6 +26,7 @@ export default function EmergenciasLayout() {
       <Stack.Screen name="tablero" options={{ title: 'Tablero del sector' }} />
       <Stack.Screen name="mis-reportes" options={{ title: 'Mis reportes' }} />
       <Stack.Screen name="acompaname" options={{ title: 'Acompáñame' }} />
+      <Stack.Screen name="guardia" options={{ title: 'Modo guardia' }} />
     </Stack>
   );
 }

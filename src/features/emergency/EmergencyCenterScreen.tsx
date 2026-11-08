@@ -203,6 +203,7 @@ export function EmergencyCenterScreen({ nearbyMap }: { nearbyMap?: ReactNode }) 
         <Option icon="package-variant" title="Necesidades y recursos" onPress={() => router.push('/emergencias/recursos')} />
         <Option icon="cctv" title="Cámaras del barrio" badge="Nuevo" onPress={() => router.push('/camaras')} />
         <Option icon="walk" title="Acompáñame: llegué bien" badge="Nuevo" onPress={() => router.push('/emergencias/acompaname')} />
+        <Option icon="ear-hearing" title="Modo guardia: pide ayuda con tu voz" badge="Nuevo" onPress={() => router.push('/emergencias/guardia')} />
       </View>
 
       <PressableScale
