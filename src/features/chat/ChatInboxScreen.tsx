@@ -3,7 +3,7 @@ import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
-import { Avatar, Card, DemoTag, GRADIENTS, Icon, Screen, SectionHero, Text } from '@/shared/ui';
+import { Avatar, Card, DemoTag, Icon, Screen, Text } from '@/shared/ui';
 
 import { useConversations } from './hooks';
 import { useChatUnread } from './useChatUnread';
@@ -75,17 +75,6 @@ export function ChatInboxScreen() {
   return (
     <Screen contentClassName="gap-4 px-5 pb-8 pt-4">
       <SectionHeader title="Chat" />
-
-      <SectionHero
-        gradient={GRADIENTS.comunidad}
-        title="Mensajes"
-        description="Habla con tus vecinos sobre lo que ofrecen o necesitan."
-        steps={[
-          { icon: 'storefront-outline', label: 'Ves algo' },
-          { icon: 'message-text-outline', label: 'Escribes' },
-          { icon: 'handshake-outline', label: 'Coordinan' },
-        ]}
-      />
 
       <Card tone="low" className="flex-row items-start gap-2">
         <Icon name="shield-account-outline" size={20} color="primary" />

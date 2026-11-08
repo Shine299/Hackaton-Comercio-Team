@@ -1,7 +1,7 @@
 # SPEC-054 — Pulido visual (solo estilo)
 
-- **Estado:** borrador (rama `shay-spec-054-pulido-visual`, 8 nov 2026). Pasa a «implementada» cuando `npm run check` esté en
-  verde y se haya probado en Expo Go.
+- **Estado:** implementada en la rama `shay-spec-054-pulido-visual` (8 nov 2026); `npm run check` en verde (39 suites, 304
+  pruebas, sin modificar ninguna). **Falta** probarla en Expo Go y la revisión de otra persona.
 - **Dueño / revisor:** Shay / _(pendiente: otra persona del equipo; quien revisa no es quien escribe)_
 - **Sprint:** Etapa 13 (pulido de interfaz), historia **S13-8**. Regla del Sprint 2: **solo cambia lo visual; las pruebas
   existentes siguen en verde sin modificarse.**
@@ -94,8 +94,10 @@ se titula «Día a día» mientras la pestaña dice «Ayuda».
 ## Pruebas
 - **Automáticas:** ninguna prueba nueva ni modificada (la spec es solo visual). Sirven de red de seguridad las 30+ suites
   existentes: `npm run check` debe quedar igual de verde.
-- **Comprobación de «solo visual»:** `git diff --stat origin/main` sin pruebas, rutas, lógica, stores ni hooks; los
-  `onPress`/`router.*` que quedan en cada archivo son los mismos salvo los de bloques quitados.
+- **Comprobación de «solo visual»** (hecha): el diff contra `origin/main` no incluye pruebas, `src/app/`, `feed.ts`,
+  `places.ts`, `logic.ts`, stores ni hooks. Los conteos de `onPress`, `router.*` y `tourId/TourTarget` por archivo son
+  idénticos a antes; la única diferencia es `ReportCard` (2 → 4 `onPress`), porque la variante `compact` reutiliza el mismo
+  manejador que recibe por prop.
 - **Manuales (Expo Go, datos de demo):**
   - [ ] Inicio: saludo de una línea; con un reporte creado, «Tienes pendiente» arriba con un solo chip; los 4 accesos abren
     Comunidad, Negocios, Emergencia y Ayuda; el feed no tiene bloques de color.

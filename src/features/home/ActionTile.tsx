@@ -7,8 +7,12 @@ import { type Gradient, PressableScale, Text, TourTarget } from '@/shared/ui';
 type ActionTileProps = {
   /** Id para el recorrido guiado (`tile-<sección>`). */
   tourId: string;
-  verb: string;
+  /** Título corto (1 o 2 palabras). */
+  title: string;
+  /** Una sola línea de apoyo. */
   detail: string;
+  /** Sección a la que lleva, para que el lector de pantalla la anuncie. */
+  section: string;
   xml: string;
   gradient: Gradient;
   onPress: () => void;
@@ -16,30 +20,32 @@ type ActionTileProps = {
   stacked?: boolean;
 };
 
-/** Botón grande del Inicio: una sección, con su degradado, su ilustración y un verbo claro. Mide ≥ 144 dp de alto. */
-export function ActionTile({ tourId, verb, detail, xml, gradient, onPress, stacked = false }: ActionTileProps) {
+/**
+ * Acceso a una sección del Inicio (SPEC-054): fila compacta con su degradado, una ilustración pequeña, un título
+ * corto y una línea de apoyo. Mide ≥ 72 dp de alto (más con letra grande).
+ */
+export function ActionTile({ tourId, title, detail, section, xml, gradient, onPress, stacked = false }: ActionTileProps) {
   return (
-    <TourTarget id={tourId} className={stacked ? undefined : "flex-1"}>
+    <TourTarget id={tourId} className={stacked ? undefined : 'flex-1'}>
       <PressableScale
         accessibilityRole="button"
-        accessibilityLabel={`${verb}. ${detail}`}
+        accessibilityLabel={`${title}. ${detail}`}
+        accessibilityHint={`Abre ${section}`}
         onPress={onPress}
-        className="min-h-36 flex-1 overflow-hidden rounded-3xl shadow-md elevation-sm">
+        className="min-h-[72px] flex-1 overflow-hidden rounded-2xl shadow-sm elevation-xs">
         <LinearGradient
           colors={gradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ flex: 1, padding: 14, justifyContent: 'space-between' }}>
-          <View className="items-end">
-            <View className="h-16 w-20 items-center justify-end overflow-hidden rounded-2xl bg-white/25">
-              <SvgXml xml={xml} width={84} height={64} />
-            </View>
+          style={{ flex: 1, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <View className="h-11 w-11 items-center justify-end overflow-hidden rounded-xl bg-white/25">
+            <SvgXml xml={xml} width={48} height={38} />
           </View>
-          <View className="gap-0.5">
-            <Text variant="headline-sm" tone="onPrimary" numberOfLines={2}>
-              {verb}
+          <View className="min-w-0 flex-1">
+            <Text variant="body-lg-bold" tone="onPrimary" numberOfLines={2}>
+              {title}
             </Text>
-            <Text variant="label-md" tone="onPrimary" numberOfLines={2} className="opacity-90">
+            <Text variant="label-md" tone="onPrimary" numberOfLines={1}>
               {detail}
             </Text>
           </View>
