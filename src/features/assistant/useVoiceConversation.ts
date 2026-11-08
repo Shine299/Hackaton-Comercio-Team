@@ -181,9 +181,12 @@ export function useVoiceConversation({ getGreeting, getContext }: { getGreeting:
         if (!text) return void dispatch({ type: 'silence' });
         heard.current = text;
         dispatch({ type: 'heard', text });
-      } catch {
+      } catch (e) {
         if (cancelled) return;
-        setError('Sin conexión: no puedo escucharte ahora. Puedes seguir escribiéndome.');
+        // Diagnóstico: un fallo del micrófono o del permiso también cae aquí, no solo la red. Se muestra el motivo real.
+        const detail = e instanceof Error ? e.message : String(e);
+        console.warn('[voz]', detail);
+        setError(`No puedo escucharte ahora (${detail.slice(0, 80)}). Puedes seguir escribiéndome.`);
         dispatch({ type: 'stop' });
       }
     })();

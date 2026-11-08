@@ -3,6 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useBarStore } from '../nav/barStore';
+import { useScrollLockStore } from '../nav/scrollLockStore';
 import { cn } from './cn';
 
 type ScreenProps = {
@@ -32,6 +33,7 @@ export function Screen({
 }: ScreenProps) {
   const insets = useSafeAreaInsets();
   const barVisible = useBarStore((s) => s.visible);
+  const scrollLocked = useScrollLockStore((s) => s.locked);
   const bottomPad = !barVisible && (safeBottom || footer) ? insets.bottom : 0;
 
   return (
@@ -41,6 +43,7 @@ export function Screen({
         <ScrollView
           className="flex-1"
           contentContainerClassName={cn('gap-4 p-4', contentClassName)}
+          scrollEnabled={!scrollLocked}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}>
           {children}
