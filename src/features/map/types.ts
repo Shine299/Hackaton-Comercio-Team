@@ -8,7 +8,8 @@ export type MapLayerId =
   | 'zones'
   | 'business'
   | 'posts'
-  | 'places';
+  | 'places'
+  | 'cameras';
 
 export type MapLayerMeta = {
   id: MapLayerId;
@@ -25,6 +26,8 @@ export type MapTarget =
   | { kind: 'board' }
   /** Aviso real de un vecino del sector (tablero compartido): se abre en el tablero para «Voy a ayudar». */
   | { kind: 'shared'; id: string }
+  /** Cámara vecinal: se abre su visor. */
+  | { kind: 'camera'; id: string }
   | { kind: 'none' };
 
 export type LatLng = { latitude: number; longitude: number };

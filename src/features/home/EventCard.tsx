@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
-import { DemoTag, GRADIENTS, Icon, ListenButton, Text } from '@/shared/ui';
+import { DemoTag, GRADIENTS, Icon, ListenButton, Text, PressableScale } from '@/shared/ui';
 
 import { eventDateParts, type SectorEvent } from './sectorEvents';
 
@@ -70,8 +70,8 @@ export function EventCard({ event, now, compact = false, onPress }: Props) {
 
   if (!onPress) return <View accessible accessibilityLabel={spoken}>{content}</View>;
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={spoken} onPress={onPress} className="active:opacity-90">
+    <PressableScale accessibilityRole="button" accessibilityLabel={spoken} onPress={onPress} className="active:opacity-90">
       {content}
-    </Pressable>
+    </PressableScale>
   );
 }

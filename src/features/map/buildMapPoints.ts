@@ -34,13 +34,15 @@ type Input = {
   /** Avisos reales de vecinos (tablero compartido). */
   shared?: SharedBoardItem[];
   volunteer: { available: boolean; showSector: boolean };
+  /** Cámaras vecinales del sector (solo zona aproximada). */
+  cameras?: { id: string; name: string; placeLabel: string; active: boolean; isDemo: boolean }[];
 };
 
 /**
  * Convierte lo que ya existe en la app (publicaciones, tablero, perfil) en puntos de mapa.
  * Todos los puntos usan una zona aproximada derivada del centro del sector.
  */
-export function buildMapPoints({ sector, posts, board, shared = [], volunteer }: Input): MapPoint[] {
+export function buildMapPoints({ sector, posts, board, shared = [], volunteer, cameras = [] }: Input): MapPoint[] {
   const center = sector.center;
   const points: MapPoint[] = [];
 
@@ -104,6 +106,19 @@ export function buildMapPoints({ sector, posts, board, shared = [], volunteer }:
 
   for (const z of DEMO_ZONES) {
     points.push({ id: z.id, layer: 'zones', title: z.title, detail: z.detail, coord: approxPoint(center, z.id, 0.2, 0.7), radiusM: z.radiusM, isDemo: true, source: SOURCE_DEMO, target: { kind: 'none' } });
+  }
+
+  for (const cam of cameras) {
+    points.push({
+      id: `camera:${cam.id}`,
+      layer: 'cameras',
+      title: cam.name,
+      detail: `${cam.placeLabel} · ${cam.active ? 'En vivo' : 'Sin señal'}`,
+      coord: approxPoint(center, cam.id, 0.2, 0.6),
+      isDemo: cam.isDemo,
+      source: cam.isDemo ? SOURCE_DEMO : 'Cámara vecinal registrada en este teléfono',
+      target: { kind: 'camera', id: cam.id },
+    });
   }
 
   points.push(...getPlacePoints(center, sector.radiusKm));

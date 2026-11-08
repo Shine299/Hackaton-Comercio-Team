@@ -1,4 +1,6 @@
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
+
+import { PressableScale } from './PressableScale';
 
 import { useEasyMode } from '@/shared/nav/viewModeStore';
 
@@ -30,13 +32,13 @@ export function Chip({
 }: ChipProps) {
   const easy = useEasyMode();
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole={role}
       accessibilityLabel={accessibilityLabel ?? label}
       accessibilityState={{ checked: selected, selected }}
       onPress={onPress}
       className={cn(
-        'flex-row items-center gap-1.5 rounded-full border-2 px-3.5 active:opacity-80',
+        'flex-row items-center gap-1.5 rounded-full border-2 px-3.5',
         easy ? 'min-h-14 px-5' : 'min-h-11',
         selected ? 'border-primary bg-primary' : 'border-transparent bg-surface-container-lowest shadow-sm elevation-xs',
       )}>
@@ -52,6 +54,6 @@ export function Chip({
       <Text variant="label-md" tone={selected ? 'onPrimary' : 'default'}>
         {label}
       </Text>
-    </Pressable>
+    </PressableScale>
   );
 }

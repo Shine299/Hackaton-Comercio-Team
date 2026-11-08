@@ -1,9 +1,12 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useSectorAlerts, useSectorImpact, useSharedBoard } from '@/features/emergency';
+import { FundCard, useSectorFunds } from '@/features/funds';
+import { CamerasTeaser } from '@/features/cameras';
+import { PetTeaser } from '@/features/pets';
 import {
   categoryText,
   getCategory,
@@ -19,7 +22,7 @@ import { formatRelativeTime } from '@/shared/format';
 import { CommunityMap } from '@/features/map';
 import { EventCard } from './EventCard';
 import { useSectorEvents } from './sectorEvents';
-import { Card, Chip, DemoTag, type Gradient, GRADIENTS, Icon, type IconName, ListenButton, Screen, SECCION_COMUNIDAD_XML, SectionHero, SegmentedControl, StatRow, Text } from '@/shared/ui';
+import { Card, Chip, DemoTag, type Gradient, GRADIENTS, Icon, type IconName, ListenButton, Screen, SECCION_COMUNIDAD_XML, SectionHero, SegmentedControl, StatRow, Text, PressableScale } from '@/shared/ui';
 
 
 
@@ -52,11 +55,11 @@ const SECTION_STYLE: Record<
 function FeedCard({ item }: { item: FeedItem }) {
   const style = SECTION_STYLE[item.section];
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityLabel={`${item.tag}. ${item.title}. ${item.meta}${item.isDemo ? '. Dato de demostración' : ''}`}
       onPress={item.onPress}
-      className="overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm elevation-xs active:opacity-90">
+      className="overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm elevation-xs">
       <View className="h-36 items-center justify-center overflow-hidden">
         <LinearGradient colors={style.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
         <Icon name={item.icon} size={64} color="onPrimary" />
@@ -76,7 +79,7 @@ function FeedCard({ item }: { item: FeedItem }) {
           {item.isDemo ? <DemoTag /> : null}
         </View>
       </View>
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -94,6 +97,9 @@ export function CommunityScreen() {
   const [filter, setFilter] = useState<FeedFilter>('all');
   const [view, setView] = useState<'list' | 'map'>('list');
   const { data: eventsData } = useSectorEvents(sector.id, sector.name);
+  const { data: fundsData } = useSectorFunds();
+  /** El fondo con meta va primero (es el que tiene barra y plazo). */
+  const featuredFund = fundsData?.funds.find((f) => f.goalCents != null) ?? fundsData?.funds[0];
 
   const alert = alerts?.[0];
   const now = data?.fetchedAt ?? 0;
@@ -195,11 +201,11 @@ export function CommunityScreen() {
 
       {alert ? (
         <Card tone={alert.severity === 'critical' ? 'error' : 'warning'} accessibilityLiveRegion="polite">
-          <Pressable
+          <PressableScale
             accessibilityRole="button"
             accessibilityLabel={`${alert.title}. Activada por ${alert.source}. Abrir Emergencia`}
             onPress={() => router.push('/emergencias')}
-            className="flex-row items-center gap-3 active:opacity-80">
+            className="flex-row items-center gap-3">
             <Icon name="weather-lightning-rainy" size={26} color={alert.severity === 'critical' ? 'error' : 'warning'} />
             <View className="min-w-0 flex-1">
               <Text variant="body-lg-bold" numberOfLines={2}>
@@ -210,7 +216,7 @@ export function CommunityScreen() {
               </Text>
             </View>
             <Icon name="chevron-right" size={24} color="onSurfaceVariant" />
-          </Pressable>
+          </PressableScale>
           <ListenButton text={`${alert.title}. ${alert.body} Activada por ${alert.source}.`} />
         </Card>
       ) : null}
@@ -254,6 +260,9 @@ export function CommunityScreen() {
           {eventList.map((event) => (
             <EventCard key={event.id} event={event} now={eventsData?.fetchedAt ?? 0} />
           ))}
+          {filter === 'all' && featuredFund ? <FundCard fund={featuredFund} now={fundsData?.fetchedAt ?? 0} /> : null}
+          {filter === 'all' ? <CamerasTeaser /> : null}
+          {filter === 'all' ? <PetTeaser /> : null}
           {visible.map((item) => (
             <FeedCard key={item.id} item={item} />
           ))}
@@ -267,16 +276,16 @@ export function CommunityScreen() {
         </Text>
       </View>
     </Screen>
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityLabel="Publicar en tu barrio"
       onPress={() => router.navigate('/publicar')}
-      className="absolute bottom-4 left-5 h-14 flex-row items-center gap-2 rounded-2xl bg-primary px-5 shadow-lg elevation-md active:opacity-90">
+      className="absolute bottom-4 left-5 h-14 flex-row items-center gap-2 rounded-2xl bg-primary px-5 shadow-lg elevation-md">
       <Icon name="square-edit-outline" size={26} color="onPrimary" />
       <Text variant="body-lg-bold" tone="onPrimary">
         Publicar
       </Text>
-    </Pressable>
+    </PressableScale>
     </View>
   );
 }

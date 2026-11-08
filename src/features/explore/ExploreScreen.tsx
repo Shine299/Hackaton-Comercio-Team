@@ -5,11 +5,15 @@ import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 import { useSectorStore } from '@/features/sector';
 import {
   applyFilters,
+  categoriesOfGroup,
   categoryText,
   countAdvancedFilters,
   DEFAULT_FILTERS,
   hasActiveFilters,
   HELP_CATEGORIES,
+  HELP_GROUPS,
+  helpGroupOf,
+  type HelpGroup,
   PostCard,
   rankPosts,
   useNearbyPosts,
@@ -25,6 +29,7 @@ import { FiltersSheet } from './components/FiltersSheet';
 const isCategory = (value: string | undefined): value is PostCategoryId =>
   HELP_CATEGORIES.some((c) => c.id === value);
 const isKind = (value: string | undefined): value is PostKind => value === 'offer' || value === 'request';
+const isGroup = (value: string | undefined): value is HelpGroup => HELP_GROUPS.some((g) => g.id === value);
 
 /**
  * Explorar = ayuda entre vecinos, en una lista simple: buscar, elegir categoría y abrir. El resto vive en
@@ -32,7 +37,7 @@ const isKind = (value: string | undefined): value is PostKind => value === 'offe
  */
 export function ExploreScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ q?: string; category?: string; kind?: string }>();
+  const params = useLocalSearchParams<{ q?: string; category?: string; kind?: string; group?: string }>();
   const sector = useSectorStore((s) => s.sector);
   const { data, isLoading, isError, refetch } = useNearbyPosts(sector.id);
   const posts = data?.posts;
@@ -48,7 +53,7 @@ export function ExploreScreen() {
 
   // Atajos desde Inicio (búsqueda, categoría o tipo) llegan como parámetros de ruta.
   // Se aplican al cambiar la firma de los parámetros (ajuste de estado durante el render).
-  const paramsSignature = `${params.q ?? ''}|${params.category ?? ''}|${params.kind ?? ''}`;
+  const paramsSignature = `${params.q ?? ''}|${params.category ?? ''}|${params.kind ?? ''}|${params.group ?? ''}`;
   const [appliedParams, setAppliedParams] = useState(paramsSignature);
   if (appliedParams !== paramsSignature) {
     setAppliedParams(paramsSignature);
@@ -57,6 +62,9 @@ export function ExploreScreen() {
       query: params.q ?? f.query,
       category: isCategory(params.category) ? params.category : f.category,
       kind: isKind(params.kind) ? params.kind : f.kind,
+      group: isGroup(params.group) ? params.group : f.group,
+      // Al entrar a un grupo se ve todo el grupo, no una categoría vieja de otro.
+      ...(isGroup(params.group) && !isCategory(params.category) ? { category: 'all' as const } : null),
     }));
   }
 
@@ -120,6 +128,20 @@ export function ExploreScreen() {
         </Pressable>
       </View>
 
+      <SegmentedControl
+        accessibilityLabel="Qué tipo de ayuda ver"
+        value={filters.group}
+        onChange={(group) =>
+          setFilters((f) => ({
+            ...f,
+            group,
+            category: group !== 'all' && f.category !== 'all' && helpGroupOf(f.category) !== group ? 'all' : f.category,
+          }))
+        }
+        options={HELP_GROUPS.map((g) => ({ value: g.id, label: g.label, icon: g.icon }))}
+      />
+
+      {categoriesOfGroup(filters.group).length > 1 ? (
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
         <Chip
           role="radio"
@@ -128,7 +150,7 @@ export function ExploreScreen() {
           selected={filters.category === 'all'}
           onPress={() => setFilters((f) => ({ ...f, category: 'all' }))}
         />
-        {HELP_CATEGORIES.map((category) => (
+        {categoriesOfGroup(filters.group).map((category) => (
           <Chip
             key={category.id}
             role="radio"
@@ -139,6 +161,7 @@ export function ExploreScreen() {
           />
         ))}
       </ScrollView>
+      ) : null}
 
       <SegmentedControl
         accessibilityLabel="Ver publicaciones como"

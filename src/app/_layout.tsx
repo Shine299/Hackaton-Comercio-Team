@@ -64,15 +64,28 @@ export default function RootLayout() {
         <ActivityBadgeSync />
         <View style={{ flex: 1 }}>
           <View style={{ flex: 1 }}>
-          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#f9f9ff' } }}>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: '#f9f9ff' },
+              // Entrada suave tipo iOS también en Android (la pantalla anterior se desplaza un poco).
+              animation: 'ios_from_right',
+              gestureEnabled: true,
+            }}>
             <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="onboarding" options={{ gestureEnabled: false }} />
+            <Stack.Screen name="onboarding" options={{ gestureEnabled: false, animation: 'fade' }} />
             <Stack.Screen name="publicacion/[id]" />
             <Stack.Screen name="vecino/[id]" />
             <Stack.Screen name="chat/[id]" />
             <Stack.Screen name="negocios/registrar" />
+            <Stack.Screen name="fondos/[id]" />
+            <Stack.Screen name="fondos/aportar/[id]" />
+            <Stack.Screen name="camaras/index" />
+            <Stack.Screen name="camaras/[id]" />
+            <Stack.Screen name="camaras/registrar" />
+            <Stack.Screen name="perrito/[slug]" />
             <Stack.Screen name="emergencias" />
-            <Stack.Screen name="sector" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="sector" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
             <Stack.Screen name="galeria" />
           </Stack>
           <ChatFab />

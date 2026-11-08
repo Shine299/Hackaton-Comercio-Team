@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 
+import { useSectorCameras } from '@/features/cameras';
 import { buildBoard, useEmergencyStore, useSharedBoard } from '@/features/emergency';
 import type { Post } from '@/features/posts';
 import { useProfilePrefsStore } from '@/features/profile';
@@ -80,6 +81,7 @@ export function CommunityMap({
   const [recenter, setRecenter] = useState(0);
   const [search, setSearch] = useState('');
   const { data: shared = [] } = useSharedBoard(sector.id);
+  const cameras = useSectorCameras();
 
   // En Expo Go el mapa funciona sin clave; la clave de Google solo hace falta en builds de producción.
   // La app es solo móvil; la vista web de desarrollo usa Leaflet (NativeLayerMap.web.tsx) únicamente para revisar.
@@ -96,8 +98,8 @@ export function CommunityMap({
       offers,
       now,
     });
-    return buildMapPoints({ sector, posts, board, shared, volunteer: { available: volunteerAvailable, showSector } });
-  }, [sector, posts, reports, vulnerable, offers, now, shared, volunteerAvailable, showSector]);
+    return buildMapPoints({ sector, posts, board, shared, volunteer: { available: volunteerAvailable, showSector }, cameras });
+  }, [sector, posts, reports, vulnerable, offers, now, shared, volunteerAvailable, showSector, cameras]);
 
   const needle = search.trim().toLowerCase();
   const visible = all.filter(
@@ -120,6 +122,7 @@ export function CommunityMap({
     if (t.kind === 'post') router.push({ pathname: '/publicacion/[id]', params: { id: t.id } });
     else if (t.kind === 'report') router.push({ pathname: '/emergencias/estado/[id]', params: { id: t.id } });
     else if (t.kind === 'board' || t.kind === 'shared') router.push('/emergencias/tablero');
+    else if (t.kind === 'camera') router.push({ pathname: '/camaras/[id]', params: { id: t.id } });
   };
 
   const listVisible = !embedded && (!nativeMap || showList);
@@ -212,7 +215,13 @@ export function CommunityMap({
           </View>
           {selected.target.kind !== 'none' ? (
             <Button
-              label={selected.target.kind === 'shared' ? 'Abrir en el tablero y ayudar' : 'Ver detalle'}
+              label={
+                selected.target.kind === 'shared'
+                  ? 'Abrir en el tablero y ayudar'
+                  : selected.target.kind === 'camera'
+                    ? 'Ver la cámara'
+                    : 'Ver detalle'
+              }
               icon={selected.target.kind === 'shared' ? 'hand-heart-outline' : 'arrow-right'}
               onPress={() => open(selected)}
             />

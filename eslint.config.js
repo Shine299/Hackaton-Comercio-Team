@@ -20,7 +20,8 @@ const SHARED_IMPORTS_FEATURE = {
 module.exports = defineConfig([
   expoConfig,
   {
-    ignores: ['dist/*'],
+    // Las Edge Functions de Supabase son Deno (otro runtime y otros imports): se revisan aparte.
+    ignores: ['dist/*', 'supabase/functions/**'],
   },
   {
     files: ['src/**/*.{ts,tsx}'],

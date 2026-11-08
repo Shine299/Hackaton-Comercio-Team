@@ -1,9 +1,9 @@
 import { usePathname, useRouter } from 'expo-router';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
 import { useOnboardingStore } from '@/features/onboarding';
 import { ROOT_PATHS } from '@/features/shell';
-import { Icon, Text } from '@/shared/ui';
+import { Icon, Text, PressableScale } from '@/shared/ui';
 
 import { usePendingRequests } from './hooks';
 
@@ -23,11 +23,11 @@ export function ChatFab() {
 
   return (
     <View pointerEvents="box-none" style={{ position: 'absolute', right: 16, bottom: 16, zIndex: 50 }}>
-      <Pressable
+      <PressableScale
         accessibilityRole="button"
         accessibilityLabel={waiting > 0 ? `Abrir mensajes, ${waiting} por responder` : 'Abrir mensajes'}
         onPress={() => router.push('/mensajes')}
-        className="h-16 w-16 items-center justify-center rounded-full bg-primary shadow-lg elevation-md active:opacity-90">
+        className="h-16 w-16 items-center justify-center rounded-full bg-primary shadow-lg elevation-md">
         <Icon name="message-text" size={30} color="onPrimary" />
         {waiting > 0 ? (
           <View className="absolute -right-1 -top-1 h-6 min-w-6 items-center justify-center rounded-full bg-secondary px-1">
@@ -36,7 +36,7 @@ export function ChatFab() {
             </Text>
           </View>
         ) : null}
-      </Pressable>
+      </PressableScale>
     </View>
   );
 }

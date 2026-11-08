@@ -21,6 +21,7 @@ export function gradientForCategory(category: string): Gradient {
       return GRADIENTS.ayuda;
     case 'care':
       return GRADIENTS.emergencia;
+    case 'pets':
     case 'mobility':
       return GRADIENTS.recomendado;
     default:

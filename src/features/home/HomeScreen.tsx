@@ -1,17 +1,20 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
+import { CamerasTeaser } from '@/features/cameras';
 import { ReportCard, useEmergencyStore, useSectorAlerts } from '@/features/emergency';
-import { getCategory, HELP_CATEGORIES, PostCard, recommendPosts, useInterestStore, useNearbyPosts, useSavedStore } from '@/features/posts';
+import { FundCard, useSectorFunds } from '@/features/funds';
+import { PetTeaser } from '@/features/pets';
+import { getCategory, PostCard, recommendPosts, useInterestStore, useNearbyPosts, useSavedStore } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
 import { useSessionStore } from '@/features/session';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
 import { useEasyMode } from '@/shared/nav/viewModeStore';
-import { Button, Card, Chip, type Gradient, GRADIENTS, Icon, ListenButton, Screen, SECCION_AYUDA_XML, SECCION_COMUNIDAD_XML, SECCION_EMERGENCIA_XML, SECCION_EMPRENDIMIENTOS_XML, Text, TextField } from '@/shared/ui';
+import { Badge, Button, Card, type Gradient, GRADIENTS, Icon, ListenButton, Screen, SECCION_AYUDA_XML, SECCION_COMUNIDAD_XML, SECCION_EMERGENCIA_XML, SECCION_EMPRENDIMIENTOS_XML, Text, PressableScale } from '@/shared/ui';
 
 import { EventCard } from './EventCard';
 import { greetingFor } from './greeting';
@@ -33,11 +36,11 @@ function ActionTile({
   onPress: () => void;
 }) {
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityLabel={`${verb}. ${detail}`}
       onPress={onPress}
-      className="min-h-44 flex-1 overflow-hidden rounded-3xl shadow-md elevation-sm active:opacity-90">
+      className="min-h-44 flex-1 overflow-hidden rounded-3xl shadow-md elevation-sm">
       <LinearGradient
         colors={gradient}
         start={{ x: 0, y: 0 }}
@@ -57,7 +60,7 @@ function ActionTile({
           </Text>
         </View>
       </LinearGradient>
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -80,12 +83,12 @@ export function HomeScreen() {
   const savedPostIds = useSavedStore((s) => s.postIds);
 
   const easy = useEasyMode();
-  const [query, setQuery] = useState('');
   const [greeting] = useState(() => greetingFor(new Date().getHours()));
-  const search = (q: string) => router.navigate({ pathname: '/explorar', params: { q: q.trim(), t: String(Date.now()) } });
 
   const { data: eventsData } = useSectorEvents(sector.id, sector.name);
   const nextEvent = eventsData?.events[0];
+  const { data: fundsData } = useSectorFunds();
+  const featuredFund = fundsData?.funds.find((f) => f.goalCents != null) ?? fundsData?.funds[0];
 
   const alert = alerts?.[0];
   const fetchedAt = data?.fetchedAt ?? 0;
@@ -123,30 +126,6 @@ export function HomeScreen() {
     <Screen contentClassName="gap-5 px-5 pb-8 pt-4">
       <SectionHeader title="Inicio" />
 
-      <View className="gap-3">
-        <TextField
-          label="Buscar en tu barrio"
-          hideLabel
-          leadingIcon="magnify"
-          placeholder="¿Qué buscas? Taladro, almuerzo, costura…"
-          value={query}
-          onChangeText={setQuery}
-          onClear={() => setQuery('')}
-          returnKeyType="search"
-          onSubmitEditing={() => search(query)}
-        />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-5" accessibilityLabel="Búsquedas rápidas">
-          {HELP_CATEGORIES.slice(0, 5).map((c) => (
-            <Chip
-              key={c.id}
-              label={c.label}
-              icon={c.icon}
-              onPress={() => router.navigate({ pathname: '/explorar', params: { category: c.id, t: String(Date.now()) } })}
-            />
-          ))}
-        </ScrollView>
-      </View>
-
       <LinearGradient
         colors={GRADIENTS.hero}
         start={{ x: 0, y: 0 }}
@@ -176,43 +155,15 @@ export function HomeScreen() {
         ) : null}
       </LinearGradient>
 
-      {alert ? (
-        <Card tone={alert.severity === 'critical' ? 'error' : 'warning'} accessibilityLiveRegion="polite">
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={`${alert.title}. Activada por ${alert.source}. Abrir Emergencia`}
-            onPress={() => router.push('/emergencias')}
-            className="flex-row items-center gap-3 active:opacity-80">
-            <View className="h-9 w-9 items-center justify-center rounded-xl bg-error">
-              <Icon name="weather-lightning-rainy" size={20} color="onError" />
-            </View>
-            <View className="min-w-0 flex-1">
-              <Text variant="body-lg-bold" tone="error" numberOfLines={2}>
-                {alert.title}
-              </Text>
-              <Text variant="label-md" tone="muted">
-                {alert.source} · {formatRelativeTime(alert.createdAt)}
-              </Text>
-            </View>
-            <Icon name="chevron-right" size={24} color="error" />
-          </Pressable>
-          <ListenButton text={`${alert.title}. ${alert.body} Activada por ${alert.source}.`} />
-        </Card>
-      ) : null}
-
-      {nextEvent ? (
-        <View className="gap-2" accessibilityLabel="Próximo evento">
-          <Text variant="headline-sm" accessibilityRole="header">
-            Próximo en tu barrio
-          </Text>
-          <EventCard event={nextEvent} now={eventsData?.fetchedAt ?? 0} compact onPress={() => router.navigate('/comunidad')} />
-        </View>
-      ) : null}
-
       <View className="gap-3" accessibilityLabel="Qué puedes hacer con la app">
-        <Text variant="headline-sm" accessibilityRole="header">
-          ¿En qué te ayudamos hoy?
-        </Text>
+        <View className="gap-0.5">
+          <Text variant="headline-lg" accessibilityRole="header">
+            ¿En qué te ayudamos hoy?
+          </Text>
+          <Text variant="body-md-medium" tone="muted">
+            Elige y llegas en un toque
+          </Text>
+        </View>
         <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
           <ActionTile
             verb="Descubre qué pasa cerca"
@@ -246,6 +197,54 @@ export function HomeScreen() {
           />
         </View>
       </View>
+
+      {alert ? (
+        <Card tone={alert.severity === 'critical' ? 'error' : 'warning'} accessibilityLiveRegion="polite">
+          <PressableScale
+            accessibilityRole="button"
+            accessibilityLabel={`${alert.title}. Activada por ${alert.source}. Abrir Emergencia`}
+            onPress={() => router.push('/emergencias')}
+            className="flex-row items-center gap-3">
+            <View className="h-9 w-9 items-center justify-center rounded-xl bg-error">
+              <Icon name="weather-lightning-rainy" size={20} color="onError" />
+            </View>
+            <View className="min-w-0 flex-1">
+              <Text variant="body-lg-bold" tone="error" numberOfLines={2}>
+                {alert.title}
+              </Text>
+              <Text variant="label-md" tone="muted">
+                {alert.source} · {formatRelativeTime(alert.createdAt)}
+              </Text>
+            </View>
+            <Icon name="chevron-right" size={24} color="error" />
+          </PressableScale>
+          <ListenButton text={`${alert.title}. ${alert.body} Activada por ${alert.source}.`} />
+        </Card>
+      ) : null}
+
+      <View className="gap-3" accessibilityLabel="Juntos por el barrio: fondos, cámaras y el perrito comunitario">
+        <View className="flex-row items-center gap-2">
+          <Text variant="headline-sm" accessibilityRole="header" className="flex-1">
+            Juntos por el barrio
+          </Text>
+          <Badge label="Nuevo" tone="primary" icon="star-four-points-outline" />
+        </View>
+        <Text variant="label-md" tone="muted" className="-mt-2">
+          Lo que los vecinos de {sector.name} logran entre todos
+        </Text>
+        {featuredFund ? <FundCard fund={featuredFund} now={fundsData?.fetchedAt ?? 0} /> : null}
+        <CamerasTeaser />
+        <PetTeaser />
+      </View>
+
+      {nextEvent ? (
+        <View className="gap-2" accessibilityLabel="Próximo evento">
+          <Text variant="headline-sm" accessibilityRole="header">
+            Próximo en tu barrio
+          </Text>
+          <EventCard event={nextEvent} now={eventsData?.fetchedAt ?? 0} compact onPress={() => router.navigate('/comunidad')} />
+        </View>
+      ) : null}
 
       {news.length > 0 ? (
         <Rail

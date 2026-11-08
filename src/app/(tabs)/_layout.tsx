@@ -21,6 +21,8 @@ export default function TabsLayout() {
       screenOptions={{
         header: () => <BackHeader />,
         headerShown: true,
+        // Cambiar de sección con un fundido corto, sin saltos.
+        animation: 'fade',
       }}>
       {/* Pantallas raíz con cabecera propia (SectionHeader). */}
       <Tabs.Screen name="index" options={{ title: 'Inicio', headerShown: false }} />

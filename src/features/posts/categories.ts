@@ -11,6 +11,7 @@ export const POST_CATEGORIES: CategoryInfo[] = [
   { id: 'barter', label: 'Trueque', icon: 'swap-horizontal' },
   { id: 'mobility', label: 'Movilidad', icon: 'car-outline' },
   { id: 'care', label: 'Cuidado y apoyo', icon: 'hand-heart-outline' },
+  { id: 'pets', label: 'Animales y mascotas', icon: 'paw' },
   { id: 'business', label: 'Negocios', icon: 'storefront-outline' },
 ];
 
@@ -19,6 +20,24 @@ export const POST_CATEGORIES: CategoryInfo[] = [
  * tiene su propia sección (pestaña Negocios) y su propio registro.
  */
 export const HELP_CATEGORIES: CategoryInfo[] = POST_CATEGORIES.filter((c) => c.id !== 'business');
+
+/**
+ * Ayuda se separa en dos mundos para no mezclarlos: objetos y favores (prestar, arreglar, trueque…)
+ * y animales (mascotas perdidas, cuidado, adopción).
+ */
+export type HelpGroup = 'all' | 'objects' | 'animals';
+
+export const HELP_GROUPS: { id: HelpGroup; label: string; icon: IconName }[] = [
+  { id: 'all', label: 'Todo', icon: 'apps' },
+  { id: 'objects', label: 'Objetos y favores', icon: 'package-variant-closed' },
+  { id: 'animals', label: 'Animales', icon: 'paw' },
+];
+
+export const helpGroupOf = (id: PostCategoryId): Exclude<HelpGroup, 'all'> => (id === 'pets' ? 'animals' : 'objects');
+
+/** Categorías de ayuda que pertenecen a un grupo («Todo» = todas las de ayuda). */
+export const categoriesOfGroup = (group: HelpGroup): CategoryInfo[] =>
+  group === 'all' ? HELP_CATEGORIES : HELP_CATEGORIES.filter((c) => helpGroupOf(c.id) === group);
 
 const byId = Object.fromEntries(POST_CATEGORIES.map((c) => [c.id, c])) as Record<
   PostCategoryId,

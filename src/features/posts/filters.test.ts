@@ -16,6 +16,15 @@ describe('applyFilters', () => {
     expect(out.every((p) => p.kind === 'request')).toBe(true);
   });
 
+  it('separa animales de objetos y favores', () => {
+    const animals = applyFilters(posts, { ...DEFAULT_FILTERS, group: 'animals', maxDistanceKm: 5 }, NOW);
+    const objects = applyFilters(posts, { ...DEFAULT_FILTERS, group: 'objects', maxDistanceKm: 5 }, NOW);
+    expect(animals.length).toBeGreaterThan(0);
+    expect(animals.every((p) => p.category === 'pets')).toBe(true);
+    expect(objects.length).toBeGreaterThan(0);
+    expect(objects.some((p) => p.category === 'pets')).toBe(false);
+  });
+
   it('respeta la distancia máxima', () => {
     const out = applyFilters(posts, { ...DEFAULT_FILTERS, maxDistanceKm: 0.5 }, NOW);
     expect(out.every((p) => p.distanceM <= 500)).toBe(true);

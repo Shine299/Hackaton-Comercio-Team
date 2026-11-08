@@ -1,11 +1,12 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { ReportCard, useEmergencyStore } from '@/features/emergency';
-import { Badge, type Gradient, GRADIENTS, Icon, type IconName, Screen, SECCION_AYUDA_XML, SectionHero, StatRow, Text } from '@/shared/ui';
-import { useNearbyPosts } from '@/features/posts';
+import { Badge, type Gradient, GRADIENTS, Icon, type IconName, Screen, SECCION_AYUDA_XML, SectionHero, StatRow, Text, PressableScale } from '@/shared/ui';
+import { PetTeaser } from '@/features/pets';
+import { helpGroupOf, useNearbyPosts } from '@/features/posts';
 import { useEasyMode } from '@/shared/nav/viewModeStore';
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
@@ -21,11 +22,11 @@ type BigActionProps = {
 /** Botón grande de la sección: una sola acción, imposible de confundir. */
 function BigAction({ title, hint, icon, gradient, onPress }: BigActionProps) {
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       accessibilityLabel={`${title}. ${hint}`}
       onPress={onPress}
-      className="min-h-44 flex-1 overflow-hidden rounded-3xl shadow-md elevation-sm active:opacity-90">
+      className="min-h-44 flex-1 overflow-hidden rounded-3xl shadow-md elevation-sm">
       <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 16, justifyContent: 'space-between' }}>
       <View className="h-14 w-14 items-center justify-center rounded-full bg-white/20">
         <Icon name={icon} size={32} color="onPrimary" />
@@ -39,7 +40,43 @@ function BigAction({ title, hint, icon, gradient, onPress }: BigActionProps) {
         </Text>
       </View>
       </LinearGradient>
-    </Pressable>
+    </PressableScale>
+  );
+}
+
+type GroupCardProps = {
+  title: string;
+  hint: string;
+  icon: IconName;
+  count: number;
+  bg: string;
+  color: 'primary' | 'warning';
+  onPress: () => void;
+};
+
+/** Tarjeta de un tipo de ayuda (objetos o animales), con cuántas publicaciones hay cerca. */
+function GroupCard({ title, hint, icon, count, bg, color, onPress }: GroupCardProps) {
+  return (
+    <PressableScale
+      accessibilityRole="button"
+      accessibilityLabel={`${title}: ${hint}. ${count} ${count === 1 ? 'publicación' : 'publicaciones'} cerca`}
+      onPress={onPress}
+      className="min-h-36 flex-1 justify-between gap-2 rounded-3xl bg-surface-container-lowest p-4 shadow-sm elevation-xs">
+      <View className="flex-row items-start justify-between">
+        <View className={`h-12 w-12 items-center justify-center rounded-2xl ${bg}`}>
+          <Icon name={icon} size={28} color={color} />
+        </View>
+        <Text variant="headline-sm" tone={color}>
+          {count}
+        </Text>
+      </View>
+      <View className="gap-0.5">
+        <Text variant="body-lg-bold">{title}</Text>
+        <Text variant="label-md" tone="muted">
+          {hint}
+        </Text>
+      </View>
+    </PressableScale>
   );
 }
 
@@ -57,6 +94,8 @@ export function HelpHomeScreen() {
   const nearby = (data?.posts ?? []).filter((p) => p.category !== 'business' && p.status === 'active' && p.distanceM / 1000 <= sector.radiusKm);
   const asking = nearby.filter((p) => p.kind === 'request').length;
   const offering = nearby.filter((p) => p.kind === 'offer').length;
+  const animals = nearby.filter((p) => helpGroupOf(p.category) === 'animals').length;
+  const objects = nearby.length - animals;
 
   return (
     <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
@@ -99,11 +138,38 @@ export function HelpHomeScreen() {
         />
       </View>
 
-      <Pressable
+      <View className="gap-2" accessibilityLabel="Elige qué tipo de ayuda ver">
+        <Text variant="headline-sm" accessibilityRole="header">
+          ¿De qué se trata?
+        </Text>
+        <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
+          <GroupCard
+            title="Objetos y favores"
+            hint="Prestar, arreglar, trueque, compañía"
+            icon="package-variant-closed"
+            count={objects}
+            bg="bg-primary-fixed"
+            color="primary"
+            onPress={() => router.navigate({ pathname: '/explorar', params: { group: 'objects', t: String(Date.now()) } })}
+          />
+          <GroupCard
+            title="Animales"
+            hint="Mascotas perdidas, cuidado, adopción"
+            icon="paw"
+            count={animals}
+            bg="bg-warning-container"
+            color="warning"
+            onPress={() => router.navigate({ pathname: '/explorar', params: { group: 'animals', t: String(Date.now()) } })}
+          />
+        </View>
+        <PetTeaser />
+      </View>
+
+      <PressableScale
         accessibilityRole="button"
         accessibilityLabel="Ayudar a un vecino vulnerable. Pide en nombre de quien no puede. Puede tener prioridad"
         onPress={() => router.push('/emergencias/vecino-vulnerable')}
-        className="flex-row items-center gap-3 rounded-3xl border-2 border-secondary-fixed bg-surface-container-lowest p-2.5 pr-4 active:opacity-90">
+        className="flex-row items-center gap-3 rounded-3xl border-2 border-secondary-fixed bg-surface-container-lowest p-2.5 pr-4">
         <View className="h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-tertiary-fixed">
           <SvgXml xml={SECCION_AYUDA_XML} width={80} height={60} />
         </View>
@@ -117,11 +183,11 @@ export function HelpHomeScreen() {
           </View>
         </View>
         <Icon name="chevron-right" size={22} color="onSurfaceVariant" />
-      </Pressable>
+      </PressableScale>
 
       <View className="flex-row items-baseline justify-between px-1 pt-2">
         <Text variant="headline-sm">Mis solicitudes</Text>
-        <Pressable
+        <PressableScale
           accessibilityRole="button"
           accessibilityLabel="Ver todas mis solicitudes"
           onPress={() => router.push('/emergencias/mis-reportes')}
@@ -130,7 +196,7 @@ export function HelpHomeScreen() {
             Ver todas
           </Text>
           <Icon name="chevron-right" size={20} color="primary" />
-        </Pressable>
+        </PressableScale>
       </View>
       {mine.length === 0 ? (
         <Text tone="muted" className="px-1">

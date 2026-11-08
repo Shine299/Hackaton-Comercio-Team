@@ -172,6 +172,33 @@ export const CATEGORY_GUIDE: Record<PostCategoryId, CategoryGuide> = {
     },
     voice: 'Puedo ofrecer o pedir un apoyo puntual de cuidado. Sin datos médicos ni direcciones exactas.',
   },
+  pets: {
+    extra1: { label: 'Animal (opcional)', placeholder: 'Perro mediano, gata atigrada…' },
+    extra2: { label: 'Zona aproximada (opcional)', placeholder: 'Cerca del parque, cuadra 4…' },
+    templates: {
+      offer: [
+        {
+          title: 'Cuido mascotas el fin de semana',
+          description: 'Puedo pasear o dar de comer a tu perro o gato mientras viajas. Coordinamos por chat.',
+        },
+        {
+          title: 'Doy en adopción a un cachorro',
+          description: 'Desparasitado y con su primera vacuna. Busco una familia del barrio.',
+        },
+      ],
+      request: [
+        {
+          title: 'Se perdió mi gata, ¿la vieron?',
+          description: 'Atigrada, con collar rojo. Se escapó ayer por la tarde. Cualquier dato ayuda.',
+        },
+        {
+          title: 'Busco quien pasee a mi perro unos días',
+          description: 'Es tranquilo y obediente. Serían 30 minutos por la mañana.',
+        },
+      ],
+    },
+    voice: 'Se perdió mi gata atigrada con collar rojo, cerca del parque. Si la ven, avísenme por la app.',
+  },
   business: {
     extra1: { label: 'Horario de atención (opcional)', placeholder: 'Lun a sáb, 8 a. m. a 7 p. m.…' },
     extra2: { label: 'Cómo se entrega (opcional)', placeholder: 'Recojo en tienda, delivery en el sector…' },

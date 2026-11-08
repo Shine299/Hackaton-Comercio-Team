@@ -11,6 +11,7 @@ export const MAP_LAYERS: MapLayerMeta[] = [
   { id: 'business', label: 'Negocios', icon: 'storefront-outline', color: '#b45f06', defaultOn: true },
   { id: 'posts', label: 'Publicaciones', icon: 'tag-outline', color: colors.primaryContainer, defaultOn: true },
   { id: 'places', label: 'Lugares de referencia', icon: 'town-hall', color: colors.tertiary, defaultOn: false },
+  { id: 'cameras', label: 'Cámaras vecinales', icon: 'cctv', color: '#1f6466', defaultOn: true },
 ];
 
 export const DEFAULT_LAYERS: MapLayerId[] = MAP_LAYERS.filter((l) => l.defaultOn).map((l) => l.id);

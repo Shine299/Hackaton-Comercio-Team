@@ -1,12 +1,11 @@
 import { useRouter } from 'expo-router';
 import type { ReactNode } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
 import { useSectorStore } from '@/features/sector';
-import { useSessionStore } from '@/features/session';
 import { useActivityBadgeStore } from '@/shared/nav/activityBadgeStore';
 import { useDrawerStore } from '@/shared/nav/drawerStore';
-import { BrandLogo, Icon, Text } from '@/shared/ui';
+import { BrandLogo, Icon, Text, PressableScale } from '@/shared/ui';
 
 /** Mismo tamaño de logo en todas las secciones y en Inicio, para que la parte de arriba se vea pareja. */
 const BRAND_HEIGHT = 34;
@@ -20,7 +19,7 @@ type SectionHeaderProps = {
 };
 
 /**
- * Cabecera común de las pantallas raíz. Fila de arriba: menú ☰, logo de Yunta, notificaciones y tu foto.
+ * Cabecera común de las pantallas raíz. Fila de arriba: menú ☰ (perfil incluido), logo de Yunta, notificaciones y SOS.
  * Debajo: tu sector y el título de la sección. El resto de accesos secundarios viven en el menú.
  */
 export function SectionHeader({ title, danger = false, eyebrow }: SectionHeaderProps) {
@@ -28,31 +27,29 @@ export function SectionHeader({ title, danger = false, eyebrow }: SectionHeaderP
   const sector = useSectorStore((s) => s.sector);
   const unread = useActivityBadgeStore((s) => s.unread);
   const setDrawerOpen = useDrawerStore((s) => s.setOpen);
-  const registered = useSessionStore((s) => s.registered);
-  const displayName = useSessionStore((s) => s.displayName);
 
   return (
     <View className="gap-3">
       <View className="flex-row items-center justify-between gap-3">
-        <Pressable
+        <PressableScale
           accessibilityRole="button"
           accessibilityLabel="Abrir el menú"
           accessibilityHint="También puedes deslizar desde el borde izquierdo"
           onPress={() => setDrawerOpen(true)}
-          className="h-11 w-11 items-center justify-center rounded-full bg-surface-container-lowest shadow-sm elevation-xs active:opacity-80">
+          className="h-11 w-11 items-center justify-center rounded-full bg-surface-container-lowest shadow-sm elevation-xs">
           <Icon name="menu" size={24} color="primary" />
-        </Pressable>
+        </PressableScale>
 
         <View className="min-w-0 flex-1 items-center">
           <BrandLogo variant="lockup" height={BRAND_HEIGHT} />
         </View>
 
         <View className="flex-row gap-2">
-          <Pressable
+          <PressableScale
             accessibilityRole="button"
             accessibilityLabel={unread > 0 ? `Notificaciones, ${unread} nuevas` : 'Notificaciones'}
             onPress={() => router.push('/actividad')}
-            className="h-11 w-11 items-center justify-center rounded-full bg-surface-container-lowest shadow-sm elevation-xs active:opacity-80">
+            className="h-11 w-11 items-center justify-center rounded-full bg-surface-container-lowest shadow-sm elevation-xs">
             <Icon name="bell-outline" size={22} color="primary" />
             {unread > 0 ? (
               <View className="absolute -right-1 -top-1 h-5 min-w-5 items-center justify-center rounded-full bg-secondary px-1">
@@ -61,22 +58,27 @@ export function SectionHeader({ title, danger = false, eyebrow }: SectionHeaderP
                 </Text>
               </View>
             ) : null}
-          </Pressable>
-          <Pressable
+          </PressableScale>
+          <PressableScale
             accessibilityRole="button"
-            accessibilityLabel="Tu perfil y configuración"
-            onPress={() => setDrawerOpen(true)}
-            className="h-11 w-11 items-center justify-center rounded-full bg-primary-container active:opacity-80">
-            <Text variant="body-lg-bold" tone="onPrimary">
-              {registered ? displayName.charAt(0).toUpperCase() || '?' : '?'}
+            accessibilityLabel={
+              danger
+                ? 'SOS, alerta vecinal. Reportar una emergencia ahora, sin cuenta'
+                : 'SOS, alerta vecinal. Abrir Emergencia para reportar o pedir auxilio, sin cuenta'
+            }
+            onPress={() => router.push(danger ? '/emergencias/reportar' : '/emergencias')}
+            className="h-11 flex-row items-center gap-1 rounded-full bg-error pl-2.5 pr-3.5 shadow-sm elevation-xs">
+            <Icon name="alarm-light" size={20} color="onError" />
+            <Text variant="body-lg-bold" tone="onError">
+              SOS
             </Text>
-          </Pressable>
+          </PressableScale>
         </View>
       </View>
 
       <View className="min-w-0">
         {eyebrow ?? (
-          <Pressable
+          <PressableScale
             accessibilityRole="button"
             accessibilityLabel={`Tu sector: ${sector.name}, ${sector.radiusKm} kilómetros. Cambiar`}
             onPress={() => router.push('/sector')}
@@ -86,7 +88,7 @@ export function SectionHeader({ title, danger = false, eyebrow }: SectionHeaderP
               {sector.name} · {sector.radiusKm} km
             </Text>
             <Icon name="chevron-down" size={20} color="primary" />
-          </Pressable>
+          </PressableScale>
         )}
         {title ? (
           <Text variant="headline-lg" tone={danger ? 'error' : 'default'} accessibilityRole="header">

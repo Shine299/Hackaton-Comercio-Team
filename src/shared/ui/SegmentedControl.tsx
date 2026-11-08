@@ -1,4 +1,6 @@
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
+
+import { PressableScale } from './PressableScale';
 
 import { cn } from './cn';
 import { Icon, type IconName } from './Icon';
@@ -32,7 +34,7 @@ export function SegmentedControl<T extends string>({
       {options.map((option) => {
         const selected = option.value === value;
         return (
-          <Pressable
+          <PressableScale
             key={option.value}
             accessibilityRole="radio"
             accessibilityLabel={option.label}
@@ -40,7 +42,7 @@ export function SegmentedControl<T extends string>({
             onPress={() => onChange(option.value)}
             className={cn(
               // `will-change-variable`: evita que NativeWind reinicie el componente al activar la sombra.
-              'will-change-variable min-h-11 flex-1 flex-row items-center justify-center gap-1.5 rounded-xl px-3 active:opacity-80',
+              'will-change-variable min-h-11 flex-1 flex-row items-center justify-center gap-1.5 rounded-xl px-3',
               selected && 'bg-surface-container-lowest shadow-sm',
             )}>
             {option.icon ? (
@@ -51,7 +53,7 @@ export function SegmentedControl<T extends string>({
             <Text variant="label-md" tone={selected ? 'primary' : 'muted'}>
               {option.label}
             </Text>
-          </Pressable>
+          </PressableScale>
         );
       })}
     </View>

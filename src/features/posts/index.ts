@@ -1,8 +1,12 @@
 export { FavoriteButton } from './components/FavoriteButton';
 export { PostCard } from './components/PostCard';
 export {
+  categoriesOfGroup,
   getCategory,
   HELP_CATEGORIES,
+  HELP_GROUPS,
+  helpGroupOf,
+  type HelpGroup,
   POST_CATEGORIES,
   POST_KIND_LABEL,
   TRUST_LABEL,

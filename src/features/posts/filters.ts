@@ -1,4 +1,4 @@
-import { getCategory } from './categories';
+import { getCategory, helpGroupOf, type HelpGroup } from './categories';
 import { matchesQuery } from './relevance';
 import type { Post, PostCategoryId, PostKind } from './types';
 
@@ -7,6 +7,8 @@ export type ExploreFilters = {
   query: string;
   kind: PostKind | 'all';
   category: PostCategoryId | 'all';
+  /** Objetos y favores, animales o todo. */
+  group: HelpGroup;
   /** Distancia máxima en km. */
   maxDistanceKm: number;
   // Avanzados
@@ -22,6 +24,7 @@ export const DEFAULT_FILTERS: ExploreFilters = {
   query: '',
   kind: 'all',
   category: 'all',
+  group: 'all',
   maxDistanceKm: 2,
   availableNow: false,
   verifiedOnly: false,
@@ -59,6 +62,7 @@ export function hasActiveFilters(
     f.query.trim().length > 0 ||
     f.kind !== 'all' ||
     f.category !== 'all' ||
+    f.group !== 'all' ||
     f.maxDistanceKm !== defaultRadiusKm ||
     countAdvancedFilters(f) > 0
   );
@@ -76,6 +80,7 @@ export function applyFilters(posts: Post[], f: ExploreFilters, now: number): Pos
   return posts.filter((p) => {
     if (f.kind !== 'all' && p.kind !== f.kind) return false;
     if (f.category !== 'all' && p.category !== f.category) return false;
+    if (f.group !== 'all' && (p.category === 'business' || helpGroupOf(p.category) !== f.group)) return false;
     if (p.distanceM / 1000 > reachKm) return false;
     if (f.availableNow && !p.availableNow) return false;
     if (f.verifiedOnly && p.author.trust === 'new') return false;

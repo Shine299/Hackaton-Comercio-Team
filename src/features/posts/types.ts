@@ -22,6 +22,7 @@ export const POST_CATEGORY_IDS = [
   'barter',
   'mobility',
   'care',
+  'pets',
   'business',
 ] as const;
 

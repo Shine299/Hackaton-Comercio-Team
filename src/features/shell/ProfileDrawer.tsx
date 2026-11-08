@@ -1,6 +1,7 @@
 import { useRouter, type Href } from 'expo-router';
+import { useEffect, useRef } from 'react';
 import { Modal, Pressable, ScrollView, useWindowDimensions, View } from 'react-native';
-import Animated, { SlideInLeft } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { TRUST_LABEL } from '@/features/posts';
@@ -10,6 +11,10 @@ import { useDrawerStore } from '@/shared/nav/drawerStore';
 import { Button, colors, Icon, Text, type IconName } from '@/shared/ui';
 
 type DrawerLink = { label: string; icon: IconName; href: Href };
+
+/** Duración de entrada y de salida del panel (ms). */
+const OPEN_MS = 240;
+const CLOSE_MS = 200;
 
 const LINKS: DrawerLink[] = [
   { label: 'Mi perfil', icon: 'account-outline', href: '/perfil' },
@@ -36,20 +41,43 @@ export function ProfileDrawer() {
   const sector = useSectorStore((s) => s.sector);
 
   const panelWidth = Math.min(320, Math.round(width * 0.86));
+  const reduceMotion = useReducedMotion();
 
-  const close = () => setOpen(false);
-  const go = (href: Href) => {
-    close();
-    router.navigate(href);
+  // El panel entra desde la izquierda y, al cerrar, se recoge hacia la izquierda antes de desaparecer.
+  const offset = useSharedValue(-panelWidth);
+  const backdrop = useSharedValue(0);
+  const closing = useRef(false);
+  const panelStyle = useAnimatedStyle(() => ({ transform: [{ translateX: offset.get() }] }));
+  const backdropStyle = useAnimatedStyle(() => ({ opacity: backdrop.get() }));
+
+  useEffect(() => {
+    if (!open) return;
+    closing.current = false;
+    offset.set(-panelWidth);
+    backdrop.set(0);
+    offset.set(withTiming(0, { duration: reduceMotion ? 0 : OPEN_MS, easing: Easing.out(Easing.cubic) }));
+    backdrop.set(withTiming(1, { duration: reduceMotion ? 0 : OPEN_MS }));
+  }, [open, panelWidth, reduceMotion, offset, backdrop]);
+
+  /** Recoge el panel y, cuando terminó, cierra el menú y ejecuta `after` (por ejemplo, navegar). */
+  const close = (after?: () => void) => {
+    if (closing.current) return;
+    closing.current = true;
+    const ms = reduceMotion ? 0 : CLOSE_MS;
+    offset.set(withTiming(-panelWidth, { duration: ms, easing: Easing.in(Easing.cubic) }));
+    backdrop.set(withTiming(0, { duration: ms }));
+    setTimeout(() => {
+      setOpen(false);
+      after?.();
+    }, ms);
   };
+  const go = (href: Href) => close(() => router.navigate(href));
 
   return (
-    <Modal visible={open} transparent animationType="fade" onRequestClose={close} statusBarTranslucent>
-      <View className="flex-1 flex-row bg-black/40" accessibilityViewIsModal>
-        {/* El panel entra desde la izquierda cada vez que se abre. */}
-        <Animated.View
-          entering={SlideInLeft.duration(220)}
-          style={{ width: panelWidth, backgroundColor: colors.surface }}>
+    <Modal visible={open} transparent animationType="none" onRequestClose={() => close()} statusBarTranslucent>
+      <View className="flex-1 flex-row" accessibilityViewIsModal>
+        <Animated.View pointerEvents="none" className="absolute inset-0 bg-black/40" style={backdropStyle} />
+        <Animated.View style={[{ width: panelWidth, backgroundColor: colors.surface }, panelStyle]}>
           <ScrollView
             contentContainerClassName="gap-4 px-4 pb-6"
             contentContainerStyle={{ paddingTop: insets.top + 16, paddingBottom: Math.max(insets.bottom, 16) }}
@@ -116,7 +144,7 @@ export function ProfileDrawer() {
             </Text>
           </ScrollView>
         </Animated.View>
-        <Pressable accessibilityRole="button" accessibilityLabel="Cerrar el menú" className="flex-1" onPress={close} />
+        <Pressable accessibilityRole="button" accessibilityLabel="Cerrar el menú" className="flex-1" onPress={() => close()} />
       </View>
     </Modal>
   );
