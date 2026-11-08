@@ -106,10 +106,15 @@ export function CommunityMap({
   }, [sector, posts, reports, vulnerable, offers, now, shared, volunteerAvailable, showSector, cameras]);
 
   const needle = search.trim().toLowerCase();
-  const visible = all.filter(
-    (p) =>
-      active.includes(p.layer) &&
-      (!needle || p.title.toLowerCase().includes(needle) || (p.detail ?? '').toLowerCase().includes(needle)),
+  // Memoizado: si cambia la identidad del arreglo, el mapa nativo recarga todos los puntos en cada toque.
+  const visible = useMemo(
+    () =>
+      all.filter(
+        (p) =>
+          active.includes(p.layer) &&
+          (!needle || p.title.toLowerCase().includes(needle) || (p.detail ?? '').toLowerCase().includes(needle)),
+      ),
+    [all, active, needle],
   );
   const selected = visible.find((p) => p.id === selectedId);
   const counts = useMemo(() => {

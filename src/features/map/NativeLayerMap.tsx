@@ -9,6 +9,7 @@ import {
   type CameraRef,
 } from '@maplibre/maplibre-react-native';
 
+import { useScrollLockStore } from '@/shared/nav/scrollLockStore';
 import { Icon } from '@/shared/ui';
 
 import { getLayer } from './layers';
@@ -47,6 +48,11 @@ export default function NativeLayerMap({
 }: Props) {
   const cameraRef = useRef<CameraRef>(null);
   const lastPointPress = useRef(0);
+  const lockScroll = useScrollLockStore((s) => s.lock);
+  const unlockScroll = useScrollLockStore((s) => s.unlock);
+
+  // Si el mapa se desmonta con el dedo puesto, no dejamos la pantalla sin scroll.
+  useEffect(() => unlockScroll, [unlockScroll]);
 
   const sectorZoom = useMemo(() => zoomForRadiusKm(radiusKm, center.latitude), [radiusKm, center.latitude]);
 
@@ -112,7 +118,12 @@ export default function NativeLayerMap({
   const pins = points.filter((p) => !p.radiusM && p.layer !== 'places' && p.layer !== 'shops');
 
   return (
-    <View style={{ height, borderRadius: 16, overflow: 'hidden' }}>
+    // Mientras el dedo está sobre el mapa, la pantalla no hace scroll: así el arrastre mueve el mapa.
+    <View
+      style={{ height, borderRadius: 16, overflow: 'hidden' }}
+      onTouchStart={lockScroll}
+      onTouchEnd={unlockScroll}
+      onTouchCancel={unlockScroll}>
       <Map
         style={{ width: '100%', height: '100%' }}
         mapStyle={OSM_STYLE}
