@@ -34,7 +34,8 @@ export const BAR_ITEMS: BarItem[] = [
 export function resolveSection(pathname: string): SectionId | null {
   switch (pathname) {
     case '/':
-      return 'inicio';
+      // Inicio es la puerta de entrada: sus tarjetas grandes reemplazan a la barra.
+      return null;
     case '/comunidad':
       return 'comunidad';
     case '/negocios':
