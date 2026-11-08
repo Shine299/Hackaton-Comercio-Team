@@ -1,2 +1,2 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Normaliza saltos de linea a LF en el repositorio (ver .editorconfig)
+* text=auto eol=lf
