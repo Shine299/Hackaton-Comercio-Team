@@ -1,7 +1,7 @@
 # SPEC-055 — «Atrás» cae al inicio de su sección
 
-- **Estado:** borrador (rama `shay-spec-055-atras-a-la-seccion`, 8 nov 2026). Pasa a «implementada» con `npm run check` en
-  verde y probada en Expo Go.
+- **Estado:** implementada en la rama `shay-spec-055-atras-a-la-seccion` (8 nov 2026); `npm run check` en verde (40 suites,
+  311 pruebas, 7 nuevas). **Falta** probarla en Expo Go y la revisión de otra persona.
 - **Dueño / revisor:** Shay / _(pendiente: otra persona del equipo)_
 - **Sprint:** Etapa 13 (navegación), historia **S13-9**. Decisión: ADR 0009.
 - **Depende de:** SPEC-054 (la rama se apila sobre `shay-spec-054-pulido-visual`; no comparten archivos).
@@ -34,7 +34,9 @@ pantalla.
    al Inicio, como hoy.
 4. **Dado** cualquier ruta, **entonces** la sección se calcula con una función pura (`backFallbackFor`) con prueba; los tres
    encabezados con botón de volver usan el mismo hook (`useGoBack`) y ya no repiten la regla.
-5. **Dado** el centro de Emergencia, **entonces** su «Atrás» se comporta igual que antes (`/emergencias`).
+5. **Dado** una subpantalla de Emergencia sin historial, **entonces** «Atrás» cae al centro (`/emergencias`), igual que antes.
+   **Dado** el propio centro de Emergencia sin historial, **cuando** toco «Salir», **entonces** salgo al Inicio (antes se
+   «reemplazaba» por sí mismo y no salía).
 6. **Dado** el lector de pantalla, **entonces** la etiqueta del botón no cambia.
 
 ## Alcance

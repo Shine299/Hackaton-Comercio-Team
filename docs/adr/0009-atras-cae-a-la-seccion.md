@@ -24,3 +24,4 @@ si no, ir al Inicio (`/`), salvo Emergencia, que iba a `/emergencias`. Quien ent
 ## Consecuencias
 - Cada pantalla nueva con botón de volver hereda la regla; si pertenece a una sección, se agrega una fila a la tabla.
 - Una sola fuente de verdad para el fallback; `EmergencyHeader` deja de tener su copia.
+- Efecto en el centro de Emergencia: sin historial, «Salir» ahora sale al Inicio (antes se reemplazaba por sí mismo).

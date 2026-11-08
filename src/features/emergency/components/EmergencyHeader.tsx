@@ -1,7 +1,7 @@
-import { useRouter } from 'expo-router';
 import { Linking, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useGoBack } from '@/shared/nav/useGoBack';
 import { Icon, Text } from '@/shared/ui';
 
 type EmergencyHeaderProps = {
@@ -15,13 +15,9 @@ type EmergencyHeaderProps = {
  * y el acceso al 116; nunca bloquea el acceso por tutorial o registro.
  */
 export function EmergencyHeader({ backToCenter = false }: EmergencyHeaderProps) {
-  const router = useRouter();
   const insets = useSafeAreaInsets();
-
-  const goBack = () => {
-    if (router.canGoBack()) router.back();
-    else router.replace('/emergencias');
-  };
+  // SPEC-055: con historial vuelve; sin historial, una subpantalla cae al centro y el centro sale al Inicio.
+  const goBack = useGoBack();
 
   return (
     <View className="flex-row items-center justify-between bg-surface-container-low px-3 pb-1" style={{ paddingTop: insets.top + 8 }}>
