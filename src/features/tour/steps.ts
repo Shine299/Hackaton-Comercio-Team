@@ -47,10 +47,10 @@ export const TOUR_STEPS: TourStep[] = [
     body: 'Aquí reportas o pides auxilio. La barra de abajo sigue visible: toca «Inicio» para volver.',
   },
   {
-    target: 'chat-fab',
+    target: 'assistant-fab',
     path: '/',
-    title: 'Habla con tus vecinos',
-    body: 'La burbuja de chat te acompaña en las pantallas principales. Tócala para ver tus mensajes.',
+    title: 'Yunta te acompaña',
+    body: 'Esta burbuja es Yunta, tu asistente: te cuenta lo que pasa en el barrio y resuelve tus dudas, escribiendo o hablando. Tócala. Tus conversaciones con vecinos están en la pestaña «Chat».',
   },
   {
     target: null,

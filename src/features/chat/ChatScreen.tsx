@@ -4,7 +4,6 @@ import {
   ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
-  Platform,
   Pressable,
   ScrollView,
   TextInput,
@@ -165,7 +164,8 @@ export function ChatScreen() {
     ]);
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+    // Android con edge-to-edge (SDK 58) ya no reduce la ventana al abrir el teclado: hay que dar el relleno a mano.
+    <KeyboardAvoidingView behavior="padding" className="flex-1">
       <Screen
         header={<BackHeader label={conversation?.otherName ?? 'Chat'} />}
         scroll={false}

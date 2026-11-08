@@ -126,7 +126,7 @@ Mapa de código para quien empieza:
 | **1 — Validar el flujo central** | 10–12 nov | Que lo que ya existe funcione de verdad | Flujo de Rosa, modo avión, privacidad y accesibilidad verificados en 2 dispositivos |
 | **2 — Visual y pantallas** | 13–15 nov | Terminar el rediseño con las imágenes | Todas las pantallas con el estilo final; sin bloques vacíos |
 | **2b — Integraciones** | 8 nov (hecho) y lo que quede, en paralelo | Diferenciadores: fondos, cámaras, perrito, «Acompáñame» | Funcionando sin servidor y con `DemoTag`; servidor y pasarela gratis, después |
-| **13 — Comunidad primero** | 9–14 nov, en paralelo con 1 y 2 | Barra Inicio · Comunidad · Negocios · Ayuda (chat en burbuja), feed en el Inicio, chat directo, eventos con «Voy», lugares con horario | Las 4 pestañas funcionan en Expo Go; 13a lista **antes del 10** para validar el Sprint 1 sobre la barra nueva |
+| **13 — Comunidad primero** | 9–14 nov, en paralelo con 1 y 2 | Barra Inicio · Comunidad · Negocios · Ayuda · Chat (burbuja = asistente), feed en el Inicio, chat directo, eventos con «Voy», lugares con horario | Las 5 pestañas funcionan en Expo Go; 13a lista **antes del 10** para validar el Sprint 1 sobre la barra nueva |
 | **3 — Release y ensayo** | 16–17 nov | App instalable y congelada | APK instalado, regresión completa, **congelar código el 16 a las 12:00** |
 
 Estimaciones: **S** ≤ 2 h · **M** ≤ medio día · **L** ≤ 1 día. «Dueño» queda en blanco para asignar en la planificación.
@@ -360,7 +360,7 @@ Mientras las integraciones esperan, el siguiente trabajo es **visual y de orden 
 ### Etapa 13 — Comunidad primero (9–14 nov; plan: `docs/04_tecnico/plan_etapa13_comunidad_primero.md`)
 
 **Origen:** feedback de UX en 4 notas de voz: que la app se sienta como una comunidad, con una barra
-**Inicio · Eventos · Explorar · Marketplace · Chat** y el contacto por chat en lugar de solicitudes. _(Ajustada el 8 nov por SPEC-051 / ADR 0007: la barra final es **Inicio · Comunidad · Negocios · Ayuda**, con el chat en burbuja y Emergencia por el SOS.)_
+**Inicio · Eventos · Explorar · Marketplace · Chat** y el contacto por chat en lugar de solicitudes. _(Ajustada el 8 nov por SPEC-051 / ADR 0007: la barra final es **Inicio · Comunidad · Negocios · Ayuda · Chat**; la burbuja flotante es el asistente y Emergencia va por el SOS.)_
 **Meta:** reorganizar la navegación y completar las piezas que faltan, reutilizando lo que ya existe (chat de
 SPEC-025, eventos de SPEC-028, feed de Comunidad, Negocios).
 
@@ -378,10 +378,11 @@ Orden: **S13-1 → S13-2 → S13-3 → S13-4 → S13-5 → S13-6**. Si falta tie
 | S13-3 ✅ | **13c — Chat directo:** «Escribir» abre o reutiliza la conversación (`start_conversation`), bloquear y reportar, límite de mensajes por minuto; se retira `ContactRequestSheet` | SPEC-045 | L | | S13-1 |
 | S13-4 ✅ | **13d — Eventos de vecinos:** feature `events`, crear (2 pasos, Zod + RHF), «Voy» con conteo (nunca la lista), `event.create` y `event.rsvp` en el outbox | SPEC-046 | L | | S13-1 |
 | S13-5 ✅ | **13e — Explorar lugares:** ampliar `fetch-places.mjs` (tiendas, restaurantes, mercados) con `opening_hours`, parser propio `abierto / cerrado / no confirmado`, filtros y mapa | SPEC-047 | M | | S13-1 |
+| S13-7 | **13g — Modo guardia por voz** (botón en el Inicio, escucha en toda la app): frase «Hola Yunta, ayúdame…», confirmación hablada, marcador 105/106/116, ubicación exacta consentida (una vez), función `guardia` (gratis) | SPEC-052, ADR 0008 | L | | S13-1 |
 | S13-6 ✅ | **13f — Pulido:** foto de perfil opcional, estados vacíos, ADR 0006 (Emergencia fuera de la barra), actualizar SPEC-014/025/028, `README.md` y `context.md` | SPEC-048 | M | | S13-2 a S13-5 |
 
 **Criterios clave** (detalle en cada spec):
-- S13-1: las 4 pestañas (Inicio · Comunidad · Negocios · Ayuda) navegan; SOS abre Emergencia en un toque desde cualquier raíz; en Emergencia la barra se ve
+- S13-1: las 5 pestañas (Inicio · Comunidad · Negocios · Ayuda · Chat) navegan; SOS abre Emergencia en un toque desde cualquier raíz; en Emergencia la barra se ve
   sin pestaña resaltada; los enlaces viejos redirigen; etiquetas completas con letra al máximo.
 - S13-3: con 2 cuentas, «Escribir» → hilo → mensaje visible en el otro teléfono en ≤ 8 s; dos toques no crean dos
   conversaciones; tras bloquear no se puede enviar; sin red el mensaje queda en la cola.
@@ -389,7 +390,7 @@ Orden: **S13-1 → S13-2 → S13-3 → S13-4 → S13-5 → S13-6**. Si falta tie
 - S13-5: nunca se dice «Abierto» sin `opening_hours` interpretable.
 
 **Migraciones nuevas:** `20261110000008_open_chat.sql` (S13-3), `20261110000009_neighbor_events.sql` (S13-4) y
-`20261110000010_chat_last_from_me.sql` (S13-6).
+`20261110000010_chat_last_from_me.sql` (S13-6) y `20261111000012_guard_usage.sql` (S13-7, **aplicada** en Supabase; la función `guardia` está desplegada, falta `GROQ_API_KEY`).
 
 **Estado (8 nov):** las 6 historias están hechas en la app (✅ = `npm run check` en verde, 165 pruebas). **Falta:**
 aplicar las 3 migraciones en Supabase (ninguna se ha ejecutado contra una base), sus pruebas de RLS y verificar en

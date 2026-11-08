@@ -3,10 +3,12 @@ import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
+import { AssistantHomeCard } from '@/features/assistant';
 import { CamerasTeaser } from '@/features/cameras';
 import { EventCard, useSectorEvents } from '@/features/events';
 import { ReportCard, useEmergencyStore, useSectorAlerts } from '@/features/emergency';
 import { FundCard, useSectorFunds } from '@/features/funds';
+import { GuardHomeCard } from '@/features/guard';
 import { PetTeaser } from '@/features/pets';
 import { useNearbyPosts } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
@@ -39,6 +41,9 @@ import { greetingFor } from './greeting';
  * Inicio = el barrio como comunidad (SPEC-044). Arriba lo que no puede esperar (alerta, Emergencia) y lo que
  * puedes hacer; abajo el feed con las personas y lo que publican, mezclado con los eventos que se vienen.
  */
+/** Cuántas novedades se ven de entrada; el resto está tras «Ver más novedades». */
+const FEED_PREVIEW = 5;
+
 export function HomeScreen() {
   const router = useRouter();
   const sector = useSectorStore((s) => s.sector);
@@ -52,6 +57,7 @@ export function HomeScreen() {
 
   const easy = useEasyMode();
   const [greeting] = useState(() => greetingFor(new Date().getHours()));
+  const [showAllFeed, setShowAllFeed] = useState(false);
 
   const alert = alerts?.[0];
   const now = data?.fetchedAt ?? eventsData?.fetchedAt ?? 0;
@@ -167,6 +173,69 @@ export function HomeScreen() {
         </View>
       </View>
 
+      {/* SPEC-052: Modo guardia. Enciende o apaga la escucha por voz en toda la app. */}
+      <GuardHomeCard />
+
+      {/* SPEC-053: hablar con Yunta (resumen hablado del barrio y conversación por voz). */}
+      <AssistantHomeCard />
+
+      {/* Novedades del barrio: las 5 más recientes y «Ver más». */}
+      <View className="gap-4">
+        <View className="gap-0.5">
+          <Text variant="headline-sm" accessibilityRole="header">
+            Lo nuevo en tu barrio
+          </Text>
+          <Text variant="label-md" tone="muted">
+            Lo que tus vecinos ofrecen, necesitan y organizan
+          </Text>
+        </View>
+
+        {isLoading ? (
+          <View className="items-center py-8" accessibilityLabel="Cargando novedades">
+            <ActivityIndicator />
+          </View>
+        ) : feed.length === 0 ? (
+          <Card className="items-center gap-2 py-8">
+            <Icon name="text-box-search-outline" size={34} color="primary" />
+            <Text variant="headline-sm" className="text-center">
+              Todavía no hay novedades aquí
+            </Text>
+            <Text tone="muted" className="text-center">
+              Sé el primero: publica algo que ofreces o necesitas.
+            </Text>
+          </Card>
+        ) : (
+          (showAllFeed ? feed : feed.slice(0, FEED_PREVIEW)).map((entry) =>
+            entry.type === 'post' ? (
+              <FeedCard key={entry.id} post={entry.post} now={now} />
+            ) : (
+              <EventCard
+                key={entry.id}
+                event={entry.event}
+                now={now}
+                compact
+                onPress={() => router.push({ pathname: '/evento/[id]', params: { id: entry.event.id } })}
+              />
+            ),
+          )
+        )}
+
+        {feed.length > FEED_PREVIEW ? (
+          <Button
+            label={showAllFeed ? 'Ver menos novedades' : `Ver más novedades (${feed.length - FEED_PREVIEW})`}
+            variant="tonal"
+            icon={showAllFeed ? 'chevron-up' : 'chevron-down'}
+            onPress={() => setShowAllFeed((value) => !value)}
+          />
+        ) : null}
+        <Button
+          label="Ver todas las publicaciones"
+          variant="tonal"
+          icon="storefront-outline"
+          onPress={() => router.navigate('/publicaciones')}
+        />
+      </View>
+
       <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
         <Button
           label="Publicar"
@@ -209,54 +278,6 @@ export function HomeScreen() {
         {featuredFund ? <FundCard fund={featuredFund} now={fundsData?.fetchedAt ?? 0} /> : null}
         <CamerasTeaser />
         <PetTeaser />
-      </View>
-
-      <View className="gap-4">
-        <View className="gap-0.5">
-          <Text variant="headline-sm" accessibilityRole="header">
-            Lo nuevo en tu barrio
-          </Text>
-          <Text variant="label-md" tone="muted">
-            Lo que tus vecinos ofrecen, necesitan y organizan
-          </Text>
-        </View>
-
-        {isLoading ? (
-          <View className="items-center py-8" accessibilityLabel="Cargando novedades">
-            <ActivityIndicator />
-          </View>
-        ) : feed.length === 0 ? (
-          <Card className="items-center gap-2 py-8">
-            <Icon name="text-box-search-outline" size={34} color="primary" />
-            <Text variant="headline-sm" className="text-center">
-              Todavía no hay novedades aquí
-            </Text>
-            <Text tone="muted" className="text-center">
-              Sé el primero: publica algo que ofreces o necesitas.
-            </Text>
-          </Card>
-        ) : (
-          feed.map((entry) =>
-            entry.type === 'post' ? (
-              <FeedCard key={entry.id} post={entry.post} now={now} />
-            ) : (
-              <EventCard
-                key={entry.id}
-                event={entry.event}
-                now={now}
-                compact
-                onPress={() => router.push({ pathname: '/evento/[id]', params: { id: entry.event.id } })}
-              />
-            ),
-          )
-        )}
-
-        <Button
-          label="Ver todas las publicaciones"
-          variant="tonal"
-          icon="storefront-outline"
-          onPress={() => router.navigate('/publicaciones')}
-        />
       </View>
 
       <View className="flex-row items-start gap-2 px-1">

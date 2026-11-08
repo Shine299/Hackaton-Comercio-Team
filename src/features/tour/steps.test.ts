@@ -17,7 +17,7 @@ describe('TOUR_STEPS', () => {
   it('cada botón existe en la navegación nueva y cada pantalla es una raíz (SPEC-051)', () => {
     const tabs = new Set(BAR_ITEMS.map((i) => `tab-${i.key}`));
     for (const step of TOUR_STEPS) {
-      if (step.target) expect(tabs.has(step.target) || step.target.startsWith('tile-') || step.target === 'header-sos' || step.target === 'chat-fab').toBe(true);
+      if (step.target) expect(tabs.has(step.target) || step.target.startsWith('tile-') || step.target === 'header-sos' || step.target === 'assistant-fab').toBe(true);
       if (step.path) expect(ROOT_PATHS.has(step.path)).toBe(true);
     }
   });
@@ -40,7 +40,7 @@ describe('isOnStepScreen', () => {
   });
 
   it('un paso sin ruta vale en cualquier pantalla', () => {
-    expect(isOnStepScreen('/mensajes', { path: null })).toBe(true);
+    expect(isOnStepScreen('/asistente', { path: null })).toBe(true);
   });
 });
 

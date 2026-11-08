@@ -13,8 +13,8 @@ que pasa cerca — y para coordinar ayuda cuando hay una emergencia. Construida 
 
 ## Qué hace
 
-La app tiene una **barra inferior de 4 pestañas: Inicio · Comunidad · Negocios · Ayuda** (ver ADR 0007 y SPEC-051), el botón **SOS** en la
-cabecera y una **burbuja flotante de chat**:
+La app tiene una **barra inferior de 5 pestañas: Inicio · Comunidad · Negocios · Ayuda · Chat** (ver ADR 0007 y SPEC-051; el Inicio no la muestra), el botón **SOS** en la
+cabecera y una **burbuja flotante con la mascota: el asistente virtual de Yunta** (puedes hablarle, SPEC-053):
 
 | Pestaña | Para qué sirve | Ruta |
 |---|---|---|
@@ -23,7 +23,8 @@ cabecera y una **burbuja flotante de chat**:
 | **Negocios** | Lugares del barrio (OpenStreetMap) con «Abierto ahora» solo si hay horario, y negocios de vecinos | `/explorar` |
 | **Ayuda** (antes «Marketplace») | Pedir u ofrecer ayuda entre vecinos: objetos, favores y animales; «Escribir» abre el chat con quien publicó | `/ayuda`, `/publicaciones`, `/publicar` |
 | **Emergencia** (botón SOS de la cabecera, no es pestaña) | Reportar un incidente o pedir auxilio **sin cuenta**, números oficiales, tablero y mapa | `/emergencias/*` |
-| **Chat** (burbuja, no pestaña) | Conversaciones 1 a 1 por publicación, con bloqueo, reporte y aviso de mensajes sin leer | `/mensajes`, `/chat/[id]` |
+| **Modo guardia por voz** (botón en el Inicio, SPEC-052) | «Hola Yunta, ayúdame, me pasó algo» → confirma por voz, abre el marcador (105/106/116), deja listo el aviso con tu ubicación exacta para tu contacto y avisa al sector. Escucha en toda la app, con la app a la vista | `/emergencias/guardia` (ajustes) |
+| **Chat** (pestaña) | Conversaciones 1 a 1 por publicación, con bloqueo, reporte y aviso de mensajes sin leer | `/mensajes`, `/chat/[id]` |
 
 Transversales: menú lateral con perfil (tu avatar o ☰, o deslizar desde el borde izquierdo), campana de actividad,
 cambio de sector, tutorial inicial y **recomendaciones** según lo que cada persona mira y guarda.
@@ -249,8 +250,8 @@ erDiagram
 flowchart LR
   OB["/onboarding (1.ª vez)"] --> HOME
 
-  BAR["Barra inferior de 4 (todas las raíces)"] --- HOME["Inicio / (feed)"] & EVE["Comunidad"] & EXP["Negocios"] & MKT["Ayuda"]
-  FAB["Burbuja de chat (4 pestañas)"] --> CHAT["/mensajes"]
+  BAR["Barra inferior de 5 (todas las raíces menos el Inicio)"] --- HOME["Inicio / (feed)"] & EVE["Comunidad"] & EXP["Negocios"] & MKT["Ayuda"] & CHAT["Chat /mensajes"]
+  FAB["Burbuja: asistente virtual"] --> ASI2["/asistente (conversación por voz)"]
   SOS["SOS en la cabecera: siempre, sin cuenta"] --> EME["Emergencia (stack propio)"]
   HOME -->|botón grande «Emergencia»| EME
   HOME -->|«Pregúntale a Yunta»| ASI["/asistente"]

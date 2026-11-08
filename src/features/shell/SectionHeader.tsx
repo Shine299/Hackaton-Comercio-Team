@@ -6,6 +6,7 @@ import { useSectorStore } from '@/features/sector';
 import { useSessionStore } from '@/features/session';
 import { useActivityBadgeStore } from '@/shared/nav/activityBadgeStore';
 import { useDrawerStore } from '@/shared/nav/drawerStore';
+import { useGuardStatusStore } from '@/shared/nav/guardStatusStore';
 import { Avatar, BrandLogo, Icon, PressableScale, Text, TourTarget } from '@/shared/ui';
 
 /** Mismo tamaño de logo en todas las secciones y en Inicio, para que la parte de arriba se vea pareja. */
@@ -27,6 +28,7 @@ export function SectionHeader({ title, danger = false, eyebrow }: SectionHeaderP
   const router = useRouter();
   const sector = useSectorStore((s) => s.sector);
   const unread = useActivityBadgeStore((s) => s.unread);
+  const guardListening = useGuardStatusStore((s) => s.listening);
   const setDrawerOpen = useDrawerStore((s) => s.setOpen);
   const registered = useSessionStore((s) => s.registered);
   const displayName = useSessionStore((s) => s.displayName);
@@ -105,6 +107,19 @@ export function SectionHeader({ title, danger = false, eyebrow }: SectionHeaderP
           </Text>
         ) : null}
       </View>
+
+      {/* SPEC-052: si el Modo guardia está escuchando, se ve siempre (texto + icono): el micrófono nunca va a escondidas. */}
+      {guardListening ? (
+        <View
+          accessible
+          accessibilityLabel="Modo guardia activo: escuchando. Di Hola Yunta, ayúdame, si necesitas ayuda"
+          className="flex-row items-center gap-2 self-start rounded-full bg-primary-fixed px-3 py-1.5">
+          <Icon name="ear-hearing" size={18} color="primary" />
+          <Text variant="label-md" tone="primary">
+            Guardia activa · escuchando
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 }
