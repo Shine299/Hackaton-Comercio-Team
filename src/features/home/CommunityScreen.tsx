@@ -1,6 +1,7 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useSectorAlerts, useSectorImpact, useSharedBoard } from '@/features/emergency';
 import {
@@ -15,7 +16,11 @@ import {
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
-import { Card, Chip, DemoTag, Icon, ListenButton, Screen, Text, type IconName } from '@/shared/ui';
+import { CommunityMap } from '@/features/map';
+import { Card, Chip, DemoTag, Icon, ListenButton, Screen, SectionHero, SegmentedControl, Text, type IconName } from '@/shared/ui';
+
+import { GRADIENTS, type Gradient } from './palette';
+import { SECCION_COMUNIDAD_XML } from './sectionArt';
 
 
 type FeedSection = 'dia' | 'negocios' | 'emergencia' | 'confianza';
@@ -35,12 +40,12 @@ type FeedItem = {
 /** Color de cada sección en el resumen. Siempre acompañado del nombre de la sección. */
 const SECTION_STYLE: Record<
   FeedSection,
-  { bg: string; icon: 'primaryContainer' | 'error' | 'onSurfaceVariant'; tagIcon: IconName; tagTone: 'primary' | 'error' | 'muted' }
+  { gradient: Gradient; tagIcon: IconName; tagTone: 'primary' | 'error' | 'muted' }
 > = {
-  dia: { bg: 'bg-primary-fixed', icon: 'primaryContainer', tagIcon: 'handshake-outline', tagTone: 'primary' },
-  negocios: { bg: 'bg-primary-fixed', icon: 'primaryContainer', tagIcon: 'storefront-outline', tagTone: 'primary' },
-  emergencia: { bg: 'bg-error-container', icon: 'error', tagIcon: 'lifebuoy', tagTone: 'error' },
-  confianza: { bg: 'bg-surface-container-high', icon: 'onSurfaceVariant', tagIcon: 'shield-check-outline', tagTone: 'muted' },
+  dia: { gradient: GRADIENTS.comunidad, tagIcon: 'handshake-outline', tagTone: 'primary' },
+  negocios: { gradient: GRADIENTS.emprendimientos, tagIcon: 'storefront-outline', tagTone: 'primary' },
+  emergencia: { gradient: GRADIENTS.emergencia, tagIcon: 'lifebuoy', tagTone: 'error' },
+  confianza: { gradient: GRADIENTS.ayuda, tagIcon: 'shield-check-outline', tagTone: 'muted' },
 };
 
 function FeedCard({ item }: { item: FeedItem }) {
@@ -51,8 +56,9 @@ function FeedCard({ item }: { item: FeedItem }) {
       accessibilityLabel={`${item.tag}. ${item.title}. ${item.meta}${item.isDemo ? '. Dato de demostración' : ''}`}
       onPress={item.onPress}
       className="overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm elevation-xs active:opacity-90">
-      <View className={`h-36 items-center justify-center ${style.bg}`}>
-        <Icon name={item.icon} size={64} color={style.icon} />
+      <View className="h-36 items-center justify-center overflow-hidden">
+        <LinearGradient colors={style.gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+        <Icon name={item.icon} size={64} color="onPrimary" />
         <View className="absolute left-3 top-3 flex-row items-center gap-1.5 rounded-xl bg-surface-container-lowest px-2.5 py-1.5">
           <Icon name={style.tagIcon} size={16} color={style.tagTone === 'error' ? 'error' : style.tagTone === 'primary' ? 'primary' : 'onSurfaceVariant'} />
           <Text variant="label-md" tone={style.tagTone}>
@@ -85,6 +91,7 @@ export function CommunityScreen() {
   const { data: board = [] } = useSharedBoard(sector.id);
   const { data: impact } = useSectorImpact(sector.id);
   const [filter, setFilter] = useState<FeedFilter>('all');
+  const [view, setView] = useState<'list' | 'map'>('list');
 
   const alert = alerts?.[0];
   const now = data?.fetchedAt ?? 0;
@@ -159,8 +166,20 @@ export function CommunityScreen() {
 
   return (
     <View className="flex-1">
-    <Screen noTopInset contentClassName="gap-4 px-5 pb-28 pt-14">
+    <Screen contentClassName="gap-4 px-5 pb-28 pt-4">
       <SectionHeader title="Comunidad" />
+
+      <SectionHero
+        gradient={GRADIENTS.comunidad}
+        title="Todo lo que pasa en tu barrio, en un solo lugar"
+        description="Aquí ves lo que tus vecinos ofrecen y piden, los negocios nuevos y los avisos del sector. Toca una tarjeta para ver el detalle y escribirle a quien publicó."
+        xml={SECCION_COMUNIDAD_XML}
+        steps={[
+          { icon: 'eye-outline', label: 'Mira las novedades' },
+          { icon: 'message-text-outline', label: 'Contacta a un vecino' },
+          { icon: 'square-edit-outline', label: 'Publica la tuya' },
+        ]}
+      />
 
       {alert ? (
         <Card tone={alert.severity === 'critical' ? 'error' : 'warning'} accessibilityLiveRegion="polite">
@@ -191,7 +210,19 @@ export function CommunityScreen() {
         <Chip role="radio" label="Emergencia" icon="lifebuoy" selected={filter === 'emergencia'} onPress={() => setFilter('emergencia')} />
       </ScrollView>
 
-      {isLoading ? (
+      <SegmentedControl
+        accessibilityLabel="Ver novedades como"
+        value={view}
+        onChange={setView}
+        options={[
+          { value: 'list', label: 'Lista', icon: 'format-list-bulleted' },
+          { value: 'map', label: 'Mapa', icon: 'map-outline' },
+        ]}
+      />
+
+      {view === 'map' ? (
+        <CommunityMap posts={[...dia, ...biz]} layers={['posts', 'business', 'incidents']} embedded height={400} />
+      ) : isLoading ? (
         <View className="items-center py-8" accessibilityLabel="Cargando novedades">
           <ActivityIndicator />
         </View>

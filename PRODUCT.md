@@ -14,7 +14,7 @@ Vecinos of a city sector (demo: Lince, Lima, 2 km radius) of every age. The user
 
 ## Product Purpose
 
-Red Vecinal Solidaria — "Tu comunidad, más cerca." It connects neighbors to solve everyday needs and to coordinate community support during emergencies. Success: anyone finds where to go within seconds, asks for or offers help in a few taps, and an emergency report is never shown as received or verified when it was not.
+Yunta — "Tu comunidad, más cerca." It connects neighbors to solve everyday needs and to coordinate community support during emergencies. Success: anyone finds where to go within seconds, asks for or offers help in a few taps, and an emergency report is never shown as received or verified when it was not.
 
 ## Positioning
 
@@ -38,7 +38,7 @@ One app, four separate spaces for the neighborhood: Comunidad (news, notices, ev
 
 ## Brand Commitments
 
-- Name and promise: "Red Vecinal Solidaria — Tu comunidad, más cerca."
+- Name and promise: "Yunta — Tu comunidad, más cerca."
 - Greens/teal as primary, light grounds and neutrals; alert red reserved for Emergencia only (from src/global.css and the user's brief).
 - Illustrations in assets/illustrations/ (neighbors, items, vulnerable-person types, neighborhood map).
 

@@ -21,7 +21,7 @@ const LINKS: DrawerLink[] = [
 ];
 
 /**
- * Barra lateral con tu perfil. Se abre al tocar el ícono de Red Vecinal; toca fuera o usa «Atrás» para
+ * Barra lateral con tu perfil. Se abre con el ícono de menú o deslizando desde el borde izquierdo; toca fuera o usa «Atrás» para
  * cerrarla. Cada acceso lleva a algo que ya existe en la app.
  */
 export function ProfileDrawer() {
@@ -111,7 +111,7 @@ export function ProfileDrawer() {
             </View>
 
             <Text variant="label-md" tone="muted">
-              Red Vecinal Solidaria · Tu comunidad, más cerca. Tu perfil se guarda en este teléfono.
+              Yunta · Tu comunidad, más cerca. Tu perfil se guarda en este teléfono.
             </Text>
           </ScrollView>
         </Animated.View>

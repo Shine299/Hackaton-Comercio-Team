@@ -41,7 +41,7 @@ const query = `[out:json][timeout:90];(${parts.join('')});out center tags;`;
 
 const response = await fetch(ENDPOINT, {
   method: 'POST',
-  headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'red-vecinal-solidaria-hackathon/0.1' },
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'yunta-hackathon/0.1' },
   body: new URLSearchParams({ data: query }),
 });
 if (!response.ok) throw new Error(`Overpass respondió ${response.status}`);

@@ -1,21 +1,21 @@
 {
   "expo": {
-    "name": "Red Vecinal Solidaria",
-    "slug": "red-vecinal-solidaria",
+    "name": "Yunta",
+    "slug": "yunta",
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "redvecinal",
+    "scheme": "yunta",
     "userInterfaceStyle": "light",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.redvecinal.solidaria",
+      "bundleIdentifier": "com.yunta.app",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Usamos tu ubicación solo para sugerir tu sector. Puedes elegirlo manualmente y la app funciona igual."
       }
     },
     "android": {
-      "package": "com.redvecinal.solidaria",
+      "package": "com.yunta.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

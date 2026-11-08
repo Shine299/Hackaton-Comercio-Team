@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Platform, Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 
 import { buildBoard, useEmergencyStore, useSharedBoard } from '@/features/emergency';
 import type { Post } from '@/features/posts';
@@ -50,7 +50,21 @@ function PointRow({ point, selected, onPress }: { point: MapPoint; selected: boo
  * Mapa barrial por capas (Explorar → Mapa). En iOS y Android muestra react-native-maps; en web,
  * la misma información en lista y un aviso claro. Los puntos son siempre zona aproximada.
  */
-export function CommunityMap({ posts, initialLayers }: { posts: Post[]; initialLayers?: MapLayerId[] }) {
+export function CommunityMap({
+  posts,
+  initialLayers,
+  layers,
+  embedded = false,
+  height,
+}: {
+  posts: Post[];
+  initialLayers?: MapLayerId[];
+  /** Capas fijas de la sección donde vive el mapa (oculta los chips de capas). */
+  layers?: MapLayerId[];
+  /** Versión para incrustar en una sección: solo mapa, tarjeta del punto y nota de privacidad. */
+  embedded?: boolean;
+  height?: number;
+}) {
   const router = useRouter();
   const sector = useSectorStore((s) => s.sector);
   const reports = useEmergencyStore((s) => s.reports);
@@ -59,7 +73,7 @@ export function CommunityMap({ posts, initialLayers }: { posts: Post[]; initialL
   const volunteerAvailable = useProfilePrefsStore((s) => s.volunteerAvailable);
   const showSector = useProfilePrefsStore((s) => s.showSector);
   const [now] = useState(() => Date.now());
-  const [active, setActive] = useState<MapLayerId[]>(initialLayers ?? DEFAULT_LAYERS);
+  const [active, setActive] = useState<MapLayerId[]>(layers ?? initialLayers ?? DEFAULT_LAYERS);
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const [showList, setShowList] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -68,7 +82,8 @@ export function CommunityMap({ posts, initialLayers }: { posts: Post[]; initialL
   const { data: shared = [] } = useSharedBoard(sector.id);
 
   // En Expo Go el mapa funciona sin clave; la clave de Google solo hace falta en builds de producción.
-  const nativeMap = Platform.OS !== 'web';
+  // En web se usa Leaflet/OpenStreetMap (NativeLayerMap.web.tsx), así que hay mapa en todas las plataformas.
+  const nativeMap = true;
 
   const all = useMemo(() => {
     // Lo que el servidor ya muestra en vivo no se repite desde el teléfono.
@@ -107,10 +122,11 @@ export function CommunityMap({ posts, initialLayers }: { posts: Post[]; initialL
     else if (t.kind === 'board' || t.kind === 'shared') router.push('/emergencias/tablero');
   };
 
-  const listVisible = !nativeMap || showList;
+  const listVisible = !embedded && (!nativeMap || showList);
 
   return (
     <View className="gap-3">
+      {!layers ? (
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
         {MAP_LAYERS.map((layer) => (
           <Chip
@@ -122,7 +138,9 @@ export function CommunityMap({ posts, initialLayers }: { posts: Post[]; initialL
           />
         ))}
       </ScrollView>
+      ) : null}
 
+      {!embedded ? (
       <TextField
         label="Buscar en el mapa"
         hideLabel
@@ -133,6 +151,7 @@ export function CommunityMap({ posts, initialLayers }: { posts: Post[]; initialL
         onClear={() => setSearch('')}
         returnKeyType="search"
       />
+      ) : null}
 
       {!nativeMap ? (
         <Card tone="warning">
@@ -151,7 +170,7 @@ export function CommunityMap({ posts, initialLayers }: { posts: Post[]; initialL
             radiusKm={sector.radiusKm}
             points={visible}
             selectedId={selectedId}
-            height={expanded ? 560 : 360}
+            height={expanded ? 560 : (height ?? 360)}
             recenterSignal={recenter}
             onSelect={setSelectedId}
           />
@@ -205,7 +224,7 @@ export function CommunityMap({ posts, initialLayers }: { posts: Post[]; initialL
         </Text>
       ) : null}
 
-      {nativeMap ? (
+      {nativeMap && !embedded ? (
         <Button
           label={showList ? 'Ocultar lista de puntos' : 'Ver lista de puntos'}
           variant="tonal"

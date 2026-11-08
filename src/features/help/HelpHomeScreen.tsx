@@ -1,30 +1,31 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Pressable, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { ReportCard, useEmergencyStore } from '@/features/emergency';
+import { GRADIENTS, type Gradient } from '@/features/home/palette';
 import { SECCION_AYUDA_XML } from '@/features/home/sectionArt';
 import { SectionHeader } from '@/features/shell';
-import { Badge, Icon, Screen, Text, type IconName } from '@/shared/ui';
+import { Badge, Icon, Screen, SectionHero, Text, type IconName } from '@/shared/ui';
 
 type BigActionProps = {
   title: string;
   hint: string;
   icon: IconName;
-  bg: string;
-  hintColor: string;
+  gradient: Gradient;
   onPress: () => void;
 };
 
 /** Botón grande de la sección: una sola acción, imposible de confundir. */
-function BigAction({ title, hint, icon, bg, hintColor, onPress }: BigActionProps) {
+function BigAction({ title, hint, icon, gradient, onPress }: BigActionProps) {
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={`${title}. ${hint}`}
       onPress={onPress}
-      style={{ backgroundColor: bg }}
-      className="min-h-44 flex-1 justify-between rounded-3xl p-4 active:opacity-90">
+      className="min-h-44 flex-1 overflow-hidden rounded-3xl shadow-md elevation-sm active:opacity-90">
+      <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 16, justifyContent: 'space-between' }}>
       <View className="h-14 w-14 items-center justify-center rounded-full bg-white/20">
         <Icon name={icon} size={32} color="onPrimary" />
       </View>
@@ -32,10 +33,11 @@ function BigAction({ title, hint, icon, bg, hintColor, onPress }: BigActionProps
         <Text variant="headline-sm" tone="onPrimary" className="uppercase">
           {title}
         </Text>
-        <Text variant="label-md" style={{ color: hintColor }}>
+        <Text variant="label-md" tone="onPrimary" className="opacity-90">
           {hint}
         </Text>
       </View>
+      </LinearGradient>
     </Pressable>
   );
 }
@@ -50,24 +52,34 @@ export function HelpHomeScreen() {
   const mine = reports.filter((r) => r.kind === 'help').slice(0, 3);
 
   return (
-    <Screen noTopInset contentClassName="gap-4 px-5 pb-6 pt-14">
+    <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
       <SectionHeader title="Ayuda" />
+
+      <SectionHero
+        gradient={GRADIENTS.ayuda}
+        title="Una mano vecina cuando la necesitas"
+        description="Pide lo que te hace falta (una herramienta, un favor, compañía) o ofrece lo que te sobra. Tus vecinos ven tu publicación y te contactan por la app, sin dar tu teléfono ni tu dirección."
+        xml={SECCION_AYUDA_XML}
+        steps={[
+          { icon: 'hand-back-left-outline', label: 'Pide o ofrece' },
+          { icon: 'account-group-outline', label: 'Un vecino responde' },
+          { icon: 'handshake-outline', label: 'Coordinan juntos' },
+        ]}
+      />
 
       <View className="flex-row gap-3">
         <BigAction
           title="Necesito ayuda"
-          hint="Pide apoyo a tus vecinos"
+          hint="Cuéntales qué te hace falta"
           icon="hand-back-left-outline"
-          bg="#003b71"
-          hintColor="#d4e3ff"
+          gradient={GRADIENTS.ayuda}
           onPress={() => router.navigate({ pathname: '/publicar', params: { kind: 'request', t: String(Date.now()) } })}
         />
         <BigAction
           title="Quiero ayudar"
-          hint="Mira quién te necesita"
+          hint="Mira quién necesita una mano"
           icon="hand-heart-outline"
-          bg="#004243"
-          hintColor="#aceeef"
+          gradient={GRADIENTS.comunidad}
           onPress={() => router.navigate({ pathname: '/explorar', params: { kind: 'request' } })}
         />
       </View>

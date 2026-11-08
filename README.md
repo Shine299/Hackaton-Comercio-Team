@@ -1,4 +1,4 @@
-# Red Vecinal Solidaria
+# Yunta
 
 Prototipo Android/iOS (Expo + React Native + TypeScript) para una hackatón de 48 horas.
 **Tu comunidad, más cerca.**

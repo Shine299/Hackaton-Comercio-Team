@@ -112,32 +112,39 @@ export default function NativeLayerMap({
               />
             );
           }
-          const size = selected ? 44 : 34;
+          const size = selected ? 40 : 32;
           return (
             <Marker
               // El `key` cambia con la selección para que Android vuelva a dibujar el marcador.
               key={`${p.id}-${selected ? 's' : 'n'}`}
               coordinate={p.coord}
-              anchor={{ x: 0.5, y: 0.5 }}
+              anchor={{ x: 0.5, y: 1 }}
               zIndex={selected ? 10 : 1}
               tracksViewChanges={false}
               onPress={(e) => {
                 e.stopPropagation();
                 onSelect(p.id);
               }}>
-              <View
-                style={{
-                  width: size,
-                  height: size,
-                  borderRadius: size / 2,
-                  backgroundColor: layer.color,
-                  borderWidth: selected ? 3 : 2,
-                  borderColor: '#ffffff',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  opacity: selectedId && !selected ? 0.75 : 1,
-                }}>
-                <Icon name={layer.icon} size={selected ? 24 : 18} color="onPrimary" />
+              {/* Pin de gota (como Google Maps): cuadrado con una esquina recta, girado 45° para que apunte abajo. */}
+              <View style={{ width: size * 1.45, height: size * 1.45, alignItems: 'center', justifyContent: 'flex-start', opacity: selectedId && !selected ? 0.8 : 1 }}>
+                <View
+                  style={{
+                    width: size,
+                    height: size,
+                    marginTop: size * 0.1,
+                    borderRadius: size / 2,
+                    borderBottomRightRadius: 0,
+                    transform: [{ rotate: '45deg' }],
+                    backgroundColor: layer.color,
+                    borderWidth: selected ? 3 : 2,
+                    borderColor: '#ffffff',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <View style={{ transform: [{ rotate: '-45deg' }] }}>
+                    <Icon name={layer.icon} size={selected ? 20 : 16} color="onPrimary" />
+                  </View>
+                </View>
               </View>
             </Marker>
           );

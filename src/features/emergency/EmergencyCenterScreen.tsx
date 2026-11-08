@@ -1,13 +1,16 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Linking, Pressable, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
+import { GRADIENTS } from '@/features/home/palette';
+import { CommunityMap } from '@/features/map';
 import { SECCION_AYUDA_XML } from '@/features/home/sectionArt';
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
-import { Badge, cn, Icon, Screen, Text, type IconName } from '@/shared/ui';
+import { Badge, cn, Icon, Screen, SectionHero, Text, type IconName } from '@/shared/ui';
 
 import { buildBoard } from './board';
 import { EMERGENCY_NUMBERS, formatReviewDate } from './emergencyNumbers';
@@ -71,14 +74,22 @@ export function EmergencyCenterScreen() {
   const active = reports.filter((r) => r.status !== 'resolved').length;
 
   return (
-    <Screen noTopInset safeBottom contentClassName="gap-3 px-5 pb-6 pt-14">
+    <Screen safeBottom contentClassName="gap-3 px-5 pb-6 pt-4">
       <SectionHeader title="Emergencia" danger />
+
+      <SectionHero
+        compact
+        gradient={GRADIENTS.emergencia}
+        title="Ayuda rápida, sin cuenta ni formularios largos"
+        description="Reporta un incidente, pide auxilio o avisa por un vecino que no puede hacerlo. Tu aviso queda guardado y lo ven tus vecinos. No reemplaza a bomberos, policía ni ambulancia."
+      />
 
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Reportar emergencia. Sin cuenta, en pocos toques"
         onPress={() => router.push('/emergencias/reportar')}
-        className="mt-2 min-h-28 flex-row items-center gap-4 rounded-[28px] bg-error p-5 active:opacity-90">
+        className="mt-2 min-h-28 overflow-hidden rounded-[28px] shadow-md elevation-sm active:opacity-90">
+        <LinearGradient colors={['#c62828', '#ff6a4d']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flexDirection: 'row', alignItems: 'center', gap: 16, padding: 20 }}>
         <View className="h-[72px] w-[72px] items-center justify-center rounded-full bg-white/20">
           <Icon name="bullhorn-outline" size={40} color="onError" />
         </View>
@@ -90,6 +101,7 @@ export function EmergencyCenterScreen() {
             Sin cuenta · en pocos toques
           </Text>
         </View>
+        </LinearGradient>
       </Pressable>
 
       <View className="flex-row gap-2">
@@ -132,16 +144,6 @@ export function EmergencyCenterScreen() {
 
       <View className="mt-3 flex-row items-baseline justify-between px-1">
         <Text variant="headline-sm">Cerca de ti</Text>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Ver el mapa de incidentes"
-          onPress={() => router.push('/mapa')}
-          className="min-h-11 flex-row items-center justify-center">
-          <Text variant="body-md-medium" tone="primary">
-            Ver mapa
-          </Text>
-          <Icon name="chevron-right" size={20} color="primary" />
-        </Pressable>
       </View>
       {alert ? (
         <Pressable
@@ -186,6 +188,8 @@ export function EmergencyCenterScreen() {
       ))}
       {!alert && nearby.length === 0 ? <Text tone="muted">Sin avisos activos cerca de ti por ahora.</Text> : null}
 
+      <CommunityMap posts={[]} layers={['incidents', 'needs', 'resources', 'zones']} embedded height={280} />
+
       <Text variant="headline-sm" className="mt-3 px-1">
         Más opciones
       </Text>
@@ -200,14 +204,13 @@ export function EmergencyCenterScreen() {
         <Option icon="view-dashboard-outline" title="Tablero de coordinación" onPress={() => router.push('/emergencias/tablero')} />
         <Option icon="hand-heart-outline" title="Ofrecer ayuda" onPress={() => router.push('/emergencias/ofrecer')} />
         <Option icon="package-variant" title="Necesidades y recursos" onPress={() => router.push('/emergencias/recursos')} />
-        <Option icon="map-outline" title="Mapa de incidentes" onPress={() => router.push('/mapa')} />
       </View>
 
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="¿Alguien no puede pedir ayuda? Pide por un vecino vulnerable"
         onPress={() => router.push('/emergencias/vecino-vulnerable')}
-        className="mt-1 flex-row items-center gap-3 rounded-3xl bg-primary p-2 pr-4 active:opacity-90">
+        className="mt-1 flex-row items-center gap-3 rounded-3xl bg-tertiary-container p-2 pr-4 active:opacity-90">
         <View className="h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-primary-container">
           <SvgXml xml={SECCION_AYUDA_XML} width={64} height={48} />
         </View>

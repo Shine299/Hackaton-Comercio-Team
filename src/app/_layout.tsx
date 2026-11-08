@@ -7,7 +7,7 @@ import { Inter_600SemiBold } from '@expo-google-fonts/inter/600SemiBold';
 import { Inter_700Bold } from '@expo-google-fonts/inter/700Bold';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BoardNotifier } from '@/features/notifications';
-import { ProfileDrawer, SectionBar } from '@/features/shell';
+import { EdgeSwipe, ProfileDrawer, SectionBar } from '@/features/shell';
 import { hasServerTransport, registerSupabaseTransport, useOutboxStore } from '@/features/outbox';
 import { reconcileWithServer, syncNow } from '@/features/sync';
 import { Stack } from 'expo-router';
@@ -64,12 +64,12 @@ export default function RootLayout() {
             <Stack.Screen name="publicacion/[id]" />
             <Stack.Screen name="vecino/[id]" />
             <Stack.Screen name="negocios/registrar" />
-            <Stack.Screen name="mapa" />
             <Stack.Screen name="emergencias" />
             <Stack.Screen name="sector" options={{ presentation: 'modal' }} />
             <Stack.Screen name="galeria" />
           </Stack>
           <SectionBar />
+          <EdgeSwipe />
         </View>
         <ProfileDrawer />
       </QueryClientProvider>

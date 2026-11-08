@@ -1,4 +1,4 @@
-# Red Vecinal Solidaria — Contexto de la app
+# Yunta — Contexto de la app
 
 Documento de traspaso para retomar el trabajo (personas o IA). Resume qué es la app, cómo está
 construida, qué está hecho y qué falta. **Fuente de verdad del producto: `docs/`.**

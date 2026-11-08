@@ -1,3 +1,4 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
@@ -11,7 +12,10 @@ import {
 } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
-import { Badge, Button, Card, Chip, cn, Icon, Screen, Text, TextField, type IconName } from '@/shared/ui';
+import { GRADIENTS } from '@/features/home/palette';
+import { SECCION_EMPRENDIMIENTOS_XML } from '@/features/home/sectionArt';
+import { CommunityMap } from '@/features/map';
+import { Badge, Button, Card, Chip, cn, Icon, Screen, SectionHero, SegmentedControl, Text, TextField, type IconName } from '@/shared/ui';
 
 import { BusinessCard } from './BusinessCard';
 import { BUSINESS_RUBROS, hasDelivery, rubroOf, type RubroId } from './rubros';
@@ -50,6 +54,7 @@ export function BusinessesScreen() {
   const [rubro, setRubro] = useState<RubroId | 'all'>('all');
   const [availableNow, setAvailableNow] = useState(false);
   const [delivery, setDelivery] = useState(false);
+  const [view, setView] = useState<'list' | 'map'>('list');
 
   const results = useMemo(() => {
     if (!data) return [];
@@ -76,8 +81,20 @@ export function BusinessesScreen() {
   };
 
   return (
-    <Screen noTopInset contentClassName="gap-4 px-5 pb-6 pt-14">
+    <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
       <SectionHeader title="Emprendimientos" />
+
+      <SectionHero
+        gradient={GRADIENTS.emprendimientos}
+        title="Compra a tus vecinos, cerca de casa"
+        description="Aquí están los negocios y oficios de tu barrio: comida, costura, bodegas y más. Ahorras en traslado y apoyas a quien vive a pasos de ti. ¿Vendes algo? Regístralo gratis."
+        xml={SECCION_EMPRENDIMIENTOS_XML}
+        steps={[
+          { icon: 'magnify', label: 'Busca o elige un rubro' },
+          { icon: 'storefront-outline', label: 'Abre el negocio' },
+          { icon: 'message-text-outline', label: 'Escribe y coordina' },
+        ]}
+      />
 
       <View className="flex-row gap-2.5">
         <View className="flex-1">
@@ -92,13 +109,6 @@ export function BusinessesScreen() {
             returnKeyType="search"
           />
         </View>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Ver emprendimientos en el mapa"
-          onPress={() => router.push({ pathname: '/mapa', params: { layer: 'business' } })}
-          className="h-14 w-14 items-center justify-center rounded-2xl bg-primary active:opacity-80">
-          <Icon name="map-outline" size={26} color="onPrimary" />
-        </Pressable>
       </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4" accessibilityRole="radiogroup">
@@ -117,6 +127,16 @@ export function BusinessesScreen() {
         />
         <Chip label="Delivery" icon="moped-outline" selected={delivery} onPress={() => setDelivery((v) => !v)} />
       </View>
+
+      <SegmentedControl
+        accessibilityLabel="Ver emprendimientos como"
+        value={view}
+        onChange={setView}
+        options={[
+          { value: 'list', label: 'Lista', icon: 'format-list-bulleted' },
+          { value: 'map', label: 'Mapa', icon: 'map-outline' },
+        ]}
+      />
 
       {isLoading ? (
         <View className="items-center py-10" accessibilityLabel="Cargando emprendimientos">
@@ -150,6 +170,8 @@ export function BusinessesScreen() {
               </Text>
               {filtersActive ? <Button label="Quitar filtros" icon="filter-remove-outline" onPress={reset} /> : null}
             </Card>
+          ) : view === 'map' ? (
+            <CommunityMap posts={results.map((r) => r.post)} layers={['business']} embedded height={380} />
           ) : (
             <View className="flex-row flex-wrap gap-3">
               {results.map(({ post }) => (
@@ -165,13 +187,13 @@ export function BusinessesScreen() {
         accessibilityLabel="¿Tienes un emprendimiento? Regístralo gratis"
         onPress={() => router.push('/negocios/registrar')}
         className="flex-row items-center gap-3.5 rounded-3xl border-2 border-dashed border-outline bg-surface-container-lowest px-4 py-3.5 active:opacity-80">
-        <View className="h-12 w-12 items-center justify-center rounded-2xl bg-primary-fixed">
-          <Icon name="store-plus-outline" size={26} color="primary" />
-        </View>
+        <LinearGradient colors={GRADIENTS.emprendimientos} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ height: 48, width: 48, borderRadius: 16, alignItems: 'center', justifyContent: 'center' }}>
+          <Icon name="store-plus-outline" size={26} color="onPrimary" />
+        </LinearGradient>
         <View className="flex-1">
           <Text variant="body-lg-bold">¿Tienes un emprendimiento?</Text>
           <Text variant="label-md" tone="muted">
-            Regístralo gratis
+            Regístralo gratis y que tus vecinos te encuentren
           </Text>
         </View>
         <Icon name="chevron-right" size={22} color="primary" />

@@ -20,7 +20,7 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
     id: 'welcome',
     icon: 'account-group',
     title: 'Tu comunidad, más cerca',
-    body: 'Red Vecinal Solidaria conecta a vecinos para resolver necesidades del día a día y coordinar apoyo cuando hay una emergencia.',
+    body: 'Yunta conecta a vecinos para resolver necesidades del día a día y coordinar apoyo cuando hay una emergencia.',
   },
   {
     id: 'explore',

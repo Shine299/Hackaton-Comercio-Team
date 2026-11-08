@@ -1,60 +1,67 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useMemo } from 'react';
-import { Pressable, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Pressable, ScrollView, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { ReportCard, useEmergencyStore, useSectorAlerts } from '@/features/emergency';
-import { getCategory, PostCard, recommendPosts, useInterestStore, useNearbyPosts, useSavedStore } from '@/features/posts';
+import { getCategory, HELP_CATEGORIES, PostCard, recommendPosts, useInterestStore, useNearbyPosts, useSavedStore } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
 import { useSessionStore } from '@/features/session';
 import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
-import { Button, Card, Icon, ListenButton, Screen, Text } from '@/shared/ui';
+import { Button, Card, Chip, Icon, ListenButton, Screen, Text, TextField } from '@/shared/ui';
 
 import { BusinessPhotoCard, NewsCard, Rail } from './HomeCarousels';
+import { GRADIENTS, type Gradient } from './palette';
 import { SECCION_AYUDA_XML, SECCION_COMUNIDAD_XML, SECCION_EMERGENCIA_XML, SECCION_EMPRENDIMIENTOS_XML } from './sectionArt';
 
-const TILE_BG = { default: 'bg-primary-fixed', emergency: 'bg-error-container', help: 'bg-tertiary-fixed' } as const;
-
-/** Qué puedes hacer: una función principal por sección, con ilustración y un verbo claro. */
+/** Qué puedes hacer: una función por sección, con degradado propio, ilustración y un verbo claro. */
 function ActionTile({
   verb,
   detail,
   xml,
-  tone = 'default',
+  gradient,
   onPress,
 }: {
   verb: string;
   detail: string;
   xml: string;
-  tone?: keyof typeof TILE_BG;
+  gradient: Gradient;
   onPress: () => void;
 }) {
-  const emergency = tone === 'emergency';
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={`${verb}. ${detail}`}
       onPress={onPress}
-      className={`flex-1 overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm elevation-xs active:opacity-90 ${emergency ? 'border-2 border-error-container' : ''}`}>
-      <View className={`h-24 items-center justify-end overflow-hidden ${TILE_BG[tone]}`}>
-        <SvgXml xml={xml} width={130} height={98} />
-      </View>
-      <View className="gap-0.5 px-3 pb-3 pt-2.5">
-        <Text variant="body-lg-bold" tone={emergency ? 'error' : 'default'} numberOfLines={2}>
-          {verb}
-        </Text>
-        <Text variant="label-md" tone="muted" numberOfLines={2}>
-          {detail}
-        </Text>
-      </View>
+      className="min-h-44 flex-1 overflow-hidden rounded-3xl shadow-md elevation-sm active:opacity-90">
+      <LinearGradient
+        colors={gradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{ flex: 1, padding: 14, justifyContent: 'space-between' }}>
+        <View className="items-end">
+          <View className="h-16 w-20 items-center justify-end overflow-hidden rounded-2xl bg-white/25">
+            <SvgXml xml={xml} width={84} height={64} />
+          </View>
+        </View>
+        <View className="gap-0.5">
+          <Text variant="headline-sm" tone="onPrimary" numberOfLines={2}>
+            {verb}
+          </Text>
+          <Text variant="label-md" tone="onPrimary" numberOfLines={2} className="opacity-90">
+            {detail}
+          </Text>
+        </View>
+      </LinearGradient>
     </Pressable>
   );
 }
 
 /**
- * Inicio = «¿Qué necesitas hoy?». Primero, lo que puedes hacer con la app (una función por sección); luego cada
- * apartado destaca la suya: novedades del área, emprendimientos con foto,
+ * Inicio = «¿Qué quieres hacer hoy?». Primero un hero y lo que puedes hacer con la app (una función por sección,
+ * cada una con su color); luego cada apartado destaca la suya: novedades del área, emprendimientos con foto,
  * lo que se presta entre vecinos y recomendaciones según lo que la persona mira. Cada tarjeta abre directo
  * el detalle, para llegar con el menor número de toques.
  */
@@ -69,6 +76,9 @@ export function HomeScreen() {
   const categoryViews = useInterestStore((s) => s.categoryViews);
   const viewedIds = useInterestStore((s) => s.viewedIds);
   const savedPostIds = useSavedStore((s) => s.postIds);
+
+  const [query, setQuery] = useState('');
+  const search = (q: string) => router.navigate({ pathname: '/explorar', params: { q: q.trim(), t: String(Date.now()) } });
 
   const alert = alerts?.[0];
   const fetchedAt = data?.fetchedAt ?? 0;
@@ -103,31 +113,63 @@ export function HomeScreen() {
   const pending = reports.filter((r) => r.status !== 'resolved').slice(0, 2);
 
   return (
-    <Screen noTopInset contentClassName="gap-5 px-5 pb-6 pt-14">
+    <Screen contentClassName="gap-5 px-5 pb-8 pt-4">
       <SectionHeader
+        title="YUNTA"
         eyebrow={
-          <View className="gap-0.5">
-            <Text variant="label-md" tone="muted">
-              {registered && displayName ? `Hola, ${displayName}` : 'Hola, vecino'}
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Tu sector: ${sector.name}, ${sector.radiusKm} kilómetros. Cambiar`}
+            onPress={() => router.push('/sector')}
+            className="min-h-7 flex-row items-center gap-0.5 self-start">
+            <Icon name="map-marker" size={18} color="primary" />
+            <Text variant="body-md-medium" tone="primary">
+              {sector.name} · {sector.radiusKm} km
             </Text>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={`Tu sector: ${sector.name}, ${sector.radiusKm} kilómetros. Cambiar`}
-              onPress={() => router.push('/sector')}
-              className="min-h-7 flex-row items-center gap-0.5 self-start">
-              <Icon name="map-marker" size={18} color="primary" />
-              <Text variant="body-md-medium" tone="primary">
-                {sector.name} · {sector.radiusKm} km
-              </Text>
-              <Icon name="chevron-down" size={20} color="primary" />
-            </Pressable>
-          </View>
+            <Icon name="chevron-down" size={20} color="primary" />
+          </Pressable>
         }
       />
 
-      <Text variant="headline-lg" accessibilityRole="header" className="mt-1">
-        ¿Qué necesitas hoy?
-      </Text>
+      <View className="gap-3">
+        <TextField
+          label="Buscar en tu barrio"
+          hideLabel
+          leadingIcon="magnify"
+          placeholder="¿Qué buscas? Taladro, almuerzo, costura…"
+          value={query}
+          onChangeText={setQuery}
+          onClear={() => setQuery('')}
+          returnKeyType="search"
+          onSubmitEditing={() => search(query)}
+        />
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-5" accessibilityLabel="Búsquedas rápidas">
+          {HELP_CATEGORIES.slice(0, 5).map((c) => (
+            <Chip
+              key={c.id}
+              label={c.label}
+              icon={c.icon}
+              onPress={() => router.navigate({ pathname: '/explorar', params: { category: c.id, t: String(Date.now()) } })}
+            />
+          ))}
+        </ScrollView>
+      </View>
+
+      <LinearGradient
+        colors={GRADIENTS.hero}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{ borderRadius: 28, padding: 18, gap: 6 }}>
+        <Text variant="label-md" tone="onPrimary" className="opacity-90">
+          {registered && displayName ? `¡Qué bueno verte en Yunta, ${displayName}!` : '¡Bienvenido a Yunta, vecino!'}
+        </Text>
+        <Text variant="headline-lg" tone="onPrimary" accessibilityRole="header">
+          Tu barrio, a un toque de ti
+        </Text>
+        <Text variant="body-md" tone="onPrimary" className="opacity-95">
+          Entérate de lo que pasa, compra local, comparte lo que tienes y pide una mano cuando la necesites.
+        </Text>
+      </LinearGradient>
 
       {alert ? (
         <Card tone={alert.severity === 'critical' ? 'error' : 'warning'} accessibilityLiveRegion="polite">
@@ -154,36 +196,38 @@ export function HomeScreen() {
       ) : null}
 
       <View className="gap-3" accessibilityLabel="Qué puedes hacer con la app">
-        <Text variant="label-md" tone="muted">
-          Con la app puedes:
+        <Text variant="headline-sm" accessibilityRole="header">
+          ¿Qué quieres hacer hoy?
         </Text>
         <View className="flex-row gap-3">
           <ActionTile
-            verb="Enterarte de tu barrio"
-            detail={news.length > 0 ? `${news.length} novedades cerca` : 'Novedades y avisos del área'}
+            verb="Descubre qué pasa cerca"
+            detail={news.length > 0 ? `${news.length} novedades frescas` : 'Novedades y avisos del área'}
             xml={SECCION_COMUNIDAD_XML}
+            gradient={GRADIENTS.comunidad}
             onPress={() => router.navigate('/comunidad')}
           />
           <ActionTile
-            verb="Comprar a tus vecinos"
-            detail={shops.length > 0 ? `${shops.length} negocios cerca` : 'Emprendimientos del barrio'}
+            verb="Compra local, apoya al barrio"
+            detail={shops.length > 0 ? `${shops.length} negocios a pasos de ti` : 'Emprendimientos del barrio'}
             xml={SECCION_EMPRENDIMIENTOS_XML}
+            gradient={GRADIENTS.emprendimientos}
             onPress={() => router.navigate('/negocios')}
           />
         </View>
         <View className="flex-row gap-3">
           <ActionTile
-            verb="Pedir auxilio o reportar"
-            detail="Sin cuenta y a un toque"
+            verb="Pide auxilio al instante"
+            detail="Reporta sin crear cuenta"
             xml={SECCION_EMERGENCIA_XML}
-            tone="emergency"
+            gradient={GRADIENTS.emergencia}
             onPress={() => router.navigate('/emergencias')}
           />
           <ActionTile
-            verb="Prestar y pedir ayuda"
+            verb="Presta, pide, ayuda"
             detail="Herramientas, favores y trueque"
             xml={SECCION_AYUDA_XML}
-            tone="help"
+            gradient={GRADIENTS.ayuda}
             onPress={() => router.navigate('/ayuda')}
           />
         </View>
@@ -191,8 +235,8 @@ export function HomeScreen() {
 
       {news.length > 0 ? (
         <Rail
-          title="Novedades en tu área"
-          subtitle={`Lo último en ${sector.name}`}
+          title="Lo que se mueve en tu barrio"
+          subtitle={`Fresquito en ${sector.name}`}
           actionLabel="Ver todo"
           onAction={() => router.navigate('/comunidad')}>
           {news.map((post) => (
@@ -202,51 +246,73 @@ export function HomeScreen() {
       ) : null}
 
       {shops.length > 0 ? (
-        <Rail
-          title="Emprendimientos cerca"
-          subtitle="Compra y apoya a tu barrio"
-          actionLabel="Ver todos"
-          onAction={() => router.navigate('/negocios')}>
-          {shops.map((post) => (
-            <BusinessPhotoCard key={post.id} post={post} />
-          ))}
-        </Rail>
+        <View className="gap-3">
+          <Rail
+            title="Sabores y oficios de tu zona"
+            subtitle="Vecinos que emprenden: ¡dales una vuelta!"
+            actionLabel="Ver todos"
+            onAction={() => router.navigate('/negocios')}>
+            {shops.map((post) => (
+              <BusinessPhotoCard key={post.id} post={post} />
+            ))}
+          </Rail>
+          <Button
+            label="¡Muestra tu negocio al barrio!"
+            variant="tonal"
+            icon="storefront-outline"
+            onPress={() => router.push('/negocios/registrar')}
+          />
+        </View>
       ) : null}
-      <Button label="Registrar mi emprendimiento" variant="tonal" icon="storefront-outline" onPress={() => router.push('/negocios/registrar')} />
 
       {lending.length > 0 ? (
         <View className="gap-3">
           <View className="gap-0.5">
             <Text variant="headline-sm" accessibilityRole="header">
-              Para prestar y pedir prestado
+              Presta hoy, ayuda mañana
             </Text>
             <Text variant="label-md" tone="muted">
-              Herramientas y cosas que tus vecinos comparten
+              Taladros, escaleras, trueques… lo que tus vecinos comparten
             </Text>
           </View>
           {lending.map((post) => (
             <PostCard key={post.id} post={post} now={fetchedAt} compact />
           ))}
           <View className="flex-row gap-2">
-            <Button label="Necesito algo" variant="tonal" icon="hand-back-left-outline" fullWidth={false} className="flex-1" onPress={() => router.navigate('/publicar')} />
-            <Button label="Quiero ayudar" icon="hand-heart-outline" fullWidth={false} className="flex-1" onPress={() => router.navigate('/explorar')} />
+            <Button
+              label="Busco algo"
+              variant="tonal"
+              icon="hand-back-left-outline"
+              fullWidth={false}
+              className="flex-1"
+              onPress={() => router.navigate('/publicar')}
+            />
+            <Button
+              label="Quiero compartir"
+              icon="hand-heart-outline"
+              fullWidth={false}
+              className="flex-1"
+              onPress={() => router.navigate('/explorar')}
+            />
           </View>
         </View>
       ) : null}
 
       {recommended.length > 0 ? (
-        <View className="gap-3" accessibilityLabel="Recomendado para ti">
+        <View className="gap-3" accessibilityLabel="Pensado para ti">
           <View className="gap-0.5">
             <Text variant="headline-sm" accessibilityRole="header">
-              Recomendado para ti
+              Pensado para ti
             </Text>
             <Text variant="label-md" tone="muted">
-              {hasHistory ? 'Según lo que más miras y guardas.' : 'Lo más útil cerca de ti. Mejora a medida que explores.'}
+              {hasHistory
+                ? 'Elegido según lo que más miras y guardas.'
+                : 'Lo más útil cerca de ti. Mientras más explores, mejor acierta.'}
             </Text>
           </View>
           {recommended.map(({ post, reason }) => (
             <View key={post.id} className="gap-1">
-              <View className="flex-row items-center gap-1 px-1">
+              <View className="flex-row items-center gap-1 self-start rounded-full bg-secondary-fixed px-2.5 py-1">
                 <Icon name={getCategory(post.category).icon} size={16} color="primary" />
                 <Text variant="label-md" tone="primary">
                   {reason}

@@ -37,7 +37,7 @@ export function TopBar() {
               onPress={() => setDrawerOpen(true)}
               className="self-start">
               <Text variant="headline-sm" numberOfLines={1}>
-                Red Vecinal
+                Yunta
               </Text>
             </Pressable>
             <Pressable

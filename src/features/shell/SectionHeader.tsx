@@ -30,6 +30,14 @@ export function SectionHeader({ title, danger = false, eyebrow }: SectionHeaderP
 
   return (
     <View className="flex-row items-end justify-between gap-3">
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Abrir el menú"
+        accessibilityHint="También puedes deslizar desde el borde izquierdo"
+        onPress={() => setDrawerOpen(true)}
+        className="h-11 w-11 items-center justify-center rounded-full bg-surface-container-lowest shadow-sm elevation-xs active:opacity-80">
+        <Icon name="menu" size={24} color="primary" />
+      </Pressable>
       <View className="min-w-0 flex-1">
         {eyebrow ?? (
           <Pressable

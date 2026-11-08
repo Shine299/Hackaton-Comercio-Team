@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
@@ -8,6 +9,7 @@ import { getCategory, type Post } from '@/features/posts';
 import { formatApproxDistance, formatRelativeTime } from '@/shared/format';
 import { DemoTag, Icon, Text } from '@/shared/ui';
 
+import { gradientForCategory } from './palette';
 import { SECCION_EMPRENDIMIENTOS_XML } from './sectionArt';
 
 const CARD_W = 264;
@@ -44,14 +46,14 @@ export function Rail({
           accessibilityLabel={`${actionLabel}: ${title}`}
           onPress={onAction}
           hitSlop={8}
-          className="min-h-10 flex-row items-center justify-center active:opacity-70">
+          className="min-h-10 flex-row items-center justify-center rounded-full bg-primary-fixed pl-3 pr-1 active:opacity-70">
           <Text variant="body-md-medium" tone="primary">
             {actionLabel}
           </Text>
           <Icon name="chevron-right" size={20} color="primary" />
         </Pressable>
       </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-3 px-5 pb-1">
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-3 px-5 pb-2">
         {children}
       </ScrollView>
     </View>
@@ -63,10 +65,9 @@ function useOpen() {
   return (post: Post) => router.push({ pathname: '/publicacion/[id]', params: { id: post.id } });
 }
 
-/** Novedad del área: una publicación reciente, con su categoría y cuánto hace que salió. */
+/** Novedad del área: una publicación reciente, con degradado por categoría y cuánto hace que salió. */
 export function NewsCard({ post, now }: { post: Post; now: number }) {
   const open = useOpen();
-  const business = post.category === 'business';
   const category = getCategory(post.category);
   const fresh = now - post.createdAt < 6 * 3_600_000;
   const when = formatRelativeTime(post.createdAt, now);
@@ -76,16 +77,20 @@ export function NewsCard({ post, now }: { post: Post; now: number }) {
       accessibilityLabel={`${post.title}. ${category.label}. ${when}. ${formatApproxDistance(post.distanceM)}`}
       onPress={() => open(post)}
       style={{ width: CARD_W }}
-      className="overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm elevation-xs active:opacity-90">
-      <View className={`h-24 items-center justify-center ${business ? 'bg-tertiary-fixed' : 'bg-primary-fixed'}`}>
-        <Icon name={category.icon} size={48} color="primaryContainer" />
-        <View className="absolute left-3 top-3 flex-row items-center gap-1 rounded-xl bg-surface-container-lowest px-2.5 py-1">
+      className="overflow-hidden rounded-3xl bg-surface-container-lowest shadow-md elevation-sm active:opacity-90">
+      <LinearGradient
+        colors={gradientForCategory(post.category)}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{ height: 96, alignItems: 'center', justifyContent: 'center' }}>
+        <Icon name={category.icon} size={52} color="onPrimary" />
+        <View className="absolute left-3 top-3 flex-row items-center gap-1 rounded-xl bg-white/90 px-2.5 py-1">
           <Text variant="label-md" tone="primary">
-            {fresh ? 'Nuevo · ' : ''}
+            {fresh ? '✨ Nuevo · ' : ''}
             {category.label}
           </Text>
         </View>
-      </View>
+      </LinearGradient>
       <View className="gap-1 p-3.5">
         <Text variant="body-lg-bold" numberOfLines={2}>
           {post.title}
@@ -111,23 +116,33 @@ export function BusinessPhotoCard({ post }: { post: Post }) {
       accessibilityLabel={`${post.title}. ${rubro.label}. ${formatApproxDistance(post.distanceM)}${post.priceLabel ? `. ${post.priceLabel}` : ''}`}
       onPress={() => open(post)}
       style={{ width: CARD_W }}
-      className="overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm elevation-xs active:opacity-90">
-      <View className="h-40 items-center justify-end overflow-hidden bg-tertiary-fixed">
+      className="overflow-hidden rounded-3xl bg-surface-container-lowest shadow-md elevation-sm active:opacity-90">
+      <View className="h-44 items-center justify-end overflow-hidden bg-tertiary-fixed">
         {post.photoUri ? (
           <Image source={{ uri: post.photoUri }} style={{ width: '100%', height: '100%' }} contentFit="cover" accessibilityIgnoresInvertColors />
         ) : (
-          <SvgXml xml={SECCION_EMPRENDIMIENTOS_XML} width={220} height={150} />
+          <LinearGradient
+            colors={['#ffd3a8', '#ffb3c7']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'flex-end' }}>
+            <SvgXml xml={SECCION_EMPRENDIMIENTOS_XML} width={220} height={150} />
+          </LinearGradient>
         )}
-        <View className="absolute left-3 top-3 flex-row items-center gap-1 rounded-xl bg-surface-container-lowest px-2.5 py-1">
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.35)']}
+          style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 60 }}
+        />
+        <View className="absolute left-3 top-3 flex-row items-center gap-1 rounded-xl bg-white/90 px-2.5 py-1">
           <Icon name={rubro.icon} size={16} color="primary" />
           <Text variant="label-md" tone="primary">
             {rubro.label}
           </Text>
         </View>
         {post.availableNow ? (
-          <View className="absolute right-3 top-3 rounded-xl bg-primary px-2.5 py-1">
+          <View className="absolute right-3 top-3 rounded-xl bg-success px-2.5 py-1">
             <Text variant="label-md" tone="onPrimary">
-              Abierto
+              Abierto ahora
             </Text>
           </View>
         ) : null}

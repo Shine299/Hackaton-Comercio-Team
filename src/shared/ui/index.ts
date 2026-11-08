@@ -10,6 +10,7 @@ export { Icon, type IconName } from './Icon';
 export { ListenButton } from './ListenButton';
 export { Screen } from './Screen';
 export { ScreenHeader } from './ScreenHeader';
+export { SectionHero } from './SectionHero';
 export { SegmentedControl } from './SegmentedControl';
 export { SyncStatusBadge } from './SyncStatusBadge';
 export { Text } from './Text';

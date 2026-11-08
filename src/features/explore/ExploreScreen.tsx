@@ -17,7 +17,8 @@ import {
   type PostCategoryId,
   type PostKind,
 } from '@/features/posts';
-import { Badge, Button, Card, Chip, Icon, Screen, Text, TextField } from '@/shared/ui';
+import { CommunityMap } from '@/features/map';
+import { Badge, Button, Card, Chip, Icon, Screen, SegmentedControl, Text, TextField } from '@/shared/ui';
 
 import { FiltersSheet } from './components/FiltersSheet';
 
@@ -27,7 +28,7 @@ const isKind = (value: string | undefined): value is PostKind => value === 'offe
 
 /**
  * Explorar = ayuda entre vecinos, en una lista simple: buscar, elegir categoría y abrir. El resto vive en
- * su propio lugar: el mapa tiene su pantalla, los negocios su pestaña, y tipo/distancia están en «Filtros».
+ * su propio lugar: el mapa se alterna aquí mismo con la lista, los negocios tienen su pestaña, y tipo/distancia están en «Filtros».
  */
 export function ExploreScreen() {
   const router = useRouter();
@@ -43,6 +44,7 @@ export function ExploreScreen() {
     maxDistanceKm: radiusKm,
   });
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [view, setView] = useState<'list' | 'map'>('list');
 
   // Atajos desde Inicio (búsqueda, categoría o tipo) llegan como parámetros de ruta.
   // Se aplican al cambiar la firma de los parámetros (ajuste de estado durante el render).
@@ -116,13 +118,6 @@ export function ExploreScreen() {
             </View>
           ) : null}
         </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Ver ayuda cercana en el mapa"
-          onPress={() => router.push('/mapa')}
-          className="h-12 w-12 items-center justify-center rounded-2xl bg-primary active:opacity-80">
-          <Icon name="map-outline" size={22} color="onPrimary" />
-        </Pressable>
       </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
@@ -144,6 +139,16 @@ export function ExploreScreen() {
           />
         ))}
       </ScrollView>
+
+      <SegmentedControl
+        accessibilityLabel="Ver publicaciones como"
+        value={view}
+        onChange={setView}
+        options={[
+          { value: 'list', label: 'Lista', icon: 'format-list-bulleted' },
+          { value: 'map', label: 'Mapa', icon: 'map-outline' },
+        ]}
+      />
 
       {isLoading ? (
         <View className="items-center py-10" accessibilityLabel="Cargando publicaciones">
@@ -183,6 +188,8 @@ export function ExploreScreen() {
                 />
               ) : null}
             </Card>
+          ) : view === 'map' ? (
+            <CommunityMap posts={results.map((r) => r.post)} layers={['posts']} embedded height={380} />
           ) : (
             <View className="gap-3">
               {results.map(({ post }) => (
