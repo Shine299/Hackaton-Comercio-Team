@@ -1,9 +1,9 @@
-# Sprints — Red Vecinal Solidaria
+# Sprints — Yunta
 
 Plan de lo que falta para cerrar la app, pensado para que cada integrante pueda tomar una historia y avanzar sin preguntar.
 Metodología: **SDD (Spec-Driven Development) + TDD (Test-Driven Development)**, en sprints cortos.
 
-- **Hoy:** 7–8 de noviembre de 2026. **Entrega final (sustentación de finalistas): 17 de noviembre de 2026, 6:00 p. m.**
+- **Última actualización:** 8 de noviembre de 2026 (integraciones nuevas, ver Sprint 2b). **Entrega final (sustentación de finalistas): 17 de noviembre de 2026, 6:00 p. m.**
 - **Formato de la final** (según las bases): 20 min como máximo = 5 de presentación + **15 de la aplicación funcionando**. Gana lo que funciona de punta a punta.
 - **Criterios del jurado:** aspectos funcionales, aspectos técnicos, valor de la solución, innovación y originalidad.
 - **Alcance de este documento:** solo la app. Sin deck ni guion de demo (decisión del equipo).
@@ -90,20 +90,31 @@ Mapa de código para quien empieza:
 | Perfil y confianza | `src/features/profile` |
 | Actividad | `src/features/activity` |
 | Notificaciones locales | `src/features/notifications` |
+| Fondos vecinales y pagos (simulados) | `src/features/funds`, `src/features/payments` |
+| Cámaras vecinales | `src/features/cameras` |
+| Perrito comunitario | `src/features/pets` |
+| Acompáñame / Llegué bien | `src/features/walk` |
+| Botón animado (toque suave) | `src/shared/ui/PressableScale.tsx` |
 | Servidor | `supabase/migrations`, `supabase/seed.sql` |
 
+### Hecho después (7–8 nov)
+- **Sprint 2 (funciones del lienzo):** Mensajes y Chat (SPEC-025), Favoritos de negocios (SPEC-026), Modo fácil (SPEC-027), eventos en Comunidad (SPEC-028), «¿Cuántas personas?» y «¿Hay personas en riesgo?» (SPEC-029).
+- **Pruebas:** Jest corre con `npm test` (18 suites, 89 pruebas de lógica pura). `npm run check` = typecheck + lint + ciclos + tests.
+- **Integraciones (Sprint 2b):** fondos vecinales con pago simulado, cámaras vecinales, perrito comunitario, «Acompáñame», Ayuda separada en Objetos y Animales, SOS en la cabecera, animaciones suaves. Detalle y pendientes en el Sprint 2b.
+
 ### Lo que falta (resumen)
-1. **No hay pruebas automáticas.** Ni framework ni un test. Es lo primero.
-2. **Nada está probado en un dispositivo real.** Todo pasó `tsc`, lint y empaquetado, pero no se vio en Expo Go.
-3. **La rama de la etapa 11 no está en `main`.**
+1. ~~No hay pruebas automáticas.~~ Hecho: hay pruebas de lógica pura. Faltan pruebas de componentes (RNTL).
+2. **Nada está probado en un dispositivo real.** Todo pasó `npm run check`, pero no se vio en Expo Go. Incluye las animaciones y las integraciones nuevas.
+3. ~~La rama de la etapa 11 no está en `main`.~~ Hecho.
 4. **Imágenes definitivas:** hoy son bloques de color con ícono (lista en el Sprint 2).
 5. **Pantallas sin rediseño individual:** Detalle, Perfil, Actividad, Tablero, Publicar, formularios de Emergencia, Estado del reporte y Onboarding solo reciben el estilo compartido.
 6. **APK instalable:** `eas.json` existe, falta ejecutar `eas init`, cargar las variables y compilar. El mapa necesita clave de Google Maps en Android.
 7. **Seguridad en Supabase:** revisar el aviso de `rls_auto_enable()` (ejecutable sin cuenta; no lo creamos nosotros) y confirmar `Allow anonymous sign-ins`.
-8. **Límites conocidos:** dictado a texto simulado en Publicar; notificaciones solo locales (no push remoto); la nota de voz no se reproduce en la pantalla de estado del reporte; iPhone solo con Expo Go; el chat del lienzo no existe en la app.
+8. **Límites conocidos:** dictado a texto simulado en Publicar; notificaciones solo locales (no push remoto); la nota de voz no se reproduce en la pantalla de estado del reporte; iPhone solo con Expo Go. Fondos, cámaras registradas, avistamientos del perrito y trayectos de «Acompáñame» se guardan **solo en el teléfono** (faltan sus tablas en Supabase).
 9. **Deuda técnica:** el filtro «Delivery» busca la palabra en un texto libre de `details`; la «confianza» de vecinos es solo de demostración (no hay verificación real).
 10. **Lienzo:** 15 tableros conservan la barra inferior anterior.
-11. **Funciones del lienzo que aún no existen en el código** (el rediseño visual ya está aplicado; esto es trabajo nuevo, ver «Pendientes del rediseño» en el Sprint 2): Mensajes y Chat · Favoritos de negocios · Modo fácil y «Elige cómo ver la app» · Avisos y eventos reales en Comunidad · «¿Cuántas personas?» y «¿Hay personas en riesgo?» en los formularios.
+11. ~~Funciones del lienzo que aún no existen en el código.~~ Hechas (SPEC-025 a SPEC-029).
+12. **Migración sin aplicar:** `supabase/migrations/20261109000007_pets_category.sql` (categoría «Animales y mascotas»). Hasta aplicarla, una publicación de animales no sube al servidor.
 
 ---
 
@@ -114,6 +125,7 @@ Mapa de código para quien empieza:
 | **0 — Cimientos** | 8–9 nov | Pruebas, specs y `main` al día | `npm test` corre y cubre la lógica actual; etapa 11 fusionada |
 | **1 — Validar el flujo central** | 10–12 nov | Que lo que ya existe funcione de verdad | Flujo de Rosa, modo avión, privacidad y accesibilidad verificados en 2 dispositivos |
 | **2 — Visual y pantallas** | 13–15 nov | Terminar el rediseño con las imágenes | Todas las pantallas con el estilo final; sin bloques vacíos |
+| **2b — Integraciones** | 8 nov (hecho) y lo que quede, en paralelo | Diferenciadores: fondos, cámaras, perrito, «Acompáñame» | Funcionando sin servidor y con `DemoTag`; servidor y pasarela gratis, después |
 | **3 — Release y ensayo** | 16–17 nov | App instalable y congelada | APK instalado, regresión completa, **congelar código el 16 a las 12:00** |
 
 Estimaciones: **S** ≤ 2 h · **M** ≤ medio día · **L** ≤ 1 día. «Dueño» queda en blanco para asignar en la planificación.
@@ -290,7 +302,56 @@ Estimaciones: **S** ≤ 2 h · **M** ≤ medio día · **L** ≤ 1 día. «Dueñ
 - [ ] Avisos y eventos reales en Comunidad (S2-10).
 - [ ] «¿Cuántas personas?» y «¿Hay personas en riesgo?» en los formularios (S2-11).
 
-**Decisiones abiertas:** el **chat** del lienzo (tablero 07) no existe en la app, que hoy usa «solicitud antes del contacto». Antes de empezar S2-7, el equipo decide si entra o queda fuera de alcance.
+**Decisiones abiertas:** ~~el chat del lienzo~~ — decidido y hecho (SPEC-025).
+
+#### Ahora: visual y ordenamiento de datos (dueño: compañero de visual)
+
+Mientras las integraciones esperan, el siguiente trabajo es **visual y de orden de datos**. Misma regla del Sprint 2: no se cambia el comportamiento y `npm run check` sigue en verde.
+
+| ID | Historia | Spec | Estim. | Dueño | Depende de |
+|---|---|---|---|---|---|
+| S2-12 | **Orden de Inicio:** saludo → «¿En qué te ayudamos hoy?» (destacado, sin cuadro) → alerta → «Juntos por el barrio» (fondo, cámaras, perrito) → próximo evento → novedades → negocios → «Pensado para ti» → pendientes. Revisar que no sobre nada y que lo nuevo se vea | SPEC-040 | M | Visual | — |
+| S2-13 | **Orden de los feeds:** Comunidad, Ayuda y Explorar con un criterio claro y el mismo en todas (urgente y cercano primero, luego lo reciente; los datos de demo nunca encima de los reales) | SPEC-041 | M | Visual | — |
+| S2-14 | **Ayuda: Objetos y favores / Animales.** Pulir las tarjetas «¿De qué se trata?», el selector de Explorar y los colores (animales en ámbar, objetos en teal) | SPEC-042 | S | Visual | — |
+| S2-15 | **Pantallas nuevas con el estilo del lienzo:** Fondo (N1), Aportar (N2), Cámara (N3), Perrito (N4), Acompáñame (N5). El lienzo ya tiene la fila «5 · Integraciones nuevas» | SPEC-021 | L | Visual | — |
+| S2-16 | **Datos de demostración coherentes entre secciones:** mismos nombres, sector y fechas en publicaciones, fondos, cámaras, perrito y eventos (base para SPEC-031) | SPEC-031 | M | Visual | — |
+| S2-17 | **Animaciones en el celular:** revisar en Expo Go el toque de botones y tarjetas, las transiciones entre pantallas, el fundido entre secciones y el menú lateral que se recoge. Ajustar duraciones si algo se ve brusco o lento | — | S | Visual | — |
+
+**SPEC-040 / SPEC-041 — Orden** (criterios, se escriben como spec antes de tocar código)
+- *Dado* el Inicio, *entonces* el orden de los bloques es el de S2-12 y la sección «Juntos por el barrio» se ve sin hacer scroll largo.
+- *Dado* un feed con datos reales y de demo, *entonces* los reales van primero y los de demo siempre llevan `DemoTag`.
+- *Dado* dos publicaciones igual de cercanas, *entonces* va primero la más reciente. Lo urgente va arriba solo con su etiqueta «Urgente · sin validar».
+- *Pruebas:* funciones puras de orden (`rankPosts` y una nueva para el Inicio, si hace falta) con su `*.test.ts`.
+
+---
+
+### Sprint 2b — Integraciones (plan: `docs/plan_integraciones_definitivo.md`)
+
+**Regla:** toda integración externa debe ser **gratis** (modo prueba, capa gratuita o alternativa sin costo). Por defecto se usa el modo simulado con `DemoTag`.
+
+**Hecho el 8 de noviembre** (pasa `npm run check`; **falta verlo en Expo Go**):
+
+| ID | Qué | Spec | Dónde se ve |
+|---|---|---|---|
+| S2b-0 | Preparación: `tsconfig`/ESLint ignoran `supabase/functions`; ADR 0005 (pagos fuera del outbox) | — | — |
+| S2b-1 | **Fondos vecinales** con barra de avance, rendición de cuentas y aporte con Yape **simulado** (procesando → confirmado / «No se cobró nada») | SPEC-034 | Inicio, Comunidad |
+| S2b-2 | **Cámaras vecinales** (celular con IP Webcam → foto refrescada), registro con reglas de privacidad y capa en el mapa | SPEC-035 | Inicio, Comunidad, Emergencia |
+| S2b-3 | **Perrito comunitario** con «Lo vi», «Necesita ayuda», su fondo y QR (`yunta://perrito/negrito`) | SPEC-038 | Inicio, Comunidad, Ayuda |
+| S2b-4 | **Acompáñame / Llegué bien:** vecinos de confianza, cuenta regresiva, notificación local y aviso por WhatsApp/SMS. Sin ubicación en vivo | SPEC-039 | Emergencia |
+| S2b-5 | **Ayuda separada** en «Objetos y favores» y «Animales» (categoría `pets`) | — | Ayuda, Explorar, Publicar |
+| S2b-6 | **SOS en la cabecera** (en lugar del círculo del perfil; el perfil sigue en ☰). Se quitó el buscador de Inicio | — | Todas las secciones |
+| S2b-7 | **Animaciones:** toque suave en botones y tarjetas (`PressableScale`), transición deslizante entre pantallas, fundido entre secciones, menú lateral que se recoge | — | Toda la app |
+
+**Siguiente (en espera; se retoma cuando el equipo lo decida):**
+
+| ID | Historia | Spec | Estim. | Dueño | Costo |
+|---|---|---|---|---|---|
+| S2b-8 | Aplicar la migración `20261109000007_pets_category.sql` en Supabase | — | S | Integraciones | Gratis |
+| S2b-9 | Tablas y RLS en Supabase para `funds`, `fund_contributions`, `fund_expenses`, `cameras`, `pets`, `pet_sightings` (plan §5), y leerlas desde la app en vez de solo la demo | SPEC-036 | L | Integraciones | Gratis (plan gratuito de Supabase) |
+| S2b-10 | **Pago de prueba con Culqi** (sandbox) vía Edge Function `create-charge`. Solo si la cuenta y el modo de prueba son gratis; si no, se queda el simulado | SPEC-036 | L | Integraciones | Confirmar que es gratis antes de crear la cuenta |
+| S2b-11 | **Reporte por WhatsApp, solo texto y sin IA:** número de prueba de Meta + clasificación por palabras clave → tablero con «vía WhatsApp · sin validar». La IA y los audios **no** entran (son de pago) | SPEC-037 | L | Integraciones | Gratis (número de prueba, hasta 5 destinatarios) |
+| S2b-12 | Contactos de confianza reales en el perfil para «Acompáñame» (hoy son de demostración) | SPEC-039 | M | Integraciones | Gratis |
+| S2b-13 | Cámaras en el APK: permitir `http://` de la red local (`usesCleartextTraffic`) y probar con 2 celulares en el mismo hotspot | SPEC-030 | S | Integraciones | Gratis |
 
 ---
 
@@ -395,8 +456,12 @@ Pasos en Expo Go (y con 2 dispositivos si aplica) y resultado.
 | Depender de internet y de Supabase en la final | La demo falla | Datos de demo, video de respaldo y modo sin conexión verificado (SPEC-011) |
 | Notificaciones solo locales | No avisan con la app cerrada | Declararlo como límite; push remoto queda fuera de alcance |
 | Cambios de estilo que rompan comportamiento | Regresiones | Regla de S2: las pruebas existentes no se tocan |
-| ¿Se construye el chat? | +1 a 2 días | Decisión del equipo antes del 13 de nov; por defecto, no |
+| ~~¿Se construye el chat?~~ | — | Decidido y hecho (SPEC-025) |
+| Integraciones con costo (IA, transcripción, pasarela) | Gasto no previsto | Regla: solo gratis. Si no hay opción gratuita, se queda el modo simulado con `DemoTag` |
+| Migración de animales sin aplicar | Publicaciones de animales no suben | S2b-8 antes de la regresión del APK |
+| Cámaras por `http://` bloqueadas en el APK | Cámaras sin imagen en la final | S2b-13 o mostrar las cámaras desde Expo Go |
+| Animaciones no vistas en un celular | Pueden verse lentas o bruscas | S2-17 en Expo Go antes del 13 de nov |
 | ¿Hay verificación real de vecinos (confianza)? | Hoy es solo demostración | Declararlo como límite; no inventar métricas |
 
 ## 8. Fuera de alcance (backlog posterior)
-Push remoto · chat en tiempo real · verificación de identidad real · panel para coordinadores y moderadores · pagos o convenios con comercios · versión para iPhone instalable · reconocimiento de voz (dictado a texto).
+Push remoto · verificación de identidad real · panel para coordinadores y moderadores · pagos reales y convenios con comercios (solo simulado o sandbox gratis) · juntas de ahorro · ubicación en vivo en «Acompáñame» · IA y audios por WhatsApp · versión para iPhone instalable · reconocimiento de voz (dictado a texto).
