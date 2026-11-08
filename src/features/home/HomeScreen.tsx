@@ -24,11 +24,11 @@ import {
   ListenButton,
   PressableScale,
   Screen,
-  SECCION_AYUDA_XML,
-  SECCION_COMUNIDAD_XML,
-  SECCION_EMERGENCIA_XML,
-  SECCION_EMPRENDIMIENTOS_XML,
   Text,
+  TILE_AYUDA_VECINAL_XML,
+  TILE_CERCA_DE_TI_XML,
+  TILE_COMERCIOS_XML,
+  TILE_PIDE_AUXILIO_XML,
 } from '@/shared/ui';
 
 import { ActionTile } from './ActionTile';
@@ -143,7 +143,7 @@ export function HomeScreen() {
             title="Pide auxilio"
             detail="Sin crear cuenta"
             section="Emergencia"
-            xml={SECCION_EMERGENCIA_XML}
+            xml={TILE_PIDE_AUXILIO_XML}
             gradient={GRADIENTS.emergencia}
             onPress={() => router.push('/emergencias')}
           />
@@ -153,7 +153,7 @@ export function HomeScreen() {
             title="Cerca de ti"
             detail="Eventos y novedades"
             section="Comunidad"
-            xml={SECCION_COMUNIDAD_XML}
+            xml={TILE_CERCA_DE_TI_XML}
             gradient={GRADIENTS.comunidad}
             onPress={() => router.navigate('/eventos')}
           />
@@ -165,7 +165,7 @@ export function HomeScreen() {
           title="Ayuda vecinal"
           detail="Presta, pide, trueque"
           section="Ayuda"
-          xml={SECCION_AYUDA_XML}
+          xml={TILE_AYUDA_VECINAL_XML}
           gradient={GRADIENTS.ayuda}
           onPress={() => router.navigate('/ayuda')}
         />
@@ -175,7 +175,7 @@ export function HomeScreen() {
           title="Comercios"
           detail="Compra local"
           section="Negocios"
-          xml={SECCION_EMPRENDIMIENTOS_XML}
+          xml={TILE_COMERCIOS_XML}
           gradient={GRADIENTS.emprendimientos}
           onPress={() => router.navigate('/explorar')}
         />

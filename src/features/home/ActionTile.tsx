@@ -45,8 +45,8 @@ export function ActionTile({ tourId, title, detail, section, xml, gradient, onPr
             alignItems: stacked ? 'center' : 'flex-start',
             gap: stacked ? 14 : 10,
           }}>
-          <View className="h-[76px] w-[76px] items-center justify-end overflow-hidden rounded-2xl bg-white/25">
-            <SvgXml xml={xml} width={84} height={68} />
+          <View className="h-[76px] w-[76px] items-center justify-center overflow-hidden rounded-2xl bg-white/25">
+            <SvgXml xml={xml} width={66} height={61} />
           </View>
           <View className={stacked ? 'min-w-0 flex-1' : 'w-full'}>
             <Text variant="body-lg-bold" tone="onPrimary" numberOfLines={2}>

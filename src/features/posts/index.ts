@@ -41,3 +41,4 @@ export type {
 } from './types';
 export { PostDetailScreen } from './PostDetailScreen';
 export { useReportStore } from './reportStore';
+export { demoAuthorPhoto } from './demoAvatars';

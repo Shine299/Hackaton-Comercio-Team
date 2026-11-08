@@ -50,6 +50,44 @@ cp .env.example .env     # opcional: sin variables la app funciona con datos de 
 npx expo start           # escanea el QR con Expo Go en tu celular (Android/iOS)
 ```
 
+### Con túnel (cuando el celular no está en la misma red)
+
+`npx expo start` a secas usa la red local (LAN): el celular y la computadora tienen que estar en la **misma Wi‑Fi**. Si
+no lo están (datos móviles, Wi‑Fi de la universidad con aislamiento de clientes, VPN, firewall), usa un túnel: Expo
+publica el servidor de desarrollo en una URL pública y el QR apunta ahí.
+
+**Método 1 — Túnel de Expo (el predeterminado en el SDK 58 que usa el proyecto).** Necesita una cuenta de Expo (gratis), nada más que instalar.
+
+```bash
+npx expo login                 # una vez por computadora (comprueba con: npx expo whoami)
+npx expo start --tunnel        # igual a: npx expo start --tunnel expo   ·   o: npm start -- --tunnel
+```
+
+Escanea el QR con Expo Go (Android: desde la app; iPhone: con la cámara). El primer arranque tarda más que en LAN.
+
+**Método 2 — ngrok (opción antigua, por si el de Expo falla).** La primera vez Expo ofrece instalar `@expo/ngrok`
+globalmente; acepta.
+
+```bash
+npx expo start --tunnel ngrok
+```
+
+**Vista previa web por el túnel.** Arranca con `npx expo start --tunnel --web` (o pulsa `w` en la terminal) y abre en el
+navegador la URL del túnel que muestra Expo. Recuerda que la web es **solo una vista previa de desarrollo** (mapa con
+Leaflet, sin módulos nativos): pruebas y decisiones de UI, siempre en el celular.
+
+Otras opciones: `--lan` (predeterminada), `--localhost` (emulador o celular por USB con `adb reverse`); solo se usa una a la vez.
+
+| Problema | Qué hacer |
+|---|---|
+| `Couldn't create a signed tunnel URL … not logged in` | `npx expo login` y vuelve a arrancar |
+| `… may not have access to it, or the tunnel service is unavailable` | Revisa <https://status.expo.dev/> o usa `--tunnel ngrok` |
+| `Tunnel connection has been closed` | Corte de conexión: detén (`Ctrl+C`) y vuelve a arrancar |
+| El QR abre pero se queda cargando | Sacude el celular → *Reload*; si sigue, `npx expo start --tunnel --clear` |
+
+> La URL del túnel es pública mientras el servidor corre: cualquiera con el enlace puede cargar la app de desarrollo.
+> Detén el servidor al terminar y no compartas el QR fuera del equipo. La app solo lleva claves `EXPO_PUBLIC_*`.
+
 | Variable (`.env`) | Para qué | Obligatoria |
 |---|---|---|
 | `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY` | Backend real (clave **anónima**; la seguridad es RLS) | No |

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -2 128 118" width="256" height="236" role="img" aria-hidden="true">
+  <!-- Ondas de ubicación (cerca de ti) -->
+  <ellipse cx="60" cy="106" rx="34" ry="7" fill="none" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="2"/>
+  <ellipse cx="60" cy="106" rx="20" ry="4.5" fill="#FFFFFF" fill-opacity="0.28"/>
+
+  <!-- Destellos amarillos (eco del logo de Yunta) -->
+  <g stroke="#FFC93C" stroke-width="6" stroke-linecap="round">
+    <line x1="69.8" y1="13.3" x2="72.4" y2="3.6"/>
+    <line x1="86.9" y1="23.1" x2="93.9" y2="16.1"/>
+    <line x1="96.7" y1="40.2" x2="106.4" y2="37.6"/>
+  </g>
+
+  <!-- Pin -->
+  <path d="M60 104 C60 104 30 76 30 50 A30 30 0 1 1 90 50 C90 76 60 104 60 104 Z" fill="#FFFFFF"/>
+  <circle cx="60" cy="50" r="16" fill="#5B21B6"/>
+
+  <!-- Estrella = evento -->
+  <polygon points="60,39.5 62.6,46.4 70,46.8 64.2,51.4 66.2,58.6 60,54.5 53.8,58.6 55.8,51.4 50,46.8 57.4,46.4"
+           fill="#FFC93C" stroke="#FFC93C" stroke-width="1.6" stroke-linejoin="round"/>
+</svg>

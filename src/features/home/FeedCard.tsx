@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
 import { StartChatButton } from '@/features/chat';
-import { getCategory, type Post } from '@/features/posts';
+import { demoAuthorPhoto, getCategory, type Post } from '@/features/posts';
 import { formatApproxDistance, formatRelativeTime } from '@/shared/format';
 import { Avatar, Badge, DemoTag, PressableScale, Text } from '@/shared/ui';
 
@@ -52,7 +52,7 @@ export function FeedCard({ post, now }: FeedCardProps) {
         }
         className="gap-3">
         <View className="flex-row items-center gap-3">
-          <Avatar name={post.author.displayName} id={post.author.id} size={40} />
+          <Avatar name={post.author.displayName} id={post.author.id} size={40} photo={demoAuthorPhoto(post.author.id)} />
           <View className="min-w-0 flex-1">
             <Text variant="body-lg-bold" numberOfLines={1}>
               {post.author.displayName}
