@@ -1,10 +1,13 @@
-import { GRADIENTS, type IconName } from '@/shared/ui';
+// Módulos puros (no el índice de `shared/ui`): así los pasos se pueden probar en Jest sin cargar Reanimated.
+import { GRADIENTS } from '@/shared/ui/gradients';
+import type { YuntaPose } from '@/shared/ui/yuntaPoses';
 
 export type OnboardingDemo = 'interests' | 'steps' | 'sos' | 'offline' | 'viewmode';
 
 export type OnboardingStep = {
   id: string;
-  icon: IconName;
+  /** Gesto de Yunta que refuerza el objetivo del paso. */
+  pose: YuntaPose;
   title: string;
   body: string;
   /** Color del encabezado del paso. */
@@ -18,68 +21,76 @@ export type OnboardingStep = {
 };
 
 /**
- * Tutorial inicial interactivo (docs/03_accesibilidad_emergencias §2). Poco texto y algo para tocar en cada paso;
- * las pruebas del SOS y del modo avión son simulaciones: no envían nada.
- * El paso final de sector es interactivo y vive en la pantalla.
+ * Tutorial inicial interactivo (docs/03_accesibilidad_emergencias §2, SPEC-057). Yunta te habla como un amigo:
+ * frases cortas, cálidas y algo para tocar en cada paso. Las pruebas del SOS y del modo avión son simulaciones:
+ * no envían nada. El paso final de sector es interactivo y vive en la pantalla.
  */
 export const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: 'welcome',
-    icon: 'account-group',
-    title: 'Bienvenido a Yunta',
-    body: 'Vecinos que se ayudan, compran local y se cuidan. Tu comunidad, más cerca.',
+    pose: 'wave',
+    title: '¡Hola! Soy Yunta',
+    body: 'Voy a acompañarte para que uses la app sin apuros. Será solo un ratito, y yo te voy guiando.',
     gradient: GRADIENTS.hero,
   },
   {
     id: 'explore',
-    icon: 'compass-outline',
-    title: '¿Qué te interesa?',
-    body: 'Elige lo que quieras ver primero. Explorar no necesita cuenta.',
+    pose: 'curious',
+    title: '¿Qué te gusta ver?',
+    body: 'Toca lo que más te interese y te lo muestro primero. Y tranquilo: para mirar no necesitas cuenta.',
     gradient: GRADIENTS.comunidad,
     demo: 'interests',
   },
   {
     id: 'publish',
-    icon: 'plus-circle-outline',
-    title: 'Pide u ofrece en 3 toques',
-    body: 'Toca cada paso para verlo.',
+    pose: 'point',
+    title: 'Pedir ayuda es muy fácil',
+    body: 'Son solo 3 pasos. Tócalos uno por uno y mira cómo es.',
     gradient: GRADIENTS.ayuda,
     demo: 'steps',
   },
   {
     id: 'emergency',
-    icon: 'shield-alert-outline',
-    title: 'Pide ayuda al instante',
-    body: 'El botón SOS siempre está arriba. Pruébalo aquí: es solo una prueba.',
+    pose: 'shield',
+    title: 'Si algo pasa, aquí estoy',
+    body: 'El botón SOS siempre está arriba de la pantalla. Pruébalo: es de práctica, no se envía nada.',
     gradient: GRADIENTS.emergencia,
     demo: 'sos',
-    notice: 'Yunta coordina ayuda entre vecinos. No reemplaza a los servicios oficiales de emergencia.',
+    notice: 'Yunta ayuda a coordinar entre vecinos, pero no reemplaza a los servicios oficiales de emergencia.',
   },
   {
     id: 'privacy',
-    icon: 'map-marker-radius-outline',
-    title: 'Tu zona, no tu dirección',
-    body: 'Mostramos solo tu zona aproximada. Tú eliges qué compartes.',
+    pose: 'lock',
+    title: 'Tu casa es solo tuya',
+    body: 'Solo mostramos tu zona, nunca tu dirección. Tú decides qué compartir.',
     gradient: GRADIENTS.emprendimientos,
-    points: ['Funciona sin activar el GPS.', 'La ubicación exacta nunca se publica.'],
+    points: ['Funciona sin encender el GPS.', 'Tu ubicación exacta nunca se publica.'],
   },
   {
     id: 'offline',
-    icon: 'cloud-off-outline',
-    title: 'Funciona con poca señal',
-    body: 'Prueba el modo avión: te diremos siempre si algo ya llegó o solo está en tu teléfono.',
+    pose: 'phone',
+    title: '¿Poca señal? Sin problema',
+    body: 'Prueba el modo avión y verás cómo te aviso si algo ya llegó o si solo está guardado en tu teléfono.',
     gradient: GRADIENTS.recomendado,
     demo: 'offline',
   },
   {
     id: 'view-mode',
-    icon: 'eye-plus-outline',
-    title: 'Elige cómo ver la app',
-    body: 'Puedes cambiarlo cuando quieras. Prueba el modo Fácil: se aplica al instante.',
+    pose: 'thumbs-up',
+    title: 'Hazla cómoda para ti',
+    body: 'Si prefieres letra más grande y botones más anchos, prueba el modo Fácil. Cambia al instante y lo puedes cambiar cuando quieras.',
     gradient: GRADIENTS.ayuda,
     demo: 'viewmode',
   },
 ];
+
+/** Paso final: elegir sector (vive en la pantalla porque usa el selector real). */
+export const SECTOR_STEP = {
+  pose: 'map-pin' as YuntaPose,
+  title: '¿Por dónde vives?',
+  body: 'Así te cuento lo que pasa cerca de ti. Lo puedes cambiar cuando quieras.',
+  gradient: GRADIENTS.comunidad,
+};
 
 /** Total de pasos incluyendo el paso final de sector. */
 export const TOTAL_ONBOARDING_STEPS = ONBOARDING_STEPS.length + 1;

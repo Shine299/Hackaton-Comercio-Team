@@ -25,14 +25,14 @@ export function InterestsDemo() {
       </View>
       {picked.length > 0 ? (
         <Animated.View entering={FadeIn.duration(250)} className="flex-row items-center gap-2">
-          <Icon name="check-circle-outline" size={18} color="primary" />
-          <Text variant="label-md" tone="primary">
-            Listo: verás {picked.length === 1 ? 'eso' : 'esas cosas'} primero en Inicio.
+          <Icon name="check-circle-outline" size={22} color="primary" />
+          <Text variant="body-lg" tone="primary" className="flex-1">
+            ¡Listo! Eso es lo primero que verás en Inicio.
           </Text>
         </Animated.View>
       ) : (
-        <Text variant="label-md" tone="muted">
-          Toca las que quieras. Puedes saltarte esto.
+        <Text variant="body-lg" tone="muted">
+          Toca las que quieras. Si prefieres, sáltate este paso.
         </Text>
       )}
     </View>
@@ -40,8 +40,8 @@ export function InterestsDemo() {
 }
 
 const PUBLISH_STEPS: { icon: IconName; title: string; detail: string }[] = [
-  { icon: 'swap-horizontal', title: 'Elige Pedir u Ofrecer', detail: 'Dices si necesitas algo o si puedes ayudar.' },
-  { icon: 'shape-outline', title: 'Escoge una categoría', detail: 'Herramientas, favores, trueque… y completas una tarjeta corta.' },
+  { icon: 'swap-horizontal', title: 'Elige Pedir u Ofrecer', detail: 'Me dices si necesitas algo o si tú puedes ayudar.' },
+  { icon: 'shape-outline', title: 'Escoge una categoría', detail: 'Herramientas, favores, trueque… y llenas una tarjeta cortita.' },
   { icon: 'send-outline', title: 'Toca Publicar', detail: 'Tus vecinos lo ven y te escriben por la app.' },
 ];
 
@@ -65,17 +65,17 @@ export function StepsDemo() {
                   : 'rounded-2xl bg-surface-container-lowest p-3 active:opacity-80'
               }>
               <View className="flex-row items-center gap-3">
-                <View className={active ? 'h-9 w-9 items-center justify-center rounded-full bg-primary' : 'h-9 w-9 items-center justify-center rounded-full bg-primary-fixed'}>
-                  <Icon name={step.icon} size={20} color={active ? 'onPrimary' : 'primary'} />
+                <View className={active ? 'h-11 w-11 items-center justify-center rounded-full bg-primary' : 'h-11 w-11 items-center justify-center rounded-full bg-primary-fixed'}>
+                  <Icon name={step.icon} size={24} color={active ? 'onPrimary' : 'primary'} />
                 </View>
-                <Text variant="body-lg-bold" className="flex-1">
+                <Text variant="headline-sm" className="flex-1">
                   {i + 1}. {step.title}
                 </Text>
                 <Icon name={active ? 'chevron-up' : 'chevron-down'} size={20} color="onSurfaceVariant" />
               </View>
               {active ? (
                 <Animated.View entering={FadeIn.duration(200)}>
-                  <Text tone="muted" className="pl-12">
+                  <Text variant="body-xl" tone="muted" className="pl-14">
                     {step.detail}
                   </Text>
                 </Animated.View>
@@ -99,7 +99,7 @@ export function SosDemo() {
         onPress={() => setPressed(true)}
         className="min-h-20 flex-row items-center justify-center gap-3 rounded-3xl bg-error px-5 active:opacity-90">
         <Icon name="alarm-light-outline" size={32} color="onError" />
-        <Text variant="headline-md" tone="onError">
+        <Text variant="headline-lg" tone="onError">
           SOS (prueba)
         </Text>
       </Pressable>
@@ -107,14 +107,16 @@ export function SosDemo() {
         <Animated.View entering={FadeInDown.duration(300)} className="gap-2 rounded-2xl bg-success-container p-3">
           <View className="flex-row items-center gap-2">
             <Icon name="check-circle-outline" size={22} color="success" />
-            <Text variant="body-lg-bold">¡Así de rápido!</Text>
+            <Text variant="headline-sm">¡Así de rápido!</Text>
           </View>
-          <Text>En una emergencia real, tu aviso queda guardado y llegan los números oficiales. Esto fue una prueba: no se envió nada.</Text>
+          <Text variant="body-lg">
+            En una emergencia de verdad, tu aviso queda guardado y te muestro los números oficiales. Esto fue solo una prueba: no se envió nada.
+          </Text>
           <Badge label="Simulación" tone="warning" icon="flask-outline" />
         </Animated.View>
       ) : (
-        <Text variant="label-md" tone="muted">
-          Tócalo para ver qué pasa. No se envía nada.
+        <Text variant="body-lg" tone="muted">
+          Tócalo y mira qué pasa. No se envía nada.
         </Text>
       )}
     </View>
@@ -133,7 +135,7 @@ export function OfflineDemo() {
         onPress={() => setAirplane((v) => !v)}
         className="min-h-14 flex-row items-center gap-3 rounded-2xl bg-surface-container-lowest px-4 active:opacity-80">
         <Icon name={airplane ? 'airplane' : 'airplane-off'} size={26} color="primary" />
-        <Text variant="body-lg-bold" className="flex-1">
+        <Text variant="headline-sm" className="flex-1">
           Modo avión
         </Text>
         <View className={airplane ? 'h-8 w-14 items-end justify-center rounded-full bg-primary px-1' : 'h-8 w-14 items-start justify-center rounded-full bg-outline-variant px-1'}>
@@ -141,14 +143,14 @@ export function OfflineDemo() {
         </View>
       </Pressable>
       <View className="gap-2 rounded-2xl bg-surface-container-lowest p-3">
-        <Text variant="label-md" tone="muted">
+        <Text variant="body-lg" tone="muted">
           Tu reporte de ejemplo:
         </Text>
         <SyncStatusBadge status={airplane ? 'local' : 'received'} />
-        <Text variant="label-md" tone="muted">
+        <Text variant="body-lg" tone="muted">
           {airplane
-            ? 'Sin señal queda guardado en tu teléfono. Se enviará solo cuando vuelva la conexión.'
-            : 'Con señal, el servidor lo recibe y te lo confirmamos.'}
+            ? 'Sin señal, queda guardado en tu teléfono. Se enviará solo cuando vuelva la conexión.'
+            : 'Con señal, el servidor lo recibe y yo te lo confirmo.'}
         </Text>
       </View>
     </View>

@@ -2,15 +2,29 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { PanResponder, Pressable, View } from 'react-native';
-import Animated, { FadeIn, SlideInLeft, SlideInRight, ZoomIn } from 'react-native-reanimated';
+import Animated, { FadeIn, SlideInLeft, SlideInRight } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { SectorPicker } from '@/features/sector';
-import { BrandLogo, Button, Card, GRADIENTS, Icon, Screen, Text, ViewModePicker } from '@/shared/ui';
+import { BrandLogo, Button, Card, Icon, Screen, Text, ViewModePicker, YuntaMascot, type YuntaPose } from '@/shared/ui';
 
 import { InterestsDemo, OfflineDemo, SosDemo, StepsDemo } from './StepDemos';
-import { ONBOARDING_STEPS, TOTAL_ONBOARDING_STEPS } from './steps';
+import { ONBOARDING_STEPS, SECTOR_STEP, TOTAL_ONBOARDING_STEPS } from './steps';
 import { useOnboardingStore } from './store';
+
+/** Encabezado de color con Yunta haciendo el gesto del paso; ella sobresale un poco hacia abajo. */
+function StepHero({ gradient, pose }: { gradient: readonly [string, string]; pose: YuntaPose }) {
+  return (
+    <LinearGradient
+      colors={gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={{ borderRadius: 28, height: 230, alignItems: 'center', justifyContent: 'center' }}>
+      <View className="absolute h-44 w-44 rounded-full bg-white/20" />
+      <YuntaMascot pose={pose} size={200} />
+    </LinearGradient>
+  );
+}
 
 function ProgressDots({ current }: { current: number }) {
   return (
@@ -85,8 +99,8 @@ export function OnboardingScreen() {
       </View>
       <View className="flex-row items-center justify-between">
         <ProgressDots current={index} />
-        <Text variant="label-md" tone="muted">
-          {index + 1} de {TOTAL_ONBOARDING_STEPS}
+        <Text variant="label-lg" tone="muted">
+          Paso {index + 1} de {TOTAL_ONBOARDING_STEPS}
         </Text>
       </View>
     </View>
@@ -99,7 +113,7 @@ export function OnboardingScreen() {
           <Button label="Atrás" variant="tonal" icon="arrow-left" fullWidth={false} className="flex-1" onPress={() => go(-1)} />
         ) : null}
         <Button
-          label={isSectorStep ? 'Empezar' : 'Siguiente'}
+          label={isSectorStep ? '¡Vamos!' : 'Siguiente'}
           icon={isSectorStep ? 'check' : 'arrow-right'}
           fullWidth={false}
           className="flex-[2]"
@@ -109,7 +123,7 @@ export function OnboardingScreen() {
       </View>
       {!isSectorStep ? (
         <Button
-          label="Saltar tutorial"
+          label="Saltar por ahora"
           variant="ghost"
           onPress={finish}
           accessibilityHint="Podrás volver a verlo después desde el menú"
@@ -128,21 +142,13 @@ export function OnboardingScreen() {
         className="gap-5">
         {step ? (
           <>
-            <LinearGradient
-              colors={step.gradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{ borderRadius: 28, height: 150, alignItems: 'center', justifyContent: 'center' }}>
-              <Animated.View entering={ZoomIn.delay(120).duration(420)} className="h-24 w-24 items-center justify-center rounded-full bg-white/25">
-                <Icon name={step.icon} size={52} color="onPrimary" />
-              </Animated.View>
-            </LinearGradient>
+            <StepHero gradient={step.gradient} pose={step.pose} />
 
             <View className="gap-2">
-              <Text variant="headline-lg" accessibilityRole="header">
+              <Text variant="headline-xl" accessibilityRole="header">
                 {step.title}
               </Text>
-              <Text variant="body-lg" tone="muted">
+              <Text variant="body-xl" tone="muted">
                 {step.body}
               </Text>
             </View>
@@ -157,8 +163,8 @@ export function OnboardingScreen() {
               <Card tone="low" className="gap-2">
                 {step.points.map((point) => (
                   <View key={point} className="flex-row items-center gap-2">
-                    <Icon name="check-circle-outline" size={20} color="primary" />
-                    <Text variant="body-lg" className="flex-1">
+                    <Icon name="check-circle-outline" size={24} color="primary" />
+                    <Text variant="body-xl" className="flex-1">
                       {point}
                     </Text>
                   </View>
@@ -169,7 +175,7 @@ export function OnboardingScreen() {
               <Card tone="warning">
                 <View className="flex-row items-start gap-2">
                   <Icon name="information-outline" size={22} color="warning" />
-                  <Text className="flex-1" variant="body-md-medium">
+                  <Text className="flex-1" variant="body-lg-bold">
                     {step.notice}
                   </Text>
                 </View>
@@ -178,21 +184,13 @@ export function OnboardingScreen() {
           </>
         ) : (
           <>
-            <LinearGradient
-              colors={GRADIENTS.comunidad}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{ borderRadius: 28, height: 120, alignItems: 'center', justifyContent: 'center' }}>
-              <Animated.View entering={ZoomIn.delay(120).duration(420)} className="h-20 w-20 items-center justify-center rounded-full bg-white/25">
-                <Icon name="map-marker-outline" size={44} color="onPrimary" />
-              </Animated.View>
-            </LinearGradient>
+            <StepHero gradient={SECTOR_STEP.gradient} pose={SECTOR_STEP.pose} />
             <View className="gap-2">
-              <Text variant="headline-lg" accessibilityRole="header">
-                Elige tu sector
+              <Text variant="headline-xl" accessibilityRole="header">
+                {SECTOR_STEP.title}
               </Text>
-              <Text variant="body-lg" tone="muted">
-                Así te mostramos lo que pasa cerca. Puedes cambiarlo cuando quieras.
+              <Text variant="body-xl" tone="muted">
+                {SECTOR_STEP.body}
               </Text>
             </View>
             <Animated.View entering={FadeIn.delay(150).duration(300)}>
