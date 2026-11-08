@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { Pressable, View } from 'react-native';
 
-import type { Post } from '@/features/posts';
+import { FavoriteButton, type Post } from '@/features/posts';
 import { formatApproxDistance } from '@/shared/format';
 import { DemoTag, Icon, SyncStatusBadge, Text } from '@/shared/ui';
 
@@ -22,6 +22,9 @@ export function BusinessCard({ post }: { post: Post }) {
       className="basis-[47%] grow overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm elevation-xs active:opacity-90">
       <View className="h-28 items-center justify-center bg-primary-fixed">
         <Icon name={rubro.icon} size={52} color="primaryContainer" />
+        <View className="absolute right-2 top-2">
+          <FavoriteButton postId={post.id} title={post.title} />
+        </View>
       </View>
       <View className="gap-1 p-3">
         <Text variant="body-lg-bold" numberOfLines={2}>

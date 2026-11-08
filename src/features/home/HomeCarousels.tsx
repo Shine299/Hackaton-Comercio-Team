@@ -5,7 +5,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { rubroOf } from '@/features/business';
-import { getCategory, type Post } from '@/features/posts';
+import { FavoriteButton, getCategory, type Post } from '@/features/posts';
 import { formatApproxDistance, formatRelativeTime } from '@/shared/format';
 import { DemoTag, gradientForCategory, Icon, SECCION_EMPRENDIMIENTOS_XML, Text } from '@/shared/ui';
 
@@ -136,6 +136,9 @@ export function BusinessPhotoCard({ post }: { post: Post }) {
           <Text variant="label-md" tone="primary">
             {rubro.label}
           </Text>
+        </View>
+        <View className="absolute bottom-2 right-2">
+          <FavoriteButton postId={post.id} title={post.title} />
         </View>
         {post.availableNow ? (
           <View className="absolute right-3 top-3 rounded-xl bg-success px-2.5 py-1">

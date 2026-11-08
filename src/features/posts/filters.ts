@@ -64,6 +64,12 @@ export function hasActiveFilters(
   );
 }
 
+/** Solo las publicaciones guardadas como favoritas (conserva el orden recibido). */
+export function filterFavorites(posts: Post[], savedIds: readonly string[]): Post[] {
+  const saved = new Set(savedIds);
+  return posts.filter((p) => saved.has(p.id));
+}
+
 export function applyFilters(posts: Post[], f: ExploreFilters, now: number): Post[] {
   const reachKm = f.includeNearbySectors ? Math.max(f.maxDistanceKm, EXPANDED_COVERAGE_KM) : f.maxDistanceKm;
 

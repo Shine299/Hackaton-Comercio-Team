@@ -7,8 +7,10 @@ import {
   applyFilters,
   categoryText,
   DEFAULT_FILTERS,
+  filterFavorites,
   rankPosts,
   useNearbyPosts,
+  useSavedStore,
 } from '@/features/posts';
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
@@ -52,6 +54,8 @@ export function BusinessesScreen() {
   const [rubro, setRubro] = useState<RubroId | 'all'>('all');
   const [availableNow, setAvailableNow] = useState(false);
   const [delivery, setDelivery] = useState(false);
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
+  const savedIds = useSavedStore((s) => s.postIds);
   const [view, setView] = useState<'list' | 'map'>('list');
 
   const results = useMemo(() => {
@@ -67,15 +71,22 @@ export function BusinessesScreen() {
         (rubro === 'all' || rubroOf(p).id === rubro) &&
         (!delivery || hasDelivery(p)),
     );
-    return rankPosts(matched, { now, radiusKm, query, extraSearchText: categoryText });
-  }, [data, query, rubro, availableNow, delivery, now, radiusKm]);
+    const pool = onlyFavorites ? filterFavorites(matched, savedIds) : matched;
+    return rankPosts(pool, { now, radiusKm, query, extraSearchText: categoryText });
+  }, [data, query, rubro, availableNow, delivery, onlyFavorites, savedIds, now, radiusKm]);
 
-  const filtersActive = query.trim().length > 0 || rubro !== 'all' || availableNow || delivery;
+  const favoritesCount = useMemo(
+    () => (data?.posts ?? []).filter((p) => p.category === 'business' && savedIds.includes(p.id)).length,
+    [data, savedIds],
+  );
+
+  const filtersActive = query.trim().length > 0 || rubro !== 'all' || availableNow || delivery || onlyFavorites;
   const reset = () => {
     setQuery('');
     setRubro('all');
     setAvailableNow(false);
     setDelivery(false);
+    setOnlyFavorites(false);
   };
 
   return (
@@ -132,6 +143,12 @@ export function BusinessesScreen() {
           onPress={() => setAvailableNow((v) => !v)}
         />
         <Chip label="Delivery" icon="moped-outline" selected={delivery} onPress={() => setDelivery((v) => !v)} />
+        <Chip
+          label={`Favoritos · ${favoritesCount}`}
+          icon="heart-outline"
+          selected={onlyFavorites}
+          onPress={() => setOnlyFavorites((v) => !v)}
+        />
       </View>
 
       <SegmentedControl
@@ -165,12 +182,18 @@ export function BusinessesScreen() {
 
           {results.length === 0 ? (
             <Card className="items-center gap-3 py-8">
-              <Icon name="storefront-outline" size={36} color="primary" />
+              <Icon name={onlyFavorites ? 'heart-outline' : 'storefront-outline'} size={36} color="primary" />
               <Text variant="headline-sm" className="text-center">
-                {filtersActive ? 'No encontramos resultados' : 'Aún no hay emprendimientos en tu sector'}
+                {onlyFavorites && favoritesCount === 0
+                  ? 'Aún no tienes favoritos'
+                  : filtersActive
+                    ? 'No encontramos resultados'
+                    : 'Aún no hay emprendimientos en tu sector'}
               </Text>
               <Text tone="muted" className="text-center">
-                {filtersActive
+                {onlyFavorites && favoritesCount === 0
+                  ? 'Toca el corazón de un negocio para guardarlo aquí.'
+                  : filtersActive
                   ? 'Prueba con otras palabras o quita algún filtro.'
                   : 'Sé el primero: registra el tuyo y aparecerá aquí.'}
               </Text>

@@ -1,3 +1,4 @@
+export { FavoriteButton } from './components/FavoriteButton';
 export { PostCard } from './components/PostCard';
 export {
   getCategory,
@@ -12,6 +13,7 @@ export {
   countAdvancedFilters,
   DEFAULT_FILTERS,
   EXPANDED_COVERAGE_KM,
+  filterFavorites,
   hasActiveFilters,
   type ExploreFilters,
 } from './filters';
