@@ -26,7 +26,9 @@ export function goingLabel(count: number): string {
  */
 export function EventCard({ event, now, compact = false, onPress }: Props) {
   const date = eventDateParts(event.startsAt, now);
-  const gradient = event.kind === 'notice' ? GRADIENTS.emergencia : GRADIENTS.recomendado;
+  // SPEC-054: colores de la marca. El rojo queda para emergencias y el marrón sale de la paleta; «Aviso» y «Evento» se
+  // distinguen por su ícono y su etiqueta.
+  const gradient = event.kind === 'notice' ? GRADIENTS.ayuda : GRADIENTS.comunidad;
   const neighbor = event.origin === 'neighbor';
   const place = event.venueKind === 'approx_zone' ? `Zona aproximada: ${event.placeLabel}` : event.placeLabel;
   const spoken = [

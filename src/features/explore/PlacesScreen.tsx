@@ -10,11 +10,9 @@ import {
   Button,
   Card,
   Chip,
-  GRADIENTS,
   Icon,
   type IconName,
   Screen,
-  SectionHero,
   SegmentedControl,
   Text,
   TextField,
@@ -33,6 +31,30 @@ const STATE_UI: Record<OpenState, { label: string; icon: IconName; tone: 'primar
 
 const GROUP_ICON = Object.fromEntries(PLACE_GROUPS.map((g) => [g.id, g.icon])) as Record<PlaceGroup, IconName>;
 
+/** SPEC-054: ícono por tipo de lugar (solo presentación); si un tipo no está aquí se usa el del grupo. */
+const KIND_ICON: Partial<Record<string, IconName>> = {
+  restaurant: 'silverware-fork-knife',
+  cafe: 'coffee-outline',
+  fast_food: 'hamburger',
+  bakery: 'bread-slice-outline',
+  supermarket: 'cart-outline',
+  convenience: 'store-24-hour',
+  marketplace: 'fruit-watermelon',
+  mall: 'storefront-outline',
+  hardware: 'hammer-wrench',
+  butcher: 'food-steak',
+  greengrocer: 'fruit-watermelon',
+  stationery: 'notebook-outline',
+  pet: 'paw-outline',
+  pharmacy: 'pill',
+  hospital: 'hospital-building',
+  clinic: 'hospital-box-outline',
+  optician: 'glasses',
+  bank: 'bank-outline',
+  hairdresser: 'content-cut',
+  laundry: 'washing-machine',
+};
+
 function PlaceCard({ row }: { row: PlaceRow<NeighborhoodPlace> }) {
   const { place, state, todayLabel } = row;
   const ui = STATE_UI[state];
@@ -44,7 +66,7 @@ function PlaceCard({ row }: { row: PlaceRow<NeighborhoodPlace> }) {
       accessibilityLabel={[place.name, kind, `${distance} del centro del sector`, ui.label, todayLabel].filter(Boolean).join('. ')}
       className="min-h-16 flex-row items-center gap-3 rounded-2xl bg-surface-container-lowest p-3.5 shadow-sm elevation-xs">
       <View className="h-12 w-12 items-center justify-center rounded-2xl bg-primary-fixed">
-        <Icon name={GROUP_ICON[row.group]} size={24} color="primary" />
+        <Icon name={KIND_ICON[place.amenity] ?? GROUP_ICON[row.group]} size={24} color="primary" />
       </View>
       <View className="min-w-0 flex-1 gap-0.5">
         <Text variant="body-lg-bold" numberOfLines={2}>
@@ -102,17 +124,6 @@ export function PlacesScreen() {
     <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
       <SectionHeader title="Negocios" />
 
-      <SectionHero
-        gradient={GRADIENTS.emprendimientos}
-        title="Explora tu barrio"
-        description={`Tiendas, restaurantes y servicios cerca de ${sector.name}.`}
-        steps={[
-          { icon: 'magnify', label: 'Busca' },
-          { icon: 'clock-outline', label: 'Mira si abre' },
-          { icon: 'walk', label: 'Visita' },
-        ]}
-      />
-
       <SegmentedControl
         accessibilityLabel="Qué explorar"
         value={tab}
@@ -138,14 +149,8 @@ export function PlacesScreen() {
             returnKeyType="search"
           />
 
+          {/* SPEC-054: una sola fila de chips; «Abierto ahora» va con los grupos. */}
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 pr-4">
-            <Chip role="radio" label="Todo" icon="apps" selected={group === 'all'} onPress={() => setGroup('all')} />
-            {PLACE_GROUPS.map((g) => (
-              <Chip key={g.id} role="radio" label={g.label} icon={g.icon} selected={group === g.id} onPress={() => setGroup(g.id)} />
-            ))}
-          </ScrollView>
-
-          <View className="flex-row flex-wrap items-center gap-2">
             <Chip
               role="checkbox"
               label="Abierto ahora"
@@ -153,10 +158,15 @@ export function PlacesScreen() {
               selected={openNow}
               onPress={() => setOpenNow((v) => !v)}
             />
-            <Text variant="label-md" tone="muted" className="flex-1" accessibilityLiveRegion="polite">
-              {rows.length} {rows.length === 1 ? 'lugar' : 'lugares'} · {openCount} con horario y abiertos
-            </Text>
-          </View>
+            <Chip role="radio" label="Todo" icon="apps" selected={group === 'all'} onPress={() => setGroup('all')} />
+            {PLACE_GROUPS.map((g) => (
+              <Chip key={g.id} role="radio" label={g.label} icon={g.icon} selected={group === g.id} onPress={() => setGroup(g.id)} />
+            ))}
+          </ScrollView>
+
+          <Text variant="label-md" tone="muted" accessibilityLiveRegion="polite">
+            {rows.length} {rows.length === 1 ? 'lugar' : 'lugares'} · {openCount} con horario y abiertos
+          </Text>
 
           <SegmentedControl
             accessibilityLabel="Ver lugares como"
@@ -189,7 +199,7 @@ export function PlacesScreen() {
               ))}
               {rows.length > limit ? (
                 <Button
-                  label={`Ver más (${rows.length - limit} restantes)`}
+                  label="Ver más lugares"
                   variant="tonal"
                   icon="chevron-down"
                   onPress={() => setPage({ key: filterKey, limit: limit + PAGE })}

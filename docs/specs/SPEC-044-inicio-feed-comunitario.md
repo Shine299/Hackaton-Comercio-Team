@@ -17,7 +17,7 @@ Esta historia junta todo en un solo feed en el Inicio y agrega un avatar con ini
 4. **Los 4 botones grandes** (SPEC-051, devueltos al Inicio): Comunidad → `/eventos`, Negocios → `/explorar`, Emergencia → `/emergencias`, Ayuda → `/ayuda`. Reemplazan a la tarjeta «¿Emergencia?». **El Inicio no muestra la barra inferior.**
 5. Acción rápida: **Publicar** (`/publicar`), a todo el ancho. Ya no hay «Ver eventos»: lo cubre el botón grande de Comunidad.
 6. «Tienes pendiente» (tus reportes sin resolver), si hay.
-7. «Juntos por el barrio»: fondo, cámaras, perrito (sin cambios).
+7. «Nuevas funcionalidades» (antes «Juntos por el barrio»; renombrada en SPEC-054): fondo, cámaras, perrito (sin cambios).
 8. **«Lo nuevo en tu barrio»**: el feed (máx. 30) + botón «Ver todas las publicaciones».
 9. Aviso «no reemplaza a los servicios oficiales».
 

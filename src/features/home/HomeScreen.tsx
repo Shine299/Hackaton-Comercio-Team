@@ -1,4 +1,3 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
@@ -74,33 +73,23 @@ export function HomeScreen() {
     <Screen safeBottom contentClassName="gap-5 px-5 pb-24 pt-4">
       <SectionHeader />
 
-      <LinearGradient
-        colors={GRADIENTS.hero}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={{ borderRadius: 28, padding: 18, gap: 10 }}>
-        <View className="gap-1">
-          <Text variant="headline-lg" tone="onPrimary" accessibilityRole="header">
-            {greeting.text}, {registered && displayName ? displayName : 'vecino'}
-          </Text>
-          <Text variant="body-lg" tone="onPrimary" className="opacity-95">
-            {greeting.line}
-          </Text>
-        </View>
-        {easy ? <ListenButton text={`${greeting.text}. ${greeting.line}`} /> : null}
+      {/* SPEC-054: saludo en una línea y, en pequeño, cuántos vecinos se mueven (sin recuadro de color). */}
+      <View className="gap-1.5">
+        <Text variant="headline-sm" accessibilityRole="header">
+          {greeting.text}, {registered && displayName ? displayName : 'vecino'}
+        </Text>
         {neighbors.count > 0 ? (
           <View className="flex-row flex-wrap items-center gap-2">
-            <View className="flex-row items-center gap-2 rounded-full bg-white/20 px-3 py-1.5">
-              <Icon name="account-group-outline" size={16} color="onPrimary" />
-              <Text variant="label-md" tone="onPrimary">
-                {neighbors.count} {neighbors.count === 1 ? 'vecino activo' : 'vecinos activos'} esta semana en{' '}
-                {sector.name}
-              </Text>
-            </View>
+            <Icon name="account-group-outline" size={16} color="onSurfaceVariant" />
+            <Text variant="label-md" tone="muted">
+              {neighbors.count} {neighbors.count === 1 ? 'vecino activo' : 'vecinos activos'} esta semana en{' '}
+              {sector.name}
+            </Text>
             {neighbors.isDemo ? <DemoTag /> : null}
           </View>
         ) : null}
-      </LinearGradient>
+        {easy ? <ListenButton text={`${greeting.text}. ${greeting.line}`} /> : null}
+      </View>
 
       {alert ? (
         <Card tone={alert.severity === 'critical' ? 'error' : 'warning'} accessibilityLiveRegion="polite">
@@ -126,51 +115,70 @@ export function HomeScreen() {
         </Card>
       ) : null}
 
-      {/* SPEC-051: el Inicio no tiene barra; estos 4 botones llevan a cada sección. Emergencia sigue a un toque. */}
-      <View className="gap-3" accessibilityLabel="Qué puedes hacer con la app">
-        <Text variant="headline-sm" accessibilityRole="header">
-          ¿En qué te ayudamos hoy?
-        </Text>
-        <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
-          <ActionTile
-            tourId="tile-comunidad"
-            stacked={easy}
-            verb="Descubre qué pasa cerca"
-            detail="Eventos y novedades del barrio"
-            xml={SECCION_COMUNIDAD_XML}
-            gradient={GRADIENTS.comunidad}
-            onPress={() => router.navigate('/eventos')}
-          />
-          <ActionTile
-            tourId="tile-negocios"
-            stacked={easy}
-            verb="Compra local, apoya al barrio"
-            detail="Negocios y lugares a pasos de ti"
-            xml={SECCION_EMPRENDIMIENTOS_XML}
-            gradient={GRADIENTS.emprendimientos}
-            onPress={() => router.navigate('/explorar')}
-          />
+      {/* SPEC-054: lo pendiente sube, justo después de la alerta oficial (un solo chip de estado por reporte). */}
+      {pending.length > 0 ? (
+        <View className="gap-2">
+          <Text variant="headline-sm" accessibilityRole="header">
+            Tienes pendiente
+          </Text>
+          {pending.map((report) => (
+            <ReportCard
+              key={report.id}
+              report={report}
+              compact
+              onPress={() => router.push({ pathname: '/emergencias/estado/[id]', params: { id: report.id } })}
+            />
+          ))}
         </View>
+      ) : null}
+
+      {/* SPEC-051: el Inicio no tiene barra; estos 4 botones llevan a cada sección. Emergencia sigue a un toque.
+          SPEC-054: cajas compactas con título corto y una línea de apoyo; 2 iguales arriba (Pide auxilio, Cerca de ti) y
+          2 anchas debajo (Ayuda vecinal, Comercios). */}
+      <View className="gap-3" accessibilityLabel="Qué puedes hacer con la app">
         <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
           <ActionTile
             tourId="tile-emergencia"
             stacked={easy}
-            verb="Pide auxilio al instante"
-            detail="Reporta sin crear cuenta"
+            title="Pide auxilio"
+            detail="Sin crear cuenta"
+            section="Emergencia"
             xml={SECCION_EMERGENCIA_XML}
             gradient={GRADIENTS.emergencia}
             onPress={() => router.push('/emergencias')}
           />
           <ActionTile
-            tourId="tile-ayuda"
+            tourId="tile-comunidad"
             stacked={easy}
-            verb="Presta, pide, ayuda"
-            detail="Herramientas, favores y trueque"
-            xml={SECCION_AYUDA_XML}
-            gradient={GRADIENTS.ayuda}
-            onPress={() => router.navigate('/ayuda')}
+            title="Cerca de ti"
+            detail="Eventos y novedades"
+            section="Comunidad"
+            xml={SECCION_COMUNIDAD_XML}
+            gradient={GRADIENTS.comunidad}
+            onPress={() => router.navigate('/eventos')}
           />
         </View>
+        {/* SPEC-054: las dos de abajo van a todo el ancho, una sobre otra (`stacked`, como en el modo fácil). */}
+        <ActionTile
+          tourId="tile-ayuda"
+          stacked
+          title="Ayuda vecinal"
+          detail="Presta, pide, trueque"
+          section="Ayuda"
+          xml={SECCION_AYUDA_XML}
+          gradient={GRADIENTS.ayuda}
+          onPress={() => router.navigate('/ayuda')}
+        />
+        <ActionTile
+          tourId="tile-negocios"
+          stacked
+          title="Comercios"
+          detail="Compra local"
+          section="Negocios"
+          xml={SECCION_EMPRENDIMIENTOS_XML}
+          gradient={GRADIENTS.emprendimientos}
+          onPress={() => router.navigate('/explorar')}
+        />
       </View>
 
       {/* SPEC-052: Modo guardia. Enciende o apaga la escucha por voz en toda la app. */}
@@ -256,24 +264,9 @@ export function HomeScreen() {
         />
       </View>
 
-      {pending.length > 0 ? (
-        <View className="gap-3">
-          <Text variant="headline-sm" accessibilityRole="header">
-            Tienes pendiente
-          </Text>
-          {pending.map((report) => (
-            <ReportCard
-              key={report.id}
-              report={report}
-              onPress={() => router.push({ pathname: '/emergencias/estado/[id]', params: { id: report.id } })}
-            />
-          ))}
-        </View>
-      ) : null}
-
-      <View className="gap-3" accessibilityLabel="Juntos por el barrio: fondos, cámaras y el perrito comunitario">
+      <View className="gap-3" accessibilityLabel="Nuevas funcionalidades: fondos, cámaras y el perrito comunitario">
         <Text variant="headline-sm" accessibilityRole="header">
-          Juntos por el barrio
+          Nuevas funcionalidades
         </Text>
         {featuredFund ? <FundCard fund={featuredFund} now={fundsData?.fetchedAt ?? 0} /> : null}
         <CamerasTeaser />

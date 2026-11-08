@@ -1,8 +1,8 @@
-import { useRouter } from 'expo-router';
 import type { ReactNode } from 'react';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useGoBack } from '@/shared/nav/useGoBack';
 import { Icon, Text } from '@/shared/ui';
 
 type BackHeaderProps = {
@@ -12,13 +12,8 @@ type BackHeaderProps = {
 
 /** Cabecera de pantallas que se abren desde una sección: solo «Atrás», sobre el fondo de la pantalla. */
 export function BackHeader({ label = 'Atrás', trailing }: BackHeaderProps) {
-  const router = useRouter();
   const insets = useSafeAreaInsets();
-
-  const goBack = () => {
-    if (router.canGoBack()) router.back();
-    else router.replace('/');
-  };
+  const goBack = useGoBack();
 
   return (
     <View className="flex-row items-center justify-between bg-surface-container-low px-3 pb-1" style={{ paddingTop: insets.top + 8 }}>

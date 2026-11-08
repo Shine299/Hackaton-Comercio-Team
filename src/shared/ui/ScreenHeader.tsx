@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
-import { useRouter } from 'expo-router';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { useGoBack } from '@/shared/nav/useGoBack';
 
 import { Icon } from './Icon';
 import { Text } from './Text';
@@ -16,13 +17,8 @@ type ScreenHeaderProps = {
 
 /** Cabecera simple para pantallas de detalle (volver + título). */
 export function ScreenHeader({ title, backLabel = 'Volver', trailing }: ScreenHeaderProps) {
-  const router = useRouter();
   const insets = useSafeAreaInsets();
-
-  const goBack = () => {
-    if (router.canGoBack()) router.back();
-    else router.replace('/');
-  };
+  const goBack = useGoBack();
 
   return (
     <View

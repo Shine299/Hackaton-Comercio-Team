@@ -1,12 +1,11 @@
 import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
 import { StartChatButton } from '@/features/chat';
 import { getCategory, type Post } from '@/features/posts';
 import { formatApproxDistance, formatRelativeTime } from '@/shared/format';
-import { Avatar, Badge, DemoTag, gradientForCategory, Icon, PressableScale, Text } from '@/shared/ui';
+import { Avatar, Badge, DemoTag, PressableScale, Text } from '@/shared/ui';
 
 import { feedTagFor } from './feed';
 
@@ -71,26 +70,17 @@ export function FeedCard({ post, now }: FeedCardProps) {
           {post.urgent ? <Badge label="Urgente · sin validar" tone="error" icon="alert-outline" /> : null}
         </View>
 
-        <View className="h-28 items-center justify-center overflow-hidden rounded-2xl">
-          {post.photoUri ? (
+        {/* SPEC-054: sin foto no hay bloque de color; la categoría ya va en su etiqueta con ícono. */}
+        {post.photoUri ? (
+          <View className="h-28 overflow-hidden rounded-2xl">
             <Image
               source={{ uri: post.photoUri }}
               style={StyleSheet.absoluteFill}
               contentFit="cover"
               accessible={false}
             />
-          ) : (
-            <>
-              <LinearGradient
-                colors={gradientForCategory(post.category)}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={StyleSheet.absoluteFill}
-              />
-              <Icon name={category.icon} size={52} color="onPrimary" />
-            </>
-          )}
-        </View>
+          </View>
+        ) : null}
 
         <View className="gap-1">
           <Text variant="headline-sm" numberOfLines={2}>
@@ -103,21 +93,11 @@ export function FeedCard({ post, now }: FeedCardProps) {
           ) : null}
         </View>
 
-        <View className="flex-row items-center justify-between gap-2">
-          {post.priceLabel ? (
-            <Text variant="label-md" tone="primary" numberOfLines={1} className="flex-1">
-              {post.priceLabel}
-            </Text>
-          ) : (
-            <View className="flex-1" />
-          )}
-          <View className="flex-row items-center gap-1">
-            <Text variant="label-md" tone="primary">
-              Ver detalle
-            </Text>
-            <Icon name="chevron-right" size={20} color="primary" />
-          </View>
-        </View>
+        {post.priceLabel ? (
+          <Text variant="label-md" tone="primary" numberOfLines={1}>
+            {post.priceLabel}
+          </Text>
+        ) : null}
       </PressableScale>
       <StartChatButton post={post} variant="tonal" />
     </View>

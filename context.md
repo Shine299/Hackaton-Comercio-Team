@@ -157,6 +157,7 @@ Emergencias usa además su propio `IncidentStatus` (`features/emergency/types.ts
 | `/camaras`, `/camaras/[id]`, `/camaras/registrar` | Cámaras vecinales (celular con IP Webcam → cámara del sector), «Financiada por N vecinos» (SPEC-035) | cameras |
 | `/perrito/[slug]` | Perfil del perrito comunitario: «Lo vi» / «Necesita ayuda»; el QR del collar abre `yunta://perrito/negrito` (SPEC-038) | pets |
 | `/asistente` | Asistente de Yunta con IA, por texto o voz (SPEC-049/050) | assistant |
+| `/politicas` | **Políticas de servicios** (SPEC-056): 4 políticas desplegables; `?tema=` elige cuál llega abierta. Se llega desde el menú lateral (☰). Textos en borrador, pendientes de revisión legal | policies |
 | `/galeria` | Galería del design system (solo revisión) | dev |
 
 Las tabs redirigen a `/onboarding` si no se completó; `/emergencias` nunca se bloquea.

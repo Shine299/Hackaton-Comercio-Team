@@ -4,7 +4,7 @@ import { ActivityIndicator, View } from 'react-native';
 
 import { useSectorStore } from '@/features/sector';
 import { SectionHeader } from '@/features/shell';
-import { Button, Card, GRADIENTS, Icon, Screen, SectionHero, Text } from '@/shared/ui';
+import { Button, Card, Icon, Screen, Text } from '@/shared/ui';
 
 import { EventCard } from './EventCard';
 import { groupEventsByWhen } from './logic';
@@ -48,18 +48,24 @@ export function EventsScreen() {
     <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
       <SectionHeader title="Comunidad" />
 
-      <SectionHero
-        gradient={GRADIENTS.recomendado}
-        title="Lo que se viene en tu barrio"
-        description={`Charlas, ferias y reuniones cerca de ${sector.name}.`}
-        steps={[
-          { icon: 'calendar-search', label: 'Mira' },
-          { icon: 'check-circle-outline', label: 'Marca «Voy»' },
-          { icon: 'calendar-plus', label: 'Organiza' },
-        ]}
-      />
-
-      <Button label="Crear evento" icon="calendar-plus" onPress={() => router.push('/eventos/crear')} />
+      {/* SPEC-054: sin banner de pasos; el título y «Crear» comparten fila. */}
+      <View className="flex-row items-center justify-between gap-3">
+        <View className="min-w-0 flex-1 gap-0.5">
+          <Text variant="headline-sm" accessibilityRole="header">
+            Lo que se viene en tu barrio
+          </Text>
+          <Text variant="label-md" tone="muted">
+            Charlas, ferias y reuniones cerca de {sector.name}.
+          </Text>
+        </View>
+        <Button
+          label="Crear"
+          icon="calendar-plus"
+          fullWidth={false}
+          accessibilityLabel="Crear evento"
+          onPress={() => router.push('/eventos/crear')}
+        />
+      </View>
 
       {isLoading ? (
         <View className="items-center py-6" accessibilityLabel="Cargando eventos">

@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { ReportCard, useEmergencyStore } from '@/features/emergency';
-import { Badge, type Gradient, GRADIENTS, Icon, type IconName, Screen, SECCION_AYUDA_XML, SectionHero, StatRow, Text, PressableScale } from '@/shared/ui';
+import { Badge, type Gradient, GRADIENTS, Icon, type IconName, Screen, SECCION_AYUDA_XML, Text, PressableScale } from '@/shared/ui';
 import { PetTeaser } from '@/features/pets';
 import { helpGroupOf, useNearbyPosts } from '@/features/posts';
 import { useEasyMode } from '@/shared/nav/viewModeStore';
@@ -14,22 +14,24 @@ import { SectionHeader } from '@/features/shell';
 type BigActionProps = {
   title: string;
   hint: string;
+  /** Conteo de vecinos cerca (SPEC-054: antes iba en tres cuadros de estadística aparte). */
+  note: string;
   icon: IconName;
   gradient: Gradient;
   onPress: () => void;
 };
 
 /** Botón grande de la sección: una sola acción, imposible de confundir. */
-function BigAction({ title, hint, icon, gradient, onPress }: BigActionProps) {
+function BigAction({ title, hint, note, icon, gradient, onPress }: BigActionProps) {
   return (
     <PressableScale
       accessibilityRole="button"
-      accessibilityLabel={`${title}. ${hint}`}
+      accessibilityLabel={`${title}. ${hint}. ${note}`}
       onPress={onPress}
-      className="min-h-44 flex-1 overflow-hidden rounded-3xl shadow-md elevation-sm">
+      className="min-h-36 flex-1 overflow-hidden rounded-3xl shadow-md elevation-sm">
       <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ flex: 1, padding: 16, justifyContent: 'space-between' }}>
-      <View className="h-14 w-14 items-center justify-center rounded-full bg-white/20">
-        <Icon name={icon} size={32} color="onPrimary" />
+      <View className="h-12 w-12 items-center justify-center rounded-full bg-white/20">
+        <Icon name={icon} size={28} color="onPrimary" />
       </View>
       <View className="gap-1">
         <Text variant="headline-sm" tone="onPrimary" className="uppercase">
@@ -37,6 +39,9 @@ function BigAction({ title, hint, icon, gradient, onPress }: BigActionProps) {
         </Text>
         <Text variant="label-md" tone="onPrimary" className="opacity-90">
           {hint}
+        </Text>
+        <Text variant="body-md-medium" tone="onPrimary">
+          {note}
         </Text>
       </View>
       </LinearGradient>
@@ -101,30 +106,12 @@ export function HelpHomeScreen() {
     <Screen contentClassName="gap-4 px-5 pb-6 pt-4">
       <SectionHeader title="Ayuda" />
 
-      <SectionHero
-        gradient={GRADIENTS.ayuda}
-        title="Una mano vecina"
-        description="Pide u ofrece, sin dar tus datos."
-        xml={SECCION_AYUDA_XML}
-        steps={[
-          { icon: 'hand-back-left-outline', label: 'Pide u ofrece' },
-          { icon: 'account-group-outline', label: 'Alguien responde' },
-          { icon: 'handshake-outline', label: 'Coordinan' },
-        ]}
-      />
-
-      <StatRow
-        stats={[
-          { icon: 'hand-back-left-outline', value: asking, label: 'piden ayuda cerca', gradient: GRADIENTS.ayuda },
-          { icon: 'hand-heart-outline', value: offering, label: 'ofrecen cerca', gradient: GRADIENTS.comunidad },
-          { icon: 'clipboard-text-clock-outline', value: reports.filter((r) => r.kind === 'help' && r.status !== 'resolved').length, label: 'tus pendientes', gradient: GRADIENTS.recomendado },
-        ]}
-      />
-
+      {/* SPEC-054: sin banner de pasos ni cuadros de estadística; los conteos van dentro de cada botón. */}
       <View className={easy ? 'gap-3' : 'flex-row gap-3'}>
         <BigAction
           title="Necesito ayuda"
           hint="Cuéntales qué te hace falta"
+          note={`${offering} ${offering === 1 ? 'ofrece' : 'ofrecen'} cerca`}
           icon="hand-back-left-outline"
           gradient={GRADIENTS.ayuda}
           onPress={() => router.navigate({ pathname: '/publicar', params: { kind: 'request', t: String(Date.now()) } })}
@@ -132,11 +119,16 @@ export function HelpHomeScreen() {
         <BigAction
           title="Quiero ayudar"
           hint="Mira quién necesita una mano"
+          note={`${asking} ${asking === 1 ? 'pide ayuda' : 'piden ayuda'} cerca`}
           icon="hand-heart-outline"
           gradient={GRADIENTS.comunidad}
           onPress={() => router.navigate({ pathname: '/publicaciones', params: { kind: 'request' } })}
         />
       </View>
+
+      <Text variant="label-md" tone="muted" className="px-1">
+        ¿Es una emergencia? Usa el SOS de arriba.
+      </Text>
 
       <View className="gap-2" accessibilityLabel="Elige qué tipo de ayuda ver">
         <Text variant="headline-sm" accessibilityRole="header">

@@ -95,6 +95,7 @@ export default function RootLayout() {
             <Stack.Screen name="emergencias" />
             <Stack.Screen name="sector" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
             <Stack.Screen name="galeria" />
+            <Stack.Screen name="politicas" />
           </Stack>
           {/* SPEC-051: la burbuja flotante es el asistente virtual, dentro del contenido para quedar sobre la barra. */}
           <AssistantFab />
