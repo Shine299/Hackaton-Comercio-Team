@@ -1,0 +1,156 @@
+import { useState } from 'react';
+import { Pressable, View } from 'react-native';
+import Animated, { FadeIn, FadeInDown, LinearTransition } from 'react-native-reanimated';
+
+import { HELP_CATEGORIES, useInterestStore, type PostCategoryId } from '@/features/posts';
+import { Badge, Chip, Icon, SyncStatusBadge, Text, type IconName } from '@/shared/ui';
+
+/** Elige intereses: alimentan las recomendaciones de Inicio desde el primer día (solo en este teléfono). */
+export function InterestsDemo() {
+  const seed = useInterestStore((s) => s.seed);
+  const [picked, setPicked] = useState<PostCategoryId[]>([]);
+
+  const toggle = (id: PostCategoryId) => {
+    const next = picked.includes(id) ? picked.filter((c) => c !== id) : [...picked, id];
+    setPicked(next);
+    seed(next);
+  };
+
+  return (
+    <View className="gap-3">
+      <View className="flex-row flex-wrap gap-2" accessibilityLabel="Tus intereses">
+        {HELP_CATEGORIES.map((c) => (
+          <Chip key={c.id} label={c.label} icon={c.icon} selected={picked.includes(c.id)} onPress={() => toggle(c.id)} />
+        ))}
+      </View>
+      {picked.length > 0 ? (
+        <Animated.View entering={FadeIn.duration(250)} className="flex-row items-center gap-2">
+          <Icon name="check-circle-outline" size={18} color="primary" />
+          <Text variant="label-md" tone="primary">
+            Listo: verás {picked.length === 1 ? 'eso' : 'esas cosas'} primero en Inicio.
+          </Text>
+        </Animated.View>
+      ) : (
+        <Text variant="label-md" tone="muted">
+          Toca las que quieras. Puedes saltarte esto.
+        </Text>
+      )}
+    </View>
+  );
+}
+
+const PUBLISH_STEPS: { icon: IconName; title: string; detail: string }[] = [
+  { icon: 'swap-horizontal', title: 'Elige Pedir u Ofrecer', detail: 'Dices si necesitas algo o si puedes ayudar.' },
+  { icon: 'shape-outline', title: 'Escoge una categoría', detail: 'Herramientas, favores, trueque… y completas una tarjeta corta.' },
+  { icon: 'send-outline', title: 'Toca Publicar', detail: 'Tus vecinos lo ven y te escriben por la app.' },
+];
+
+/** Tres pasos tocables: cada uno se abre y explica en una línea. */
+export function StepsDemo() {
+  const [open, setOpen] = useState(0);
+  return (
+    <View className="gap-2" accessibilityRole="list">
+      {PUBLISH_STEPS.map((step, i) => {
+        const active = open === i;
+        return (
+          <Animated.View key={step.title} layout={LinearTransition.duration(220)}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityState={{ expanded: active }}
+              accessibilityLabel={`Paso ${i + 1}: ${step.title}`}
+              onPress={() => setOpen(i)}
+              className={
+                active
+                  ? 'gap-1 rounded-2xl border-2 border-primary bg-surface-container-lowest p-3'
+                  : 'rounded-2xl bg-surface-container-lowest p-3 active:opacity-80'
+              }>
+              <View className="flex-row items-center gap-3">
+                <View className={active ? 'h-9 w-9 items-center justify-center rounded-full bg-primary' : 'h-9 w-9 items-center justify-center rounded-full bg-primary-fixed'}>
+                  <Icon name={step.icon} size={20} color={active ? 'onPrimary' : 'primary'} />
+                </View>
+                <Text variant="body-lg-bold" className="flex-1">
+                  {i + 1}. {step.title}
+                </Text>
+                <Icon name={active ? 'chevron-up' : 'chevron-down'} size={20} color="onSurfaceVariant" />
+              </View>
+              {active ? (
+                <Animated.View entering={FadeIn.duration(200)}>
+                  <Text tone="muted" className="pl-12">
+                    {step.detail}
+                  </Text>
+                </Animated.View>
+              ) : null}
+            </Pressable>
+          </Animated.View>
+        );
+      })}
+    </View>
+  );
+}
+
+/** Botón SOS de práctica. No envía nada: lo dice claro para no confundir con una emergencia real. */
+export function SosDemo() {
+  const [pressed, setPressed] = useState(false);
+  return (
+    <View className="gap-3">
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Botón de prueba del SOS. No envía nada"
+        onPress={() => setPressed(true)}
+        className="min-h-20 flex-row items-center justify-center gap-3 rounded-3xl bg-error px-5 active:opacity-90">
+        <Icon name="alarm-light-outline" size={32} color="onError" />
+        <Text variant="headline-md" tone="onError">
+          SOS (prueba)
+        </Text>
+      </Pressable>
+      {pressed ? (
+        <Animated.View entering={FadeInDown.duration(300)} className="gap-2 rounded-2xl bg-success-container p-3">
+          <View className="flex-row items-center gap-2">
+            <Icon name="check-circle-outline" size={22} color="success" />
+            <Text variant="body-lg-bold">¡Así de rápido!</Text>
+          </View>
+          <Text>En una emergencia real, tu aviso queda guardado y llegan los números oficiales. Esto fue una prueba: no se envió nada.</Text>
+          <Badge label="Simulación" tone="warning" icon="flask-outline" />
+        </Animated.View>
+      ) : (
+        <Text variant="label-md" tone="muted">
+          Tócalo para ver qué pasa. No se envía nada.
+        </Text>
+      )}
+    </View>
+  );
+}
+
+/** Modo avión de mentira: muestra cómo cambia el estado entre «guardado en tu teléfono» y «recibido». */
+export function OfflineDemo() {
+  const [airplane, setAirplane] = useState(false);
+  return (
+    <View className="gap-3">
+      <Pressable
+        accessibilityRole="switch"
+        accessibilityState={{ checked: airplane }}
+        accessibilityLabel="Modo avión de prueba"
+        onPress={() => setAirplane((v) => !v)}
+        className="min-h-14 flex-row items-center gap-3 rounded-2xl bg-surface-container-lowest px-4 active:opacity-80">
+        <Icon name={airplane ? 'airplane' : 'airplane-off'} size={26} color="primary" />
+        <Text variant="body-lg-bold" className="flex-1">
+          Modo avión
+        </Text>
+        <View className={airplane ? 'h-8 w-14 items-end justify-center rounded-full bg-primary px-1' : 'h-8 w-14 items-start justify-center rounded-full bg-outline-variant px-1'}>
+          <View className="h-6 w-6 rounded-full bg-white" />
+        </View>
+      </Pressable>
+      <View className="gap-2 rounded-2xl bg-surface-container-lowest p-3">
+        <Text variant="label-md" tone="muted">
+          Tu reporte de ejemplo:
+        </Text>
+        <SyncStatusBadge status={airplane ? 'local' : 'received'} />
+        <Text variant="label-md" tone="muted">
+          {airplane
+            ? 'Sin señal queda guardado en tu teléfono. Se enviará solo cuando vuelva la conexión.'
+            : 'Con señal, el servidor lo recibe y te lo confirmamos.'}
+        </Text>
+      </View>
+    </View>
+  );
+}

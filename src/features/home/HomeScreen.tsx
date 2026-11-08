@@ -12,6 +12,7 @@ import { SectionHeader } from '@/features/shell';
 import { formatRelativeTime } from '@/shared/format';
 import { Button, Card, Chip, type Gradient, GRADIENTS, Icon, ListenButton, Screen, SECCION_AYUDA_XML, SECCION_COMUNIDAD_XML, SECCION_EMERGENCIA_XML, SECCION_EMPRENDIMIENTOS_XML, Text, TextField } from '@/shared/ui';
 
+import { greetingFor } from './greeting';
 import { BusinessPhotoCard, NewsCard, Rail } from './HomeCarousels';
 
 /** Qué puedes hacer: una función por sección, con degradado propio, ilustración y un verbo claro. */
@@ -76,6 +77,7 @@ export function HomeScreen() {
   const savedPostIds = useSavedStore((s) => s.postIds);
 
   const [query, setQuery] = useState('');
+  const [greeting] = useState(() => greetingFor(new Date().getHours()));
   const search = (q: string) => router.navigate({ pathname: '/explorar', params: { q: q.trim(), t: String(Date.now()) } });
 
   const alert = alerts?.[0];
@@ -142,16 +144,28 @@ export function HomeScreen() {
         colors={GRADIENTS.hero}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={{ borderRadius: 28, padding: 18, gap: 6 }}>
-        <Text variant="label-md" tone="onPrimary" className="opacity-90">
-          {registered && displayName ? `¡Qué bueno verte en Yunta, ${displayName}!` : '¡Bienvenido a Yunta, vecino!'}
-        </Text>
-        <Text variant="headline-lg" tone="onPrimary" accessibilityRole="header">
-          Tu barrio, a un toque de ti
-        </Text>
-        <Text variant="body-md" tone="onPrimary" className="opacity-95">
-          Descubre, compra local, comparte y pide ayuda.
-        </Text>
+        style={{ borderRadius: 28, padding: 20, gap: 12 }}>
+        <View className="flex-row items-center gap-3">
+          <View className="flex-1 gap-1">
+            <Text variant="headline-lg" tone="onPrimary" accessibilityRole="header">
+              {greeting.text}, {registered && displayName ? displayName : 'vecino'}
+            </Text>
+            <Text variant="body-lg" tone="onPrimary" className="opacity-95">
+              {greeting.line}
+            </Text>
+          </View>
+          <View className="h-14 w-14 items-center justify-center rounded-full bg-white/25">
+            <Icon name={greeting.icon} size={32} color="onPrimary" />
+          </View>
+        </View>
+        {news.length > 0 ? (
+          <View className="flex-row items-center gap-2 self-start rounded-full bg-white/20 px-3 py-1.5">
+            <Icon name="bullhorn-outline" size={16} color="onPrimary" />
+            <Text variant="label-md" tone="onPrimary">
+              {news.length} {news.length === 1 ? 'novedad' : 'novedades'} hoy en {sector.name}
+            </Text>
+          </View>
+        ) : null}
       </LinearGradient>
 
       {alert ? (
@@ -180,7 +194,7 @@ export function HomeScreen() {
 
       <View className="gap-3" accessibilityLabel="Qué puedes hacer con la app">
         <Text variant="headline-sm" accessibilityRole="header">
-          ¿Qué quieres hacer hoy?
+          ¿En qué te ayudamos hoy?
         </Text>
         <View className="flex-row gap-3">
           <ActionTile
