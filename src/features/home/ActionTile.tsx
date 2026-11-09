@@ -20,6 +20,9 @@ type ActionTileProps = {
   stacked?: boolean;
 };
 
+/** Alto de cada botón: la ilustración (76) + el relleno vertical (2 × 14) = 104, con aire. */
+const TILE_HEIGHT = 112;
+
 /**
  * Acceso a una sección del Inicio (SPEC-054): caja con su degradado, una ilustración grande (76 dp), un título
  * corto y una línea de apoyo. En fila si va a todo ancho; icono arriba si es de medio ancho. Mide ≥ 112 dp de alto (más con letra grande); la letra no se escala.
@@ -32,17 +35,16 @@ export function ActionTile({ tourId, title, detail, section, xml, gradient, onPr
         accessibilityLabel={`${title}. ${detail}`}
         accessibilityHint={`Abre ${section}`}
         onPress={onPress}
-        // En ancho completo (stacked) NO se usa flex:1: dentro de un contenedor sin alto fijo colapsa y la caja queda más
-        // baja que su contenido, así que la tarjeta de abajo (Modo guardia) la tapaba.
+        // En ancho completo (stacked) el alto es FIJO: con flex/min-h el alto dependía del contenedor y en Android la caja
+        // quedaba más baja que su contenido, así que la tarjeta de abajo (Modo guardia) la tapaba.
         className={stacked ? 'overflow-hidden rounded-2xl shadow-sm elevation-xs' : 'flex-1 overflow-hidden rounded-2xl shadow-sm elevation-xs'}
-        style={{ minHeight: 112 }}>
+        style={stacked ? { height: TILE_HEIGHT } : { minHeight: TILE_HEIGHT }}>
         <LinearGradient
           colors={gradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{
-            flex: stacked ? undefined : 1,
-            minHeight: 112,
+            flex: 1,
             paddingHorizontal: 15,
             paddingVertical: 14,
             flexDirection: stacked ? 'row' : 'column',

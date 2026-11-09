@@ -32,10 +32,13 @@ const REPORT_LABEL: Partial<Record<SyncStatus, string>> = {
 function Bubble({
   message,
   reportStatus,
+  hideSyncStatus,
   onReport,
 }: {
   message: ChatMessage;
   reportStatus?: SyncStatus;
+  /** En la conversación de demostración el mensaje nunca sale del teléfono: la etiqueta «Demo» ya lo dice. */
+  hideSyncStatus?: boolean;
   onReport?: () => void;
 }) {
   const mine = message.mine;
@@ -64,7 +67,7 @@ function Bubble({
         <Text variant="label-sm" tone="muted">
           {formatRelativeTime(message.createdAt)}
         </Text>
-        {message.syncStatus ? <SyncStatusBadge status={message.syncStatus} /> : null}
+        {message.syncStatus && !hideSyncStatus ? <SyncStatusBadge status={message.syncStatus} /> : null}
         {reportStatus ? (
           <View className="flex-row items-center gap-1">
             <Icon name="flag-outline" size={14} color="onSurfaceVariant" />
@@ -253,6 +256,7 @@ export function ChatScreen() {
                 key={message.id}
                 message={message}
                 reportStatus={reported[message.id]}
+                hideSyncStatus={isDemo}
                 onReport={!message.mine && !reported[message.id] ? () => confirmReport(message) : undefined}
               />
             ))
