@@ -95,3 +95,25 @@ export function fileFromMime(mime: string): { type: string; name: string } | nul
   const ext = FILE_BY_MIME[type];
   return ext ? { type, name: `voz.${ext}` } : null;
 }
+
+/**
+ * Cuerpo `multipart/form-data` armado a mano con el audio en bytes. En el APK, el `FormData` de React Native con
+ * `{ uri, name, type }` puede fallar antes de salir del teléfono («Failed to send a request»); mandar los bytes
+ * directamente evita esa vía. El servidor lo lee igual (`req.formData()`).
+ */
+export function buildAudioMultipart(
+  audio: ArrayBuffer,
+  file: { name: string; type: string },
+  boundary = `----yunta${Date.now().toString(16)}`,
+): { body: ArrayBuffer; contentType: string } {
+  const enc = new TextEncoder();
+  const head = enc.encode(
+    `--${boundary}\r\nContent-Disposition: form-data; name="audio"; filename="${file.name}"\r\nContent-Type: ${file.type}\r\n\r\n`,
+  );
+  const tail = enc.encode(`\r\n--${boundary}--\r\n`);
+  const out = new Uint8Array(head.length + audio.byteLength + tail.length);
+  out.set(head, 0);
+  out.set(new Uint8Array(audio), head.length);
+  out.set(tail, head.length + audio.byteLength);
+  return { body: out.buffer, contentType: `multipart/form-data; boundary=${boundary}` };
+}

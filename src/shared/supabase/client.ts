@@ -36,3 +36,24 @@ export async function ensureAnonymousUser(): Promise<string> {
   if (error || !created.user) throw new Error(error?.message ?? 'No se pudo iniciar sesión anónima');
   return created.user.id;
 }
+
+/**
+ * Llama a una Edge Function con `fetch` directo (el mismo camino que sí funciona para el resto de Supabase en el APK;
+ * `functions.invoke` fallaba antes de salir del teléfono). Lanza con el motivo real si no hay red o el servidor falla.
+ */
+export async function callFunction(name: string, body: BodyInit, contentType?: string): Promise<unknown> {
+  if (!supabase || !url || !anonKey) throw new Error('Sin servidor configurado');
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  if (!token) throw new Error('Sin sesión');
+  const headers: Record<string, string> = { apikey: anonKey, Authorization: `Bearer ${token}` };
+  if (contentType) headers['Content-Type'] = contentType;
+  let res: Response;
+  try {
+    res = await fetch(`${url}/functions/v1/${name}`, { method: 'POST', headers, body });
+  } catch (e) {
+    throw new Error(`sin conexión con ${name}: ${e instanceof Error ? e.message : String(e)}`);
+  }
+  if (!res.ok) throw new Error(`${name} respondió ${res.status}`);
+  return res.json().catch(() => null);
+}

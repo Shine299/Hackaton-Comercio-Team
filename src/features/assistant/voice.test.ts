@@ -1,4 +1,4 @@
-import { audioMimeFromUri, checkRecording, cleanTranscript, clipSummary, fileFromMime, MAX_RECORDING_MS, micTestAdvice } from './voice';
+import { audioMimeFromUri, buildAudioMultipart, checkRecording, cleanTranscript, clipSummary, fileFromMime, MAX_RECORDING_MS, micTestAdvice } from './voice';
 
 // SPEC-050: voz al asistente.
 describe('checkRecording', () => {
@@ -109,5 +109,16 @@ describe('fileFromMime (audio del navegador: llega como blob sin extensión)', (
     expect(fileFromMime('')).toBeNull();
     expect(fileFromMime('video/mp4')).toBeNull();
     expect(fileFromMime('application/octet-stream')).toBeNull();
+  });
+});
+
+describe('buildAudioMultipart', () => {
+  it('arma un multipart con el audio en bytes entre el encabezado y el cierre', () => {
+    const audio = new Uint8Array([1, 2, 3]).buffer;
+    const { body, contentType } = buildAudioMultipart(audio, { name: 'voz.m4a', type: 'audio/mp4' }, 'XX');
+    const text = String.fromCharCode(...new Uint8Array(body));
+    expect(contentType).toBe('multipart/form-data; boundary=XX');
+    expect(text.startsWith('--XX\r\nContent-Disposition: form-data; name="audio"; filename="voz.m4a"\r\nContent-Type: audio/mp4\r\n\r\n')).toBe(true);
+    expect(text.endsWith('\x01\x02\x03\r\n--XX--\r\n')).toBe(true);
   });
 });
