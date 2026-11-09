@@ -32,13 +32,17 @@ export function ActionTile({ tourId, title, detail, section, xml, gradient, onPr
         accessibilityLabel={`${title}. ${detail}`}
         accessibilityHint={`Abre ${section}`}
         onPress={onPress}
-        className="min-h-[112px] flex-1 overflow-hidden rounded-2xl shadow-sm elevation-xs">
+        // En ancho completo (stacked) NO se usa flex:1: dentro de un contenedor sin alto fijo colapsa y la caja queda más
+        // baja que su contenido, así que la tarjeta de abajo (Modo guardia) la tapaba.
+        className={stacked ? 'overflow-hidden rounded-2xl shadow-sm elevation-xs' : 'flex-1 overflow-hidden rounded-2xl shadow-sm elevation-xs'}
+        style={{ minHeight: 112 }}>
         <LinearGradient
           colors={gradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{
-            flex: 1,
+            flex: stacked ? undefined : 1,
+            minHeight: 112,
             paddingHorizontal: 15,
             paddingVertical: 14,
             flexDirection: stacked ? 'row' : 'column',
